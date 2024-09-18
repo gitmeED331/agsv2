@@ -1,0 +1,16 @@
+@import './button';
+
+@mixin switch {
+    @include button;
+
+    slider {
+        background: $font-color3;
+        border-radius: $radius;
+        min-width: 24px;
+        min-height: 24px;
+    }
+
+    image {
+        color: transparent;
+    }
+}

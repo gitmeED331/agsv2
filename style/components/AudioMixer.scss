@@ -1,0 +1,142 @@
+//------------- VOLUME SLIDER ---------------------
+.audio-mixer {
+    // margin-top: 0.5rem;
+    // margin-right: 0.65rem;
+    color: $font-color1;
+
+    &.header {
+        border-radius: $radius;
+        border-bottom: $border;
+        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+        margin-bottom: 0.5rem;
+        padding: 0.25rem 0rem;
+    }
+
+    &Label {
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: $font-color1;
+        //text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px $shadow-color;
+    }
+
+    &Icon {
+        margin-right: 0.5rem;
+        margin-top: 0.5rem;
+        text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px $shadow-color;
+
+        image {
+            color: $font-color1;
+        }
+    }
+
+    &.settings-button {
+        color: $font-color1;
+    }
+
+    &.container {
+        background: $PrimaryBG;
+        border-radius: calc($radius * 1.25);
+        border: $border;
+        padding: 1rem;
+    }
+
+    &.speaker-mic {
+        margin: 0rem 0.5rem;
+    }
+}
+
+.muted {
+    &:hover {
+        color: red;
+    }
+}
+
+.volumebtn:hover {
+    color: $font-color5;
+}
+
+.volumemixer .menu {
+    all: unset;
+
+    &.app-mixer {
+        .title {
+            background: $PrimaryBG;
+            box-shadow: inset 0.25rem 0.25rem 1rem rgba(0, 0, 0, 1);
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 0.25rem;
+            border-radius: 3rem;
+            padding: .25rem 0.75rem;
+            color: rgba(15, 155, 255, 1);
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+            margin-top: 0.25rem;
+        }
+    }
+
+    &.sink-selector {
+        color: $font-color1;
+
+        .title {
+            background: $PrimaryBG;
+            box-shadow: inset 0.25rem 0.25rem 1rem rgba(0, 0, 0, 1);
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 0.25rem;
+            border-radius: 3rem;
+            padding: .25rem 0.75rem;
+            color: rgba(15, 155, 255, 1);
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+            margin-top: 0.25rem;
+            color: rgba(15, 155, 255, 1);
+        }
+    }
+}
+
+.mixeritem {
+    color: $font-color1;
+    margin-right: 0.65rem;
+
+    &icon {
+        color: $font-color1;
+        margin-right: 0.25rem;
+        margin-top: 0.25rem;
+    }
+
+    &label {
+        color: $font-color1;
+        margin-top: 0.25rem;
+    }
+
+    &:last-child {
+        margin-bottom: 0.5rem;
+    }
+
+}
+
+.sinkitem {
+
+    &box {
+        margin-top: 0.25rem;
+    }
+
+    &icon {
+        margin-right: 0.25rem;
+        color: $font-color1;
+    }
+
+    &label {
+        margin-top: 0.25rem;
+        color: $font-color1;
+    }
+
+    &:last-child {
+        margin-bottom: 0.5rem;
+    }
+}

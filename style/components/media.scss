@@ -1,0 +1,213 @@
+// ---- Ticker ----
+.ticker {
+	&btn {
+		border-top: $border;
+		border-radius: 3rem;
+		padding: 0rem 0.5rem;
+		background: $PrimaryBG;
+		font-weight: bold;
+		min-width: 1rem;
+
+		tooltip {
+			font-weight: bold;
+			padding: 10px
+		}
+
+		&:hover {
+
+			.tickertrack {
+				color: $font-color5;
+			}
+
+			.tickerartist {
+				color: $font-color1
+			}
+
+			icon {
+				animation: spin 1s infinite;
+			}
+		}
+	}
+
+	&artist {
+		color: $font-color2;
+		font-size: 1rem;
+	}
+
+	&track {
+		font-size: 1rem;
+		color: $font-color1;
+	}
+
+	&icon {
+		color: red;
+	}
+}
+
+.tickerbox {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+// ---- Player ----
+.player {
+	background: $PrimaryBG;
+	padding: 0px;
+	border: $border;
+	border-radius: $radius * 1.5;
+	min-width: 400px;
+	min-height: 100px;
+	padding-left: 2.5rem;
+	padding-right: 0.25rem;
+	padding-top: 0.5rem;
+	box-shadow: inset -0.75rem 0rem 1rem 0rem $PrimaryBG,
+		inset 0rem 0rem 0rem 0rem $PrimaryBG,
+		inset 0rem 0rem 0rem 0rem $PrimaryBG;
+
+	.mediainfo {
+		padding-left: 0rem;
+		margin-left: 6rem;
+		margin-right: 2rem;
+	}
+
+	.playercontrols {
+		margin-top: -1rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.positioncontainer {
+		margin-left: 0.5rem;
+	}
+}
+
+.track {
+
+	&position,
+	&length {
+		color: $font-color1;
+		text-shadow: 0.1rem 0.1rem $PrimaryBG;
+	}
+
+	&img {
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		border-radius: $radius-tbleft;
+		margin-right: 0.25rem;
+	}
+}
+
+.playicon {
+	color: $font-color1;
+	-gtk-icon-style: symbolic;
+	-gtk-icon-shadow: 0.3rem 0.3rem 0.2rem $PrimaryBG;
+}
+
+.trackinfo {
+	min-width: 250px;
+
+}
+
+.tracktitle {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: $font-color1;
+	text-shadow: 0.1rem 0.1rem $PrimaryBG;
+}
+
+.artist {
+	font-size: 1.1rem;
+	color: $font-color2;
+	text-shadow: 0.1rem 0.1rem $PrimaryBG;
+}
+
+.player scale.position {
+	margin-bottom: 0.3rem;
+	padding: 0.25rem;
+	min-width: 12rem;
+
+
+	trough {
+		min-height: 10px;
+		background: $SliderTrough;
+		border-radius: $radius;
+		box-shadow: 0rem 0.25rem 0.5rem rgba(0, 0, 0, 1);
+	}
+
+	highlight {
+		background: $SliderHighlight;
+		border-radius: $radius;
+
+	}
+
+	slider {
+		min-height: 10px;
+		min-width: 10px;
+		border-radius: 20px;
+		background-color: blue;
+		border: none;
+		box-shadow: 0px 0px 4px white;
+	}
+}
+
+.player button {
+	color: #cdd6f4;
+	border: 2px solid rgba(0, 0, 0, 0);
+
+	icon {
+		font-size: 1.5rem;
+		margin: 0rem 0.25rem;
+	}
+
+	&.playicon {
+		-gtk-icon-shadow: 0rem 0.2rem 0.25rem $PrimaryBG;
+
+		&:hover {
+			-gtk-icon-shadow: 0rem 0.2rem 0.25rem $font-color2;
+		}
+	}
+
+	&.previous {
+		-gtk-icon-shadow: -0.2rem 0.2rem $PrimaryBG;
+
+		&:hover {
+			color: red;
+			-gtk-icon-shadow: -0.2rem 0.2rem $font-color5;
+		}
+	}
+
+	&.play-pause {
+		margin: 0rem 0.25rem;
+		-gtk-icon-shadow: 0.1rem 0.3rem $PrimaryBG;
+
+		&:hover {
+			color: yellow;
+			-gtk-icon-shadow: 0.1rem 0.3rem $font-color4;
+		}
+	}
+
+	&.next {
+		-gtk-icon-shadow: 0.2rem 0.2rem $PrimaryBG;
+
+		&:hover {
+			color: $font-color5;
+			-gtk-icon-shadow: 0.2rem 0.2rem yellow;
+		}
+	}
+
+	&.close {
+		//margin-left: -1.75rem;
+		margin-right: -0.3rem;
+		border-radius: $radius-tbleft;
+		background: $font-color2;
+		color: $font-color1;
+		opacity: 0.1;
+		box-shadow: -0.5rem 0rem 1rem 0.5rem rgba(0, 0, 0, 1);
+
+		&:hover {
+			color: red;
+			opacity: 1;
+		}
+	}
+}

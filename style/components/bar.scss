@@ -1,0 +1,101 @@
+.bar {
+  color: $font-color1;
+  background-image: none;
+  // background-color: red;
+  min-height: 10px;
+
+  &left {
+    min-width: 100px;
+  }
+
+  &center {
+    min-width: 100px;
+  }
+
+  &right {
+    min-width: 100px;
+  }
+}
+
+/* --- AppTitleTicker --- */
+.AppTitleTicker {
+  background: $PrimaryBG;
+  border-radius: 1rem;
+  border-top: $border;
+  min-width: 50px;
+  padding: 0rem 0.5rem;
+
+  icon {
+    color: $font-color5;
+    font-size: 1rem;
+  }
+
+  label {
+    color: $font-color1;
+    font-weight: bold;
+  }
+
+  &:hover {
+    icon {
+      color: $font-color1;
+      animation: spin 1s linear infinite;
+      /* -gtk-icon-transform: scale(2); */
+    }
+
+    label {
+      color: $font-color5;
+    }
+  }
+}
+
+/* --- Clock --- */
+
+.clock {
+  background: $PrimaryBG;
+  color: $font-color1;
+  border-top: $border;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem;
+
+  label {
+    font-size: 1rem;
+  }
+
+  icon {
+    color: $font-color5;
+  }
+
+  &:hover {
+    color: $font-color5;
+
+    icon {
+      color: $font-color1;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+/* --- sysinfo --- */
+
+.sysinfo {
+  background: $PrimaryBG;
+  border-top: $border;
+  color: $font-color1;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem;
+}
+
+.volumebtn {
+  color: $font-color1;
+
+  icon,
+  image {
+    font-size: 1.15rem;
+  }
+
+  button:hover {
+    color: $font-color5;
+  }
+}

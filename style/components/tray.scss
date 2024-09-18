@@ -1,0 +1,70 @@
+.tray {
+  background: $TertiaryBG;
+  border: $border;
+  border-radius: $radius;
+  padding: 0.25rem;
+
+  >* {
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-color: transparent;
+    font-weight: bold;
+  }
+
+  button {
+    image {
+      color: $font-color1;
+      //font-size: 1.15rem;
+      border-radius: $radius;
+    }
+
+    image,
+    icon {
+      color: $font-color1;
+      font-size: 1.5rem;
+      border-radius: $radius;
+    }
+
+    &:hover {
+      background-color: #1e1e2e;
+      border-radius: $radius;
+      border: $border;
+
+      // image {
+      // }
+    }
+  }
+}
+
+menu>menuitem {
+  background: rgba(0, 0, 0, 1);
+  border-radius: $radius;
+  border-bottom: $border;
+  color: $font-color1;
+  margin: 0.5px;
+  padding: 5px;
+
+  &:hover {
+    color: $font-color5;
+    border-right: $border;
+    border-left: $border;
+    border-bottom: none;
+    font-weight: bolder;
+    border-color: $font-color4;
+
+    icon,
+    image {
+      color: $font-color4;
+    }
+  }
+
+  icon,
+  image {
+    color: $font-color1;
+  }
+
+  &:disabled {
+    color: gray;
+    background: rgba(39, 38, 38, 0.5);
+    border: none;
+  }
+}

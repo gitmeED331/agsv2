@@ -1,0 +1,81 @@
+/* -----------------------------------------------------
+ * Clipboard history
+ * ----------------------------------------------------- */
+
+.clip {
+    &history {
+        &_box {
+            border-radius: calc($radius * 1.25);
+            background-color: $PrimaryBG;
+            border: $border;
+        }
+
+        &_box separator {
+            margin: 0px;
+        }
+
+        &_entry {
+            background-color: $SecondaryBG;
+            color: $font-color1;
+            border: none;
+            outline: none;
+            border-radius: 100px;
+            margin-bottom: 16px;
+            padding: 5px;
+            padding-left: 25px;
+            margin: 11px;
+        }
+    }
+
+    &_container {
+        border: none;
+        outline: none;
+        border-radius: 0px;
+        min-height: 40px;
+
+        label {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        &:hover {
+            background: $active-gradient;
+            border-radius: $radius;
+        }
+
+        &:focus {
+            background: $HoverBGG;
+            border: 0px solid;
+            border: none;
+            outline: none;
+        }
+
+        &:active {
+            background: $active-gradient;
+        }
+
+        & .clip_id {
+            font-weight: 200;
+            font-feature-settings: "tnum";
+            color: $font-color2;
+        }
+
+        & .dot_divider {
+            font-weight: 900;
+            font-size: 1rem;
+            min-width: 0px;
+            margin: 0px;
+            color: red;
+        }
+    }
+
+    &_divider {
+        color: $font-color2;
+        margin: 0px;
+    }
+
+    &_label {
+        color: $font-color1;
+        font-weight: normal;
+    }
+}

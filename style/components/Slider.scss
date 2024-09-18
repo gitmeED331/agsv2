@@ -1,0 +1,27 @@
+// general slider style
+.Slider {
+	min-width: 15rem;
+
+	& trough {
+		background: $SliderTrough;
+		border-radius: 20rem;
+		min-height: 12px;
+	}
+
+	;
+
+	& highlight {
+		background: $SliderHighlight;
+		border-radius: 20rem;
+		min-width: 16px;
+	}
+
+	& slider {
+		min-height: 15px;
+		min-width: 15px;
+		border-radius: 20px;
+		background-color: blue;
+		border: none;
+		box-shadow: 0px 0px 4px white;
+	}
+}

@@ -1,0 +1,132 @@
+.bluetooth {
+    // &.container {
+    //     background: $TertiaryBG;
+    //     border-radius: $radius-rlbottom;
+    //     border: $border;
+    //     border-top: none;
+    // }
+
+    &.devicelist-header {
+        color: $font-color1;
+        border-radius: $radius;
+        border-bottom: $border;
+        padding: 0.25rem 1rem;
+        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+        &.controls {
+            border: unset;
+            box-shadow: unset;
+            padding: unset;
+
+            button {
+
+                &.power-on {
+                    color: $font-color3;
+                }
+
+                &.power-off {
+                    color: $font-color4;
+                }
+
+                &:hover {
+                    label {
+                        color: $font-color5;
+                    }
+
+                    icon {
+                        color: $font-color5;
+                    }
+                }
+            }
+        }
+
+        .refreshing {
+            color: $font-color3;
+
+            icon {
+                animation: spin 1s infinite linear;
+            }
+        }
+    }
+
+    &.devicelist-inner {
+        color: $font-color1;
+        padding: 0.25rem;
+
+        &.controls {
+            all: unset;
+            background: transparent;
+            border-radius: $radius;
+            border-left: $border;
+            padding: 0rem 0.5rem;
+            box-shadow: -0.75rem 0rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+            icon {
+                font-size: 1.25rem;
+            }
+
+            button {
+                all: unset;
+
+                &:hover {
+                    label {
+                        color: $font-color5;
+                    }
+
+                    icon {
+                        color: $font-color5;
+                    }
+                }
+            }
+        }
+
+        &.items {
+            border-radius: $radius;
+            border-bottom: $border;
+
+            button {
+                label {
+                    color: $font-color1;
+                }
+
+                icon {
+                    color: $font-color1;
+                }
+
+                &:hover {
+                    label {
+                        color: $font-color5;
+                    }
+
+                    icon {
+                        color: $font-color5;
+                    }
+                }
+            }
+
+            &.itemicon {
+                color: $font-color3;
+            }
+
+            &.connected {
+                border-color: $font-color3;
+
+                label {
+                    color: $font-color3;
+                }
+            }
+
+
+        }
+    }
+
+    &.barbutton {
+        &:hover {
+            color: $font-color5
+        }
+
+        &-label {
+            color: $font-color2;
+        }
+    }
+}

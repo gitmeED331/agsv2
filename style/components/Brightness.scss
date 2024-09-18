@@ -1,0 +1,12 @@
+//----------- BRIGHTNESS SLIDER -------------
+.brightness {
+    color: $font-color1;
+    margin-bottom: 0.25rem;
+    padding: 0.5rem;
+    border: $border;
+    border-radius: $radius;
+
+    icon {
+        font-size: 1.25rem;
+    }
+}

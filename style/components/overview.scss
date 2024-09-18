@@ -1,0 +1,59 @@
+@import "../mixins/mixins";
+
+.overview {
+    @include floating-widget;
+    @include spacing;
+
+    & {
+        //background: $OverviewBG;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-color: rgba(0, 0, 0, 1);
+    }
+
+    .workspace {
+        padding: 0.8rem;
+
+        &.active>widget {
+            border-color: $border-color;
+        }
+
+        >widget {
+            @include widget;
+            border-radius: if($radius ==0, 0, $radius + $padding);
+
+            &:hover {
+                background: $active-gradient;
+            }
+
+            &:drop(active) {
+                border-color: $border-color;
+            }
+        }
+    }
+
+    .client {
+        @include button;
+
+        & {
+            margin: $padding;
+        }
+
+        &:hover {
+            background: $HoverBGG;
+        }
+
+        &.hidden {
+            @include hidden;
+
+            & {
+                transition: 0;
+            }
+        }
+    }
+}
+
+.ovhorizontal {
+    padding: 0.8rem;
+    background: none;
+}
