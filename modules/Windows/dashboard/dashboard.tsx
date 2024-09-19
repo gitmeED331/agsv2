@@ -17,7 +17,7 @@ import {
   AudioMixer,
   SessionControls,
 } from "../../Widgets/index";
-import { NotificationList } from "./notificationList";
+import NotificationList from "./notificationList";
 
 function LeftSide() {
   const settings = (

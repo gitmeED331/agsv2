@@ -3,105 +3,121 @@ import Icon, { Icons } from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-const { audio } = AstalWp.get_default_wp();
+const { audio } = AstalWp.get_default();
 const Speaker = audio.get_default_speaker();
 const Microphone = audio.get_default_microphone();
 
-function VolumeIdentifier({ device }) {
-    const tooltipText = Variable.derive(
-        [bind(device, "volume"), bind(device, "mute")],
-        (volume, isMuted) => isMuted ? "Muted" : `Volume ${(volume * 100).toFixed(2)}%`
-    );
+function DeviceIdentifier({ device }) {
+    const tooltipText = (
+        Variable.derive(
+            [bind(device, "volume"), bind(device, "mute")],
+            (volume, isMuted) => isMuted ? "Muted" : `Volume ${(volume * 100).toFixed(2)}%`
+        )
+    )
+    const classname = Variable.derive([bind(device, "mute")], (isMuted) => {
+        const classList = ["audio-mixer", "volume-indicator"];
+        if (isMuted) {
+            classList.push("muted");
+        }
+        return classList.join(" ");
+    });
 
-    return (
-        <button
-            tooltip_text={bind(tooltipText)}
-            className={`audio mixer volume-indicator ${device?.get_mute() ? "muted" : ""}`}
-            onClick={(_, event) => {
-                if (event.button === Gdk.BUTTON_PRIMARY) {
-                    device?.set_mute(!device?.get_mute());
-                }
-            }}
-        >
-            <icon icon={bind(device, "volume_icon")} />
-        </button>
-    );
+    return <button
+        tooltip_text={bind(tooltipText)}
+        className={bind(classname)}
+        onClick={(_, event) => {
+            if (event.button === Gdk.BUTTON_PRIMARY) {
+                device?.set_mute(!device?.get_mute());
+            }
+        }}
+    >
+        <icon icon={bind(device, "volume_icon")} />
+    </button>
 }
 
-function VolumeSlider({ device }) {
-    return (
-        <slider
-            className={`audio-mixer ${device}-slider Slider`}
-            hexpand={true}
-            drawValue={false}
-            min={0}
-            max={device === Speaker ? 1.5 : 1}
-            value={bind(device, "volume")}
-            onDragged={({ value, dragging }) => {
-                if (dragging) {
-                    device?.set_volume(value);
-                    device?.set_mute(false);
-                }
-            }}
-        />
-    );
+function DeviceSlider({ device }) {
+    return <slider
+        className={`audio-mixer ${device}-slider Slider`}
+        hexpand={true}
+        drawValue={false}
+        min={0}
+        max={device === Speaker ? 1.5 : 1}
+        value={bind(device, "volume")}
+        onDragged={({ value, dragging }) => {
+            if (dragging) {
+                device?.set_volume(value);
+                device?.set_mute(false);
+            }
+        }}
+    />
 }
 
-function VolumeControlGroup({ devices }) {
-    return (
-        <box
-            className="audio-mixer speaker-mic"
-            vertical={true}
-            vexpand={true}
-            spacing={10}
-        >
-            {devices.map((device) => (
-                <box spacing={5} >
-                    <VolumeIdentifier device={device} />
-                    <VolumeSlider device={device} />
-                </box>
-            ))}
-        </box>
-    );
+function DeviceControlGroup({ devices }) {
+    return <box
+        className="audio-mixer speaker-mic"
+        vertical={true}
+        vexpand={true}
+        spacing={10}
+    >
+        {devices.map((device) => (
+            <box spacing={5} key={device.id}>
+                <DeviceIdentifier device={device} />
+                <DeviceSlider device={device} />
+            </box>
+        ))}
+    </box>
 }
 
 function AppMixerItem({ stream }) {
-    const mixerLabel = () => (
-        <box
-            className={stream?.is_muted ? "muted" : ""}
-            spacing={5}
-            vertical={false}
-            valign={Gtk.Align.CENTER}
+    const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
+        const classList = ["audio-mixer", "item"];
+        if (isMuted) {
+            classList.push("muted");
+        }
+        return classList.join(" ");
+    });
+    const mixerLabel = (
+        <button
+            className={bind(classname)}
+            onClick={(_, event) => {
+                if (event.button === Gdk.BUTTON_PRIMARY) {
+                    stream?.set_mute(!stream?.get_mute());
+                }
+            }}
         >
-            <icon
-                className={"mixeritemicon"}
-                valign={Gtk.Align.START}
-                tooltip_text={bind(stream, "description").as((n) => n || "")}
-                icon={bind(stream, "icon_name")}
-            />
-            <label
-                className={"mixeritemlabel"}
+            <box
+                spacing={5}
+                vertical={false}
                 valign={Gtk.Align.CENTER}
-                xalign={0}
-                ellipsize={Pango.EllipsizeMode.END}
-                max_width_chars={28}
-                label={bind(stream, "name").as((d) => d || "")}
-            />
-        </box>
+            >
+                <icon
+                    valign={Gtk.Align.START}
+                    tooltip_text={bind(stream, "description").as((n) => n || "")}
+                    icon={bind(stream, "icon").as((n) => Icons(n) || Icon.audio.type.speaker)}
+                />
+                <label
+                    valign={Gtk.Align.CENTER}
+                    xalign={0}
+                    ellipsize={Pango.EllipsizeMode.END}
+                    max_width_chars={28}
+                    label={bind(stream, "description").as((d) => d || "")}
+                />
+            </box>
+        </button>
     );
 
     return (
         <box
-            className={"mixeritem"}
+            className={"audio-mixer item"}
             hexpand={true}
             valign={Gtk.Align.CENTER}
             vertical={true}
             visible={true}
-            spacing={10}
+            spacing={2}
         >
-            {mixerLabel()}
+            {mixerLabel}
             <slider
-                className={"mixeritemslider Slider"}
+                className={"audio-mixer item Slider"}
                 hexpand={true}
                 draw_value={false}
                 value={bind(stream, "volume")}
@@ -129,28 +145,24 @@ function SettingsButton() {
         </button>
     );
 }
-function getActiveStreams() {
-    try {
-        return audio.get_streams();
-    } catch (error) {
-        console.error("Error fetching active streams:", error);
-        return [];
-    }
-}
+
 
 export default function AudioMixer() {
-    const activeStreams = getActiveStreams();
+    const getStreams = audio.get_streams();
+    const activeStreams = (
+        <box vertical={true}>
+            <label className={"audio-mixer header"} label={"Active Audio Streams"} visible={getStreams.length > 0} />
+            {bind(audio, "streams").as(getStreams => getStreams.length > 0 ? (
+                getStreams.map((stream, index) => <AppMixerItem key={index} stream={stream} />)
+            ) : (
+                <label label="No active audio streams" />
+            ))}
+        </box>
+    )
     return (
         <box vertical={true} className={"audio-mixer container"} spacing={10}>
-            <VolumeControlGroup devices={[Speaker, Microphone]} />
-            <box vertical={true}>
-                <label className={"audio-mixer header"} label="Active Audio Streams" visible={activeStreams.length > 0 ? true : false} />
-                {activeStreams.length > 0 ? (
-                    activeStreams.map((stream) => <AppMixerItem stream={stream} />)
-                ) : (
-                    <label label="No active audio streams" />
-                )}
-            </box>
+            <DeviceControlGroup devices={[Speaker, Microphone]} />
+            {activeStreams}
             <SettingsButton />
         </box>
     );

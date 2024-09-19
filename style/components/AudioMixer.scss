@@ -1,7 +1,5 @@
 //------------- VOLUME SLIDER ---------------------
 .audio-mixer {
-    // margin-top: 0.5rem;
-    // margin-right: 0.65rem;
     color: $font-color1;
 
     &.header {
@@ -12,23 +10,13 @@
         padding: 0.25rem 0rem;
     }
 
-    &Label {
-        margin-bottom: 0.5rem;
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: $font-color1;
-        //text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px $shadow-color;
-    }
+    // &Label {
+    //     font-size: 1.25rem;
+    //     font-weight: bold;
+    //     color: $font-color1;
+    // }
 
-    &Icon {
-        margin-right: 0.5rem;
-        margin-top: 0.5rem;
-        text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px $shadow-color;
-
-        image {
-            color: $font-color1;
-        }
-    }
+    &.item {}
 
     &.settings-button {
         color: $font-color1;
@@ -40,14 +28,13 @@
         border: $border;
         padding: 1rem;
     }
-
-    &.speaker-mic {
-        margin: 0rem 0.5rem;
-    }
 }
 
 .muted {
-    &:hover {
+    color: red;
+
+
+    icon {
         color: red;
     }
 }

@@ -1,3 +1,16 @@
+<eventbox
+                onClick={(_, event) => {
+                  if (event.button === Gdk.BUTTON_PRIMARY) {
+                    removeItem(item.id);
+                  } else if (event.button === Gdk.BUTTON_SECONDARY) {
+                    item.dismiss();
+                  }
+                }}
+                onHoverLost={() => {
+                  removeItem(item.id);
+                }}
+              >
+
 rm /run/user/1000/astal.sock
 
 ellipsize={Pango.EllipsizeMode.END}
@@ -93,3 +106,11 @@ repeatedGreetings()
 onKeyPressEvent={(_, event) => {
     if (event.get_keyval()[1] === Gdk.KEY_Escape) { App.toggle_window("sessioncontrols") }
 }}
+
+    const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
+        const classList = ["audio-mixer", "item"];
+        if (isMuted) {
+            classList.push("muted");
+        }
+        return classList.join(" ");
+    });

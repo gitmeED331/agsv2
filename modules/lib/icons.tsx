@@ -27,6 +27,7 @@ const substitutes = {
   "kate-symbolic": "geany-symbolic",
   "org.kde.kate": "codepen-symbolic",
   "dev.zed.Zed": "zed-symbolic",
+  "chromium-browser": "chromium-symbolic",
 };
 
 const Icon = {

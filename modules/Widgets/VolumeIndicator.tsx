@@ -1,19 +1,19 @@
 import { Widget, App, Gtk, Gdk, bind, Variable } from "astal";
-import Wp from "gi://AstalWp";
+import AstalWp from "gi://AstalWp";
 
-const { audio } = Wp.get_default_wp()
+const { audio } = AstalWp.get_default()
 
 const Speaker = audio.get_default_speaker()
 
 function VolumeIndicator() {
-  const volumeIndicatorClassName = () => {
+  const volumeIndicatorClassName = Variable.derive([bind(Speaker, "mute")], (isMuted) => {
     const classes = ["volume-indicator"];
-    if (Speaker?.get_mute() === true) {
+    if (isMuted) {
       classes.push("muted");
     }
     const className = classes.join(" ");
     return className;
-  };
+  })
 
   const tooltip = Variable.derive(
     [bind(Speaker, "volume"), bind(Speaker, "mute")],
@@ -23,10 +23,10 @@ function VolumeIndicator() {
   return (
     <button
       tooltip_text={bind(tooltip)}
-      className={volumeIndicatorClassName()}
+      className={bind(volumeIndicatorClassName)}
       onClick={(_, event) => {
         if (event.button === Gdk.BUTTON_PRIMARY) {
-          const win = App.get_window("audiomixerwindow");
+          const win = App.get_window("dashboard");
           if (win) {
             win.visible = !win.visible;
           }

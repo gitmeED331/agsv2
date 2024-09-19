@@ -1,4 +1,4 @@
-import { App, Astal, Gtk } from "astal";
+import { App, Astal, Gtk, execAsync } from "astal";
 // import Hyprland from "gi://AstalHyprland";
 
 // ----- Widgets -----
@@ -7,7 +7,6 @@ import Workspaces from "./Workspaces";
 import Clock from "./clock";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
-import { DashboardButton, SessionControlButton } from "./BarButtons";
 
 function LeftBar() {
   return (
@@ -49,7 +48,6 @@ function RightBar() {
     </box>
   );
 }
-
 export default function Bar({ monitor }: { monitor: number }) {
   return (
     <window

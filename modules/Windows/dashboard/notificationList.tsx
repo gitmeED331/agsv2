@@ -8,50 +8,50 @@ import {
   bind,
 } from "astal";
 import Icon, { Icons } from "../../lib/icons";
-//import Notification from "./Notification"
 import Notifd from "gi://AstalNotifd";
 import Pango from "gi://Pango";
-import { NotifWidget } from "../../Widgets/index";
+import NotifWidget from "../../Widgets/Notification";
 const Notif = Notifd.get_default();
 
-const NotifBox = (
-  <scrollable
-    className="notif container"
-    vscroll={Gtk.PolicyType.AUTOMATIC}
-    hscroll={Gtk.PolicyType.NEVER}
-    vexpand={true}
-    hexpand={false}
-    halign={Gtk.Align.FILL}
-    valign={Gtk.Align.FILL}
-  >
-    <NotifWidget />
-  </scrollable>
-);
-
-const Empty = (
-  <box
-    className="notif empty"
-    halign={Gtk.Align.CENTER}
-    valign={Gtk.Align.CENTER}
-    vertical={true}
-  >
-    <label
-      label={`󱙎`}
-      valign={Gtk.Align.CENTER}
-      halign={Gtk.Align.CENTER}
-      vexpand={true}
-    />
-  </box>
-);
-
-export function NotificationList() {
+const NotifBox = () => {
   return (
-    <box
-      className="notif panel"
-      name={"notifications"}
-      vertical={true}
+    <scrollable
+      className="notif container"
+      vscroll={Gtk.PolicyType.AUTOMATIC}
+      hscroll={Gtk.PolicyType.NEVER}
       vexpand={true}
       hexpand={false}
+      halign={Gtk.Align.FILL}
+      valign={Gtk.Align.FILL}
+    >
+      <eventbox>
+        <box
+          className={"notif"}
+          halign={Gtk.Align.CENTER | Gtk.Align.FILL}
+          valign={Gtk.Align.START}
+          vexpand={true}
+          vertical={true}
+          spacing={10}
+          widthRequest={350}
+        >
+          {bind(Notif, "notifications").as((items) => {
+            if (items) {
+              items.sort((a, b) => b.time - a.time);
+            }
+            return items.map((item) => NotifWidget({ item }));
+          })}
+        </box>
+      </eventbox>
+    </scrollable>
+  );
+};
+
+export default function NotificationList() {
+  return (
+    <box
+      name={"notifications"}
+      className="notif panel"
+      vertical={true}
       halign={Gtk.Align.FILL}
       valign={Gtk.Align.FILL}
     >
@@ -62,13 +62,8 @@ export function NotificationList() {
         halign={Gtk.Align.FILL}
         vertical={false}
         centerWidget={
-          <label
-            label="Notifications"
-            valign={Gtk.Align.START}
-            halign={Gtk.Align.END}
-          />
+          <label label="Notifications" valign={Gtk.Align.START} halign={Gtk.Align.END} />
         }
-
         endWidget={
           <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} vertical={false} spacing={20}>
             <button
@@ -77,14 +72,14 @@ export function NotificationList() {
               onClick={(_, event) => {
                 if (event.button === Gdk.BUTTON_PRIMARY) {
                   Notif.get_notifications().forEach((item, id) =>
-                    timeout(50 * id, () => item.dismiss()),
+                    timeout(50 * id, () => item.dismiss())
                   );
                 }
               }}
             >
               <icon
                 icon={bind(Notif, "notifications").as((items) =>
-                  items.length > 0 ? Icon.trash.full : Icon.trash.empty,
+                  items.length > 0 ? Icon.trash.full : Icon.trash.empty
                 )}
               />
             </button>
@@ -99,9 +94,7 @@ export function NotificationList() {
             >
               <icon
                 icon={bind(Notif, "dont_disturb").as((d) =>
-                  d === false
-                    ? Icons("bell-disabled-symbolic")
-                    : Icons("bell-enabled-symbolic"),
+                  d === false ? Icons("bell-enabled-symbolic") : Icons("bell-disabled-symbolic")
                 )}
                 valign={Gtk.Align.CENTER}
                 halign={Gtk.Align.CENTER}
@@ -110,11 +103,7 @@ export function NotificationList() {
           </box>
         }
       />
-
-      {/* {bind(Notif, "notifications").as((noti) =>
-        noti.length > 0 ? NotifBox : Empty,
-      )} */}
-      {NotifBox}
+      {NotifBox()}
     </box>
   );
 }
