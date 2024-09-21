@@ -4,12 +4,13 @@ import { Widget, Gtk, Astal } from "astal";
  * @param {string} place
  * @param {*} props
  */
-export const RoundedCorner = (place, props) =>
-  Widget.DrawingArea({
-    ...props,
-    hpack: place.includes("left") ? "start" : "end",
-    vpack: place.includes("top") ? "start" : "end",
-    setup: (widget) => {
+export const RoundedCorner = (place, props) => {
+  <drawingarea
+    ...props
+  halign={place.includes("left") ? "Gtk.Align.START" : "Gtk.Align.END"}
+valign={place.includes("top") ? "Gtk.Align.START" : "Gtk.Align.END"}
+
+    setup={(widget) => {
       //HACK: ensure a minimum size required for the window to even show up.
       //size chande later from css
       const r = 2;
@@ -43,17 +44,18 @@ export const RoundedCorner = (place, props) =>
         cr.clip();
         Gtk.render_background(widget.get_style_context(), cr, 0, 0, r, r);
       });
-    },
-  });
+}}
+  />
+}
 
 /**
  * @param {string} place
  * @param {*} props
  */
-export const RoundedAngleEnd = (place, props) =>
-  Widget.DrawingArea({
-    ...props,
-    setup: (widget) => {
+export const RoundedAngleEnd = (place, props) => {
+  <drawingarea
+    ...props
+    setup={(widget) => {
       const ratio = 1.5;
       const r = widget.get_allocated_height();
       widget.set_size_request(ratio * r, r);
@@ -146,44 +148,50 @@ export const RoundedAngleEnd = (place, props) =>
         // cr.setLineWidth(border_width);
         // cr.setSourceRGBA(border_color.red, border_color.green, border_color.blue, border_color.alpha);
       });
-    },
-  });
+}}
+  />
+}
 
 export const CornerTopleft = () =>
-  Widget.Window({
-    name: "cornertl",
-    layer: "top",
-    anchor: ["top", "left"],
-    exclusivity: "normal",
-    visible: true,
-    child: RoundedCorner("topleft", { className: "corner" }),
-  });
+  <window
+		name={"cornertl"}
+		layer={Astal.Layer.TOP}
+		anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT }
+    exclusivity={Astal.Exclusivity.NORMAL}
+		visible={true}
+		>
+			{RoundedCorner("topleft", { className: "corner" })}
+    </window>
+
 export const CornerTopright = () =>
-  Widget.Window({
-    name: "cornertr",
-    layer: "top",
-    anchor: ["top", "right"],
-    exclusivity: "normal",
-    visible: true,
-    child: RoundedCorner("topright", { className: "corner" }),
-  });
+	<window
+		name={"cornertr"}
+		layer={Astal.Layer.TOP}
+		anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT }
+		exclusivity={Astal.Exclusivity.NORMAL}
+visible={true}
+	>
+    { RoundedCorner("topright", { className: "corner" }) }
+  </window>
 export const CornerBottomleft = () =>
-  Widget.Window({
-    name: "cornerbl",
-    layer: "top",
-    anchor: ["bottom", "left"],
-    exclusivity: "normal",
-    visible: true,
-    child: RoundedCorner("bottomleft", { className: "corner" }),
-  });
+	<window
+		name={"cornerbl"}
+    layer={Astal.Layer.TOP}
+    anchor={Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT }
+    exclusivity={Astal.Exclusivity.NORMAL}
+		visible={true}
+	>
+    {RoundedCorner("bottomleft", { className: "corner" }),
+    </window>
 export const CornerBottomright = () =>
-  Widget.Window({
-    name: "cornerbr",
-    layer: "top",
-    anchor: ["bottom", "right"],
-    exclusivity: "normal",
-    visible: true,
-    child: RoundedCorner("bottomright", { className: "corner" }),
-  });
+	<window
+		name={"cornerbr"}
+    layer={Astal.Layer.TOP}
+    anchor={Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT }
+		exclusivity={Astal.Exclusivity.NORMAL}
+visible={true}
+>
+	{RoundedCorner("bottomright", { className: "corner" })}
+</window>
 
 export default RoundedCorner;

@@ -5,6 +5,7 @@ import NotifWidget from "../Widgets/Notification";
 
 const Notif = Notifd.get_default();
 const transitionTime = 300;
+const waitTime = 3000;
 const expireTime = 30000;
 
 const Time = (time: number, format = "%H:%M.%S") =>
@@ -42,12 +43,15 @@ function NotifItem() {
           onClick={(_, event) => {
             if (event.button === Gdk.BUTTON_PRIMARY) {
               removeItem(box, notificationItem);
-            } else if (event.button === Gdk.BUTTON_SECONDARY) {
+            }
+            if (event.button === Gdk.BUTTON_SECONDARY) {
               notification.dismiss();
             }
           }}
           onHoverLost={() => {
-            removeItem(box, notificationItem);
+            timeout(waitTime).then(() => {
+              removeItem(box, notificationItem);
+            })
           }}
         >
           <NotifWidget item={notification} />
@@ -61,7 +65,6 @@ function NotifItem() {
       });
 
       timeout(expireTime, () => {
-        notification.dismiss();
         removeItem(box, notificationItem);
       });
     }

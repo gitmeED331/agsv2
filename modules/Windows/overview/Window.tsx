@@ -22,38 +22,29 @@ function setup(btn) {
     btn.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
 }
 
-export default ({ address, size: [w, h], class: c, title }: Client) => {
+export default ({ address, class: c, title, size: [w, h] }: Client) => {
     const scale = 15
     let monochrome = new Variable(true)
-    return (
-        <button
-            className={"client"}
-            tooltip_text={title}
-            onClick={(_, event) => {
-                if (event.button === Gdk.BUTTON_PRIMARY) {
-                    dispatch(`focuswindow address:${address}`)
-                    App.toggle_window("overview")
-                }
-                if (event.button === Gdk.BUTTON_SECONDARY) {
-                    dispatch(`closewindow address:${address}`)
-                }
-            }}
-            setup={setup}
-        >
-            <icon
-                css={`
+    return <button className={"client"} tooltip_text={title} setup={setup}
+        onClick={(_, event) => {
+            if (event.button === Gdk.BUTTON_PRIMARY) {
+                dispatch(`focuswindow address:${address}`)
+                App.toggle_window("overview")
+            }
+            if (event.button === Gdk.BUTTON_SECONDARY) { dispatch(`closewindow address:${address}`) }
+        }}
+    >
+        <icon
+            css={`
             min-width: ${(scale / 100) * w}px;
             min-height: ${(scale / 100) * h}px;
             `}
-                icon={monochrome.map(m => {
-                    const app = apps.find(app => app.match(c));
-                    if (!app) {
-                        return Icon.fallback.executable + (m ? "-symbolic" : "");
-                    }
-                    return Icons(app.icon_name + (m ? "-symbolic" : ""));
-                })}
-            />
-        </button>
-    )
+            icon={monochrome.map(m => {
+                const app = apps.find(app => app.match(c));
+                if (!app) { return Icon.fallback.executable + (m ? "-symbolic" : "") }
+                return Icons(app.icon_name + (m ? "-symbolic" : ""));
+            })}
+        />
+    </button>
 }
 

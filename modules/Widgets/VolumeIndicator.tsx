@@ -38,9 +38,11 @@ function VolumeIndicator() {
       onScroll={(_, { delta_y }) => {
         if (delta_y < 0) {
           Speaker?.set_volume(Speaker.volume + 0.05);
+          Speaker?.set_mute(false);
         }
         else {
           Speaker?.set_volume(Speaker.volume - 0.05);
+          Speaker?.set_mute(false);
         }
       }}
     >

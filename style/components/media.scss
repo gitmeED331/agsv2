@@ -122,34 +122,34 @@
 	text-shadow: 0.1rem 0.1rem $PrimaryBG;
 }
 
-.player scale.position {
-	margin-bottom: 0.3rem;
-	padding: 0.25rem;
-	min-width: 12rem;
+// .player scale.position {
+// 	margin-bottom: 0.3rem;
+// 	padding: 0.25rem;
+// 	min-width: 12rem;
 
 
-	trough {
-		min-height: 10px;
-		background: $SliderTrough;
-		border-radius: $radius;
-		box-shadow: 0rem 0.25rem 0.5rem rgba(0, 0, 0, 1);
-	}
+// trough {
+// 	min-height: 10px;
+// 	background: $SliderTrough;
+// 	border-radius: $radius;
+// 	box-shadow: 0rem 0.25rem 0.5rem rgba(0, 0, 0, 1);
+// }
 
-	highlight {
-		background: $SliderHighlight;
-		border-radius: $radius;
+// highlight {
+// 	background: $SliderHighlight;
+// 	border-radius: $radius;
 
-	}
+// }
 
-	slider {
-		min-height: 10px;
-		min-width: 10px;
-		border-radius: 20px;
-		background-color: blue;
-		border: none;
-		box-shadow: 0px 0px 4px white;
-	}
-}
+// slider {
+// 	min-height: 10px;
+// 	min-width: 10px;
+// 	border-radius: 20px;
+// 	background-color: blue;
+// 	border: none;
+// 	box-shadow: 0px 0px 4px white;
+// }
+// }
 
 .player button {
 	color: #cdd6f4;

@@ -49,6 +49,17 @@ onClick={(_, event) => {
                 }
             }}
 
+ onScroll={(_, { delta_y }) => {
+        if (delta_y < 0) {
+          Speaker?.set_volume(Speaker.volume + 0.05);
+          Speaker?.set_mute(false);
+        }
+        else {
+          Speaker?.set_volume(Speaker.volume - 0.05);
+          Speaker?.set_mute(false);
+        }
+      }}
+      
 const win = App.get_window("overview");
     if (win) { win.visible = !win.visible; }
 
@@ -107,10 +118,10 @@ onKeyPressEvent={(_, event) => {
     if (event.get_keyval()[1] === Gdk.KEY_Escape) { App.toggle_window("sessioncontrols") }
 }}
 
-    const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
-        const classList = ["audio-mixer", "item"];
-        if (isMuted) {
-            classList.push("muted");
-        }
-        return classList.join(" ");
-    });
+const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
+  const classList = ["audio-mixer", "item"];
+    if (isMuted) {
+      classList.push("muted");
+    }
+  return classList.join(" ");
+});

@@ -6,25 +6,33 @@ const SystemTray = AstalTray.Tray.get_default();
 
 const SysTrayItem = (item) => {
   const menu = item.create_menu?.();
-
+  let clickTimeout: any = null;
+  let clickCount = 0;
   return (
     <button
       className={"systray-item"}
       halign={Gtk.Align.CENTER}
       valign={Gtk.Align.CENTER}
       onClick={(btn, event) => {
-        if (
-          event.button === Gdk.BUTTON_PRIMARY ||
-          event.button === Gdk.BUTTON_SECONDARY
-        ) {
+        if (event.button === Gdk.BUTTON_PRIMARY) {
+          clickCount++;
+          if (clickCount === 1) {
+            clickTimeout = setTimeout(() => {
+              clickCount = 0;
+            }, 400);
+          } else if (clickCount === 2) {
+            clearTimeout(clickTimeout);
+            clickCount = 0;
+            item.activate(0, 0);
+          }
+        }
+        if (event.button === Gdk.BUTTON_SECONDARY) {
           menu?.popup_at_widget(
             btn,
             Gdk.Gravity.EAST,
             Gdk.Gravity.WEST,
             null,
           );
-        } else if (event.button === Gdk.BUTTON_MIDDLE) {
-          item.activate(0, 0);
         }
       }}
       tooltip_markup={bind(item, "tooltip_markup")}
@@ -32,9 +40,7 @@ const SysTrayItem = (item) => {
       <icon
         halign={Gtk.Align.CENTER}
         valign={Gtk.Align.CENTER}
-        g_icon={bind(item, "gicon")}
-      // pixbuf={bind(item, "icon_pixbuf")}
-      // icon={bind(item, "icon_name")}
+        g_icon={bind(item, "gicon").as((gicon) => gicon || Icons(item.icon_name))}
       />
     </button>
   );

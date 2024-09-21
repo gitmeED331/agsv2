@@ -48,7 +48,7 @@ const TheLabelReveal = () => {
 			transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT}
 			transitionDuration={300}
 			clickThrough={true}
-			revealChild={PercentageReveal()}
+			revealChild={bind(PercentageReveal())}
 		>
 			<PercentLabel />
 		</revealer>

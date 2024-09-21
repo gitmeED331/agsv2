@@ -28,6 +28,8 @@ const substitutes = {
   "org.kde.kate": "codepen-symbolic",
   "dev.zed.Zed": "zed-symbolic",
   "chromium-browser": "chromium-symbolic",
+  "ente_auth": "auth-icon-symbolic",
+  "udiskie": ""
 };
 
 const Icon = {

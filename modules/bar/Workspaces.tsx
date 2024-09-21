@@ -1,19 +1,13 @@
-import Icon from '../lib/icons';
 import { App, bind, execAsync, Gtk, Gdk, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
+import Icon from '../lib/icons';
 
-// --- button click actions ---
-const dispatch = (arg: string | number) => {
-    execAsync(`hyprctl dispatch workspace ${arg}`);
-};
-const moveSilently = (arg: string | number) => {
-    execAsync(`hyprctl dispatch movetoworkspacesilent ${arg}`);
-};
+const dispatch = (arg: string | number) => { execAsync(`hyprctl dispatch workspace ${arg}`) };
+const moveSilently = (arg: string | number) => { execAsync(`hyprctl dispatch movetoworkspacesilent ${arg}`) };
 const openOverview = (arg: string | number) => {
     const win = App.get_window("overview");
     if (win) { win.visible = !win.visible; }
 };
-// --- end button click actions ---
 
 // --- signal handler ---
 function ws(id: number) {
@@ -54,29 +48,14 @@ export default function Workspaces({ id }: { id: number }) {
                     <icon icon={wsIcon[`ws${id}`]} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} /> :
                     <label label={`${id}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
             return (
-                <button
-                    className={className()}
-                    visible={isVisible()}
-                    valign={Gtk.Align.CENTER}
-                    halign={Gtk.Align.CENTER}
-                    cursor="pointer"
-
+                <button className={className()} visible={isVisible()}
+                    valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} cursor="pointer"
                     onClick={(_, event) => {
-                        if (event.button === Gdk.BUTTON_PRIMARY) {
-                            dispatch(id);
-                        }
-                        if (event.button === Gdk.BUTTON_SECONDARY) {
-                            moveSilently(id);
-                        }
-                        if (event.button === Gdk.BUTTON_MIDDLE) {
-                            openOverview(id);
-                        }
+                        if (event.button === Gdk.BUTTON_PRIMARY) { dispatch(id); }
+                        if (event.button === Gdk.BUTTON_SECONDARY) { moveSilently(id); }
+                        if (event.button === Gdk.BUTTON_MIDDLE) { openOverview(id); }
                     }}>
-
-                    <box
-                        halign={Gtk.Align.CENTER}
-                        valign={Gtk.Align.CENTER}
-                    >
+                    <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
                         {wsIconLabel}
                     </box >
                 </button >

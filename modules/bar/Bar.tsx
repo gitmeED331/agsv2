@@ -1,6 +1,4 @@
 import { App, Astal, Gtk, execAsync } from "astal";
-// import Hyprland from "gi://AstalHyprland";
-
 // ----- Widgets -----
 import AppTitleTicker from "./AppTitleTicker";
 import Workspaces from "./Workspaces";
