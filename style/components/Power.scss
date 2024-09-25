@@ -1,61 +1,69 @@
 @keyframes lowBlink {
-  0% {
-    color: #ff0000;
-  }
+	0% {
+		color: #ff0000;
+	}
 
-  50% {
-    color: #ffff00;
-  }
+	50% {
+		color: #ffff00;
+	}
 
-  100% {
-    color: #000066;
-  }
+	100% {
+		color: #000066;
+	}
 }
 
 // ------------- Battery bar --------------
 
 .battery {
-  & {
-    border: none;
-    color: $font-color1;
-    font-size: 0.5rem;
-  }
+	& {
+		border: none;
+		color: $font-color1;
+		font-size: 0.5rem;
+	}
 
-  icon {
-    color: red;
-  }
+	icon {
+		&.charging {
+			color: yellow;
+		}
+		&.discharging {
+			color: red;
+		}
+	}
 
-  &.low {
-    animation: lowBlink 3s infinite;
+	&.low {
+		animation: lowBlink 3s infinite;
 
-    label {
-      animation: lowBlink 2s infinite;
-    }
-  }
+		label {
+			animation: lowBlink 2s infinite;
+		}
+		icon {
+			animation: lowBlink 2s infinite;
+		}
+	}
 
-  &:hover {
-    color: $font-color5;
-  }
+	&:hover {
+		color: $font-color5;
+	}
 
-  & trough {
-    border-radius: $radius * 5;
-    min-width: 75px;
+	& trough {
+		border-radius: $radius * 5;
+		min-width: 75px;
 
-    block {
-      min-height: 10px;
-      border: 1px solid $font-color2;
-      border-radius: $radius * 5;
-      margin: 0px 0.25px;
+		block {
+			min-height: 10px;
+			border: 1px solid $font-color2;
+			border-radius: $radius * 5;
+			margin: 0px 0.25px;
 
-      &.empty {
-        background: linear-gradient(90deg, red, black 100%);
-      }
+			&.empty {
+				background: linear-gradient(90deg, red, black 100%);
+			}
 
-      &.filled {
-        background: linear-gradient(90deg, black, lime 100%);
-      }
-    }
-  }
+			&.filled {
+				background: linear-gradient(90deg, black, lime 100%);
+			}
+		}
+	}
 }
 
 // ------------- Power profiles --------------
@@ -102,7 +110,6 @@
 //             lime 100%);
 //       }
 //     }
-
 
 //     &:nth-child(2) {
 //       color: yellow;

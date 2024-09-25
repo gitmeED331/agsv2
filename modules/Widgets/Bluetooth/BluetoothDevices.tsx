@@ -2,11 +2,21 @@ import { Astal, Widget, bind, Gtk, Gdk, App, execAsync, Variable } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
 import Pango from "gi://Pango";
+import { Spinner } from "../../Astalified/Spinner";
 
 const Bluetooth = AstalBluetooth.get_default();
 const Adapter = Bluetooth.adapter;
 
-const btControls = () => {
+function btControls() {
+	function spinSetup(spinner: Spinner) {
+		bind(Adapter, "discovering").as((v) => (v ? spinner.start : spinner.stop));
+	}
+	const theSpinner = new Spinner({
+		name: "refreshspinner",
+		setup: spinSetup,
+		halign: Gtk.Align.CENTER,
+		valign: Gtk.Align.CENTER,
+	})
 	const btPower = (
 		<button
 			className={bind(Bluetooth, "is_powered").as((v) => (v ? "bluetooth power-on" : "bluetooth power-off"))}
@@ -24,26 +34,29 @@ const btControls = () => {
 	);
 
 	const Refresh = (
-		<button
-			className={bind(Adapter, "discovering").as((v) => (v ? "bluetooth refreshing" : "bluetooth stale"))}
-			onClick={async (_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					//await execAsync("bluetoothctl --timeout 120 scan on").catch(console.error);
-					await Adapter.start_discovery();
-					setTimeout(() => {
+		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Adapter, "discovering").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
+			{theSpinner}
+			<button
+				name={"refreshbtn"}
+				onClick={async (_, event) => {
+					if (event.button === Gdk.BUTTON_PRIMARY) {
+						//await execAsync("bluetoothctl --timeout 120 scan on").catch(console.error);
+						await Adapter.start_discovery();
+						setTimeout(() => {
+							Adapter.stop_discovery();
+						}, 120000);
+					}
+					if (event.button === Gdk.BUTTON_SECONDARY) {
 						Adapter.stop_discovery();
-					}, 120000);
-				}
-				if (event.button === Gdk.BUTTON_SECONDARY) {
-					Adapter.stop_discovery();
-				}
-			}}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-			tooltip_text={"Refresh"}
-		>
-			<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-		</button>
+					}
+				}}
+				halign={Gtk.Align.CENTER}
+				valign={Gtk.Align.CENTER}
+				tooltip_text={"Refresh"}
+			>
+				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+			</button>
+		</stack>
 	);
 
 	return (

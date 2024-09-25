@@ -3,34 +3,28 @@ import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import Pango from "gi://Pango";
 import NM from "gi://NM";
-import { Spinner } from "../../Astalified/Spinner"
+import { Spinner } from "../../Astalified/Spinner";
 
 const network = AstalNetwork.get_default();
 const Wifi = network.wifi;
 
-function header() {
-	const isActiveAP = Wifi.active_access_point?.ssid === ap.ssid ? true : false;
-	const isConnecting = ap.state === NM.State.CONNECTING ? true : false;
+function Header() {
 	function spinSetup(spinner: Spinner) {
-		spinner_set_spinning: bind(Wifi, "scanning").as((s) => s ? true : false)
-	}
-	function theSpinner() {
-		return <Spinner
-			name={"refreshspinner"}
-			setup={spinSetup}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-		/>
+		bind(Wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop));
 	}
 
+	const theSpinner = new Spinner({
+		name: "refreshspinner",
+		setup: spinSetup,
+		halign: Gtk.Align.CENTER,
+		valign: Gtk.Align.CENTER,
+	});
+
 	const refresh = (
-		<stack
-			visible={isActiveAP || isConnecting} halign={Gtk.Align.END}
-			visible_child_name={bind(Wifi, "scanning").as((s) => s ? "refreshspinner" : "refreshbtn")}
-			homogeneous={false}
-		>
+		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
 			{theSpinner}
 			<button
+				name={"refreshbtn"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
 						Wifi.scan();
@@ -39,9 +33,8 @@ function header() {
 				halign={Gtk.Align.CENTER}
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(Wifi, "scanning").as((v) => (v ? "wifi scanning" : ""))}
-				className={bind(Wifi, "scanning").as((v) => (v ? "scanning" : ""))}
 			>
-				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} xalign={0} yalign={0} />
+				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 			</button>
 		</stack>
 	);
@@ -79,8 +72,8 @@ function header() {
 }
 
 function WifiAP(ap) {
-	const isActiveAP = Wifi.active_access_point?.ssid === ap.ssid ? true : false;
-	const isConnecting = ap.state === NM.State.CONNECTING ? true : false;
+	const isActiveAP = Wifi.active_access_point && Wifi.active_access_point.ssid === ap.ssid ? true : false;
+	const isConnecting = NM.State.CONNECTING === ap.state ? true : false;
 	const passreveal = Variable(false);
 	const noPw = NM["80211ApSecurityFlags"].NONE;
 	const apPrivacy = NM["80211ApFlags"].NONE;
@@ -103,7 +96,7 @@ function WifiAP(ap) {
 			halign={Gtk.Align.FILL}
 			valign={Gtk.Align.FILL}
 			css={`
-				min-width: 100px;
+				min-width: 10px;
 				min-height: 10px;
 			`}
 			onActivate={(self) => {
@@ -219,16 +212,14 @@ function WifiAP(ap) {
 		</button>
 	);
 	function spinSetup(spinner: Spinner) {
-		spinner.set_spinning(isConnecting)
+		isConnecting ? spinner.start() : spinner.stop();
 	}
-	function theSpinner() {
-		return <Spinner
-			name={"connectionSpinner"}
-			setup={spinSetup}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-		/>
-	}
+	const theSpinner = new Spinner({
+		name: "connectionSpinner",
+		setup: spinSetup,
+		halign: Gtk.Align.CENTER,
+		valign: Gtk.Align.CENTER,
+	});
 	const APItem = (
 		<box vertical={true}>
 			<centerbox
@@ -306,7 +297,7 @@ function WifiAPs() {
 
 	return (
 		<box className={"network wifi container"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} visible={true} vertical={true} spacing={10}>
-			{header()}
+			<Header />
 			<scrollable halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} vexpand={true}>
 				<box className={"wifi aplist-inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={5}>
 					{APList}

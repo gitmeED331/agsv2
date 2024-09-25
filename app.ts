@@ -25,37 +25,34 @@ import { GLib, App, execAsync, monitorFile, Astal, Gtk } from "astal";
 //   monitorFile(`${STYLEDIR}`, resetAndApplyCss);
 // }
 
-
 import style from "./style/main.scss";
 import Bar from "./modules/bar/Bar";
 import {
-  Dashboard,
-  MediaPlayerWindow,
-  Calendar,
-  AudioMixer,
-  NotificationPopups,
-  // Overview,
-  sessioncontrol,
-  powerprofiles,
-  // Launcher,
-  //  cliphist,
+	Dashboard,
+	MediaPlayerWindow,
+	Calendar,
+	AudioMixer,
+	NotificationPopups,
+	// Overview,
+	sessioncontrol,
+	powerprofiles,
+	Launcher,
+	//  cliphist,
 } from "./modules/Windows/index";
 
-
-
 App.start({
-  css: style,
-  main() {
-    Bar({ monitor: 0 });
-    Dashboard();
-    MediaPlayerWindow();
-    Calendar();
-    AudioMixer();
-    NotificationPopups(0);
-    // Overview();
-    sessioncontrol();
-    powerprofiles();
-    // Launcher();
-    //  cliphist();
-  },
+	css: style,
+	main() {
+		Bar({ monitor: 0 });
+		Dashboard();
+		MediaPlayerWindow();
+		Calendar();
+		AudioMixer();
+		NotificationPopups(0);
+		// Overview();
+		sessioncontrol();
+		powerprofiles();
+		Launcher();
+		//  cliphist();
+	},
 });

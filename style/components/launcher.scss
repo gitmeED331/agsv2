@@ -1,18 +1,49 @@
-.launcher-switcher {
-  background: $PrimaryBG;
+.launcher {
+  &.container {
+    //background: $LauncherBG;
+    background-color: black;
+    background-size: auto 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    //border-top-left-radius: 3rem;
+    border-radius: $radius-tbright;
+    border: $border;
+  }
 
-  &-button {
+  &.search {
+    margin: 1rem;
     background: none;
+    border: $border;
+    border-radius: $radius;
+    color: $font-color1;
+    padding: 0.5rem;
+  }
 
-    // margin-left: 15px;
+  &.app {
+    padding: 0.5rem;
+    min-width: 7rem;
+    min-height: 3rem;
+    margin: 1rem;
+
+    icon {
+      font-size: 2.5rem;
+      color: $font-color1;
+    }
+
+    label {
+      color: $font-color1;
+      font-weight: normal;
+      font-size: 1.25rem;
+    }
+
+
+    &.active,
     &.focused {
       background-color: black;
-      border-radius: $radius-tbleft;
-      border-left: $border;
-      border-top: $border;
-      border-bottom: $border;
+      border-radius: $radius;
+      border: $border;
 
-      image {
+      icon {
         background: $active-gradient;
         border-radius: $radius-tbleft;
       }
@@ -21,132 +52,52 @@
     &:hover {
       background: $HoverBGG;
       background-color: black;
-      border-radius: $radius-tbleft;
-    }
-
-    &.before-focused {
-      image {
-        border-bottom-right-radius: 1rem;
-      }
-
-      ;
-    }
-
-    &.after-focused {
-      image {
-        border-top-right-radius: 1rem;
-      }
-    }
-
-    image {
-      padding: 10px;
-      //background: $PrimaryBG;
-      color: $font-color1;
-      font-size: 2rem;
-    }
-
-    &:first-child {
-      border-radius: $radius-tbleft;
-    }
-
-    &:last-child {
-      border-radius: $radius-tbleft;
-    }
-  }
-}
-
-.launcher {
-  // search  tab
-  //background: $LauncherBG;
-  background-color: black;
-  background-size: auto 50%;
-  background-position: center;
-  background-repeat: no-repeat;
-  //border-top-left-radius: 3rem;
-  border-radius: $radius-tbright;
-  border: $border;
-
-  .launcher-search {
-    margin: 1rem;
-    background: none;
-
-    .search-entry {
       border-radius: $radius;
-      margin-bottom: 5px;
-      padding: 8px;
-      border: $border;
-
-      image.left {
-        margin-right: 8px;
-      }
     }
 
-    .search-scroll {
-      .search-results {
-        //color for letter highlighting
-        color: $font-color1;
+  }
 
-        .app-button {
-          color: $font-color1;
-          padding: 5px;
-          border-radius: $radius;
+  .switcher {
+    // all: unset;
+    color: $font-color1;
+    padding: 0.5rem 0rem;
+    padding-left: 0.75rem;
 
-          &:hover {
-            background: $HoverBGG;
-          }
+    button {
+      background: none;
 
-          .app-icon {
-            font-size: 2rem;
-            margin-right: 5px;
-          }
+      &.active,
+      &.focused {
+        background-color: black;
+        border-radius: $radius;
+        border: $border;
 
-          .app-name {
-            font-weight: bold;
-            font-size: 1rem;
-          }
-
-          .app-description {
-            font-size: 0.8rem;
-            color: $font-color2;
-          }
-
-          &.focused {
-            background: $HoverBGG;
-            transition: all 1s $squeezebezier;
-          }
+        icon {
+          background: $active-gradient;
+          border-radius: $radius-tbleft;
         }
       }
-    }
-  }
-
-  .launcher-category {
-    margin: 1rem;
-    //background: $LauncherBG;
-    background-color: black;
-    background-size: auto 50%;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    .app-button {
-      padding: 8px;
-      border-radius: $radius;
-      background-color: rgba(0, 0, 0, 0.75);
 
       &:hover {
         background: $HoverBGG;
+        background-color: black;
+        border-radius: $radius;
       }
 
-      &.focused {
-        background: $PrimaryBG;
-      }
 
-      .app-icon {
+      icon {
+        padding: 10px;
+        color: $font-color1;
         font-size: 2rem;
       }
 
-      .app-name {
-        font-size: 1rem;
-      }
+      // &:first-child {
+      //   border-radius: $radius-tbleft;
+      // }
+
+      // &:last-child {
+      //   border-radius: $radius-tbleft;
+      // }
     }
   }
 }

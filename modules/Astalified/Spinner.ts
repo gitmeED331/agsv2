@@ -2,8 +2,7 @@ import { Widget, Astal, Gtk } from "astal"
 
 export type SpinnerProps = Widget.ConstructProps<
     Gtk.Spinner,
-    Gtk.Spinner.ConstructorProps,
-    {}
+    Gtk.Spinner.ConstructorProps
 >
 export const Spinner = Widget.astalify<
     typeof Gtk.Spinner,

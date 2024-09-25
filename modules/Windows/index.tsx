@@ -8,17 +8,17 @@ import NotificationPopups from "./notificationPopups";
 // import Overview from "./overview/Overview";
 import sessioncontrol from "./sessioncontrol";
 import powerprofiles from "./powerprofile";
-// import Launcher from "./launcher/Launcher";
+import Launcher from "./Launcher";
 
 export {
-  Dashboard,
-  MediaPlayerWindow,
-  Calendar,
-  AudioMixer,
-  NotificationPopups,
-  // Overview,
-  sessioncontrol,
-  powerprofiles,
-  // Launcher,
-  // cliphist,
+	Dashboard,
+	MediaPlayerWindow,
+	Calendar,
+	AudioMixer,
+	NotificationPopups,
+	// Overview,
+	sessioncontrol,
+	powerprofiles,
+	Launcher,
+	// cliphist,
 };
