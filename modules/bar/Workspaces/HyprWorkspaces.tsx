@@ -1,6 +1,6 @@
 import { App, bind, execAsync, Gtk, Gdk, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
-import Icon from "../lib/icons";
+import Icon from "../../lib/icons";
 
 const dispatch = (arg: string | number) => {
 	execAsync(`hyprctl dispatch workspace ${arg}`);
@@ -25,7 +25,7 @@ function ws(id: number) {
 // --- end signal handler ---
 
 // --- workspaces ---
-export default function Workspaces({ id }: { id: number }) {
+function Workspaces({ id }: { id: number }) {
 	const hyprland = Hyprland.get_default();
 
 	function workspaceButton(id: number) {
@@ -80,3 +80,5 @@ export default function Workspaces({ id }: { id: number }) {
 		</box>
 	);
 }
+
+export default Workspaces;

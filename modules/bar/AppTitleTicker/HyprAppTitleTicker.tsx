@@ -1,6 +1,6 @@
 import { App, bind, Gtk, Gdk } from "astal";
 import Pango from "gi://Pango";
-import { Icons } from "../lib/icons";
+import { Icons } from "../../lib/icons";
 
 import Hyprland from "gi://AstalHyprland";
 const hyprland = Hyprland.get_default();
@@ -22,10 +22,8 @@ function AppTitleTicker() {
 			}}
 		>
 			<box>
-				{bind(hyprland, "focusedClient").as((c) =>
-					!c ? (
-						<box>No Client focused</box>
-					) : (
+				{bind(hyprland, "focusedClient").as((c) => c &&
+					(
 						<box spacing={5}>
 							<icon valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} icon={bind(c, "class").as((i) => Icons(i))} />
 							<label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} hexpand={true} ellipsize={Pango.EllipsizeMode.END} label={bind(c, "title")} />
@@ -36,4 +34,5 @@ function AppTitleTicker() {
 		</button>
 	);
 }
+
 export default AppTitleTicker;

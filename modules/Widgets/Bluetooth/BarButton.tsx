@@ -1,6 +1,7 @@
 import { App, Widget, Variable, Gtk, bind, Gdk } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
+import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 const Bluetooth = AstalBluetooth.get_default();
 
@@ -55,18 +56,20 @@ function BluetoothButton() {
       onClick={(_, event) => {
         if (event.button === Gdk.BUTTON_PRIMARY) {
           const win = App.get_window("dashboard");
-          if (win && win.visible !== true) {
-            win.visible = !win.visible;
-            // `RightStack.set_visible_child_name("bluetooth"`
+          if (win) {
+            if (win.visible === false && dashboardRightStack.get_visible_child_name() !== "bluetooth") { dashboardRightStack.set_visible_child_name("bluetooth"); win.visible = !win.visible; }
+            else if (win.visible === true && dashboardRightStack.get_visible_child_name() !== "bluetooth") { dashboardRightStack.set_visible_child_name("bluetooth") }
+            else if (win.visible === true && dashboardRightStack.get_visible_child_name() === "bluetooth") { win.visible = !win.visible; }
+            else { win.visible = !win.visible }
           }
-          // if (win && win.visible === true) (StackSetVisibleChild("bluetooth"))
-        } else if (event.button === Gdk.BUTTON_SECONDARY) {
+        }
+        if (event.button === Gdk.BUTTON_SECONDARY) {
           btreveal.set(!btreveal.get())
         }
       }}
     >
       <BluetoothWidget />
-    </button>
+    </button >
   );
 }
 export default BluetoothButton;

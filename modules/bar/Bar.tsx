@@ -1,24 +1,57 @@
-import { App, Astal, Gtk, execAsync } from "astal";
+import { App, Astal, Gtk, Gdk, GLib, execAsync } from "astal";
 // ----- Widgets -----
-import AppTitleTicker from "./AppTitleTicker";
-import Workspaces from "./Workspaces";
 import Clock from "./clock";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
 
+// ----- hyprland Widgets -----
+// import HyprWorkspaces from "./Workspaces/HyprWorkspaces"
+// import HyprAppTitleTicker from "./AppTitleTicker/HyprAppTitleTicker"
+
+// ----- river Widgets -----
+// import RiverWorkspaces from "./Workspaces/RiverWorkspaces"
+// import RiverAppTitleTicker from "./AppTitleTicker/RiverAppTitleTicker"
+
+const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase() || "river";
+
+function loadWorkspaces(wm: string) {
+  if (wm === "hyprland") {
+    const { default: HyprWorkspaces } = require("./Workspaces/HyprWorkspaces");
+    return HyprWorkspaces;
+  } else if (wm === "river") {
+    const { default: RiverWorkspaces } = require("./Workspaces/RiverWorkspaces");
+    return RiverWorkspaces;
+  }
+}
+
+function loadAppTitleTicker(wm: string) {
+  if (wm === "hyprland") {
+    const { default: HyprAppTitleTicker } = require("./AppTitleTicker/HyprAppTitleTicker");
+    return HyprAppTitleTicker;
+  } else if (wm === "river") {
+    const { default: RiverAppTitleTicker } = require("./AppTitleTicker/RiverAppTitleTicker");
+    return RiverAppTitleTicker;
+  }
+}
+
 function LeftBar() {
+
+  const WorkspacesComponent = loadWorkspaces(wm);
+  const AppTitleTickerComponent = loadAppTitleTicker(wm);
+
   return (
     <box
-      className={"left"}
+      className="left"
       halign={Gtk.Align.START}
       valign={Gtk.Align.START}
       spacing={5}
     >
-      <Workspaces id={Number()} />
-      <AppTitleTicker />
+      <WorkspacesComponent id={Number()} />
+      <AppTitleTickerComponent />
     </box>
   );
 }
+
 
 function CenterBar() {
   return (

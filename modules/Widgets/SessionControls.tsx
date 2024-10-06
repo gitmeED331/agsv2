@@ -1,15 +1,22 @@
-import { App, Astal, execAsync, Gdk, Gtk } from "astal";
+import { App, Astal, execAsync, Gdk, Gtk, GLib } from "astal";
 import Icon, { Icons } from "../lib/icons.js";
+
+const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase() || "river";
 
 const SysButton = (action: string, label: string) => {
     const command = (() => {
         switch (action) {
             case "lock":
-                return "bash -c 'exec ags -b lockscreen -c ~/.config/ags/Lockscreen/lockscreen.js'";
+                return "hyprlock";
             case "reboot":
                 return "systemctl reboot";
             case "logout":
-                return "bash -c 'exec  ~/.config/hypr/scripts/hyprkill.sh >/dev/null 2>&1 &'";
+                if (wm === "hyprland") {
+                    return "hyprctl dispatch exit";
+                }
+                if (wm === "river") {
+                    return "riverctl exit";
+                }
             case "shutdown":
                 return "systemctl -i poweroff";
             default:
@@ -23,7 +30,7 @@ const SysButton = (action: string, label: string) => {
                 const win = App.get_window("sessioncontrols");
                 if (event.button === Gdk.BUTTON_PRIMARY) {
                     execAsync(command);
-                    if (win && !win.visible) { win.visible = !win.visible; }
+                    if (win && !win.visible) { win.visible = false; }
                 }
             }
             }

@@ -1,4 +1,4 @@
-import { Astal, Widget, bind, Gtk, Gdk, App, execAsync, Variable } from "astal";
+import { Astal, Widget, bind, Gtk, Gdk, App, execAsync, exec, Variable } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
 import Pango from "gi://Pango";
@@ -8,15 +8,7 @@ const Bluetooth = AstalBluetooth.get_default();
 const Adapter = Bluetooth.adapter;
 
 function btControls() {
-	function spinSetup(spinner: Spinner) {
-		bind(Adapter, "discovering").as((v) => (v ? spinner.start : spinner.stop));
-	}
-	const theSpinner = new Spinner({
-		name: "refreshspinner",
-		setup: spinSetup,
-		halign: Gtk.Align.CENTER,
-		valign: Gtk.Align.CENTER,
-	})
+
 	const btPower = (
 		<button
 			className={bind(Bluetooth, "is_powered").as((v) => (v ? "bluetooth power-on" : "bluetooth power-off"))}
@@ -33,36 +25,67 @@ function btControls() {
 		</button>
 	);
 
+	function spinSetup(spinner: Spinner) {
+		bind(Adapter, "discovering").as((s) => (s === true ? spinner.start : spinner.stop));
+	}
+
 	const Refresh = (
-		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Adapter, "discovering").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
-			{theSpinner}
+		<stack
+			visible={true}
+			halign={Gtk.Align.END}
+			visible_child_name={bind(Adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))}
+			homogeneous={false}
+		>
 			<button
-				name={"refreshbtn"}
-				onClick={async (_, event) => {
+				name={"iconbtn"}
+				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						//await execAsync("bluetoothctl --timeout 120 scan on").catch(console.error);
-						await Adapter.start_discovery();
+						//execAsync(`bluetoothctl --timeout 120 scan on`)
+						Adapter.start_discovery();
 						setTimeout(() => {
 							Adapter.stop_discovery();
 						}, 120000);
 					}
-					if (event.button === Gdk.BUTTON_SECONDARY) {
+				}}
+				halign={Gtk.Align.CENTER}
+				valign={Gtk.Align.CENTER}
+				tooltip_text={"Start Discovery"}
+			>
+				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+			</button>
+			<button
+				name="spinnerbtn"
+				onClick={(_, event) => {
+					if (event.button === Gdk.BUTTON_PRIMARY) {
+						//execAsync("bluetoothctl scan off")
 						Adapter.stop_discovery();
 					}
 				}}
 				halign={Gtk.Align.CENTER}
 				valign={Gtk.Align.CENTER}
-				tooltip_text={"Refresh"}
+				tooltip_text={"Stop Discovery"}
 			>
-				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+				<Spinner
+					setup={spinSetup}
+					halign={Gtk.Align.CENTER}
+					valign={Gtk.Align.CENTER}
+				/>
 			</button>
 		</stack>
 	);
-
+	const blueman = <button
+		onClicked={"blueman-manager"}
+		halign={Gtk.Align.END}
+		valign={Gtk.Align.CENTER}
+		tooltip_text={"Blueman Manager"}
+	>
+		<icon icon={Icon.ui.settings} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+	</button>
 	return (
-		<box className={"bluetooth devicelist-header controls"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={5}>
+		<box className={"bluetooth devicelist-header controls"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={15}>
 			{btPower}
 			{Refresh}
+			{blueman}
 		</box>
 	);
 };
@@ -77,24 +100,21 @@ function content(device) {
 			<button
 				halign={Gtk.Align.FILL}
 				valign={Gtk.Align.CENTER}
-				onClick={() => {
-					execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`);
-				}}
+				onClick={() => execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`)}
 			>
 				<centerbox halign={Gtk.Align.START} valign={Gtk.Align.CENTER} spacing={5} startWidget={DeviceTypeIcon} centerWidget={btDeviceLabel} />
 			</button>
 		);
 	};
-
 	const btDeviceControls = () => {
 		const PairDevice = (
 			<button
 				className={"bluetooth devicelist-inner controls pair"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						execAsync(`bluetoothctl ${device.paired ? "Unpair" : "Pair"} ${device.address}`);
+						exec(`bluetoothctl ${device.paired === true ? "Unpair" : "Pair"} ${device.address}`)
 					} else if (event.button === Gdk.BUTTON_SECONDARY) {
-						execAsync(`bluetoothctl cancel-pairing ${device.address}`);
+						exec(`bluetoothctl cancelpair ${device.address}`)
 					}
 				}}
 				halign={Gtk.Align.END}
@@ -122,11 +142,7 @@ function content(device) {
 		const ConnectDevice = (
 			<button
 				className={"bluetooth devicelist-inner controls connect"}
-				onClick={(_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`);
-					}
-				}}
+				onClicked={async () => await execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`)}
 				halign={Gtk.Align.END}
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(device, "connected").as((v) => (v ? "Disconnect" : "Connect"))}

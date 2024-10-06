@@ -7,8 +7,9 @@ import { StackSwitcher } from "../../Astalified/StackSwitcher";
 import { BluetoothDevices, EthernetWidget, WifiAPs } from "../../Widgets/index";
 import NotificationList from "./notificationList";
 
+export let dashboardRightStack
 export default function RightSide() {
-	const theStack = new Gtk.Stack({
+	const rightStack = new Gtk.Stack({
 		transitionType: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
 		transitionDuration: 300,
 		halign: Gtk.Align.FILL,
@@ -20,8 +21,10 @@ export default function RightSide() {
 		vexpand: true,
 	});
 
-	theStack.add_titled(NotificationList(), "notifications", "Notifications");
-	theStack.add_titled(
+	dashboardRightStack = rightStack
+
+	rightStack.add_titled(NotificationList(), "notifications", "Notifications");
+	rightStack.add_titled(
 		Widget.Box({
 			className: "network dashboard",
 			vertical: true,
@@ -31,10 +34,10 @@ export default function RightSide() {
 		"network",
 		"Network",
 	);
-	theStack.add_titled(BluetoothDevices(), "bluetooth", "Bluetooth");
+	rightStack.add_titled(BluetoothDevices(), "bluetooth", "Bluetooth");
 
 	function SSsetup(stackSwitcher: StackSwitcher) {
-		stackSwitcher.set_stack(theStack);
+		stackSwitcher.set_stack(rightStack);
 	}
 
 	const stackSwitcher = new StackSwitcher({
@@ -48,7 +51,7 @@ export default function RightSide() {
 	return (
 		<box className={"dashboard rightSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} spacing={5}>
 			{stackSwitcher}
-			{theStack}
+			{rightStack}
 		</box>
 	);
 }

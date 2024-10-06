@@ -1,5 +1,6 @@
 import { Widget, App, Gtk, Gdk, bind, Variable } from "astal";
 import AstalWp from "gi://AstalWp";
+import { dashboardLeftStack } from "../Windows/dashboard/LeftSide";
 
 const { audio } = AstalWp.get_default();
 const Speaker = audio.get_default_speaker();
@@ -24,7 +25,10 @@ function VolumeIndicator() {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const win = App.get_window("dashboard");
 					if (win) {
-						win.visible = !win.visible;
+						if (win.visible === false && dashboardLeftStack.get_visible_child_name() !== "settings") { dashboardLeftStack.set_visible_child_name("settings"); win.visible = !win.visible; }
+						else if (win.visible === true && dashboardLeftStack.get_visible_child_name() !== "settings") { dashboardLeftStack.set_visible_child_name("settings") }
+						else if (win.visible === true && dashboardLeftStack.get_visible_child_name() === "settings") { win.visible = !win.visible; }
+						else { win.visible = !win.visible }
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {

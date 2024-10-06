@@ -1,4 +1,6 @@
 import { App, Gtk, Variable, Astal, bind, Gdk } from "astal";
+import { dashboardLeftStack } from "../Windows/dashboard/LeftSide";
+import { dashboardRightStack } from "../Windows/dashboard/RightSide";
 
 export default function Clock() {
   const time = Variable("").poll(1000, 'date "+%H:%M:%S"');
@@ -11,7 +13,16 @@ export default function Clock() {
         if (event.button === Gdk.BUTTON_PRIMARY) {
           const win = App.get_window("dashboard");
           if (win) {
-            win.visible = !win.visible;
+            if ([
+              win.visible === false,
+              dashboardLeftStack.get_visible_child_name() !== "calendar",
+              dashboardRightStack.get_visible_child_name() !== "notifications"
+            ]) {
+              dashboardLeftStack.set_visible_child_name("calendar");
+              dashboardRightStack.set_visible_child_name("notifications");
+              win.visible = !win.visible;
+            }
+            else { win.visible = !win.visible }
           }
         }
         // else if (event.button === Gdk.BUTTON_SECONDARY) {

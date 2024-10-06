@@ -4,7 +4,6 @@ import Pango from "gi://Pango";
 
 import TrimTrackTitle from "../lib/TrimTrackTitle";
 import Icon, { Icons } from "../lib/icons";
-//const { RoundedCorner } = Roundedges
 
 const player = Mpris.Player.new("Deezer") //"Deezer"  "vlc" "mpv";
 

@@ -62,7 +62,7 @@ function DeviceSlider({ device }) {
 
 function DeviceControlGroup({ devices }) {
 	return (
-		<box className={"audio-mixer speaker-mic"} vertical={true} vexpand={true} spacing={10}>
+		<box className={"audio-mixer devices"} vertical={true} vexpand={true} spacing={10}>
 			{devices.map((device) => (
 				<box spacing={5} key={device.id}>
 					<DeviceIdentifier device={device} />

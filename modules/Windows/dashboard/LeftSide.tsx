@@ -5,7 +5,8 @@ import { StackSwitcher } from "../../Astalified/StackSwitcher";
 
 // --- imported widgets ---
 import { BrightnessSlider, GridCalendar, PowerProfiles, AudioMixer, SessionControls } from "../../Widgets/index";
-import NotificationList from "./notificationList";
+
+export let dashboardLeftStack
 
 export default function LeftSide() {
 	const settings = (
@@ -21,7 +22,7 @@ export default function LeftSide() {
 		</box>
 	);
 
-	const theStack = new Gtk.Stack({
+	const leftStack = new Gtk.Stack({
 		transitionType: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
 		transitionDuration: 300,
 		halign: Gtk.Align.FILL,
@@ -33,13 +34,15 @@ export default function LeftSide() {
 		vexpand: true,
 	});
 
-	theStack.add_titled(GridCalendar(), "calendar", "Calendar");
-	theStack.add_titled(power, "power", "Power Controls");
-	theStack.add_titled(settings, "settings", "Settings");
+	dashboardLeftStack = leftStack
+
+	leftStack.add_titled(GridCalendar(), "calendar", "Calendar");
+	leftStack.add_titled(power, "power", "System Controls");
+	leftStack.add_titled(settings, "settings", "Settings");
 
 	const stackSwitcher = new StackSwitcher({
 		className: "dashboard stackSwitcher",
-		stack: theStack,
+		stack: leftStack,
 		halign: Gtk.Align.CENTER,
 		valign: Gtk.Align.START,
 		spacing: 10,
@@ -47,7 +50,7 @@ export default function LeftSide() {
 
 	return (
 		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>
-			{[stackSwitcher, theStack]}
+			{[stackSwitcher, leftStack]}
 		</box>
 	);
 }

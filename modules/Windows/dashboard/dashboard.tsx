@@ -1,12 +1,9 @@
 import { Astal, bind, Widget, Gtk, App, Gdk, Variable } from "astal";
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
-import Icon, { Icons } from "../../lib/icons";
-import { StackSwitcher } from "../../Astalified/StackSwitcher";
 
 // --- imported widgets ---
-import { BrightnessSlider, GridCalendar, Player, PowerProfiles, Tray, BluetoothDevices, EthernetWidget, WifiAPs, AudioMixer, SessionControls } from "../../Widgets/index";
-import NotificationList from "./notificationList";
+import { Player, Tray, } from "../../Widgets/index";
 import LeftSide from "./LeftSide";
 import RightSide from "./RightSide";
 
@@ -57,11 +54,11 @@ function Dashboard() {
 						App.toggle_window("dashboard");
 					}
 				}}
-				// onClick={(btn, event) => {
-				//   if (event.button === Gdk.BUTTON_PRIMARY) {
-				//     App.toggle_window("dashboard");
-				//   }
-				// }}
+			// onClick={(btn, event) => {
+			//   if (event.button === Gdk.BUTTON_PRIMARY) {
+			//     App.toggle_window("dashboard");
+			//   }
+			// }}
 			>
 				{content}
 			</eventbox>

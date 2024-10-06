@@ -17,7 +17,7 @@ const sortedApplications = Applications.sort((a, b) => {
 	return a.get_name().localeCompare(b.get_name());
 });
 
-function createAppGrid(appList) {
+function createAppGrid(appList, app) {
 	appList = appList.sort((a, b) => {
 		return a.get_name().localeCompare(b.get_name());
 	});
@@ -27,12 +27,13 @@ function createAppGrid(appList) {
 		vexpand: true,
 		halign: Gtk.Align.FILL,
 		valign: Gtk.Align.FILL,
+
 	});
 
 	appList.forEach((app, index) => {
 		const appButton = (
 			<button
-				className="launcher app"
+				className={"launcher app"}
 				name={app.get_name()}
 				tooltip_text={app.get_description()}
 				on_clicked={() => {
@@ -40,13 +41,13 @@ function createAppGrid(appList) {
 					App.toggle_window("launcher");
 				}}
 			>
-				<box vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5}>
+				<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5} widthRequest={winwidth(0.15)}>
 					<icon icon={app.icon_name} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-					<label label={app.name} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={15} lines={1} wrap={true} xalign={0} yalign={0} />
+					<label label={app.name} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
 				</box>
 			</button>
 		);
-		grid.attach(appButton, index % 2, Math.floor(index / 2), 1, 1);
+		grid.attach(appButton, index % 1, Math.floor(index / 1), 1, 1);
 	});
 
 	return grid;
@@ -55,7 +56,6 @@ function createAppGrid(appList) {
 function createScrollablePage(appList) {
 	return (
 		<scrollable
-			className="notif container"
 			vscroll={Gtk.PolicyType.AUTOMATIC}
 			hscroll={Gtk.PolicyType.NEVER}
 			vexpand={true}
@@ -64,7 +64,9 @@ function createScrollablePage(appList) {
 			valign={Gtk.Align.FILL}
 			visible={true}
 			heightRequest={winheight(0.9)}
-			css={`padding:1rem;`}
+			css={`
+				padding: 1rem;
+			`}
 		>
 			<box halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true}>
 				{createAppGrid(appList)}
@@ -96,8 +98,7 @@ function getCategories(app) {
 	);
 }
 
-const uniqueCategories = Array.from(new Set(Applications.flatMap((app) => getCategories(app))))
-	.sort((a, b) => a.localeCompare(b));
+const uniqueCategories = Array.from(new Set(Applications.flatMap((app) => getCategories(app)))).sort((a, b) => a.localeCompare(b));
 
 const allAppsPage = (
 	<box key="All Apps" name="All Apps" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
@@ -106,8 +107,7 @@ const allAppsPage = (
 );
 
 const categoryPages = uniqueCategories.map((category) => {
-	const sortedAppsInCategory = Applications.filter((app) => getCategories(app).includes(category))
-		.sort((a, b) => a.get_name().localeCompare(b.get_name()));
+	const sortedAppsInCategory = Applications.filter((app) => getCategories(app).includes(category)).sort((a, b) => a.get_name().localeCompare(b.get_name()));
 
 	return (
 		<box key={category} name={category.toLowerCase()} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
@@ -115,6 +115,7 @@ const categoryPages = uniqueCategories.map((category) => {
 		</box>
 	);
 });
+
 function getRelevanceScore(appName, appDescription, query) {
 	appName = appName.toLowerCase();
 	appDescription = appDescription?.toLowerCase() ?? "";
@@ -126,12 +127,12 @@ function getRelevanceScore(appName, appDescription, query) {
 	else if (appName.startsWith(query)) score += 3;
 	else if (appName.includes(query)) score += 2;
 
-
 	if (appDescription.includes(query)) score += 1;
 
 	return score;
 }
 
+let query = "";
 function Search(query) {
 	const results = Applications.filter((app) => getRelevanceScore(app.get_name(), app.get_description(), query) > 0);
 
@@ -157,12 +158,11 @@ function Search(query) {
 }
 
 const SearchInput = () => {
-	let query = "";
-
 	return (
 		<entry
 			className={"launcher search input"}
 			placeholder_text="Search applications..."
+			primary_icon_name={Icon.launcher.search}
 			on_changed={(entry) => {
 				query = entry.get_text();
 				Search(query);
@@ -176,7 +176,6 @@ const SearchInput = () => {
 		/>
 	);
 };
-
 
 const theStack = new Stack({
 	className: "launcher stack",
@@ -198,9 +197,14 @@ const theStack = new Stack({
 const Switcher = () => {
 	const allAppsButton = (
 		<button
-			className={bind(theStack, "visible_child_name").as((name) => name === "All Apps" ? "active" : "")}
+			className={bind(theStack, "visible_child_name").as((name) => (name === "All Apps" ? "active" : ""))}
 			onClick={() => {
 				theStack.set_visible_child_name("All Apps");
+			}}
+			onKeyPressEvent={(_, event) => {
+				if (event.get_keyval()[1] === Gdk.KEY_Return) {
+					theStack.set_visible_child_name("All Apps");
+				}
 			}}
 			tooltip_text={"All Apps"}
 		>
@@ -212,10 +216,15 @@ const Switcher = () => {
 		const iconName = Icon.launcher[category.toLowerCase()] || Icon.launcher.system;
 		return (
 			<button
-				className={bind(theStack, "visible_child_name").as((name) => name === category.toLowerCase() ? "active" : "")}
+				className={bind(theStack, "visible_child_name").as((name) => (name === category.toLowerCase() ? "active" : ""))}
 				key={category}
 				onClick={() => {
 					theStack.set_visible_child_name(category.toLowerCase());
+				}}
+				onKeyPressEvent={(_, event) => {
+					if (event.get_keyval()[1] === Gdk.KEY_Return) {
+						theStack.set_visible_child_name(category.toLowerCase());
+					}
 				}}
 				tooltip_text={category}
 			>
@@ -225,12 +234,13 @@ const Switcher = () => {
 	});
 
 	return (
-		<box className={"launcher switcher"} vertical spacing={30} halign={Gtk.Align.CENTER} valign={Gtk.Align.START}>
+		<box className={"launcher switcher"} vertical halign={Gtk.Align.CENTER} valign={Gtk.Align.START}>
 			{allAppsButton}
 			{categoryButtons}
 		</box>
 	);
 };
+
 
 export default function Launcher() {
 	return (
@@ -240,28 +250,25 @@ export default function Launcher() {
 			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.NORMAL}
-			keymode={Astal.Keymode.EXCLUSIVE}
+			keymode={Astal.Keymode.ON_DEMAND}
 			visible={false}
 			application={App}
 			clickThrough={false}
 		>
-			<eventbox className={"launcher container"} onKeyPressEvent={(_, event) => {
-				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-					App.toggle_window("launcher");
-				}
-			}}
+			<eventbox
+				className={"launcher container"}
+				onKeyPressEvent={(_, event) => {
+					const keyVal = event.get_keyval()[1];
+
+					if (keyVal === Gdk.KEY_Escape) {
+						App.toggle_window("launcher");
+					}
+				}}
 			>
 				<box vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
 					<SearchInput />
 
-					<box
-						vertical={false}
-						halign={Gtk.Align.FILL}
-						valign={Gtk.Align.START}
-						hexpand={true}
-						vexpand={true}
-						spacing={10}
-					>
+					<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>
 						<Switcher />
 						{theStack}
 					</box>

@@ -19,7 +19,7 @@
 @mixin button-disabled() {
     box-shadow: none;
     background-color: transparent;
-    color: transparentize($font-color1, 0.7);
+    color: $font-color1
 }
 
 @mixin button($flat: false, $reactive: true, $radius: $radius, $focusable: true) {

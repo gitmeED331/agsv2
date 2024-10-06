@@ -1,6 +1,7 @@
 import { bind, Gdk, Gtk, Widget, App, Astal, Variable, Binding } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
+import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 const network = AstalNetwork.get_default();
 const Wired = network.wired;
@@ -68,7 +69,10 @@ function NetworkButton() {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const win = App.get_window("dashboard");
 					if (win) {
-						win.visible = !win.visible;
+						if (win.visible === false && dashboardRightStack.get_visible_child_name() !== "network") { dashboardRightStack.set_visible_child_name("network"); win.visible = !win.visible; }
+						else if (win.visible === true && dashboardRightStack.get_visible_child_name() !== "network") { dashboardRightStack.set_visible_child_name("network") }
+						else if (win.visible === true && dashboardRightStack.get_visible_child_name() === "network") { win.visible = !win.visible; }
+						else { win.visible = !win.visible }
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
