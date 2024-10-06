@@ -27,15 +27,11 @@ const ChargeIndicatorIcon = () => {
 
 const PercentageReveal = Variable(true);
 
-const PercentLabel = () => {
-	const TheLabel = bind(battery, "percentage").as((p) => `${p * 100}%`);
-	return <label label={TheLabel} tooltipText={bind(battery, "charging").as(chargeTooltip)} />;
-};
-
 const TheLabelReveal = () => {
+	const PercentLabel = <label label={bind(battery, "percentage").as((p) => `${p * 100}%`)} tooltipText={bind(battery, "charging").as(chargeTooltip)} />;
 	return (
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} transitionDuration={300} clickThrough={true} revealChild={bind(battery, "charging").as((c) => (c ? false : true))}>
-			<PercentLabel />
+			{PercentLabel}
 		</revealer>
 	);
 };

@@ -18,7 +18,7 @@ function AppTitleTicker() {
 					}
 				}
 
-				if (event.button === Gdk.BUTTON_SECONDARY) hyprland.focusedClient.kill();
+				if (event.button === Gdk.BUTTON_SECONDARY) { hyprland.focusedClient.kill() };
 			}}
 		>
 			<box>
