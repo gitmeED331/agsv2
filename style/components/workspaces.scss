@@ -1,9 +1,23 @@
-.workspaces {
+.hyprworkspaces {
     background: $PrimaryBG;
     border-top: $border;
     border-radius: 1rem;
     margin-left: 0.5rem;
     padding: 0rem 0.5rem;
+
+    & .urgent {
+        color: $font-color4;
+
+        &:hover {
+            icon {
+                color: $font-color5;
+            }
+
+            label {
+                color: $font-color5
+            }
+        }
+    }
 
     & .occupied {
         color: rgba(15, 155, 255, 1);
@@ -18,7 +32,6 @@
             }
         }
     }
-
 
     & .focused {
         all: unset;

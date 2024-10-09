@@ -189,6 +189,7 @@ const Icon = {
     temp: "temperature-symbolic",
   },
   launcher: {
+    allapps: "nix-snowflake-symbolic",
     search: "system-search-symbolic",
     utility: "applications-utilities-symbolic",
     system: "emblem-system-symbolic",
@@ -199,6 +200,7 @@ const Icon = {
     game: "applications-games-symbolic",
     multimedia: "applications-multimedia-symbolic",
     hyprland: "hyprland-symbolic",
+    clear: "fox-symbolic",
   },
   wsicon: {
     ws1: "dragon-symbolic",

@@ -1,7 +1,5 @@
-import { Astal, bind, Widget, Gtk, App, Gdk, Variable } from "astal";
-import { winheight, winwidth } from "../../lib/screensizeadjust";
-import Icon, { Icons } from "../../lib/icons";
-import { StackSwitcher } from "../../Astalified/StackSwitcher";
+import { Widget, Gtk } from "astal";
+import { StackSwitcher } from "../../Astalified/index";
 
 // --- imported widgets ---
 import { BluetoothDevices, EthernetWidget, WifiAPs } from "../../Widgets/index";
@@ -49,9 +47,9 @@ export default function RightSide() {
 	});
 
 	return (
-		<box className={"dashboard rightSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} spacing={5}>
-			{stackSwitcher}
-			{rightStack}
+		<box className={"dashboard rightSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={5}
+			heightRequest={500} widthRequest={50}>
+			{[stackSwitcher, rightStack]}
 		</box>
 	);
 }

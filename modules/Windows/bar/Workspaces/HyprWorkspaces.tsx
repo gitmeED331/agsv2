@@ -1,6 +1,6 @@
 import { App, bind, execAsync, Gtk, Gdk, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
-import Icon from "../../lib/icons";
+import Icon from "../../../lib/icons";
 
 const dispatch = (arg: string | number) => {
 	execAsync(`hyprctl dispatch workspace ${arg}`);
@@ -18,9 +18,9 @@ const openOverview = (arg: string | number) => {
 // --- signal handler ---
 function ws(id: number) {
 	const hyprland = Hyprland.get_default();
-	const get = () => hyprland.get_workspace(id) || Hyprland.Workspace.dummy(id, null);
+	const getWorkspace = () => hyprland.get_workspace(id) || Hyprland.Workspace.dummy(id, null);
 
-	return Variable(get()).observe(hyprland, "workspace-added", get).observe(hyprland, "workspace-removed", get);
+	return Variable(getWorkspace()).observe(hyprland, "workspace-added", getWorkspace).observe(hyprland, "workspace-removed", getWorkspace);
 }
 // --- end signal handler ---
 
@@ -31,10 +31,11 @@ function Workspaces({ id }: { id: number }) {
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
 			const className = Variable.derive(
-				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
-				(focused, clients) => `
+				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients"), bind(hyprland, "urgent")],
+				(focused, clients, urgent) => `
                 ${focused === ws ? "focused" : ""}
-                ${clients.length > 0 ? "occupied" : "empty"}
+                ${clients.length > 0 ? "occupied" : ""}
+				${urgent ? "urgent" : ""}
                 workspacebutton
             `,
 			);
@@ -53,14 +54,18 @@ function Workspaces({ id }: { id: number }) {
 					halign={Gtk.Align.CENTER}
 					cursor="pointer"
 					onClick={(_, event) => {
-						if (event.button === Gdk.BUTTON_PRIMARY) {
-							dispatch(id);
-						}
-						if (event.button === Gdk.BUTTON_SECONDARY) {
-							moveSilently(id);
-						}
-						if (event.button === Gdk.BUTTON_MIDDLE) {
-							openOverview(id);
+						switch (event.button) {
+							case Gdk.BUTTON_PRIMARY:
+								dispatch(id);
+								break;
+							case Gdk.BUTTON_SECONDARY:
+								moveSilently(id);
+								break;
+							case Gdk.BUTTON_MIDDLE:
+								openOverview(id);
+								break;
+							default:
+								break;
 						}
 					}}
 				>
@@ -75,7 +80,7 @@ function Workspaces({ id }: { id: number }) {
 	const workspaceButtons = [...Array(10).keys()].map((id) => workspaceButton(id + 1));
 
 	return (
-		<box className="workspaces" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+		<box className="hyprworkspaces" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
 			{workspaceButtons}
 		</box>
 	);

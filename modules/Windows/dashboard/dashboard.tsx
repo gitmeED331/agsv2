@@ -1,6 +1,7 @@
-import { Astal, bind, Widget, Gtk, App, Gdk, Variable } from "astal";
+import { Astal, Gtk, App, Gdk, Widget } from "astal";
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
+import { Grid } from "../../Astalified/index";
 
 // --- imported widgets ---
 import { Player, Tray, } from "../../Widgets/index";
@@ -9,32 +10,86 @@ import RightSide from "./RightSide";
 
 const player = Mpris.Player.new("Deezer");
 
+const Lhandler = (
+	<eventbox
+		halign={Gtk.Align.START}
+		valign={Gtk.Align.FILL}
+		onClick={(_, event) => {
+			const win = App.get_window("dashboard");
+			if (event.button === Gdk.BUTTON_PRIMARY) {
+				if (win && win.visible === true) {
+					win.visible = false;
+
+				}
+			}
+		}}
+		widthRequest={winwidth(.25)}
+		heightRequest={winheight(.1)}
+	/>
+)
+const Rhandler = (
+	<eventbox
+		halign={Gtk.Align.START}
+		valign={Gtk.Align.FILL}
+		onClick={(_, event) => {
+			const win = App.get_window("dashboard");
+			if (event.button === Gdk.BUTTON_PRIMARY) {
+				if (win && win.visible === true) {
+					win.visible = false;
+
+				}
+			}
+		}}
+		widthRequest={winwidth(.25)}
+		heightRequest={winheight(.1)}
+	/>
+)
+
+const bottomhandler = (
+	<eventbox
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		onClick={(_, event) => {
+			const win = App.get_window("dashboard");
+			if (event.button === Gdk.BUTTON_PRIMARY) {
+				if (win && win.visible === true) {
+					win.visible = false;
+
+				}
+			}
+		}}
+		widthRequest={winwidth(1)}
+		heightRequest={winheight(.5)}
+	/>
+)
+
 function Dashboard() {
-	const content = (
-		<box
-			className={"dashboard container"}
-			vertical={true}
-			vexpand={true}
-			hexpand={false}
-			valign={Gtk.Align.START}
-			halign={Gtk.Align.CENTER}
-			heightRequest={winheight(0.5)}
-			widthRequest={winwidth(0.25)}
-			css={`
-				padding: 1.5rem;
-			`}
-			clickThrough={false}
-		>
-			<box vertical={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={10}>
-				<Player player={player} />
-			</box>
-			<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={10}>
-				<LeftSide />
-				<Tray />
-				<RightSide />
-			</box>
-		</box>
-	);
+	const content = new Grid({
+		className: "dashboard grid",
+		halign: Gtk.Align.FILL,
+		valign: Gtk.Align.FILL,
+		hexpand: true,
+		vexpand: true,
+		visible: true,
+		baseline_row: 1,
+		column_spacing: 5,
+		row_spacing: 5,
+	});
+
+	const thePlayer = <Player player={player} />
+
+	if (thePlayer) {
+		content.insert_row(1);
+		content.attach(thePlayer, 2, 1, 3, 1);
+	} else { content.remove_row(1) }
+
+	content.attach(Lhandler, 1, 1, 1, 2) // left side
+	content.attach(LeftSide(), 2, 2, 1, 1)
+	content.attach(Tray(), 3, 2, 1, 1)
+	content.attach(RightSide(), 4, 2, 1, 1)
+	content.attach(Rhandler, 5, 1, 1, 2) // right side
+	content.attach(bottomhandler, 1, 3, 5, 1) // bottom
+
 	return (
 		<window
 			name={"dashboard"}
@@ -45,23 +100,14 @@ function Dashboard() {
 			keymode={Astal.Keymode.EXCLUSIVE}
 			visible={false}
 			application={App}
+			onKeyPressEvent={(_, event) => {
+				const win = App.get_window("dashboard");
+				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+					if (win && win.visible === true) { win.visible = false; }
+				}
+			}}
 		>
-			<eventbox
-				valign={Gtk.Align.FILL}
-				halign={Gtk.Align.FILL}
-				onKeyPressEvent={(_, event) => {
-					if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-						App.toggle_window("dashboard");
-					}
-				}}
-			// onClick={(btn, event) => {
-			//   if (event.button === Gdk.BUTTON_PRIMARY) {
-			//     App.toggle_window("dashboard");
-			//   }
-			// }}
-			>
-				{content}
-			</eventbox>
+			{content}
 		</window>
 	);
 }

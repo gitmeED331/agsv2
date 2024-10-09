@@ -1,8 +1,7 @@
 .bar {
-  color: $font-color1;
-  background-image: none;
-  // background-color: red;
-  min-height: 10px;
+  color: $color7;
+  background: none;
+  min-height: 8px;
 
   &left {
     min-width: 100px;
@@ -85,17 +84,17 @@
   font-weight: bold;
   border-radius: 1rem;
   padding: 0rem 0.5rem;
-}
 
-.volumebtn {
-  color: $font-color1;
+  .volumebtn {
+    color: $font-color1;
 
-  icon,
-  image {
-    font-size: 1.15rem;
-  }
+    icon,
+    image {
+      font-size: 1.15rem;
+    }
 
-  button:hover {
-    color: $font-color5;
+    button:hover {
+      color: $font-color5;
+    }
   }
 }

@@ -125,3 +125,31 @@ const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
     }
   return classList.join(" ");
 });
+
+
+
+@register({ GTypeName: "MyObj" })
+class MyObj extends GObject.Object {
+    @property(String)
+    declare propName: string // default getter/setter with notify signals
+
+    @property(Number)
+    get customProp() {
+        return "value"
+    }
+
+    // defining custom setters requiers manual notify emission
+    set customProp(v: number) {
+        if (v !== this.customProp) {
+            this.notify("custom-prop")
+        }
+    }
+
+    @signal(Number, String)
+    declare someSigh: (a: number, b: string) => void
+
+    @signal(Number, String)
+    defHandler(a: number, b: string) {
+        print("default handler", a, b)
+    }
+}

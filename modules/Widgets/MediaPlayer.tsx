@@ -82,9 +82,9 @@ function PlayerIcon() {
 		<button
 			className={"playicon"}
 			onClicked={player.entry}
-			// async () => {
-			//   await execAsync(`bash -c "exec ${player.entry} &"`);
-			// }}
+		// async () => {
+		//   await execAsync(`bash -c "exec ${player.entry} &"`);
+		// }}
 		>
 			<icon
 				hexpand={true}
@@ -170,7 +170,8 @@ function Player({ player }: { player: Mpris.Player }) {
 	}
 
 	return (
-		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} visible={bind(player, "available").as((a) => a === true)} setup={setup}>
+		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} 
+		visible={bind(player, "available").as((a) => a === true)} setup={setup}>
 			<centerbox
 				className={"mediainfo"}
 				vertical={true}

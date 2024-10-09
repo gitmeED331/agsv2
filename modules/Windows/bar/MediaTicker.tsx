@@ -2,15 +2,15 @@ import { Widget, App, Gtk, Gdk, Variable, Astal, bind } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
-import TrimTrackTitle from "../lib/TrimTrackTitle";
-import Icon, { Icons } from "../lib/icons";
+import TrimTrackTitle from "../../lib/TrimTrackTitle";
+import Icon, { Icons } from "../../lib/icons";
 
 const player = Mpris.Player.new("Deezer") //"Deezer"  "vlc" "mpv";
 
 function TickerTrack() {
   return (
     <label
-      className={"tickertrack"}
+      className={"ticker track"}
       vexpand={true}
       wrap={false}
       halign={Gtk.Align.CENTER}
@@ -25,7 +25,7 @@ function TickerArtist() {
 
   return (
     <label
-      className={"tickerartist"}
+      className={"ticker artist"}
       wrap={false}
       halign={Gtk.Align.CENTER}
       valign={Gtk.Align.CENTER}
@@ -39,13 +39,13 @@ function TickerArtist() {
 function TickerIcon() {
   return (
     <icon
-      className={"tickericon"}
+      className={"ticker icon"}
       hexpand={true}
       halign={Gtk.Align.CENTER}
       valign={Gtk.Align.CENTER}
       tooltip_text={bind(player, "identity")}
       icon={bind(player, "entry").as(
-        entry => Icons(entry) || Icon.mpris.controls.FALLBACK_ICON,
+        entry => Icons(entry) || Icon.mpris.controls.FALLBACK_ICON
       )}
     />
   );
@@ -53,7 +53,7 @@ function TickerIcon() {
 
 const NoMedia = (
   <label
-    className={"nomedia"}
+    className={"ticker nomedia"}
     hexpand={true}
     wrap={false}
     halign={Gtk.Align.CENTER}
@@ -64,7 +64,7 @@ const NoMedia = (
 function TickerBox() {
   return (
     <box
-      className={"tickerbox"}
+      className={"ticker box"}
       visible={true}
       vertical={false}
       hexpand={true}
@@ -84,7 +84,6 @@ function TickerBox() {
                 <TickerArtist />
               </box>
             );
-
           default:
             return NoMedia;
         }
@@ -96,7 +95,7 @@ function TickerBox() {
 function MediaTickerButton() {
   return (
     <button
-      className={"tickerbtn"}
+      className={"ticker container"}
       vexpand={false}
       hexpand={true}
       onClick={(_, event) => {
@@ -117,14 +116,29 @@ function MediaTickerButton() {
       onScroll={(_, { delta_y }) => {
         if (delta_y < 0) {
           player.previous();
-        }
-        else {
+        } else {
           player.next();
         }
       }}
     >
-      <TickerBox />
-    </button >
+      {bind(player, "playbackStatus").as((status) => {
+        switch (status) {
+          case Mpris.PlaybackStatus.STOPPED:
+            return NoMedia;
+          case Mpris.PlaybackStatus.PLAYING:
+          case Mpris.PlaybackStatus.PAUSED:
+            return (
+              <box vertical={false} visible={true} spacing={5}>
+                <TickerTrack />
+                <TickerIcon />
+                <TickerArtist />
+              </box>
+            );
+          default:
+            return NoMedia;
+        }
+      })}
+    </button>
   );
 }
 

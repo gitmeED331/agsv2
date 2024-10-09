@@ -1,17 +1,11 @@
 import { App, Widget, Astal, Gtk, Gdk, GLib, timeout } from "astal";
-import Notifd from "gi://AstalNotifd";
+import AstalNotifd from "gi://AstalNotifd";
 import Icon, { Icons } from "../lib/icons";
-import NotifWidget from "../Widgets/Notification";
+import { NotifWidget } from "../Widgets/index";
 
-const Notif = Notifd.get_default();
-const transitionTime = 300;
+const Notif = AstalNotifd.get_default();
 const waitTime = 3000;
-const expireTime = 30000;
-
-const Time = (time: number, format = "%H:%M.%S") =>
-  GLib.DateTime.new_from_unix_local(time).format(format);
-const Date = (time: number, format = "%b %d") =>
-  GLib.DateTime.new_from_unix_local(time).format(format);
+const expireTime = 20000;
 
 function removeItem(box, notificationItem) {
   box.remove(notificationItem);
@@ -49,9 +43,7 @@ function NotifItem() {
             }
           }}
           onHoverLost={() => {
-            timeout(waitTime).then(() => {
-              removeItem(box, notificationItem);
-            })
+            timeout(waitTime, () => removeItem(box, notificationItem));
           }}
         >
           <NotifWidget item={notification} />

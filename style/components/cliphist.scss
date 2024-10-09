@@ -39,19 +39,19 @@
         }
 
         &:hover {
-            background: $active-gradient;
+            background: $BGG4;
             border-radius: $radius;
         }
 
         &:focus {
-            background: $HoverBGG;
+            background: $BGG3;
             border: 0px solid;
             border: none;
             outline: none;
         }
 
         &:active {
-            background: $active-gradient;
+            background: $BGG4;
         }
 
         & .clip_id {

@@ -1,5 +1,9 @@
 .launcher {
 	&.container {
+		padding-right: 1rem;
+	}
+
+	&.contentgrid {
 		background: $LauncherBG;
 		background-color: black;
 		background-size: auto auto;
@@ -7,16 +11,38 @@
 		background-repeat: no-repeat;
 		border-radius: $radius-tbright;
 		border: $border;
+		border-left: unset;
+		box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 	}
 
 	&.search {
-		margin: 1rem;
-		background: none;
-		border: $border;
-		border-radius: $radius;
-		color: $font-color1;
-		padding: 0.5rem;
-		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		selection {
+			color: black;
+			background-color: $font-color2;
+		}
+
+		&.input {
+			margin: 1rem;
+			background: none;
+			border-bottom: $border;
+			border-left: $border;
+			border-right: $border;
+			border-radius: $radius;
+			color: $font-color1;
+			padding: 0.5rem;
+			box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+			& .left {
+				margin-right: 0.25rem;
+				padding-right: 0.25rem;
+				border-right: $border;
+				border-radius: $radius;
+			}
+
+			& .right {
+				margin-left: 0.5rem;
+			}
+		}
 	}
 
 	&.app {
@@ -35,7 +61,7 @@
 		icon {
 			font-size: 2rem;
 			color: $font-color1;
-			border-radius: $radius;
+			border-radius: 10rem;
 		}
 
 		label {
@@ -44,11 +70,10 @@
 			font-size: 1.25rem;
 		}
 
-		&:focus-visible,
-		&:active,
-		&:focused,
+		//&:focus-visible,
+		&.active,
+		&:focus,
 		&:hover {
-			// background: $HoverBGG;
 			background-color: rgba(0, 0, 0, 0.8);
 			border-radius: $radius;
 			border-bottom: $border;
@@ -73,22 +98,21 @@
 		button {
 			background: none;
 
-			&.active,
-			&.focused {
+			&.active {
 				background-color: black;
 				border-radius: $radius;
 				border: $border;
 
 				icon {
-					background: $active-gradient;
+					background: $BGG4;
 					border-radius: $radius-tbleft;
 				}
 			}
 
 			&:focus-visible,
-			&:focused,
+			&:focus,
 			&:hover {
-				background: $HoverBGG;
+				background: $BGG3;
 				background-color: black;
 				border-radius: $radius;
 			}
@@ -98,6 +122,29 @@
 				color: $font-color1;
 				font-size: 2rem;
 			}
+		}
+	}
+
+	scrollbar.vertical {
+		transition: 200ms;
+		background-color: rgba(23, 23, 23, 0.3);
+		margin: 0.5rem 0rem;
+
+		&:hover {
+			background-color: rgba(23, 23, 23, 0.7);
+
+			slider {
+				background-color: $font-color1;
+				min-width: .5rem;
+			}
+		}
+
+		slider {
+			background-color: rgba(15, 155, 255, 0.5);
+			border-radius: $radius;
+			min-width: .4rem;
+			min-height: 2rem;
+			transition: 200ms;
 		}
 	}
 }

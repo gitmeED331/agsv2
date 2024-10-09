@@ -26,18 +26,16 @@ import { GLib, App, execAsync, monitorFile, Astal, Gtk } from "astal";
 // }
 
 import style from "./style/main.scss";
-import Bar from "./modules/bar/Bar";
 import {
+	Bar,
 	Dashboard,
 	MediaPlayerWindow,
-	Calendar,
-	AudioMixer,
 	NotificationPopups,
 	// Overview,
 	sessioncontrol,
-	powerprofiles,
 	Launcher,
 	//  cliphist,
+	WallpaperChooser
 } from "./modules/Windows/index";
 
 App.start({
@@ -46,13 +44,11 @@ App.start({
 		Bar({ monitor: 0 });
 		Dashboard();
 		MediaPlayerWindow();
-		Calendar();
-		AudioMixer();
 		NotificationPopups(0);
 		// Overview();
-		sessioncontrol();
-		powerprofiles();
+		// sessioncontrol();
 		Launcher();
 		//  cliphist();
+		WallpaperChooser();
 	},
 });

@@ -1,7 +1,5 @@
-import { Astal, bind, Widget, Gtk, App, Gdk, Variable } from "astal";
-import { winheight, winwidth } from "../../lib/screensizeadjust";
-import Icon, { Icons } from "../../lib/icons";
-import { StackSwitcher } from "../../Astalified/StackSwitcher";
+import { Gtk } from "astal";
+import { StackSwitcher } from "../../Astalified/index";
 
 // --- imported widgets ---
 import { BrightnessSlider, GridCalendar, PowerProfiles, AudioMixer, SessionControls } from "../../Widgets/index";
@@ -49,7 +47,7 @@ export default function LeftSide() {
 	});
 
 	return (
-		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>
+		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>
 			{[stackSwitcher, leftStack]}
 		</box>
 	);

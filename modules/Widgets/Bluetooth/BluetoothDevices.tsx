@@ -74,7 +74,12 @@ function btControls() {
 		</stack>
 	);
 	const blueman = <button
-		onClicked={"blueman-manager"}
+		onClick={(_, event) => {
+			if (event.button === Gdk.BUTTON_PRIMARY) {
+				execAsync("blueman-manager");
+				App.toggle_window("dashboard");
+			}
+		}}
 		halign={Gtk.Align.END}
 		valign={Gtk.Align.CENTER}
 		tooltip_text={"Blueman Manager"}

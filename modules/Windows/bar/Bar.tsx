@@ -1,18 +1,10 @@
-import { App, Astal, Gtk, Gdk, GLib, execAsync } from "astal";
+import { App, Astal, Gtk, GLib } from "astal";
 // ----- Widgets -----
 import Clock from "./clock";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
 
-// ----- hyprland Widgets -----
-// import HyprWorkspaces from "./Workspaces/HyprWorkspaces"
-// import HyprAppTitleTicker from "./AppTitleTicker/HyprAppTitleTicker"
-
-// ----- river Widgets -----
-// import RiverWorkspaces from "./Workspaces/RiverWorkspaces"
-// import RiverAppTitleTicker from "./AppTitleTicker/RiverAppTitleTicker"
-
-const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase() || "river";
+const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase()
 
 function loadWorkspaces(wm: string) {
   if (wm === "hyprland") {
@@ -35,7 +27,6 @@ function loadAppTitleTicker(wm: string) {
 }
 
 function LeftBar() {
-
   const WorkspacesComponent = loadWorkspaces(wm);
   const AppTitleTickerComponent = loadAppTitleTicker(wm);
 
@@ -79,6 +70,7 @@ function RightBar() {
     </box>
   );
 }
+
 export default function Bar({ monitor }: { monitor: number }) {
   return (
     <window
@@ -92,8 +84,9 @@ export default function Bar({ monitor }: { monitor: number }) {
         | Astal.WindowAnchor.RIGHT
       }
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
+
     >
-      <centerbox>
+      <centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.START} css={`margin-right: 7px;`}>
         <LeftBar />
         <CenterBar />
         <RightBar />

@@ -85,7 +85,7 @@
 
 .calendar.return-today {
   color: $font-color1;
-  background: $active-gradient;
+  background: $BGG5;
   border-radius: $radius;
   min-width: 50px;
   min-height: 30px;
@@ -96,7 +96,7 @@
   }
 
   &:hover {
-    background: $HoverBGG;
+    background: $BGG3;
 
     image {
       color: $font-color3;

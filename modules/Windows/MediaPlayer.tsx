@@ -16,14 +16,14 @@ export default function MediaPlayerWindow() {
       visible={false}
       application={App}
       margin-right={90}
+      onKeyPressEvent={(_, event) => {
+        const win = App.get_window("mediaplayerwindow");
+        if (event.get_keyval()[1] === Gdk.KEY_Escape) { if (win && win.visible === true) { win.visible = false; } }
+      }}
     >
-      <eventbox onKeyPressEvent={(_, event) => {
-        if (event.get_keyval()[1] === Gdk.KEY_Escape) { App.toggle_window("mediaplayerwindow") }
-      }}>
-        <box className={"mediaplayerbox"}>
-          <Player player={player} />
-        </box>
-      </eventbox>
+      <box className={"mediaplayerbox"}>
+        <Player player={player} />
+      </box>
     </window>
   );
 }

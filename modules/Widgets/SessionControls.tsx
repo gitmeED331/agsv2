@@ -1,4 +1,4 @@
-import { App, Astal, execAsync, Gdk, Gtk, GLib } from "astal";
+import { App, execAsync, Gdk, Gtk, GLib } from "astal";
 import Icon, { Icons } from "../lib/icons.js";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase() || "river";
@@ -29,6 +29,14 @@ const SysButton = (action: string, label: string) => {
             onClick={(_, event) => {
                 const win = App.get_window("sessioncontrols");
                 if (event.button === Gdk.BUTTON_PRIMARY) {
+                    execAsync(command);
+                    if (win && win.visible === true) { win.visible = false; }
+                }
+            }
+            }
+            onKeyPressEvent={(_, event) => {
+                const win = App.get_window("sessioncontrols");
+                if (event.get_keyval()[1] === Gdk.KEY_Return) {
                     execAsync(command);
                     if (win && !win.visible) { win.visible = false; }
                 }

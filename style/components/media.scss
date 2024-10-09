@@ -1,45 +1,49 @@
 // ---- Ticker ----
 .ticker {
-	&btn {
+	&.container {
 		border-top: $border;
 		border-radius: 3rem;
 		padding: 0rem 0.5rem;
 		background: $PrimaryBG;
 		font-weight: bold;
 		min-width: 1rem;
+	}
 
-		tooltip {
-			font-weight: bold;
-			padding: 10px
+	&.nomedia {
+		color: $font-color1;
+	}
+
+	tooltip {
+		font-weight: bold;
+		padding: 10px
+	}
+
+	&:hover {
+
+		.ticker.track {
+			color: $font-color5;
 		}
 
-		&:hover {
+		.ticker.artist {
+			color: $font-color1
+		}
 
-			.tickertrack {
-				color: $font-color5;
-			}
-
-			.tickerartist {
-				color: $font-color1
-			}
-
-			icon {
-				animation: spin 1s infinite;
-			}
+		icon {
+			animation: spin 1s infinite;
 		}
 	}
 
-	&artist {
+	&.artist {
 		color: $font-color2;
 		font-size: 1rem;
 	}
 
-	&track {
+	&.track {
 		font-size: 1rem;
 		color: $font-color1;
 	}
 
-	&icon {
+	&.icon {
 		color: red;
 	}
 }

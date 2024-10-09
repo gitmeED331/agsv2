@@ -2,7 +2,7 @@ import BatteryButton from "./battery";
 import BrightnessSlider from "./Brightness";
 import GridCalendar from "./GridCalendar";
 import Player from "./MediaPlayer";
-//import NotifWidget from "./Notification";
+import NotifWidget from "./Notification";
 import VolumeIndicator from "./VolumeIndicator";
 import AudioMixer from "./AudioMixer";
 import PowerProfiles from "./powerprofiles";
@@ -16,7 +16,7 @@ import SessionControls from "./SessionControls";
 
 export {
   AudioMixer,
-  //NotifWidget,
+  NotifWidget,
   BrightnessSlider,
   GridCalendar,
   VolumeIndicator,

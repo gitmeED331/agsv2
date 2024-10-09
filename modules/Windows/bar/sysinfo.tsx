@@ -1,5 +1,5 @@
 import { Astal, Gtk } from "astal";
-import { VolumeIndicator, BatteryButton, NetworkButton, BluetoothButton } from "../Widgets/index";
+import { VolumeIndicator, BatteryButton, NetworkButton, BluetoothButton } from "../../Widgets/index";
 
 export default function SysInfo() {
 	return (

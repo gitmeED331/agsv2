@@ -1,6 +1,6 @@
 import { App, bind, Gtk, GLib, Gdk, execAsync } from "astal";
 import Pango from "gi://Pango";
-import { Icons } from "../../lib/icons";
+import { Icons } from "../../../lib/icons";
 
 import AstalRiver from "gi://AstalRiver";
 const river = AstalRiver.get_default()!;
@@ -10,15 +10,18 @@ function AppTitleTicker() {
 		<button
 			className={"AppTitleTicker"}
 			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					const win = App.get_window("overview");
-					if (win) {
-						win.visible = !win.visible;
-					}
-				}
-
-				if (event.button === Gdk.BUTTON_SECONDARY) {
-					execAsync(`riverctl focus-view close`);
+				const win = App.get_window("overview");
+				switch (event.button) {
+					case Gdk.BUTTON_PRIMARY:
+						if (win) { win.visible = !win.visible };
+						break;
+					case Gdk.BUTTON_SECONDARY:
+						execAsync(`riverctl focus-view close`);
+						break;
+					case Gdk.BUTTON_MIDDLE:
+						break; // TODO: Implement middle click behavior
+					default:
+						break
 				}
 			}}
 		>

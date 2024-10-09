@@ -1,20 +1,13 @@
 import {
-  Widget,
-  Gio,
   Gtk,
-  Gdk,
   GLib,
-  Astal,
-  GObject,
-  timeout,
-  bind,
 } from "astal";
 import Icon, { Icons } from "../lib/icons";
-import Notifd from "gi://AstalNotifd";
+import AstalNotifd from "gi://AstalNotifd";
 import Pango from "gi://Pango";
 
-const Notif = Notifd.get_default();
-const item = Notifd.Notification
+// const Notif = AstalNotifd.get_default();
+// const item = AstalNotifd.Notification
 const Time = (time: number, format = "%H:%M") =>
   GLib.DateTime.new_from_unix_local(time).format(format);
 const Date = (time: number, format = "%b %d") =>
@@ -52,6 +45,7 @@ export default function NotifWidget({ item }) {
             halign={Gtk.Align.CENTER}
             lines={1}
             maxWidthChars={6}
+            visible={true}
             label={Date(item.time)?.toString()}
           />
           <label

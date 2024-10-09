@@ -1,4 +1,4 @@
-import { Gdk } from "astal";
+import { Gdk, Gtk } from "astal";
 
 /*
  * 		value must between 0 and 1
@@ -16,3 +16,16 @@ export const winwidth = (value: number) => {
   const winwidth = screenWidth * value;
   return winwidth;
 };
+
+export function getWidgetPosition(widget: Gtk.Widget) {
+  // Get the widget's Gdk.Window, where the widget is drawn
+  const gdkWindow = widget.get_window();
+  if (!gdkWindow) {
+    console.error("Widget has no associated Gdk.Window");
+    return;
+  }
+
+  // Get the (x, y) position relative to the screen
+  const [x, y] = gdkWindow.get_origin();
+  console.log(`Widget is located at (x: ${x}, y: ${y}) on the screen.`);
+}
