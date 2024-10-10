@@ -1,7 +1,7 @@
-import { App, bind, Widget, Astal, Gtk, Gdk, GLib, Variable } from "astal";
+import { App, bind, Widget, execAsync, Astal, Gtk, Gdk, GLib, Variable } from "astal";
 import AstalApps from "gi://AstalApps";
 import Pango from "gi://Pango";
-import Icon from "../lib/icons";
+import Icon, { Icons } from "../lib/icons";
 import { winwidth, winheight } from "../lib/screensizeadjust";
 import { Grid, Stack } from "../Astalified/index";
 
@@ -12,13 +12,12 @@ const Apps = new AstalApps.Apps({
 });
 const Applications = Apps.get_list();
 
-
-
 const sortedApplications = Applications.sort((a, b) => {
 	return a.get_name().localeCompare(b.get_name());
 });
 
 function createAppGrid(appList, app) {
+	const columnCount = 1;
 	appList = appList.sort((a, b) => {
 		return a.get_name().localeCompare(b.get_name());
 	});
@@ -28,7 +27,6 @@ function createAppGrid(appList, app) {
 		vexpand: true,
 		halign: Gtk.Align.FILL,
 		valign: Gtk.Align.FILL,
-
 	});
 
 	appList.forEach((app, index) => {
@@ -38,17 +36,25 @@ function createAppGrid(appList, app) {
 				name={app.get_name()}
 				tooltip_text={app.get_description()}
 				on_clicked={() => {
+					entry.set_text("");
 					app.launch();
 					App.toggle_window("launcher");
 				}}
+				onKeyPressEvent={(_, event) => {
+					if (event.get_keyval()[1] === Gdk.KEY_Return) {
+						entry.set_text("");
+						app.launch();
+						App.toggle_window("launcher");
+					}
+				}}
 			>
 				<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5} widthRequest={winwidth(0.15)}>
-					<icon icon={app.icon_name} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-					<label label={app.name} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
+					<icon icon={app.icon_name || Icon.missing} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+					<label label={app.name || "missing"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
 				</box>
 			</button>
 		);
-		grid.attach(appButton, index % 1, Math.floor(index / 1), 1, 1);
+		grid.attach(appButton, index % columnCount, Math.floor(index / columnCount), 1, 1);
 	});
 
 	return grid;
@@ -140,24 +146,111 @@ function Search(query) {
 	}
 }
 
-const SearchInput = <entry
-	className={"launcher search input"}
-	placeholder_text="Search applications..."
-	primary_icon_name={Icon.launcher.search}
-	secondary_icon_name={Icon.launcher.clear}
-	on_changed={(self) => {
-		query = self.get_text();
-		Search(query);
-	}}
-	secondary_icon_activatable={true}
-	secondary_icon_tooltip_text={"Clear search"}
-	hexpand={false}
-	halign={Gtk.Align.FILL}
-	valign={Gtk.Align.CENTER}
-	tooltip_text={"Search applications"}
-	activates_default={true}
-	focusOnClick={true}
-/>
+function SearchWindows(query) {
+	const windows = getActiveWindows();
+	const results = windows.filter((win) => win.title.includes(query));
+}
+
+const handleTerminalCommand = (query, state, self) => {
+	const command = query.slice(3).trim();
+
+	if (command) {
+		const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
+		const cmd = isShiftPressed ? `kitty --hold --directory=$HOME -e ${command}` : command;
+
+		execAsync(cmd);
+
+		self.set_text("");
+		App.toggle_window("launcher");
+	}
+};
+
+const handleWindowSearch = (query) => {
+	const windowQuery = query.slice(3).trim();
+	if (windowQuery) {
+		SearchWindows(windowQuery);
+	}
+};
+
+let currentQuery = "";
+
+const entry = (
+	<entry
+		className={"input"}
+		placeholder_text="Search apps, C:: for teriminal commands..."
+		on_changed={(self) => {
+			const query = self.get_text().trim();
+			currentQuery = query;
+			if (!query.startsWith("C::") && !query.startsWith("W::")) {
+				Search(query);
+			}
+		}}
+		onKeyPressEvent={(self, event) => {
+			const keyval = event.get_keyval()[1];
+			const state = event.get_state()[1];
+			const query = currentQuery.trim();
+
+			if (keyval === Gdk.KEY_Return) {
+				switch (true) {
+					case query.startsWith("C::"):
+						handleTerminalCommand(query, state, self);
+						break;
+
+					case query.startsWith("W::"):
+						handleWindowSearch(query);
+						break;
+
+					default:
+						break;
+				}
+			}
+		}}
+		hexpand={true}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.CENTER}
+		tooltip_text={"Search applications, or use C:: for terminal, W:: for windows"}
+		activates_default={true}
+		focusOnClick={true}
+	/>
+);
+const SearchInput = () => {
+	const icon = (
+		<button>
+			<icon icon={Icon.launcher.search} />
+		</button>
+	);
+
+	const clear = (
+		<button
+			onClick={(_, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					entry.set_text("");
+					theStack.set_visible_child_name("All Apps");
+				}
+			}}
+			tooltip_text={"Clear search"}
+			visible={bind(entry, "text").as((text) => text.length > 0)}
+			halign={Gtk.Align.END}
+		>
+			<icon icon={Icon.launcher.clear} />
+		</button>
+	);
+
+	const SIGrid = new Grid({
+		hexpand: true,
+		vexpand: true,
+		halign: Gtk.Align.FILL,
+		valign: Gtk.Align.CENTER,
+		columnSpacing: 5,
+		className: "launcher search",
+	});
+
+	SIGrid.attach(icon, 1, 1, 1, 1);
+	SIGrid.attach(entry, 2, 1, 1, 1);
+	SIGrid.attach(clear, 3, 1, 1, 1);
+
+	return <box className={""}>{SIGrid}</box>;
+};
 
 const allAppsPage = (
 	<box key="All Apps" name="All Apps" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
@@ -192,19 +285,23 @@ const theStack = new Stack({
 });
 
 const Switcher = () => {
+	const handleSwitch = (name) => {
+		theStack.set_visible_child_name(name);
+		query = "";
+		entry.set_text("");
+	};
+
 	const allAppsButton = (
 		<button
 			className={bind(theStack, "visible_child_name").as((name) => (name === "All Apps" ? "active" : ""))}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					theStack.set_visible_child_name("All Apps");
-					query = "";
+					handleSwitch("All Apps");
 				}
 			}}
 			onKeyPressEvent={(_, event) => {
 				if (event.get_keyval()[1] === Gdk.KEY_Return) {
-					theStack.set_visible_child_name("All Apps");
-					query = "";
+					handleSwitch("All Apps");
 				}
 			}}
 			tooltip_text={"All Apps"}
@@ -215,20 +312,19 @@ const Switcher = () => {
 
 	const categoryButtons = uniqueCategories.map((category) => {
 		const iconName = Icon.launcher[category.toLowerCase()] || Icon.launcher.system;
+
 		return (
 			<button
 				className={bind(theStack, "visible_child_name").as((name) => (name === category.toLowerCase() ? "active" : ""))}
 				key={category}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						theStack.set_visible_child_name(category.toLowerCase());
-						query = "";
+						handleSwitch(category.toLowerCase());
 					}
 				}}
 				onKeyPressEvent={(_, event) => {
 					if (event.get_keyval()[1] === Gdk.KEY_Return) {
-						theStack.set_visible_child_name(category.toLowerCase());
-						query = "";
+						handleSwitch(category.toLowerCase());
 					}
 				}}
 				tooltip_text={category}
@@ -257,14 +353,13 @@ export default function Launcher() {
 					if (win && win.visible === true) {
 						query = "";
 						win.visible = false;
-
 					}
 				}
 			}}
 			widthRequest={winwidth(0.8)}
 			heightRequest={winheight(0.8)}
 		/>
-	)
+	);
 
 	const theGrid = new Grid({
 		className: "launcher contentgrid",
@@ -273,9 +368,9 @@ export default function Launcher() {
 		hexpand: true,
 		vexpand: true,
 		visible: true,
-	})
+	});
 
-	theGrid.attach(SearchInput, 1, 1, 2, 1);
+	theGrid.attach(SearchInput(), 1, 1, 2, 1);
 	theGrid.attach(Switcher(), 1, 2, 1, 1);
 	theGrid.attach(theStack, 2, 2, 1, 1);
 
@@ -286,11 +381,10 @@ export default function Launcher() {
 		hexpand: true,
 		vexpand: true,
 		visible: true,
-	})
+	});
 
 	masterGrid.attach(theGrid, 1, 1, 1, 1);
 	masterGrid.attach(eventHandler, 2, 1, 1, 1);
-
 
 	return (
 		<window
@@ -309,7 +403,6 @@ export default function Launcher() {
 					if (win && win.visible === true) {
 						query = "";
 						win.visible = false;
-
 					}
 				}
 			}}

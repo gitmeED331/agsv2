@@ -16,33 +16,34 @@
 	}
 
 	&.search {
+		margin: 1rem;
+		background: none;
+		border-bottom: $border;
+		border-left: $border;
+		border-right: $border;
+		border-radius: $radius;
+		color: $font-color1;
+		padding: 0.5rem;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
 		selection {
 			color: black;
 			background-color: $font-color2;
 		}
 
-		&.input {
-			margin: 1rem;
-			background: none;
-			border-bottom: $border;
-			border-left: $border;
-			border-right: $border;
-			border-radius: $radius;
-			color: $font-color1;
-			padding: 0.5rem;
-			box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		// &.input {
 
-			& .left {
-				margin-right: 0.25rem;
-				padding-right: 0.25rem;
-				border-right: $border;
-				border-radius: $radius;
-			}
+		// 	& .left {
+		// 		margin-right: 0.25rem;
+		// 		padding-right: 0.25rem;
+		// 		border-right: $border;
+		// 		border-radius: $radius;
+		// 	}
 
-			& .right {
-				margin-left: 0.5rem;
-			}
-		}
+		// 	& .right {
+		// 		margin-left: 0.5rem;
+		// 	}
+		// }
 	}
 
 	&.app {

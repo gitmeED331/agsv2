@@ -46,7 +46,7 @@ App.start({
 		MediaPlayerWindow();
 		NotificationPopups(0);
 		// Overview();
-		// sessioncontrol();
+		sessioncontrol();
 		Launcher();
 		//  cliphist();
 		WallpaperChooser();
