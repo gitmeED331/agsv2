@@ -1,4 +1,4 @@
-import { App, bind, Widget, execAsync, Astal, Gtk, Gdk, GLib, Variable } from "astal";
+import { App, bind, execAsync, Astal, Gtk, Gdk } from "astal";
 import AstalApps from "gi://AstalApps";
 import Pango from "gi://Pango";
 import Icon, { Icons } from "../lib/icons";
@@ -214,11 +214,7 @@ const entry = (
 	/>
 );
 const SearchInput = () => {
-	const icon = (
-		<button>
-			<icon icon={Icon.launcher.search} />
-		</button>
-	);
+	const icon = (<icon icon={Icon.launcher.search} />);
 
 	const clear = (
 		<button
@@ -370,9 +366,9 @@ export default function Launcher() {
 		visible: true,
 	});
 
-	theGrid.attach(SearchInput(), 1, 1, 2, 1);
-	theGrid.attach(Switcher(), 1, 2, 1, 1);
-	theGrid.attach(theStack, 2, 2, 1, 1);
+	theGrid.attach(SearchInput(), 0, 0, 2, 1);
+	theGrid.attach(Switcher(), 0, 1, 1, 1);
+	theGrid.attach(theStack, 1, 1, 1, 1);
 
 	const masterGrid = new Grid({
 		className: "launcher containergrid",
@@ -383,8 +379,8 @@ export default function Launcher() {
 		visible: true,
 	});
 
-	masterGrid.attach(theGrid, 1, 1, 1, 1);
-	masterGrid.attach(eventHandler, 2, 1, 1, 1);
+	masterGrid.attach(theGrid, 0, 0, 1, 1);
+	masterGrid.attach(eventHandler, 1, 0, 1, 1);
 
 	return (
 		<window

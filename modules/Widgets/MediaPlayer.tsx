@@ -1,4 +1,4 @@
-import { Widget, bind, execAsync, Gtk, Astal, GLib } from "astal";
+import { App, Widget, bind, execAsync, Gtk, Gdk, Astal, GLib } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
@@ -81,10 +81,13 @@ function PlayerIcon() {
 	return (
 		<button
 			className={"playicon"}
-			onClicked={player.entry}
-		// async () => {
-		//   await execAsync(`bash -c "exec ${player.entry} &"`);
-		// }}
+			// onClicked={player.entry}
+			onClick={(_, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					execAsync(player.entry);
+					App.toggle_window("dashboard");
+				}
+			}}
 		>
 			<icon
 				hexpand={true}
@@ -170,8 +173,8 @@ function Player({ player }: { player: Mpris.Player }) {
 	}
 
 	return (
-		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} 
-		visible={bind(player, "available").as((a) => a === true)} setup={setup}>
+		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START}
+			visible={bind(player, "available").as((a) => a === true)} setup={setup}>
 			<centerbox
 				className={"mediainfo"}
 				vertical={true}

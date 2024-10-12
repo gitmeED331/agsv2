@@ -30,7 +30,6 @@ function AppTitleTicker() {
 			}
 			focusedTitle.set(c.get_title());
 			focusedClass.set(c.get_class());
-			focusedIcon.set(c.get_icon_name());
 		});
 	};
 

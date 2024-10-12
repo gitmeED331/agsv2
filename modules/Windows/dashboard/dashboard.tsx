@@ -10,58 +10,23 @@ import RightSide from "./RightSide";
 
 const player = Mpris.Player.new("Deezer");
 
-const Lhandler = (
-	<eventbox
-		halign={Gtk.Align.START}
-		valign={Gtk.Align.FILL}
-		onClick={(_, event) => {
-			const win = App.get_window("dashboard");
-			if (event.button === Gdk.BUTTON_PRIMARY) {
-				if (win && win.visible === true) {
-					win.visible = false;
-
-				}
-			}
-		}}
-		widthRequest={winwidth(.25)}
-		heightRequest={winheight(.1)}
-	/>
-)
-const Rhandler = (
-	<eventbox
-		halign={Gtk.Align.START}
-		valign={Gtk.Align.FILL}
-		onClick={(_, event) => {
-			const win = App.get_window("dashboard");
-			if (event.button === Gdk.BUTTON_PRIMARY) {
-				if (win && win.visible === true) {
-					win.visible = false;
-
-				}
-			}
-		}}
-		widthRequest={winwidth(.25)}
-		heightRequest={winheight(.1)}
-	/>
-)
-
-const bottomhandler = (
-	<eventbox
+function eventHandler(eh: number, width: number, height: number) {
+	const eventbox = <eventbox
 		halign={Gtk.Align.FILL}
 		valign={Gtk.Align.FILL}
 		onClick={(_, event) => {
-			const win = App.get_window("dashboard");
+			const win = App.get_window("sessioncontrols");
 			if (event.button === Gdk.BUTTON_PRIMARY) {
 				if (win && win.visible === true) {
 					win.visible = false;
-
 				}
 			}
 		}}
-		widthRequest={winwidth(1)}
-		heightRequest={winheight(.5)}
-	/>
-)
+		widthRequest={winwidth(width)}
+		heightRequest={winheight(height)}
+	/>;
+	return eventbox;
+}
 
 function Dashboard() {
 	const content = new Grid({
@@ -80,15 +45,15 @@ function Dashboard() {
 
 	if (thePlayer) {
 		content.insert_row(1);
-		content.attach(thePlayer, 2, 1, 3, 1);
+		content.attach(thePlayer, 1, 0, 3, 1);
 	} else { content.remove_row(1) }
 
-	content.attach(Lhandler, 1, 1, 1, 2) // left side
-	content.attach(LeftSide(), 2, 2, 1, 1)
-	content.attach(Tray(), 3, 2, 1, 1)
-	content.attach(RightSide(), 4, 2, 1, 1)
-	content.attach(Rhandler, 5, 1, 1, 2) // right side
-	content.attach(bottomhandler, 1, 3, 5, 1) // bottom
+	content.attach(eventHandler(1, .25, .1), 0, 0, 1, 2) // left side
+	content.attach(LeftSide(), 1, 1, 1, 1)
+	content.attach(Tray(), 2, 1, 1, 1)
+	content.attach(RightSide(), 3, 1, 1, 1)
+	content.attach(eventHandler(2, .25, .1), 4, 0, 1, 2) // right side
+	content.attach(eventHandler(3, 1, .5), 0, 2, 5, 1) // bottom
 
 	return (
 		<window

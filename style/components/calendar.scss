@@ -32,10 +32,11 @@
   }
 
   &-days {
-    color: $font-color2;
+    color: $color6;
     border-bottom: $border;
     border-radius: $radius;
     font-size: 1.5rem;
+    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
   }
 
   &-day {

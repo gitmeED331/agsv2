@@ -70,6 +70,9 @@ const Icon = {
       up: "pan-up-symbolic",
     },
   },
+  cliphist: {
+    delete: "window-close-symbolic",
+  },
   audio: {
     mic: {
       muted: "microphone-disabled-symbolic",

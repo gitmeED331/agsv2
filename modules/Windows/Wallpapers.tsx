@@ -2,6 +2,7 @@ import { execAsync, Gtk, Gdk, GLib, Gio, Astal, App } from "astal";
 import { Grid } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
 import GdkPixbuf from "gi://GdkPixbuf?version=2.0"
+import Icon from "../lib/icons";
 
 const cacheDir = "/tmp/wallpaper_cache";
 
@@ -93,8 +94,8 @@ function createWallpaperGrid(wps: { name: string, path: string }[]) {
                     execAsync(`swww img ${wp.path}`);
                     App.toggle_window("wallpapers");
                 }}
-                widthRequest={winwidth(0.05)}
-                heightRequest={winheight(0.05)}
+                widthRequest={winwidth(0.1)}
+                heightRequest={winheight(0.1)}
                 halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             >
                 <box className={"wallpaper image"}
@@ -114,22 +115,38 @@ function createWallpaperGrid(wps: { name: string, path: string }[]) {
     return grid;
 }
 
+const refreshButton = (
+    <button
+        className={"refresh button"}
+        tooltip_text={"Refresh Wallpapers"}
+        on_clicked={async () => {
+            await loadWallpapers(); // Reload wallpapers
+        }}
+        halign={Gtk.Align.START}
+        valign={Gtk.Align.START}
+    >
+        <icon icon={Icon.ui.refresh} />
+    </button>
+);
+
 function createScrollablePage(wps) {
     return (
-        <scrollable
-            vscroll={Gtk.PolicyType.AUTOMATIC}
-            hscroll={Gtk.PolicyType.NEVER}
-            vexpand={true}
-            hexpand={true}
-            halign={Gtk.Align.FILL}
-            valign={Gtk.Align.FILL}
-            visible={true}
-            widthRequest={winwidth(0.35)}
-            heightRequest={winheight(0.35)}
-            css={"scrollable {background-color: rgba(0,0,0,0.75); border: 2px solid rgba(15,155,255,1); border-radius: 3rem;}"}
-        >
-            {createWallpaperGrid(wps)}
-        </scrollable>
+        <box css={"background-color: rgba(0,0,0,0.75); border: 2px solid rgba(15,155,255,1); border-radius: 3rem; padding: 1rem;"}>
+            <scrollable
+                vscroll={Gtk.PolicyType.AUTOMATIC}
+                hscroll={Gtk.PolicyType.NEVER}
+                vexpand={true}
+                hexpand={true}
+                halign={Gtk.Align.FILL}
+                valign={Gtk.Align.FILL}
+                visible={true}
+                widthRequest={winwidth(0.35)}
+                heightRequest={winheight(0.35)}
+            >
+                {createWallpaperGrid(wps)}
+            </scrollable>
+            {refreshButton}
+        </box>
     );
 }
 
@@ -161,14 +178,18 @@ export default function WallpaperChooser() {
         visible: true,
     });
 
-    getWallpapersFromFolderAsync().then(wps => {
-        wallpaperGrid.attach(createScrollablePage(wps), 2, 2, 1, 1);
-    });
+    const loadWallpapers = async () => {
+        const wps = await getWallpapersFromFolderAsync();
+        wallpaperGrid.attach(createScrollablePage(wps), 1, 1, 1, 1);
+    };
 
-    wallpaperGrid.attach(eventHandler(1), 1, 1, 3, 1);
-    wallpaperGrid.attach(eventHandler(2), 1, 2, 1, 1);
-    wallpaperGrid.attach(eventHandler(3), 3, 2, 1, 1);
-    wallpaperGrid.attach(eventHandler(4), 1, 3, 3, 1);
+    // wallpaperGrid.attach(refreshButton, 2, 1, 1, 1)
+    wallpaperGrid.attach(eventHandler(1), 0, 0, 3, 1); // top
+    wallpaperGrid.attach(eventHandler(2), 0, 1, 1, 1); // left
+    wallpaperGrid.attach(eventHandler(3), 2, 1, 1, 1); // right
+    wallpaperGrid.attach(eventHandler(4), 0, 2, 3, 1); // bottom
+
+    loadWallpapers();
 
     const window = <window
         name={"wallpapers"}

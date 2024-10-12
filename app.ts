@@ -34,7 +34,7 @@ import {
 	// Overview,
 	sessioncontrol,
 	Launcher,
-	//  cliphist,
+	cliphist,
 	WallpaperChooser
 } from "./modules/Windows/index";
 
@@ -42,13 +42,13 @@ App.start({
 	css: style,
 	main() {
 		Bar({ monitor: 0 });
+		cliphist();
 		Dashboard();
+		Launcher();
 		MediaPlayerWindow();
 		NotificationPopups(0);
 		// Overview();
 		sessioncontrol();
-		Launcher();
-		//  cliphist();
 		WallpaperChooser();
 	},
 });

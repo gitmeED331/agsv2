@@ -16,6 +16,7 @@ halign={Gtk.Align.CENTER}
 
 /* window parameters */
 
+anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
       layer={Astal.Layer.OVERLAY}
       exclusivity={Astal.Exclusivity.NORMAL}
       keymode={Astal.Keymode.NONE}
@@ -94,9 +95,6 @@ const repeatedGreetings = async () => {
 }
 
 repeatedGreetings()
-
-{RoundedAngleEnd("bottomright", { className: "angleLarge" })}
-{RoundedAngleEnd("bottomleft", { className: "angleLarge" })}
 
 onKeyPressEvent={(_, event) => {
     if (event.get_keyval()[1] === Gdk.KEY_Escape) { App.toggle_window("sessioncontrols") }

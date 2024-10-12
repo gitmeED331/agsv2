@@ -42,6 +42,8 @@ const SysButton = (action: string, label: string) => {
                 }
             }
             }
+            canFocus={true}
+            hasDefault={false}
         >
             <box
                 className={"sessioncontrol button"}

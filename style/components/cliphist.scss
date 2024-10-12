@@ -1,81 +1,121 @@
-/* -----------------------------------------------------
- * Clipboard history
- * ----------------------------------------------------- */
+.cliphist {
+    &.container {}
 
-.clip {
-    &history {
-        &_box {
-            border-radius: calc($radius * 1.25);
-            background-color: $PrimaryBG;
-            border: $border;
-        }
+    &.contentgrid {
+        background: $LauncherBG;
+        background-color: black;
+        background-size: auto auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: $radius-tbleft;
+        border: $border;
+        border-right: unset;
+        box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+        padding: 0rem 1rem;
+    }
 
-        &_box separator {
-            margin: 0px;
-        }
+    &.header {
+        margin: 1rem;
+        background: none;
+        border-bottom: $border;
+        border-left: $border;
+        border-right: $border;
+        border-radius: $radius;
+        color: $font-color1;
+        padding: 0.5rem;
+        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-        &_entry {
-            background-color: $SecondaryBG;
+        .clear_hist {
+            background: $font-color2;
             color: $font-color1;
-            border: none;
-            outline: none;
-            border-radius: 100px;
-            margin-bottom: 16px;
-            padding: 5px;
-            padding-left: 25px;
-            margin: 11px;
+            border-radius: $radius;
+
+            icon {
+                font-size: 2rem;
+                margin: -0.25rem;
+            }
+
+            &:hover {
+                color: $font-color2;
+                background: $font-color4
+            }
+        }
+
+        .search {
+            border-radius: $radius;
+            padding: 0rem 0.5rem;
+
+            selection {
+                color: black;
+                background-color: $font-color2;
+            }
         }
     }
 
-    &_container {
-        border: none;
-        outline: none;
-        border-radius: 0px;
-        min-height: 40px;
+    &.item {
+        all: unset;
+        padding: 0rem 0.75rem;
+        min-height: 1.5rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(0, 0, 255, 1);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        icon {
+            font-size: 2rem;
+            color: $font-color1;
+            border-radius: 10rem;
+        }
 
         label {
-            margin-left: 1rem;
-            margin-right: 1rem;
+            color: $font-color1;
+            font-weight: normal;
+            font-size: 1.25rem;
         }
+
+        //&:focus-visible,
+        &.active,
+        &:focus,
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: $radius;
+            border-bottom: $border;
+
+            label {
+                text-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+            }
+
+            icon {
+                -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+                animation: spin 1s linear infinite;
+            }
+        }
+    }
+
+    &.preview {}
+
+    scrollbar.vertical {
+        transition: 200ms;
+        background-color: rgba(23, 23, 23, 0.3);
+        margin: 0.5rem 0rem;
 
         &:hover {
-            background: $BGG4;
+            background-color: rgba(23, 23, 23, 0.7);
+
+            slider {
+                background-color: $font-color1;
+                min-width: .5rem;
+            }
+        }
+
+        slider {
+            background-color: rgba(15, 155, 255, 0.5);
             border-radius: $radius;
+            min-width: .4rem;
+            min-height: 2rem;
+            transition: 200ms;
         }
-
-        &:focus {
-            background: $BGG3;
-            border: 0px solid;
-            border: none;
-            outline: none;
-        }
-
-        &:active {
-            background: $BGG4;
-        }
-
-        & .clip_id {
-            font-weight: 200;
-            font-feature-settings: "tnum";
-            color: $font-color2;
-        }
-
-        & .dot_divider {
-            font-weight: 900;
-            font-size: 1rem;
-            min-width: 0px;
-            margin: 0px;
-            color: red;
-        }
-    }
-
-    &_divider {
-        color: $font-color2;
-        margin: 0px;
-    }
-
-    &_label {
-        color: $font-color1;
-        font-weight: normal;
     }
 }
