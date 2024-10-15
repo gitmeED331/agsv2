@@ -1,7 +1,6 @@
 import { App, bind, Gdk, Gtk, Variable } from "astal";
 import Pango from "gi://Pango";
 import Icon, { Icons } from "../../../lib/icons";
-import { winwidth } from "../../../lib/screensizeadjust";
 import Hyprland from "gi://AstalHyprland";
 import AstalApps from "gi://AstalApps";
 
@@ -10,7 +9,7 @@ const Applications = AstalApps.Apps.new();
 const hyprland = Hyprland.get_default();
 
 function AppTitleTicker() {
-	// const client = bind(hyprland, "focusedClient");
+	const hclient = bind(hyprland, "focusedClient");
 	const focusedIcon = Variable<string>("");
 	const focusedTitle = Variable<string>("");
 	const focusedClass = Variable<string>("");
@@ -63,9 +62,10 @@ function AppTitleTicker() {
 			}}
 		>
 			<box spacing={5}>
-				<icon valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} icon={bind(focusedIcon)} />
-
-				<label
+				<icon valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}
+					icon={bind(focusedIcon) || bind(hyprland, "focusedClient").as((c) => c.get_class())}
+				/>
+				< label
 					label={bind(focusedTitle)}
 					valign={Gtk.Align.CENTER}
 					halign={Gtk.Align.CENTER}
@@ -74,27 +74,6 @@ function AppTitleTicker() {
 					useMarkup={true}
 				/>
 			</box>
-
-			{/* 						<box spacing={5}>
-							{c.class ? (
-								<icon
-									valign={Gtk.Align.CENTER}
-									halign={Gtk.Align.CENTER}
-									icon={bind(hyprland, "icon_name")}
-								/>
-							) : null}
-							{c.title || c.class ? (
-								<label
-									valign={Gtk.Align.CENTER}
-									halign={Gtk.Align.CENTER}
-									hexpand={true}
-									ellipsize={Pango.EllipsizeMode.END} // truncate
-									useMarkup={true}
-									label={bind(hyprland, "title") || "Desktop"}
-								/>
-							) : null}
-						</box>
-					 */}
 		</button>
 	);
 }

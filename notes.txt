@@ -17,11 +17,11 @@ halign={Gtk.Align.CENTER}
 /* window parameters */
 
 anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
-      layer={Astal.Layer.OVERLAY}
-      exclusivity={Astal.Exclusivity.NORMAL}
-      keymode={Astal.Keymode.NONE}
-      visible={false}
-      application={App}
+layer={Astal.Layer.OVERLAY}
+exclusivity={Astal.Exclusivity.NORMAL}
+keymode={Astal.Keymode.NONE}
+visible={false}
+application={App}
 
 /* end window parameters */
 
@@ -133,3 +133,34 @@ class MyObj extends GObject.Object {
         print("default handler", a, b)
     }
 }
+
+function eventHandler(eh: number, width: number, height: number) {
+	const eventbox = <eventbox
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		onClick={(_, event) => {
+			const win = App.get_window(WINDOW_NAME);
+			if (event.button === Gdk.BUTTON_PRIMARY) {
+				if (win && win.visible === true) {
+					win.visible = false;
+				}
+			}
+		}}
+		widthRequest={winwidth(width)}
+		heightRequest={winheight(height)}
+	/>;
+	return eventbox;
+}
+
+/* old apptitleticker */
+<box>
+	{bind(hyprland, "focusedClient").as((c) => !c ? (
+		<box>No Client focused</box>
+		) : (
+		<box spacing={5}>
+			<icon valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} icon={bind(c, "class").as((i) => Icons(i))} />
+			<label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} hexpand={true} ellipsize={Pango.EllipsizeMode.END} label={bind(c, "title")} />
+		</box>
+		),
+	)}
+</box>

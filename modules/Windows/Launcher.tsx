@@ -338,7 +338,7 @@ const Switcher = () => {
 	);
 };
 
-export default function Launcher() {
+function Launcher() {
 	const eventHandler = (
 		<eventbox
 			halign={Gtk.Align.FILL}
@@ -407,3 +407,13 @@ export default function Launcher() {
 		</window>
 	);
 }
+
+// App.connect("window-toggled", (_, win) => {
+// 	if (win.name === launcher) {
+// 		query = ""
+// 		entry.set_text("")
+// 		theStack.set_visible_child_name("All Apps")
+// 	}
+// })
+
+export default Launcher

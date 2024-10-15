@@ -1,12 +1,12 @@
-import { Astal, Gtk, App, Gdk, Widget } from "astal";
+import { Astal, Gtk, App, Gdk } from "astal";
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
 import { Grid } from "../../Astalified/index";
 
 // --- imported widgets ---
 import { Player, Tray, } from "../../Widgets/index";
-import LeftSide from "./LeftSide";
-import RightSide from "./RightSide";
+import LeftSide, { dashboardLeftStack } from "./LeftSide";
+import RightSide, { dashboardRightStack } from "./RightSide";
 
 const player = Mpris.Player.new("Deezer");
 
@@ -15,7 +15,7 @@ function eventHandler(eh: number, width: number, height: number) {
 		halign={Gtk.Align.FILL}
 		valign={Gtk.Align.FILL}
 		onClick={(_, event) => {
-			const win = App.get_window("sessioncontrols");
+			const win = App.get_window("dashboard");
 			if (event.button === Gdk.BUTTON_PRIMARY) {
 				if (win && win.visible === true) {
 					win.visible = false;
@@ -76,4 +76,12 @@ function Dashboard() {
 		</window>
 	);
 }
+
+// App.connect("window-toggled", (_, win) => {
+// 	if (win.name === "dashboard") {
+// 		dashboardLeftStack.set_visible_child_name("calendar")
+// 		dashboardRightStack.set_visible_child_name("notifications")
+// 	}
+// })
+
 export default Dashboard;

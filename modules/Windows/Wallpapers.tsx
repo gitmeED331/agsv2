@@ -1,7 +1,7 @@
 import { execAsync, Gtk, Gdk, GLib, Gio, Astal, App } from "astal";
 import { Grid } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
-import GdkPixbuf from "gi://GdkPixbuf?version=2.0"
+import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
 import Icon from "../lib/icons";
 
 const cacheDir = "/tmp/wallpaper_cache";
@@ -36,15 +36,20 @@ async function getWallpapersFromFolderAsync(batchSize = 10) {
     const folderPath = "/home/topsykrets/Pictures/Wallpapers";
 
     const directory = Gio.File.new_for_path(folderPath);
+    const uniqueBaseNames = new Set();
 
-    try {
-        const enumerator = directory.enumerate_children("standard::name", Gio.FileQueryInfoFlags.NONE, null);
-        let info;
-        let batch = [];
+    const enumerator = directory.enumerate_children("standard::name", Gio.FileQueryInfoFlags.NONE, null);
+    let info;
+    let batch = [];
 
-        while ((info = enumerator.next_file(null)) !== null) {
-            const fileName = info.get_name();
-            if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+    while ((info = enumerator.next_file(null)) !== null) {
+        const fileName = info.get_name();
+        const baseName = GLib.path_get_basename(fileName).split('.').slice(0, -1).join('.');
+
+        if (fileName.endsWith(".png")) {
+            if (!uniqueBaseNames.has(baseName)) {
+                uniqueBaseNames.add(baseName);
+
                 batch.push({
                     name: fileName,
                     path: `${folderPath}/${fileName}`,
@@ -56,16 +61,34 @@ async function getWallpapersFromFolderAsync(batchSize = 10) {
                     await new Promise(resolve => setTimeout(resolve, 50));
                 }
             }
+        } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            if (!uniqueBaseNames.has(baseName)) {
+                const pngFileName = `${baseName}.png`;
+                if (!uniqueBaseNames.has(pngFileName)) {
+                    uniqueBaseNames.add(baseName);
+
+                    batch.push({
+                        name: fileName,
+                        path: `${folderPath}/${fileName}`,
+                    });
+
+                    if (batch.length === batchSize) {
+                        wallpapers.push(...batch);
+                        batch = [];
+                        await new Promise(resolve => setTimeout(resolve, 50));
+                    }
+                }
+            }
         }
-        wallpapers.push(...batch);
-    } catch (error) {
-        print(`Error reading the wallpapers folder: ${error.message}`);
     }
+    wallpapers.push(...batch);
+
+    wallpapers.sort((a, b) => a.name.localeCompare(b.name));
 
     return wallpapers;
 }
 
-function createWallpaperGrid(wps: { name: string, path: string }[]) {
+function createWallpaperGrid(wps) {
     const columnCount = 5;
 
     const grid = new Grid({
@@ -115,58 +138,72 @@ function createWallpaperGrid(wps: { name: string, path: string }[]) {
     return grid;
 }
 
-const refreshButton = (
-    <button
-        className={"refresh button"}
-        tooltip_text={"Refresh Wallpapers"}
-        on_clicked={async () => {
-            await loadWallpapers(); // Reload wallpapers
-        }}
-        halign={Gtk.Align.START}
-        valign={Gtk.Align.START}
-    >
-        <icon icon={Icon.ui.refresh} />
-    </button>
-);
+export default function WallpaperChooser() {
+    const refreshButton = (
+        <button
+            className={"refresh button"}
+            tooltip_text={"Refresh Wallpapers"}
+            on_clicked={async () => {
+                const cacheDirFile = Gio.File.new_for_path(cacheDir);
 
-function createScrollablePage(wps) {
-    return (
-        <box css={"background-color: rgba(0,0,0,0.75); border: 2px solid rgba(15,155,255,1); border-radius: 3rem; padding: 1rem;"}>
-            <scrollable
-                vscroll={Gtk.PolicyType.AUTOMATIC}
-                hscroll={Gtk.PolicyType.NEVER}
-                vexpand={true}
-                hexpand={true}
+                await cacheDirFile.delete_async(null, (file, result) => {
+                    try {
+                        file.delete_finish(result);
+                    } catch (error) {
+                        print(`Error deleting cache directory: ${error.message}`);
+                    }
+                });
+
+                GLib.mkdir_with_parents(cacheDir, 0o755);
+                const wps = await getWallpapersFromFolderAsync();
+                wallpaperGrid.remove(createScrollablePage(wps));
+                wallpaperGrid.attach(createScrollablePage(wps), 1, 1, 1, 1);
+            }}
+            halign={Gtk.Align.START}
+            valign={Gtk.Align.START}
+        >
+            <icon icon={Icon.ui.refresh} />
+        </button>
+    );
+
+    function createScrollablePage(wps) {
+        return (
+            <box css={"background-color: rgba(0,0,0,0.75); border: 2px solid rgba(15,155,255,1); border-radius: 3rem; padding: 1rem;"}>
+                <scrollable
+                    vscroll={Gtk.PolicyType.AUTOMATIC}
+                    hscroll={Gtk.PolicyType.NEVER}
+                    vexpand={true}
+                    hexpand={true}
+                    halign={Gtk.Align.FILL}
+                    valign={Gtk.Align.FILL}
+                    visible={true}
+                    widthRequest={winwidth(0.35)}
+                    heightRequest={winheight(0.35)}
+                >
+                    {createWallpaperGrid(wps)}
+                </scrollable>
+                {refreshButton}
+            </box>
+        );
+    }
+
+    function eventHandler(eh) {
+        const eventbox = (
+            <eventbox
                 halign={Gtk.Align.FILL}
                 valign={Gtk.Align.FILL}
-                visible={true}
-                widthRequest={winwidth(0.35)}
-                heightRequest={winheight(0.35)}
-            >
-                {createWallpaperGrid(wps)}
-            </scrollable>
-            {refreshButton}
-        </box>
-    );
-}
-
-export default function WallpaperChooser() {
-
-    function eventHandler(eh: number) {
-        const eventbox = <eventbox
-            halign={Gtk.Align.FILL}
-            valign={Gtk.Align.FILL}
-            onClick={(_, event) => {
-                const win = App.get_window("wallpapers");
-                if (event.button === Gdk.BUTTON_PRIMARY) {
-                    if (win && win.visible === true) {
-                        win.visible = false;
+                onClick={(_, event) => {
+                    const win = App.get_window("wallpapers");
+                    if (event.button === Gdk.BUTTON_PRIMARY) {
+                        if (win && win.visible === true) {
+                            win.visible = false;
+                        }
                     }
-                }
-            }}
-            widthRequest={winwidth(0.2)}
-            heightRequest={winheight(0.2)}
-        />;
+                }}
+                widthRequest={winwidth(0.2)}
+                heightRequest={winheight(0.2)}
+            />
+        );
         return eventbox;
     }
 
@@ -183,34 +220,35 @@ export default function WallpaperChooser() {
         wallpaperGrid.attach(createScrollablePage(wps), 1, 1, 1, 1);
     };
 
-    // wallpaperGrid.attach(refreshButton, 2, 1, 1, 1)
-    wallpaperGrid.attach(eventHandler(1), 0, 0, 3, 1); // top
-    wallpaperGrid.attach(eventHandler(2), 0, 1, 1, 1); // left
-    wallpaperGrid.attach(eventHandler(3), 2, 1, 1, 1); // right
-    wallpaperGrid.attach(eventHandler(4), 0, 2, 3, 1); // bottom
-
     loadWallpapers();
 
-    const window = <window
-        name={"wallpapers"}
-        className={"wallpapers window"}
-        anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
-        layer={Astal.Layer.OVERLAY}
-        exclusivity={Astal.Exclusivity.NORMAL}
-        keymode={Astal.Keymode.EXCLUSIVE}
-        visible={false}
-        application={App}
-        onKeyPressEvent={(_, event) => {
-            const win = App.get_window("wallpapers");
-            if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                if (win && win.visible === true) {
-                    win.visible = false;
+    wallpaperGrid.attach(eventHandler(1), 0, 0, 3, 1); // Top
+    wallpaperGrid.attach(eventHandler(2), 0, 1, 1, 1); // Left
+    wallpaperGrid.attach(eventHandler(3), 2, 1, 1, 1); // Right
+    wallpaperGrid.attach(eventHandler(4), 0, 2, 3, 1); // Bottom
+
+    const window = (
+        <window
+            name={"wallpapers"}
+            className={"wallpapers window"}
+            anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+            layer={Astal.Layer.OVERLAY}
+            exclusivity={Astal.Exclusivity.NORMAL}
+            keymode={Astal.Keymode.EXCLUSIVE}
+            visible={false}
+            application={App}
+            onKeyPressEvent={(_, event) => {
+                const win = App.get_window("wallpapers");
+                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                    if (win && win.visible === true) {
+                        win.visible = false;
+                    }
                 }
-            }
-        }}
-    >
-        {wallpaperGrid}
-    </window>;
+            }}
+        >
+            {wallpaperGrid}
+        </window>
+    );
 
     return window;
 }
