@@ -1,4 +1,5 @@
-import { Astal, Widget, App, Gtk, Gdk, GLib, Gio, monitorFile } from "astal"
+import { Astal, Widget, App, Gtk, Gdk } from "astal/gtk3"
+import { GLib, Gio, monitorFile, register } from "astal"
 
 const STYLEDIR = `${GLib.get_user_config_dir()}/astal-gjs/src/style`
 const DISTDIR = `${GLib.get_user_config_dir()}/astal-gjs/dist`

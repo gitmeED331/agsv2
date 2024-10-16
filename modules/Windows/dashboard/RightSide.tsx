@@ -1,4 +1,4 @@
-import { Widget, Gtk } from "astal";
+import { Widget, Gtk } from "astal/gtk3";
 import { StackSwitcher } from "../../Astalified/index";
 
 // --- imported widgets ---
@@ -23,12 +23,13 @@ export default function RightSide() {
 
 	rightStack.add_titled(NotificationList(), "notifications", "Notifications");
 	rightStack.add_titled(
-		Widget.Box({
-			className: "network dashboard",
-			vertical: true,
-			spacing: 5,
-			children: [EthernetWidget(), WifiAPs()],
-		}),
+		<box
+			className={"network dashboard"}
+			vertical={true}
+			spacing={5}
+		>
+			{[EthernetWidget(), WifiAPs()]}
+		</box>,
 		"network",
 		"Network",
 	);

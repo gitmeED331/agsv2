@@ -1,4 +1,5 @@
-import { Astal, Gtk, Gdk, Variable } from "astal";
+import { Astal, Gtk, Gdk } from "astal/gtk3";
+import { Variable } from "astal"
 
 export default function StackSwitcher({ children }: { children?: Array<JSX.Element> }) {
 	// if (children!.some((ch) => !ch.name)) throw Error("Every child must have a name");

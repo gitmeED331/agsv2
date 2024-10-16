@@ -1,4 +1,5 @@
-import { bind, Gdk, Gtk, Widget, App, Astal, Variable, Binding } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, Variable } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import NM from "gi://NM";

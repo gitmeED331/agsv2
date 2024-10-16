@@ -1,10 +1,11 @@
 #!/usr/bin/gjs -m
-import { GLib, App, execAsync, monitorFile, Astal, Gtk } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { GLib, execAsync, monitorFile } from "astal";
+
 // import DirectoryMonitorService from "./modules/lib/DirectoryMonitorService";
 
 // const Icons = `${GLib.get_user_data_dir()}/icons/Astal`
-// const STYLEDIR = `${GLib.get_user_config_dir()}/astal-gjs/src/style`
-// const DISTDIR = `${GLib.get_user_config_dir()}/astal-gjs/dist`
+// const STYLEDIR = `${GLib.get_user_config_dir()}/ags/style`
 
 // const css = `${STYLEDIR}/style.css`
 // const scss = `${STYLEDIR}/main.scss`
@@ -42,13 +43,13 @@ App.start({
 	css: style,
 	main() {
 		Bar({ monitor: 0 });
-		cliphist();
-		Dashboard();
-		Launcher();
+		cliphist({ monitor: 0 });
+		Dashboard({ monitor: 0 });
+		Launcher({ monitor: 0 });
 		MediaPlayerWindow();
-		NotificationPopups(0);
+		NotificationPopups({ monitor: 0 });
 		// Overview();
-		sessioncontrol();
+		sessioncontrol({ monitor: 0 });
 		WallpaperChooser();
 	},
 });

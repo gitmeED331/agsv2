@@ -1,6 +1,6 @@
-import { App, bind, Gtk, GLib, Gdk, execAsync } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, GLib, execAsync } from "astal";
 import Pango from "gi://Pango";
-import { Icons } from "../../../lib/icons";
 
 import AstalRiver from "gi://AstalRiver";
 const river = AstalRiver.get_default()!;

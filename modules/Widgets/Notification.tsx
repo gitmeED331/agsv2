@@ -1,8 +1,6 @@
-import {
-  Gtk,
-  GLib,
-} from "astal";
-import Icon, { Icons } from "../lib/icons";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { GLib, } from "astal";
+import Icon from "../lib/icons";
 import AstalNotifd from "gi://AstalNotifd";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";

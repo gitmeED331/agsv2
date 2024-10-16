@@ -1,4 +1,5 @@
-import { Astal, App, bind, Gdk, Gtk, exec, execAsync, monitorFile, Variable } from "astal"
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { bind, exec, execAsync, monitorFile, Variable } from "astal"
 import Icon from "../lib/icons"
 import Pango from "gi://Pango"
 

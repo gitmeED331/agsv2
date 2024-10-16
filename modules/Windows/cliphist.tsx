@@ -1,8 +1,9 @@
-import { Astal, execAsync, Gtk, Gdk, GLib, App } from "astal";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { execAsync, GLib, } from "astal";
 import Pango from "gi://Pango"
 import { Grid } from "../Astalified/index"
 import { winwidth, winheight } from "../lib/screensizeadjust";
-import Icon, { Icons } from "../lib/icons"
+import Icon from "../lib/icons"
 
 type EntryObject = {
     id: string;
@@ -148,7 +149,7 @@ function ClipHistWidget() {
     );
 }
 
-function cliphist() {
+function cliphist({ monitor }: { monitor: number }) {
     const eventHandler = (
         <eventbox
             halign={Gtk.Align.FILL}
@@ -196,11 +197,11 @@ function cliphist() {
     </window>
 }
 
-// App.connect("window-toggled", (_, win) => {
-//     if (win.name === "cliphist") {
-//         entry.set_text("");
-//         repopulate();
-//     }
-// })
+App.connect("window-toggled", (_, win) => {
+    if (win.name === "cliphist") {
+        entry.set_text("");
+        repopulate();
+    }
+})
 
 export default cliphist

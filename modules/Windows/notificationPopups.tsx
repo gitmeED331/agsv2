@@ -1,4 +1,5 @@
-import { App, Widget, Astal, Gtk, Gdk, GLib, timeout } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { GLib, timeout } from "astal";
 import AstalNotifd from "gi://AstalNotifd";
 import Icon, { Icons } from "../lib/icons";
 import { NotifWidget } from "../Widgets/index";
@@ -81,7 +82,7 @@ function NotifPopup() {
   );
 }
 
-export default (monitor: number) => (
+export default ({ monitor }: { monitor: number }) => (
   <window
     name={`notifications${monitor}`}
     anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}

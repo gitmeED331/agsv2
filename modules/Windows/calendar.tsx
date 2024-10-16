@@ -1,4 +1,5 @@
-import { Astal, execAsync, Widget, App, Gtk, Gdk } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync } from "astal";
 import { GridCalendar } from "../Widgets/index";
 import { winheight, winwidth } from "../lib/screensizeadjust";
 

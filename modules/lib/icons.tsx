@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GLib, Astal, App } from "astal";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { GLib } from "astal";
 
 const substitutes = {
   "geany": "geany-symbolic",
@@ -29,7 +30,6 @@ const substitutes = {
   "dev.zed.Zed": "zed-symbolic",
   "chromium-browser": "chromium-symbolic",
   "ente_auth": "auth-icon-symbolic",
-  "udiskie": ""
 };
 
 const Icon = {
@@ -223,16 +223,16 @@ App.add_icons(`${GLib.get_user_data_dir()}/icons/Astal`);
 type SubstitutesType = {
   [key: string]: string;
 };
-export function Icons(name: string | null, fallback = Icon.missing) {
-  if (!name) return fallback || "";
+// export function Icons(name: string | null, fallback = Icon.missing) {
+//   if (!name) return fallback || "";
 
-  if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
+//   if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
 
-  const icon = (substitutes as SubstitutesType)[name] || name;
+//   const icon = (substitutes as SubstitutesType)[name] || name;
 
-  if (Astal.lookup_icon(icon)) return icon;
-  console.log(Astal.lookup_icon(icon));
+//   if (Astal.lookup_icon(icon)) return icon;
+//   console.log(Astal.lookup_icon(icon));
 
-  print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`);
-  return fallback;
-}
+//   print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`);
+//   return fallback;
+// }

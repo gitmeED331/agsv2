@@ -1,4 +1,6 @@
-import { App, Gtk, Gdk, Variable, bind, GLib } from "astal";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { Variable, bind, GLib } from "astal";
+
 import Icon from "../lib/icons";
 import powerProfiles from "gi://AstalPowerProfiles";
 import Battery from "gi://AstalBattery";

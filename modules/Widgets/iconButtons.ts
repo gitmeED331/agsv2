@@ -1,4 +1,5 @@
-import { execAsync, Widget, Gdk, Gtk, App } from "astal"
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { execAsync } from "astal"
 import Hyprland from "gi://AstalHyprland"
 const hyprland = Hyprland.get_default()
 import { Icons } from "../lib/icons"

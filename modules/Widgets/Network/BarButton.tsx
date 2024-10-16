@@ -1,4 +1,5 @@
-import { bind, Gdk, Gtk, Widget, App, Astal, Variable, Binding } from "astal";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { bind, Variable, Binding } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import { dashboardRightStack } from "../../Windows/dashboard/RightSide";

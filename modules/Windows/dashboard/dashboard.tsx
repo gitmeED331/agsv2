@@ -1,7 +1,8 @@
-import { Astal, Gtk, App, Gdk } from "astal";
+import { Astal, Gtk, App, Gdk, astalify, ConstructProps } from "astal/gtk3";
+import { GObject } from "astal"
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
-import { Grid } from "../../Astalified/index";
+import Grid from "../../Astalified/Grid";
 
 // --- imported widgets ---
 import { Player, Tray, } from "../../Widgets/index";
@@ -28,7 +29,7 @@ function eventHandler(eh: number, width: number, height: number) {
 	return eventbox;
 }
 
-function Dashboard() {
+function Dashboard({ monitor }: { monitor: number }) {
 	const content = new Grid({
 		className: "dashboard grid",
 		halign: Gtk.Align.FILL,
@@ -41,12 +42,33 @@ function Dashboard() {
 		row_spacing: 5,
 	});
 
+	// const content = <Grid
+	// 	className={"dashboard grid"}
+	// 	halign={Gtk.Align.FILL}
+	// 	valign={Gtk.Align.FILL}
+	// 	hexpand={true}
+	// 	vexpand={true}
+	// 	visible={true}
+	// 	column_spacing={5}
+	// 	row_spacing={5}
+	// >
+	// 	{[
+	// 		thePlayer,
+	// 		eventHandler(1, .25, .1),
+	// 		LeftSide(),
+	// 		Tray(),
+	// 		RightSide(),
+	// 		eventHandler(2, .25, .1),
+	// 		eventHandler(3, 1, .5)
+	// 	]}
+	// </Grid>
+
 	const thePlayer = <Player player={player} />
 
 	if (thePlayer) {
-		content.insert_row(1);
+		content.insert_row(0);
 		content.attach(thePlayer, 1, 0, 3, 1);
-	} else { content.remove_row(1) }
+	} else { content.remove_row(0) }
 
 	content.attach(eventHandler(1, .25, .1), 0, 0, 1, 2) // left side
 	content.attach(LeftSide(), 1, 1, 1, 1)
@@ -77,11 +99,11 @@ function Dashboard() {
 	);
 }
 
-// App.connect("window-toggled", (_, win) => {
-// 	if (win.name === "dashboard") {
-// 		dashboardLeftStack.set_visible_child_name("calendar")
-// 		dashboardRightStack.set_visible_child_name("notifications")
-// 	}
-// })
+App.connect("window-toggled", (_, win) => {
+	if (win.visible === false && win.name === "dashboard") {
+		dashboardLeftStack.set_visible_child_name("calendar")
+		dashboardRightStack.set_visible_child_name("notifications")
+	}
+})
 
 export default Dashboard;

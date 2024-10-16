@@ -1,6 +1,9 @@
-import { App, bind, execAsync, Gtk, Gdk, Variable } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, execAsync, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
 import Icon from "../../../lib/icons";
+
+const hyprland = Hyprland.get_default();
 
 const dispatch = (arg: string | number) => {
 	execAsync(`hyprctl dispatch workspace ${arg}`);
@@ -17,7 +20,6 @@ const openOverview = (arg: string | number) => {
 
 // --- signal handler ---
 function ws(id: number) {
-	const hyprland = Hyprland.get_default();
 	const getWorkspace = () => hyprland.get_workspace(id) || Hyprland.Workspace.dummy(id, null);
 
 	return Variable(getWorkspace()).observe(hyprland, "workspace-added", getWorkspace).observe(hyprland, "workspace-removed", getWorkspace);
@@ -26,8 +28,6 @@ function ws(id: number) {
 
 // --- workspaces ---
 function Workspaces({ id }: { id: number }) {
-	const hyprland = Hyprland.get_default();
-
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
 			const className = Variable.derive(

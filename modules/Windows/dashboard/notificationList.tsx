@@ -1,5 +1,6 @@
-import { Gtk, Gdk, timeout, bind } from "astal";
-import Icon, { Icons } from "../../lib/icons";
+import { Gtk, Gdk } from "astal/gtk3";
+import { timeout, bind } from "astal";
+import Icon from "../../lib/icons";
 import AstalNotifd from "gi://AstalNotifd";
 import { NotifWidget } from "../../Widgets/index";
 const Notif = AstalNotifd.get_default();
@@ -44,7 +45,7 @@ const Controls = (
 			}}
 		>
 			<icon
-				icon={bind(Notif, "dont_disturb").as((d) => (d === false ? Icons("bell-enabled-symbolic") : Icons("bell-disabled-symbolic")))}
+				icon={bind(Notif, "dont_disturb").as((d) => (d === false ? "bell-enabled-symbolic" : "bell-disabled-symbolic"))}
 				valign={Gtk.Align.CENTER}
 				halign={Gtk.Align.CENTER}
 			/>

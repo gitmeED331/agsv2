@@ -1,4 +1,5 @@
-import { App, Astal, Gtk, GLib } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { GLib } from "astal";
 // ----- Widgets -----
 import Clock from "./clock";
 import SysInfo from "./sysinfo";

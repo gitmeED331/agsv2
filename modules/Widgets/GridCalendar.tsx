@@ -1,5 +1,5 @@
-import { Widget, Gtk, Astal } from "astal";
-import { Icons } from "../lib/icons"
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+// import { Icons } from "../lib/icons"
 const { Label } = Widget;
 
 
@@ -124,11 +124,11 @@ function GridCalendar() {
   const header = (
     <box orientation={Gtk.Orientation.HORIZONTAL} spacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
       <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar month arrow-left"} onClick={() => changeMonth(-1)}>
-        <icon icon={Icons("arrow-back-circle-symbolic")} />
+        <icon icon={"arrow-back-circle-symbolic"} />
       </button>
       {monthLabel}
       <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar month arrow-right"} onClick={() => changeMonth(1)}>
-        <icon icon={Icons("arrow-forward-circle-symbolic")} />
+        <icon icon={"arrow-forward-circle-symbolic"} />
       </button>
       <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar return-today"} onClick={() => {
 
@@ -141,11 +141,11 @@ function GridCalendar() {
         <icon icon={"nix-snowflake-symbolic"} />
       </button>
       <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar year arrow-left"} onClick={() => changeYear(-1)}>
-        <icon icon={Icons("arrow-back-circle-symbolic")} />
+        <icon icon={"arrow-back-circle-symbolic"} />
       </button>
       {yearLabel}
       <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar year arrow-right"} onClick={() => changeYear(1)}>
-        <icon icon={Icons("arrow-forward-circle-symbolic")} />
+        <icon icon={"arrow-forward-circle-symbolic"} />
       </button>
 
     </box>

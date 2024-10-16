@@ -1,5 +1,6 @@
-import { execAsync, Gtk, Gdk, GLib, Gio, Astal, App } from "astal";
-import { Grid } from "../Astalified/index";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, GLib, Gio } from "astal";
+// import { Grid } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
 import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
 import Icon from "../lib/icons";
@@ -91,7 +92,7 @@ async function getWallpapersFromFolderAsync(batchSize = 10) {
 function createWallpaperGrid(wps) {
     const columnCount = 5;
 
-    const grid = new Grid({
+    const grid = new Gtk.Grid({
         hexpand: true,
         vexpand: false,
         halign: Gtk.Align.FILL,
@@ -207,7 +208,7 @@ export default function WallpaperChooser() {
         return eventbox;
     }
 
-    const wallpaperGrid = new Grid({
+    const wallpaperGrid = new Gtk.Grid({
         hexpand: true,
         vexpand: true,
         halign: Gtk.Align.FILL,
@@ -220,7 +221,7 @@ export default function WallpaperChooser() {
         wallpaperGrid.attach(createScrollablePage(wps), 1, 1, 1, 1);
     };
 
-    loadWallpapers();
+    loadWallpapers().catch();
 
     wallpaperGrid.attach(eventHandler(1), 0, 0, 3, 1); // Top
     wallpaperGrid.attach(eventHandler(2), 0, 1, 1, 1); // Left

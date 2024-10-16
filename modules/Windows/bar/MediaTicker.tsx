@@ -1,9 +1,10 @@
-import { Widget, App, Gtk, Gdk, Variable, Astal, bind } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Variable, bind } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
 import TrimTrackTitle from "../../lib/TrimTrackTitle";
-import Icon, { Icons } from "../../lib/icons";
+import Icon from "../../lib/icons";
 
 const player = Mpris.Player.new("Deezer") //"Deezer"  "vlc" "mpv";
 
@@ -45,7 +46,7 @@ function TickerIcon() {
       valign={Gtk.Align.CENTER}
       tooltip_text={bind(player, "identity")}
       icon={bind(player, "entry").as(
-        entry => Icons(entry) || Icon.mpris.controls.FALLBACK_ICON
+        entry => entry || Icon.mpris.controls.FALLBACK_ICON
       )}
     />
   );

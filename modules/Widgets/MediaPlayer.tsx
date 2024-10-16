@@ -1,8 +1,9 @@
-import { App, Widget, bind, execAsync, Gtk, Gdk, Astal, GLib } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, execAsync, GLib } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
-import Icon, { Icons } from "../lib/icons";
+import Icon from "../lib/icons";
 import TrimTrackTitle from "../lib/TrimTrackTitle";
 
 const player = Mpris.Player.new("Deezer"); //"Deezer"  "vlc" "mpv" "spotify"
@@ -94,7 +95,8 @@ function PlayerIcon() {
 				halign={Gtk.Align.END}
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(player, "identity")}
-				icon={bind(player, "entry").as((entry) => Icons(entry) || Icon.mpris.controls.FALLBACK_ICON)}
+				// icon={bind(player, "entry").as((entry) => Icons(entry) || Icon.mpris.controls.FALLBACK_ICON)}
+				icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
 			/>
 		</button>
 	);

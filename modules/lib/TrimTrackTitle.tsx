@@ -1,4 +1,5 @@
-import { Astal, bind } from "astal";
+import { Astal } from "astal/gtk3";
+import { bind } from "astal";
 import Mpris from "gi://AstalMpris";
 
 //const { RoundedCorner } = Roundedges

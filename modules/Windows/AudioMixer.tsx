@@ -1,4 +1,4 @@
-import { Widget, Astal, App, Gdk } from "astal"
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import AudioMixer from "../Widgets/AudioMixer"
 
 export default () => <window

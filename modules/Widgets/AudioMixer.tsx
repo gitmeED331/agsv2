@@ -1,5 +1,6 @@
-import { bind, execAsync, Gtk, Astal, GLib, Variable, Gdk, App } from "astal";
-import Icon, { Icons } from "../lib/icons";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { bind, execAsync, GLib, Variable } from "astal";
+import Icon from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
@@ -103,7 +104,7 @@ function AppMixerItem({ stream }) {
 			}}
 		>
 			<box spacing={5} vertical={false} valign={Gtk.Align.CENTER}>
-				<icon valign={Gtk.Align.START} tooltip_text={bind(stream, "description").as((n) => n || "")} icon={bind(stream, "icon").as((n) => Icons(n) || Icon.audio.type.speaker)} />
+				<icon valign={Gtk.Align.START} tooltip_text={bind(stream, "description").as((n) => n || "")} icon={bind(stream, "icon").as((n) => n || Icon.audio.type.speaker)} />
 				<label valign={Gtk.Align.CENTER} xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(stream, "description").as((d) => d || "")} />
 			</box>
 		</button>

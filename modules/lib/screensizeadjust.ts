@@ -1,4 +1,4 @@
-import { Gdk, Gtk } from "astal";
+import { Gdk, Gtk } from "astal/gtk3";
 
 /*
  * 		value must between 0 and 1

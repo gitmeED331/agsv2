@@ -1,4 +1,5 @@
-import { App, Gtk, Variable, Astal, bind, Gdk } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Variable, bind } from "astal";
 import { dashboardLeftStack } from "../dashboard/LeftSide";
 import { dashboardRightStack } from "../dashboard/RightSide";
 
@@ -13,14 +14,7 @@ export default function Clock() {
         if (event.button === Gdk.BUTTON_PRIMARY) {
           const win = App.get_window("dashboard");
           if (win) {
-            const isLeftVisible = dashboardLeftStack.get_visible_child_name() !== "calendar";
-            const isRightVisible = dashboardRightStack.get_visible_child_name() !== "notifications";
-            if (!win.visible || isLeftVisible || isRightVisible) {
-              dashboardLeftStack.set_visible_child_name("calendar");
-              dashboardRightStack.set_visible_child_name("notifications");
-              win.visible = !win.visible;
-            }
-            else { win.visible = !win.visible }
+            win.visible = !win.visible;
           }
         }
         // else if (event.button === Gdk.BUTTON_SECONDARY) {

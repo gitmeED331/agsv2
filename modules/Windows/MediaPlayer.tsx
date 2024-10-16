@@ -1,4 +1,4 @@
-import { App, Astal, Gdk } from "astal";
+import { App, Astal, Gdk } from "astal/gtk3";
 import Mpris from "gi://AstalMpris";
 import { Player } from "../Widgets/index";
 

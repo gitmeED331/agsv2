@@ -1,8 +1,9 @@
-import { App, Astal, execAsync, Gdk, Gtk, GLib } from "astal";
-import Icon, { Icons } from "../lib/icons.js";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, GLib } from "astal";
+import Icon from "../lib/icons.js";
 import { winheight, winwidth } from "../lib/screensizeadjust";
 import { SessionControls } from "../Widgets/index"
-import { Grid } from "../Astalified/index";
+// import { Grid } from "../Astalified/index";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase()
 
@@ -24,7 +25,7 @@ function eventHandler(eh: number, width: number, height: number) {
   return eventbox;
 }
 
-const theGrid = new Grid({
+const theGrid = new Gtk.Grid({
   halign: Gtk.Align.FILL,
   valign: Gtk.Align.FILL,
   hexpand: true,
@@ -38,7 +39,7 @@ theGrid.attach(eventHandler(2, .2, .25), 1, 2, 1, 1);
 theGrid.attach(eventHandler(3, .2, .25), 3, 2, 1, 1);
 theGrid.attach(eventHandler(4, 1, .25), 1, 3, 3, 1);
 
-export default () => {
+export default ({ monitor }: { monitor: number }) => {
   <window
     name={"sessioncontrols"}
     className={"sessioncontrols window"}

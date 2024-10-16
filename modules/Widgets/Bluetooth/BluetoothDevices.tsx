@@ -1,8 +1,9 @@
-import { Astal, Widget, bind, Gtk, Gdk, App, execAsync, exec, Variable } from "astal";
-import Icon, { Icons } from "../../lib/icons";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { bind, execAsync, exec, Variable } from "astal";
+import Icon from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
 import Pango from "gi://Pango";
-import { Spinner } from "../../Astalified/Spinner";
+import Spinner from "../../Astalified/Spinner";
 
 const Bluetooth = AstalBluetooth.get_default();
 const Adapter = Bluetooth.adapter;
@@ -126,7 +127,7 @@ function content(device) {
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(device, "paired").as((v) => (v ? "Unpair" : "Pair"))}
 			>
-				<icon icon={bind(device, "paired").as((v) => (v ? Icons("bluetooth-link-symbolic") : Icons("bluetooth-unlink-symbolic")))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+				<icon icon={bind(device, "paired").as((v) => (v ? "bluetooth-link-symbolic" : "bluetooth-unlink-symbolic"))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 			</button>
 		);
 		const TrustDevice = (
@@ -141,7 +142,7 @@ function content(device) {
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(device, "trusted").as((v) => (v ? "Untrust" : "Trust"))}
 			>
-				<icon icon={bind(device, "trusted").as((v) => (v ? Icons("bluetooth-trust-symbolic") : Icons("bluetooth-untrust-symbolic")))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+				<icon icon={bind(device, "trusted").as((v) => (v ? "bluetooth-trust-symbolic" : "bluetooth-untrust-symbolic"))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 			</button>
 		);
 		const ConnectDevice = (
@@ -152,7 +153,7 @@ function content(device) {
 				valign={Gtk.Align.CENTER}
 				tooltip_text={bind(device, "connected").as((v) => (v ? "Disconnect" : "Connect"))}
 			>
-				<icon icon={bind(device, "connected").as((v) => (v ? Icons("bluetooth-connect-symbolic") : Icons("bluetooth-disconnect-symbolic")))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+				<icon icon={bind(device, "connected").as((v) => (v ? "bluetooth-connect-symbolic" : "bluetooth-disconnect-symbolic"))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 			</button>
 		);
 		const ForgetDevice = (
@@ -168,7 +169,7 @@ function content(device) {
 				valign={Gtk.Align.CENTER}
 				tooltip_text={"Forget"}
 			>
-				<icon tooltip_text={"Forget"} icon={Icons("circle-x-symbolic")} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+				<icon tooltip_text={"Forget"} icon={"circle-x-symbolic"} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 			</button>
 		);
 

@@ -1,4 +1,4 @@
-import { Astal, App, Gdk } from "astal";
+import { Astal, App, Gdk } from "astal/gtk3";
 import { PowerProfiles } from "../Widgets/index";
 
 export default () => <window

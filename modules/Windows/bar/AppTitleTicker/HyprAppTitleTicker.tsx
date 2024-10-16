@@ -1,4 +1,5 @@
-import { App, bind, Gdk, Gtk, Variable } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, Variable } from "astal";
 import Pango from "gi://Pango";
 import Icon, { Icons } from "../../../lib/icons";
 import Hyprland from "gi://AstalHyprland";

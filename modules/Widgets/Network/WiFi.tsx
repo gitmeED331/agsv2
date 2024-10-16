@@ -1,9 +1,10 @@
-import { execAsync, bind, Gdk, Gtk, Widget, App, Astal, Variable, Binding } from "astal";
-import Icon, { Icons } from "../../lib/icons";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, bind, Variable } from "astal";
+import Icon from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import Pango from "gi://Pango";
 import NM from "gi://NM";
-import { Spinner } from "../../Astalified/Spinner";
+import Spinner from "../../Astalified/Spinner";
 
 const network = AstalNetwork.get_default();
 const Wifi = network.wifi;
@@ -182,7 +183,7 @@ function WifiAP(ap) {
 			cursor={"pointer"}
 			visible={isActiveAP}
 		>
-			<icon icon={Icons("circle-x-symbolic")} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+			<icon icon={"circle-x-symbolic"} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 		</button>
 	);
 
@@ -208,7 +209,7 @@ function WifiAP(ap) {
 			cursor={"pointer"}
 			visible={isActiveAP}
 		>
-			<icon icon={Icons("edit-delete-symbolic")} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+			<icon icon={"edit-delete-symbolic"} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 		</button>
 	);
 	function spinSetup(spinner: Spinner) {

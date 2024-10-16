@@ -1,4 +1,5 @@
-import { Widget, App, bind, execAsync, Gtk, Gdk, Variable } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, execAsync, Variable } from "astal";
 import AstalRiver from "gi://AstalRiver";
 
 const river = AstalRiver.River.get_default()!;

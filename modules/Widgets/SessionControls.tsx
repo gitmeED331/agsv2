@@ -1,7 +1,8 @@
-import { App, execAsync, Gdk, Gtk, GLib } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, GLib } from "astal";
 import Icon, { Icons } from "../lib/icons.js";
 
-const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase() || "river";
+const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
 const SysButton = (action: string, label: string) => {
     const command = (() => {

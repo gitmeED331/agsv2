@@ -1,4 +1,5 @@
-import { App, Widget, Astal, execAsync, exec, bind, Gtk, Gdk, GObject } from "astal";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, exec, bind, GObject } from "astal";
 import Icon, { Icons } from "../lib/icons";
 import AstalPowerProfiles from "gi://AstalPowerProfiles";
 
