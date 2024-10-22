@@ -4,61 +4,10 @@
   font-size: 10pt;
 }
 
-@keyframes lowBlink {
-  0% {
-    color: #ff0000;
-  }
-  50% {
-    color: #ffff00;
-  }
-  100% {
-    color: #000066;
-  }
-}
-.BarBTN {
-  background: rgba(0, 0, 0, 0.5);
-  border-top: 2px solid #0f9bff;
-  border-radius: 1rem;
-  -gtk-icon-style: symbolic;
-}
-.BarBTN icon {
-  font-size: 1.15rem;
-}
-.BarBTN:hover {
-  color: rgb(0, 0, 255);
-}
-.BarBTN:hover icon {
-  animation: spin 1s infinite;
-}
-
-.BarBTN2 {
-  font-size: 1.4rem;
-  -gtk-icon-style: symbolic;
-}
-.BarBTN2:hover {
-  color: rgb(0, 0, 255);
-  animation: spin 1s infinite;
-}
-
-tooltip * {
-  all: unset;
-  background-color: transparent;
-  border: none;
-}
-tooltip > * > * {
-  background: black;
-  border-radius: 2rem;
-  border: 0.1rem solid rgba(0, 0, 0, 0);
-  color: rgb(255, 140, 0);
-  padding: 0.75rem;
-  margin: 4px;
-  box-shadow: 0 0 5px 0 rgb(15, 155, 255);
-}
-
 .bar {
-  color: rgb(255, 140, 0);
-  background-image: none;
-  min-height: 10px;
+  color: #08204C;
+  background: none;
+  min-height: 8px;
 }
 .barleft {
   min-width: 100px;
@@ -127,40 +76,30 @@ tooltip > * > * {
   border-radius: 1rem;
   padding: 0rem 0.5rem;
 }
-
-.volumebtn {
+.sysinfo .volumebtn {
   color: rgb(255, 140, 0);
 }
-.volumebtn icon,
-.volumebtn image {
+.sysinfo .volumebtn icon,
+.sysinfo .volumebtn image {
   font-size: 1.15rem;
 }
-.volumebtn button:hover {
+.sysinfo .volumebtn button:hover {
   color: rgb(0, 0, 255);
 }
 
-.brightSlider {
-  margin-bottom: 5px;
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
-
-.brightsldLabel {
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+.brightness {
   color: rgb(255, 140, 0);
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  border: 2px solid #0f9bff;
+  border-radius: 2rem;
 }
-.brightsldIcon {
-  margin-right: 1rem;
-  text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px rgb(15, 155, 255);
-  color: rgb(255, 140, 0);
-}
-.brightsldIcon:hover {
-  color: rgb(0, 0, 255);
+.brightness icon {
+  font-size: 1.25rem;
 }
 
 .calendarbox {
-  background: #0e0e1e;
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 2rem;
   border: 2px solid #0f9bff;
   padding: 1rem;
@@ -189,10 +128,11 @@ tooltip > * > * {
   padding-bottom: 1rem;
 }
 .calendar-days {
-  color: rgb(15, 155, 255);
+  color: #27D8DE;
   border-bottom: 2px solid #0f9bff;
   border-radius: 2rem;
   font-size: 1.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 }
 .calendar-day {
   color: rgb(255, 140, 0);
@@ -236,7 +176,7 @@ tooltip > * > * {
 
 .calendar.return-today {
   color: rgb(255, 140, 0);
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
   border-radius: 2rem;
   min-width: 50px;
   min-height: 30px;
@@ -253,70 +193,111 @@ tooltip > * > * {
   animation: spin 1s infinite;
 }
 
-/* -----------------------------------------------------
- * Clipboard history
- * ----------------------------------------------------- */
-.cliphistory_box {
-  border-radius: 2.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
+.cliphist.contentgrid {
+  background: url("assets/groot-thin-right.png");
+  background-color: black;
+  background-size: auto auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 3rem 0rem 0rem 3rem;
   border: 2px solid #0f9bff;
+  border-right: unset;
+  box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+  padding: 0rem 1rem;
 }
-.cliphistory_box separator {
-  margin: 0px;
-}
-.cliphistory_entry {
-  background-color: #0e0e1e;
+.cliphist.header {
+  margin: 1rem;
+  background: none;
+  border-bottom: 2px solid #0f9bff;
+  border-left: 2px solid #0f9bff;
+  border-right: 2px solid #0f9bff;
+  border-radius: 2rem;
   color: rgb(255, 140, 0);
-  border: none;
-  outline: none;
-  border-radius: 100px;
-  margin-bottom: 16px;
-  padding: 5px;
-  padding-left: 25px;
-  margin: 11px;
+  padding: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 }
-.clip_container {
-  border: none;
-  outline: none;
-  border-radius: 0px;
-  min-height: 40px;
-}
-.clip_container label {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-.clip_container:hover {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
+.cliphist.header .clear_hist {
+  color: rgb(255, 140, 0);
   border-radius: 2rem;
 }
-.clip_container:focus {
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-  border: 0px solid;
-  border: none;
-  outline: none;
+.cliphist.header .clear_hist icon {
+  font-size: 2rem;
+  margin: -0.25rem;
 }
-.clip_container:active {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
-}
-.clip_container .clip_id {
-  font-weight: 200;
-  font-feature-settings: "tnum";
+.cliphist.header .clear_hist:hover {
   color: rgb(15, 155, 255);
+  background: rgb(255, 0, 0);
 }
-.clip_container .dot_divider {
-  font-weight: 900;
-  font-size: 1rem;
-  min-width: 0px;
-  margin: 0px;
-  color: red;
+.cliphist.header .refresh_hist {
+  color: rgb(255, 140, 0);
+  border-radius: 2rem;
 }
-.clip_divider {
+.cliphist.header .refresh_hist icon {
+  font-size: 1.5rem;
+  margin: -0.25rem;
+}
+.cliphist.header .refresh_hist:hover {
   color: rgb(15, 155, 255);
-  margin: 0px;
+  background: rgb(255, 0, 0);
 }
-.clip_label {
+.cliphist.header .search {
+  border-radius: 2rem;
+  padding: 0rem 0.5rem;
+}
+.cliphist.header .search selection {
+  color: black;
+  background-color: rgb(15, 155, 255);
+}
+.cliphist button.item {
+  all: unset;
+  padding: 0rem 0.75rem;
+  min-height: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid rgb(0, 0, 255);
+}
+.cliphist button.item:last-child {
+  border-bottom: none;
+}
+.cliphist button.item icon {
+  font-size: 2rem;
+  color: rgb(255, 140, 0);
+  border-radius: 10rem;
+}
+.cliphist button.item label {
   color: rgb(255, 140, 0);
   font-weight: normal;
+  font-size: 1.25rem;
+}
+.cliphist button.item.active, .cliphist button.item:focus, .cliphist button.item:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+}
+.cliphist button.item.active label, .cliphist button.item:focus label, .cliphist button.item:hover label {
+  text-shadow: 0.3rem 0.3rem 0.5rem rgb(15, 155, 255);
+}
+.cliphist button.item.active icon, .cliphist button.item:focus icon, .cliphist button.item:hover icon {
+  -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem rgb(15, 155, 255);
+  animation: spin 1s linear infinite;
+}
+.cliphist scrollbar.vertical {
+  transition: 200ms;
+  background-color: rgba(23, 23, 23, 0.3);
+  margin: 0.5rem 0rem;
+}
+.cliphist scrollbar.vertical:hover {
+  background-color: rgba(23, 23, 23, 0.7);
+}
+.cliphist scrollbar.vertical:hover slider {
+  background-color: rgb(255, 140, 0);
+  min-width: 0.5rem;
+}
+.cliphist scrollbar.vertical slider {
+  background-color: rgba(15, 155, 255, 0.5);
+  border-radius: 2rem;
+  min-width: 0.4rem;
+  min-height: 2rem;
+  transition: 200ms;
 }
 
 .dashboard {
@@ -329,133 +310,235 @@ tooltip > * > * {
 }
 .dashboard.leftSide {
   border-radius: 2rem;
-  margin: 0.25rem;
-}
-.dashboard.calendar {
-  border-radius: 2rem;
-  border: 2px solid #0f9bff;
   background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #0f9bff;
   padding: 0.5rem;
+  margin: 0.25rem;
 }
 .dashboard.rightSide {
   border-radius: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #0f9bff;
+  padding: 0.5rem;
   margin: 0.25rem;
 }
-
-.launcher-switcher {
-  background: rgba(0, 0, 0, 0.5);
+.dashboard.power .powerprofiles {
+  all: unset;
 }
-.launcher-switcher-button {
-  background: none;
+.dashboard.power .powerprofiles button {
+  border: 2px solid #0f9bff;
+  border-width: 5px;
+  border-radius: 2rem;
+  padding: 0.45rem 0.65rem;
+  margin: 0rem 0.5rem;
 }
-.launcher-switcher-button.focused {
-  background-color: black;
-  border-radius: 3rem 0rem 0rem 3rem;
-  border-left: 2px solid #0f9bff;
+.dashboard.power .powerprofiles button:first-child {
+  color: lime;
+}
+.dashboard.power .powerprofiles button:first-child:hover {
+  border-left: 5px solid lime;
+  border-right: 5px solid lime;
   border-top: 2px solid #0f9bff;
   border-bottom: 2px solid #0f9bff;
+  border-width: 5px;
+  background: linear-gradient(0deg, lime 0%, rgba(0, 0, 0, 0) 50%, lime 100%);
 }
-.launcher-switcher-button.focused image {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
-  border-radius: 3rem 0rem 0rem 3rem;
+.dashboard.power .powerprofiles button:nth-child(2) {
+  color: yellow;
 }
-.launcher-switcher-button:hover {
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-  background-color: black;
-  border-radius: 3rem 0rem 0rem 3rem;
+.dashboard.power .powerprofiles button:nth-child(2):hover {
+  border-left: 5px dashed yellow;
+  border-right: 5px dashed yellow;
+  border-top: 2px solid #0f9bff;
+  border-bottom: 2px solid #0f9bff;
+  border-width: 5px;
+  background: linear-gradient(0deg, rgb(255, 255, 0) 0%, rgba(0, 0, 0, 0) 50%, rgb(255, 255, 0) 100%);
 }
-.launcher-switcher-button.before-focused image {
-  border-bottom-right-radius: 1rem;
+.dashboard.power .powerprofiles button:last-child {
+  color: red;
 }
-.launcher-switcher-button.after-focused image {
-  border-top-right-radius: 1rem;
+.dashboard.power .powerprofiles button:last-child:hover {
+  border-left: 5px dotted red;
+  border-right: 5px dotted red;
+  border-top: 2px solid #0f9bff;
+  border-bottom: 2px solid #0f9bff;
+  border-width: 5px;
+  background: linear-gradient(0deg, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 50%, rgb(255, 0, 0) 100%);
 }
-.launcher-switcher-button image {
-  padding: 10px;
+.dashboard.power .powerprofiles button label {
+  font-weight: bold;
+  margin-top: 0.25rem;
+}
+.dashboard.power .powerprofiles button image {
+  font-size: 1.5rem;
+}
+.dashboard.power .powerprofiles .power-saver {
+  border-left-color: lime;
+  border-right-color: lime;
+}
+.dashboard.power .powerprofiles .balanced {
+  border-left-color: yellow;
+  border-left-style: dashed;
+  border-right-color: yellow;
+  border-right-style: dashed;
+}
+.dashboard.power .powerprofiles .performance {
+  border-left-color: red;
+  border-left-style: dotted;
+  border-right-color: red;
+  border-right-style: dotted;
+}
+.dashboard.power .sessioncontrols {
+  all: unset;
+}
+.dashboard.power .sessioncontrols button {
+  border-radius: 5rem;
+  border-left: 0.5rem solid #0f9bff;
+  border-right: 0.5rem solid #0f9bff;
+  background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 255, 0.5) 100%);
+  padding: 0.5rem;
+  margin: 0rem 0.5rem;
+}
+.dashboard.power .sessioncontrols button:first-child icon, .dashboard.power .sessioncontrols button:nth-child(2) icon, .dashboard.power .sessioncontrols button:nth-child(3) icon, .dashboard.power .sessioncontrols button:last-child icon {
+  font-size: 1.5rem;
+}
+.dashboard.power .sessioncontrols button label,
+.dashboard.power .sessioncontrols button icon {
   color: rgb(255, 140, 0);
-  font-size: 2rem;
+  font-size: 1.25rem;
 }
-.launcher-switcher-button:first-child {
-  border-radius: 3rem 0rem 0rem 3rem;
+.dashboard.power .sessioncontrols button label {
+  font-size: 1rem;
 }
-.launcher-switcher-button:last-child {
-  border-radius: 3rem 0rem 0rem 3rem;
+.dashboard.power .sessioncontrols button:hover icon, .dashboard.power .sessioncontrols button:focus icon, .dashboard.power .sessioncontrols button:active icon {
+  animation: spin 1s infinite;
+}
+.dashboard.power .sessioncontrols button:hover {
+  border-left: 0.5rem dashed red;
+  border-right: 0.5rem dashed red;
+  background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, rgb(255, 0, 0) 15%, rgba(0, 0, 0, 0) 50%, rgb(255, 0, 0) 85%, rgba(255, 0, 0, 0.5) 100%);
+}
+.dashboard.power .sessioncontrols button:hover label {
+  color: rgb(0, 0, 255);
+}
+.dashboard.power .sessioncontrols button:focus, .dashboard.power .sessioncontrols button:active {
+  border-left: 0.5rem dashed rgb(255, 255, 0);
+  border-right: 0.5rem dashed rgb(255, 255, 0);
+  background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgb(255, 255, 0) 15%, rgba(0, 0, 0, 0) 50%, rgb(255, 255, 0) 85%, rgba(255, 255, 0, 0.5) 100%);
+}
+.dashboard.power .sessioncontrols button:focus label, .dashboard.power .sessioncontrols button:active label {
+  color: rgb(0, 0, 255);
 }
 
-.launcher {
+.launcher.container {
+  padding-right: 1rem;
+}
+.launcher.contentgrid {
+  background: url("assets/groot-thin-left.png");
   background-color: black;
-  background-size: auto 50%;
+  background-size: auto auto;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 0rem 3rem 3rem 0rem;
   border: 2px solid #0f9bff;
+  border-left: unset;
+  box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 }
-.launcher .launcher-search {
+.launcher.search {
   margin: 1rem;
   background: none;
-}
-.launcher .launcher-search .search-entry {
+  border-bottom: 2px solid #0f9bff;
+  border-left: 2px solid #0f9bff;
+  border-right: 2px solid #0f9bff;
   border-radius: 2rem;
-  margin-bottom: 5px;
-  padding: 8px;
+  color: rgb(255, 140, 0);
+  padding: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.launcher.search selection {
+  color: black;
+  background-color: rgb(15, 155, 255);
+}
+.launcher.app {
+  all: unset;
+  padding: 0rem 0.75rem;
+  min-width: 7rem;
+  min-height: 3rem;
+  border-bottom: 1px solid rgba(0, 0, 155, 0.7);
+}
+.launcher.app:last-child {
+  border-bottom: none;
+}
+.launcher.app icon {
+  font-size: 2rem;
+  color: rgb(255, 140, 0);
+  border-radius: 10rem;
+}
+.launcher.app label {
+  color: rgb(255, 140, 0);
+  font-weight: normal;
+  font-size: 1.25rem;
+}
+.launcher.app.active, .launcher.app:focus, .launcher.app:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+}
+.launcher.app.active label, .launcher.app:focus label, .launcher.app:hover label {
+  text-shadow: 0.3rem 0.3rem 0.5rem rgb(15, 155, 255);
+}
+.launcher.app.active icon, .launcher.app:focus icon, .launcher.app:hover icon {
+  -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem rgb(15, 155, 255);
+  animation: spin 1s linear infinite;
+}
+.launcher .switcher {
+  color: rgb(255, 140, 0);
+  padding: 0.5rem 0rem;
+  padding-left: 0.75rem;
+}
+.launcher .switcher button {
+  background: none;
+}
+.launcher .switcher button.active {
+  background-color: black;
+  border-radius: 2rem;
   border: 2px solid #0f9bff;
 }
-.launcher .launcher-search .search-entry image.left {
-  margin-right: 8px;
+.launcher .switcher button.active icon {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
+  border-radius: 3rem 0rem 0rem 3rem;
 }
-.launcher .launcher-search .search-scroll .search-results {
-  color: rgb(255, 140, 0);
-}
-.launcher .launcher-search .search-scroll .search-results .app-button {
-  color: rgb(255, 140, 0);
-  padding: 5px;
-  border-radius: 2rem;
-}
-.launcher .launcher-search .search-scroll .search-results .app-button:hover {
+.launcher .switcher button:focus-visible, .launcher .switcher button:focus, .launcher .switcher button:hover {
   background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-}
-.launcher .launcher-search .search-scroll .search-results .app-button .app-icon {
-  font-size: 2rem;
-  margin-right: 5px;
-}
-.launcher .launcher-search .search-scroll .search-results .app-button .app-name {
-  font-weight: bold;
-  font-size: 1rem;
-}
-.launcher .launcher-search .search-scroll .search-results .app-button .app-description {
-  font-size: 0.8rem;
-  color: rgb(15, 155, 255);
-}
-.launcher .launcher-search .search-scroll .search-results .app-button.focused {
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-  transition: all 1s cubic-bezier(0.5, 3, 0, 1);
-}
-.launcher .launcher-category {
-  margin: 1rem;
   background-color: black;
-  background-size: auto 50%;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.launcher .launcher-category .app-button {
-  padding: 8px;
   border-radius: 2rem;
-  background-color: rgba(0, 0, 0, 0.75);
 }
-.launcher .launcher-category .app-button:hover {
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-}
-.launcher .launcher-category .app-button.focused {
-  background: rgba(0, 0, 0, 0.5);
-}
-.launcher .launcher-category .app-button .app-icon {
+.launcher .switcher button icon {
+  padding: 10px;
+  color: rgb(255, 140, 0);
   font-size: 2rem;
 }
-.launcher .launcher-category .app-button .app-name {
-  font-size: 1rem;
+.launcher scrollbar.vertical {
+  transition: 200ms;
+  background-color: rgba(23, 23, 23, 0.3);
+  margin: 0.5rem 0rem;
+}
+.launcher scrollbar.vertical:hover {
+  background-color: rgba(23, 23, 23, 0.7);
+}
+.launcher scrollbar.vertical:hover slider {
+  background-color: rgb(255, 140, 0);
+  min-width: 0.5rem;
+}
+.launcher scrollbar.vertical slider {
+  background-color: rgba(15, 155, 255, 0.5);
+  border-radius: 2rem;
+  min-width: 0.4rem;
+  min-height: 2rem;
+  transition: 200ms;
 }
 
-.tickerbtn {
+.ticker.container {
   border-top: 2px solid #0f9bff;
   border-radius: 3rem;
   padding: 0rem 0.5rem;
@@ -463,28 +546,31 @@ tooltip > * > * {
   font-weight: bold;
   min-width: 1rem;
 }
-.tickerbtn tooltip {
+.ticker.nomedia {
+  color: rgb(255, 140, 0);
+}
+.ticker tooltip {
   font-weight: bold;
   padding: 10px;
 }
-.tickerbtn:hover .tickertrack {
+.ticker:hover .ticker.track {
   color: rgb(0, 0, 255);
 }
-.tickerbtn:hover .tickerartist {
+.ticker:hover .ticker.artist {
   color: rgb(255, 140, 0);
 }
-.tickerbtn:hover icon {
+.ticker:hover icon {
   animation: spin 1s infinite;
 }
-.tickerartist {
+.ticker.artist {
   color: rgb(15, 155, 255);
   font-size: 1rem;
 }
-.tickertrack {
+.ticker.track {
   font-size: 1rem;
   color: rgb(255, 140, 0);
 }
-.tickericon {
+.ticker.icon {
   color: red;
 }
 
@@ -501,8 +587,7 @@ tooltip > * > * {
   border-radius: 3rem;
   min-width: 400px;
   min-height: 100px;
-  padding-left: 2.5rem;
-  padding-right: 0.25rem;
+  padding-left: 8rem;
   padding-top: 0.5rem;
   box-shadow: inset -0.75rem 0rem 1rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5);
 }
@@ -554,36 +639,12 @@ tooltip > * > * {
   text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
 }
 
-.player scale.position {
-  margin-bottom: 0.3rem;
-  padding: 0.25rem;
-  min-width: 12rem;
-}
-.player scale.position trough {
-  min-height: 10px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, rgb(0, 255, 0) 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
-  border-radius: 2rem;
-  box-shadow: 0rem 0.25rem 0.5rem rgb(0, 0, 0);
-}
-.player scale.position highlight {
-  background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgb(0, 255, 255) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
-  border-radius: 2rem;
-}
-.player scale.position slider {
-  min-height: 10px;
-  min-width: 10px;
-  border-radius: 20px;
-  background-color: blue;
-  border: none;
-  box-shadow: 0px 0px 4px white;
-}
-
 .player button {
   color: #cdd6f4;
   border: 2px solid rgba(0, 0, 0, 0);
 }
 .player button icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin: 0rem 0.25rem;
 }
 .player button.playicon {
@@ -628,17 +689,13 @@ tooltip > * > * {
 }
 
 .notif .outerbox {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 2rem;
   padding: 0.35rem;
 }
 .notif.panel {
-  margin-top: 0.25rem;
   padding: 0rem 0.5rem;
   padding-bottom: 0.25rem;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 2rem;
-  border: 2px solid #0f9bff;
 }
 .notif.panel .header {
   border-radius: 2rem;
@@ -660,12 +717,27 @@ tooltip > * > * {
 .notif.panel .header button:hover icon {
   color: rgb(0, 0, 255);
 }
-.notif .title {
+.notif .titlebox {
+  border-bottom: 2px solid #0f9bff;
+  border-radius: 2rem;
+  padding: 0rem 1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.notif .titlebox .title {
   font-size: 1.1rem;
+  font-weight: bolder;
+}
+.notif .titlebox .subtitle {
+  color: rgb(255, 140, 0);
+  font-size: 1rem;
+  font-weight: normal;
 }
 .notif .body {
   color: rgb(155, 255, 15);
   font-size: 0.9rem;
+  font-weight: normal;
+  padding: 0rem 1rem;
 }
 .notif .icondatetime {
   padding: 0.5rem;
@@ -675,6 +747,7 @@ tooltip > * > * {
 }
 .notif .icondatetime .datetime {
   padding: 0.25rem;
+  font-weight: normal;
 }
 .notif .icondatetime .datetime label {
   color: rgb(15, 155, 255);
@@ -693,6 +766,13 @@ tooltip > * > * {
 }
 .notif .actions button:last-child {
   margin-right: 0.25rem;
+}
+.notif .actions button:hover {
+  background-color: #08204C;
+}
+.notif .actions button:hover label {
+  font-weight: bolder;
+  color: rgb(255, 0, 0);
 }
 .notif .level2.outerbox {
   border: 3px dotted rgb(255, 0, 0);
@@ -757,183 +837,24 @@ tooltip > * > * {
     color: #000066;
   }
 }
-.BarBTN {
-  background: rgba(0, 0, 0, 0.5);
-  border-top: 2px solid #0f9bff;
-  border-radius: 1rem;
-  -gtk-icon-style: symbolic;
-}
-.BarBTN icon {
-  font-size: 1.15rem;
-}
-.BarBTN:hover {
-  color: rgb(0, 0, 255);
-}
-.BarBTN:hover icon {
-  animation: spin 1s infinite;
-}
-
-.BarBTN2 {
-  font-size: 1.4rem;
-  -gtk-icon-style: symbolic;
-}
-.BarBTN2:hover {
-  color: rgb(0, 0, 255);
-  animation: spin 1s infinite;
-}
-
-tooltip * {
-  all: unset;
-  background-color: transparent;
-  border: none;
-}
-tooltip > * > * {
-  background: black;
-  border-radius: 2rem;
-  border: 0.1rem solid rgba(0, 0, 0, 0);
-  color: rgb(255, 140, 0);
-  padding: 0.75rem;
-  margin: 4px;
-  box-shadow: 0 0 5px 0 rgb(15, 155, 255);
-}
-
-.overview {
-  margin: 12pt;
-  border: none;
-  color: white;
-  border-radius: 1rem;
-  padding: 0.5rem;
-  min-height: 250px;
-}
-.overview shadows {
-  box-shadow: 0 0 5px 0 rgb(15, 155, 255);
-}
-.overview.horizontal > * {
-  margin: 0 0.15rem;
-}
-.overview.horizontal > *:first-child {
-  margin-left: 0;
-}
-.overview.horizontal > *:last-child {
-  margin-right: 0;
-}
-.overview.vertical > * {
-  margin: 0.15rem 0;
-}
-.overview.vertical > *:first-child {
-  margin-top: 0;
-}
-.overview.vertical > *:last-child {
-  margin-bottom: 0;
-}
-.overview {
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-color: rgb(0, 0, 0);
-}
-.overview .workspace {
-  padding: 0.8rem;
-}
-.overview .workspace.active > widget {
-  border-color: #0f9bff;
-}
-.overview .workspace > widget {
-  transition: 100ms;
-  border-radius: 2rem;
-  color: rgb(255, 140, 0);
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid #0f9bff;
-  border-radius: 2.3rem;
-}
-.overview .workspace > widget:hover {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
-}
-.overview .workspace > widget:drop(active) {
-  border-color: #0f9bff;
-}
-.overview .client {
-  all: unset;
-  transition: 100ms;
-  border-radius: 2rem;
-  color: rgb(255, 0, 0);
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 0 0.1rem #0f9bff;
-}
-.overview .client:focus {
-  box-shadow: inset 0 0 0 0.1rem #0f9bff;
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-  color: rgb(255, 0, 0);
-}
-.overview .client:hover {
-  box-shadow: inset 0 0 2px 0.1rem #0f9bff;
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-  color: rgb(255, 0, 0);
-}
-.overview .client:active, .overview .client.on, .overview .client.active, .overview .client:checked {
-  box-shadow: inset 0 0 0 0.1rem #0f9bff;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
-  color: rgb(255, 0, 0);
-}
-.overview .client:active:hover, .overview .client.on:hover, .overview .client.active:hover, .overview .client:checked:hover {
-  box-shadow: inset 0 0 0 0.1rem #0f9bff, inset 0 0 0 99px rgba(15, 155, 255, 0.5);
-}
-.overview .client:disabled {
-  box-shadow: none;
-  background-color: transparent;
-  color: rgba(255, 140, 0, 0.3);
-}
-.overview .client {
-  margin: 0.3rem;
-}
-.overview .client:hover {
-  background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 55, 0.5) 100%);
-}
-.overview .client.hidden {
-  background-color: transparent;
-  background-image: none;
-  border-color: transparent;
-  box-shadow: none;
-  -gtk-icon-transform: scale(0);
-}
-.overview .client.hidden * {
-  background-color: transparent;
-  background-image: none;
-  border-color: transparent;
-  box-shadow: none;
-  -gtk-icon-transform: scale(0);
-}
-.overview .client.hidden {
-  transition: 0;
-}
-
-.ovhorizontal {
-  padding: 0.8rem;
-  background: none;
-}
-
-@keyframes lowBlink {
-  0% {
-    color: #ff0000;
-  }
-  50% {
-    color: #ffff00;
-  }
-  100% {
-    color: #000066;
-  }
-}
 .battery {
   border: none;
   color: rgb(255, 140, 0);
   font-size: 0.5rem;
 }
-.battery icon {
+.battery icon.charging {
+  color: yellow;
+}
+.battery icon.discharging {
   color: red;
 }
 .battery.low {
   animation: lowBlink 3s infinite;
 }
 .battery.low label {
+  animation: lowBlink 2s infinite;
+}
+.battery.low icon {
   animation: lowBlink 2s infinite;
 }
 .battery:hover {
@@ -956,138 +877,8 @@ tooltip > * > * {
   background: linear-gradient(90deg, black, lime 100%);
 }
 
-.powerprofiles.container {
-  border: 2px solid #0f9bff;
-  border-radius: 1rem;
-  background: rgba(0, 0, 0, 0.8);
-  font-size: 1rem;
-  color: rgb(255, 140, 0);
-}
-.powerprofiles.header {
-  border-radius: 2rem;
-  border-bottom: 2px solid #0f9bff;
-  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
-  padding: 0.25rem;
-}
-.powerprofiles label {
-  font-weight: bold;
-}
-.powerprofiles button {
-  border: 2px solid #0f9bff;
-  border-width: 5px;
-  border-radius: 2rem;
-  padding: 0.45rem 0.65rem;
-  margin: 0.5rem 0.5rem;
-}
-.powerprofiles button:first-child {
-  color: lime;
-}
-.powerprofiles button:first-child:hover {
-  border-left: 5px solid lime;
-  border-right: 5px solid lime;
-  border-top: 2px solid #0f9bff;
-  border-bottom: 2px solid #0f9bff;
-  border-width: 5px;
-  background: linear-gradient(0deg, lime 0%, rgba(0, 0, 0, 0) 50%, lime 100%);
-}
-.powerprofiles button:first-child .power-saver {
-  border-left-color: lime;
-  border-right-color: lime;
-}
-.powerprofiles button:nth-child(2) {
-  color: yellow;
-}
-.powerprofiles button:nth-child(2):hover {
-  border-left: 5px dashed yellow;
-  border-right: 5px dashed yellow;
-  border-top: 2px solid #0f9bff;
-  border-bottom: 2px solid #0f9bff;
-  border-width: 5px;
-  background: linear-gradient(0deg, rgb(255, 255, 0) 0%, rgba(0, 0, 0, 0) 50%, rgb(255, 255, 0) 100%);
-}
-.powerprofiles button:nth-child(2) .balanced {
-  border-left-color: yellow;
-  border-left-style: dashed;
-  border-right-color: yellow;
-  border-right-style: dashed;
-}
-.powerprofiles button:last-child {
-  color: red;
-}
-.powerprofiles button:last-child:hover {
-  border-left: 5px dotted red;
-  border-right: 5px dotted red;
-  border-top: 2px solid #0f9bff;
-  border-bottom: 2px solid #0f9bff;
-  border-width: 5px;
-  background: linear-gradient(0deg, rgb(255, 0, 0) 0%, rgba(0, 0, 0, 0) 50%, rgb(255, 0, 0) 100%);
-}
-.powerprofiles button:last-child .performance {
-  border-left-color: red;
-  border-left-style: dotted;
-  border-right-color: red;
-  border-right-style: dotted;
-}
-.powerprofiles button label {
-  font-weight: bold;
-  margin-top: 0.25rem;
-}
-.powerprofiles button image {
-  font-size: 1.5rem;
-}
-
-.corner {
-  background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(15, 155, 255) 54%, rgb(0, 0, 0) 100%);
-  border-radius: 1rem;
-  margin: 3rem 10rem;
-}
-
-.angleRight {
-  color: #0f9bff;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid #0f9bff;
-}
-.angleLeft {
-  color: #0f9bff;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid #0f9bff;
-}
-
-.angleLarge {
-  color: #0f9bff;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid #0f9bff;
-  border-width: 0.5rem;
-}
-
-.spacer {
-  min-width: 10px;
-}
-
-.Slider {
-  min-width: 15rem;
-}
-.Slider trough {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, rgb(0, 255, 0) 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
-  border-radius: 20rem;
-  min-height: 12px;
-}
-.Slider highlight {
-  background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgb(0, 255, 255) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
-  border-radius: 20rem;
-  min-width: 16px;
-}
-.Slider slider {
-  min-height: 15px;
-  min-width: 15px;
-  border-radius: 20px;
-  background-color: blue;
-  border: none;
-  box-shadow: 0px 0px 4px white;
-}
-
 .tray {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   border: 2px solid #0f9bff;
   border-radius: 2rem;
   padding: 0.25rem;
@@ -1096,10 +887,6 @@ tooltip > * > * {
   border: 2px solid rgba(0, 0, 0, 0);
   background-color: transparent;
   font-weight: bold;
-}
-.tray button image {
-  color: rgb(255, 140, 0);
-  border-radius: 2rem;
 }
 .tray button image,
 .tray button icon {
@@ -1144,23 +931,14 @@ menu > menuitem:disabled {
 }
 
 .audio-mixer {
-  margin-top: 0.5rem;
-  margin-right: 0.65rem;
   color: rgb(255, 140, 0);
 }
-.audio-mixerLabel {
+.audio-mixer.header {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
   margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: rgb(255, 140, 0);
-}
-.audio-mixerIcon {
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
-  text-shadow: 0px 0px 0px red, 0px 0px 0px red, 0px 0px 0px red, 0px -5px 3px rgb(15, 155, 255);
-}
-.audio-mixerIcon image {
-  color: rgb(255, 140, 0);
+  padding: 0.25rem 0rem;
 }
 .audio-mixer.settings-button {
   color: rgb(255, 140, 0);
@@ -1172,11 +950,14 @@ menu > menuitem:disabled {
   padding: 1rem;
 }
 
-.muted:hover {
+.muted {
+  color: red;
+}
+.muted icon {
   color: red;
 }
 
-.volumebtn:hover {
+.volume-indicator:hover {
   color: rgb(0, 0, 255);
 }
 
@@ -1248,23 +1029,32 @@ menu > menuitem:disabled {
   margin-bottom: 0.5rem;
 }
 
-.workspaces {
+.hyprworkspaces {
   background: rgba(0, 0, 0, 0.5);
   border-top: 2px solid #0f9bff;
   border-radius: 1rem;
   margin-left: 0.5rem;
   padding: 0rem 0.5rem;
 }
-.workspaces .occupied {
+.hyprworkspaces .urgent {
+  color: rgb(255, 0, 0);
+}
+.hyprworkspaces .urgent:hover icon {
+  color: rgb(0, 0, 255);
+}
+.hyprworkspaces .urgent:hover label {
+  color: rgb(0, 0, 255);
+}
+.hyprworkspaces .occupied {
   color: rgb(15, 155, 255);
 }
-.workspaces .occupied:hover icon {
+.hyprworkspaces .occupied:hover icon {
   color: rgb(0, 0, 255);
 }
-.workspaces .occupied:hover label {
+.hyprworkspaces .occupied:hover label {
   color: rgb(0, 0, 255);
 }
-.workspaces .focused {
+.hyprworkspaces .focused {
   all: unset;
   background-image: radial-gradient(circle at center, rgb(0, 0, 0), rgb(255, 140, 0) 1.5rem);
   border: 1px solid rgb(15, 155, 255);
@@ -1272,52 +1062,113 @@ menu > menuitem:disabled {
   padding: 0.2rem;
   color: rgb(155, 255, 15);
 }
-.workspaces .focused:hover icon {
+.hyprworkspaces .focused:hover icon {
   color: rgb(0, 0, 255);
 }
-.workspaces .focused:hover label {
+.hyprworkspaces .focused:hover label {
   color: rgb(0, 0, 255);
 }
-.workspaces button {
+.hyprworkspaces button {
   transition: all 2s cubic-bezier(0.5, 2, 0, 1);
   color: rgb(255, 140, 0);
 }
-.workspaces button icon {
+.hyprworkspaces button icon {
   font-size: 0.8rem;
 }
-.workspaces button label {
-  font-size: 0.8rem;
+.hyprworkspaces button label {
+  font-size: 0.9rem;
 }
-.workspaces button:first-child {
+.hyprworkspaces button:first-child {
   margin-right: 0.25rem;
 }
-.workspaces button:nth-child(1n+0) {
+.hyprworkspaces button:nth-child(1n+0) {
   margin: 0rem 0.25rem;
 }
-.workspaces button:last-child {
+.hyprworkspaces button:last-child {
   margin-left: 0.25rem;
 }
-.workspaces button:hover icon {
+.hyprworkspaces button:hover icon {
   animation: spin 1s linear infinite;
   color: rgb(0, 0, 255);
 }
-.workspaces button:hover label {
+.hyprworkspaces button:hover label {
   color: rgb(0, 0, 255);
 }
 
-.sessioncontrols {
-  all: unset;
+.riverworkspaces {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem;
 }
+.riverworkspaces .urgent {
+  color: rgb(255, 0, 0);
+}
+.riverworkspaces .urgent:hover icon {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces .urgent:hover label {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces .occupied {
+  color: rgb(15, 155, 255);
+}
+.riverworkspaces .occupied:hover icon {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces .occupied:hover label {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces .focused {
+  all: unset;
+  border-bottom: 1px solid rgb(15, 155, 255);
+  border-radius: 2rem;
+  padding: 0rem 0.2rem;
+  color: rgb(155, 255, 15);
+}
+.riverworkspaces .focused:hover icon {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces .focused:hover label {
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces button {
+  color: rgb(255, 140, 0);
+}
+.riverworkspaces button icon {
+  font-size: 0.8rem;
+}
+.riverworkspaces button label {
+  font-size: 0.9rem;
+}
+.riverworkspaces button:first-child {
+  margin-right: 0.25rem;
+}
+.riverworkspaces button:nth-child(1n+0) {
+  margin: 0rem 0.25rem;
+}
+.riverworkspaces button:last-child {
+  margin-left: 0.25rem;
+}
+.riverworkspaces button:hover icon {
+  animation: spin 1s linear infinite;
+  color: rgb(0, 0, 255);
+}
+.riverworkspaces button:hover label {
+  color: rgb(0, 0, 255);
+}
+
 .sessioncontrols.window {
+  all: unset;
   background: rgba(0, 0, 0, 0.5);
 }
-.sessioncontrols.container {
+.sessioncontrols.window.container {
   color: rgb(15, 155, 255);
   font-size: 2rem;
   font-weight: bold;
   min-width: 5rem;
 }
-.sessioncontrols.box {
+.sessioncontrols.window.box {
   background: rgba(0, 0, 0, 0.5);
   border-top: 2px solid #0f9bff;
   border-bottom: 2px solid #0f9bff;
@@ -1325,7 +1176,7 @@ menu > menuitem:disabled {
   border-width: 0.5rem;
   padding: 2rem;
 }
-.sessioncontrols button {
+.sessioncontrols.window button {
   border-radius: 5rem;
   min-width: 10rem;
   min-height: 10rem;
@@ -1333,45 +1184,41 @@ menu > menuitem:disabled {
   border-right: 0.5rem solid #0f9bff;
   background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, rgb(0, 0, 255) 15%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 255) 85%, rgba(0, 0, 255, 0.5) 100%);
   padding: 0.5rem;
+  margin: 0rem 2rem;
 }
-.sessioncontrols button:first-child icon, .sessioncontrols button:nth-child(2) icon, .sessioncontrols button:nth-child(3) icon, .sessioncontrols button:last-child icon {
+.sessioncontrols.window button:first-child icon, .sessioncontrols.window button:nth-child(2) icon, .sessioncontrols.window button:nth-child(3) icon, .sessioncontrols.window button:last-child icon {
   min-width: 2em;
   min-height: 2em;
   font-size: 3rem;
 }
-.sessioncontrols button label,
-.sessioncontrols button icon {
+.sessioncontrols.window button label,
+.sessioncontrols.window button icon {
   color: rgb(255, 140, 0);
   font-size: 2rem;
 }
-.sessioncontrols button label {
+.sessioncontrols.window button label {
   font-size: 1.75rem;
 }
-.sessioncontrols button:hover icon, .sessioncontrols button:focus icon, .sessioncontrols button:active icon {
+.sessioncontrols.window button:hover icon, .sessioncontrols.window button:focus icon, .sessioncontrols.window button:active icon {
   animation: spin 1s infinite;
 }
-.sessioncontrols button:hover {
+.sessioncontrols.window button:hover {
   border-left: 0.5rem dashed red;
   border-right: 0.5rem dashed red;
   background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, rgb(255, 0, 0) 15%, rgba(0, 0, 0, 0) 50%, rgb(255, 0, 0) 85%, rgba(255, 0, 0, 0.5) 100%);
 }
-.sessioncontrols button:hover label {
+.sessioncontrols.window button:hover label {
   color: rgb(0, 0, 255);
 }
-.sessioncontrols button:focus, .sessioncontrols button:active {
+.sessioncontrols.window button:focus, .sessioncontrols.window button:active {
   border-left: 0.5rem dashed rgb(255, 255, 0);
   border-right: 0.5rem dashed rgb(255, 255, 0);
   background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgb(255, 255, 0) 15%, rgba(0, 0, 0, 0) 50%, rgb(255, 255, 0) 85%, rgba(255, 255, 0, 0.5) 100%);
 }
-.sessioncontrols button:focus label, .sessioncontrols button:active label {
+.sessioncontrols.window button:focus label, .sessioncontrols.window button:active label {
   color: rgb(0, 0, 255);
 }
 
-.bluetooth.container {
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 2rem;
-  border: 2px solid #0f9bff;
-}
 .bluetooth.devicelist-header {
   color: rgb(255, 140, 0);
   border-radius: 2rem;
@@ -1464,12 +1311,6 @@ menu > menuitem:disabled {
 .network.barbutton:hover {
   color: rgb(0, 0, 255);
 }
-.network.dashboard {
-  border-radius: 2rem;
-  border: 2px solid #0f9bff;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
 .network .ethernet.container {
   border-radius: 2rem;
   border-bottom: 2px solid #0f9bff;
@@ -1485,6 +1326,16 @@ menu > menuitem:disabled {
   color: rgb(255, 140, 0);
   padding: 0.5rem 1rem;
 }
+.network .wifi entry {
+  box-shadow: inset 0px 0px 7px rgba(15, 155, 255, 0.8);
+  border-radius: 2rem;
+  border: 1px solid rgb(15, 155, 255);
+  padding: 0.1rem 0.75rem;
+}
+.network .wifi entry selection {
+  color: rgb(0, 0, 255);
+  background: rgba(255, 140, 0, 0.7);
+}
 .network .wifi.header {
   border-radius: 2rem;
   border-bottom: 2px solid #0f9bff;
@@ -1497,12 +1348,6 @@ menu > menuitem:disabled {
 }
 .network .wifi.header button.disabled {
   color: grey;
-}
-.network .wifi.header button.scanning {
-  color: rgb(255, 0, 0);
-}
-.network .wifi.header button.scanning icon {
-  animation: spin 1s linear infinite;
 }
 .network .wifi.header button:hover {
   color: rgb(0, 0, 255);
@@ -1532,6 +1377,143 @@ menu > menuitem:disabled {
 }
 .network .wifi.connected.controls button:hover icon {
   color: rgb(255, 0, 0);
+}
+
+.corner {
+  background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(15, 155, 255) 54%, rgb(0, 0, 0) 100%);
+  border-radius: 1rem;
+  margin: 3rem 10rem;
+}
+
+.angleRight {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+}
+.angleLeft {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+}
+
+.angleLarge {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+  border-width: 0.5rem;
+}
+
+.spacer {
+  min-width: 10px;
+}
+
+.Slider {
+  min-width: 15rem;
+}
+.Slider trough {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, rgb(0, 255, 0) 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
+  border-radius: 20rem;
+  min-height: 12px;
+}
+.Slider highlight {
+  background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgb(0, 255, 255) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
+  border-radius: 20rem;
+  min-width: 16px;
+}
+.Slider slider {
+  min-height: 15px;
+  min-width: 15px;
+  border-radius: 20px;
+  background-color: blue;
+  border: none;
+  box-shadow: 0px 0px 4px white;
+}
+
+.stackSidebar,
+.stackSwitcher {
+  color: rgb(255, 140, 0);
+}
+.stackSidebar .needsAttention,
+.stackSwitcher .needsAttention {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  border-color: red;
+}
+.stackSidebar button,
+.stackSwitcher button {
+  border-radius: 2rem;
+  padding: 0rem 0.5rem;
+}
+.stackSidebar button:checked,
+.stackSwitcher button:checked {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+}
+.stackSidebar button:hover,
+.stackSwitcher button:hover {
+  box-shadow: inset 0px -2px 6px #0f9bff;
+}
+
+.stackSidebar {
+  background-color: rgb(255, 0, 0);
+  min-height: 10rem;
+  min-width: 2rem;
+}
+
+spinner {
+  color: rgb(155, 255, 15);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes lowBlink {
+  0% {
+    color: #ff0000;
+  }
+  50% {
+    color: #ffff00;
+  }
+  100% {
+    color: #000066;
+  }
+}
+.BarBTN {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  -gtk-icon-style: symbolic;
+}
+.BarBTN icon {
+  font-size: 1.15rem;
+}
+.BarBTN:hover {
+  color: rgb(0, 0, 255);
+}
+.BarBTN:hover icon {
+  animation: spin 1s infinite;
+}
+
+.BarBTN2 {
+  font-size: 1.4rem;
+  -gtk-icon-style: symbolic;
+}
+.BarBTN2:hover {
+  color: rgb(0, 0, 255);
+  animation: spin 1s infinite;
+}
+
+tooltip * {
+  all: unset;
+  background-color: transparent;
+  border: none;
+}
+tooltip > * > * {
+  background: black;
+  border-radius: 2rem;
+  border: 0.1rem solid rgba(0, 0, 0, 0);
+  color: rgb(255, 140, 0);
+  padding: 0.75rem;
+  margin: 4px;
+  box-shadow: 0 0 5px 0 rgb(15, 155, 255);
 }
 
 /*# sourceMappingURL=style.css.map */

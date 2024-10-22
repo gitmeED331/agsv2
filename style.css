@@ -1,0 +1,1239 @@
+* {
+  all: unset;
+  font-family: "Liberation Mono";
+  font-size: 10pt; }
+
+.bar {
+  color: #08204C;
+  background: none;
+  min-height: 8px; }
+  .barleft {
+    min-width: 100px; }
+  .barcenter {
+    min-width: 100px; }
+  .barright {
+    min-width: 100px; }
+
+/* --- AppTitleTicker --- */
+.AppTitleTicker {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  border-top: 2px solid #0f9bff;
+  min-width: 50px;
+  padding: 0rem 0.5rem; }
+  .AppTitleTicker icon {
+    color: blue;
+    font-size: 1rem; }
+  .AppTitleTicker label {
+    color: darkorange;
+    font-weight: bold; }
+  .AppTitleTicker:hover icon {
+    color: darkorange;
+    animation: spin 1s linear infinite;
+    /* -gtk-icon-transform: scale(2); */ }
+  .AppTitleTicker:hover label {
+    color: blue; }
+
+/* --- Clock --- */
+.clock {
+  background: rgba(0, 0, 0, 0.5);
+  color: darkorange;
+  border-top: 2px solid #0f9bff;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem; }
+  .clock label {
+    font-size: 1rem; }
+  .clock icon {
+    color: blue; }
+  .clock:hover {
+    color: blue; }
+    .clock:hover icon {
+      color: darkorange;
+      animation: spin 1s linear infinite; }
+
+/* --- sysinfo --- */
+.sysinfo {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  color: darkorange;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem; }
+  .sysinfo .volumebtn {
+    color: darkorange; }
+    .sysinfo .volumebtn icon,
+    .sysinfo .volumebtn image {
+      font-size: 1.15rem; }
+    .sysinfo .volumebtn button:hover {
+      color: blue; }
+
+.brightness {
+  color: darkorange;
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  border: 2px solid #0f9bff;
+  border-radius: 2rem; }
+  .brightness icon {
+    font-size: 1.25rem; }
+
+.calendarbox {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 2rem;
+  border: 2px solid #0f9bff;
+  padding: 1rem; }
+
+.dashcal {
+  border-top: 2px solid #0f9bff;
+  border-radius: 3rem 3rem 0rem 0rem;
+  padding: 0.5rem 2.5rem; }
+
+.calendar {
+  font-family: Liberation Mono; }
+  .calendar-grid {
+    border-radius: 2rem;
+    padding: 0.25rem;
+    color: darkorange; }
+    .calendar-grid label {
+      margin: 3px; }
+  .calendar-header {
+    color: #9bff0f;
+    margin: 0rem 1rem;
+    padding-bottom: 1rem; }
+  .calendar-days {
+    color: #27D8DE;
+    border-bottom: 2px solid #0f9bff;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+  .calendar-day {
+    color: darkorange;
+    margin: 0.1rem 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 1.25rem;
+    font-weight: 100; }
+  .calendar-today {
+    background: radial-gradient(black 25%, #0f9bff 100%);
+    color: red;
+    border-radius: 2rem;
+    font-weight: bolder; }
+
+.calendar-year-label,
+.calendar-month-label {
+  font-size: 1.5rem;
+  color: darkorange; }
+
+.calendar.year.label,
+.calendar.month.label {
+  color: darkorange; }
+
+.calendar.year.arrow-left,
+.calendar.month.arrow-left {
+  color: red;
+  font-size: 1.5rem; }
+
+.calendar.year.arrow-right,
+.calendar.month.arrow-right {
+  color: #9bff0f;
+  font-size: 1.5rem; }
+
+.calendar.year:hover,
+.calendar.month:hover {
+  color: blue; }
+
+.calendar.return-today {
+  color: darkorange;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, black 50%, rgba(0, 0, 0, 0.5) 100%);
+  border-radius: 2rem;
+  min-width: 50px;
+  min-height: 30px; }
+  .calendar.return-today image {
+    font-size: 1.25rem;
+    padding: 0.25rem 1.5rem; }
+  .calendar.return-today:hover {
+    background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, blue 15%, rgba(0, 0, 0, 0) 50%, blue 85%, rgba(0, 0, 55, 0.5) 100%); }
+    .calendar.return-today:hover image {
+      color: #9bff0f;
+      animation: spin 1s infinite; }
+
+.cliphist.contentgrid {
+  background: url("assets/groot-thin-right.png");
+  background-color: black;
+  background-size: auto auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 3rem 0rem 0rem 3rem;
+  border: 2px solid #0f9bff;
+  border-right: unset;
+  box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+  padding: 0rem 1rem; }
+
+.cliphist.header {
+  margin: 1rem;
+  background: none;
+  border-bottom: 2px solid #0f9bff;
+  border-left: 2px solid #0f9bff;
+  border-right: 2px solid #0f9bff;
+  border-radius: 2rem;
+  color: darkorange;
+  padding: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+  .cliphist.header .clear_hist {
+    color: darkorange;
+    border-radius: 2rem; }
+    .cliphist.header .clear_hist icon {
+      font-size: 2rem;
+      margin: -0.25rem; }
+    .cliphist.header .clear_hist:hover {
+      color: #0f9bff;
+      background: red; }
+  .cliphist.header .refresh_hist {
+    color: darkorange;
+    border-radius: 2rem; }
+    .cliphist.header .refresh_hist icon {
+      font-size: 1.5rem;
+      margin: -0.25rem; }
+    .cliphist.header .refresh_hist:hover {
+      color: #0f9bff;
+      background: red; }
+  .cliphist.header .search {
+    border-radius: 2rem;
+    padding: 0rem 0.5rem; }
+    .cliphist.header .search selection {
+      color: black;
+      background-color: #0f9bff; }
+
+.cliphist button.item {
+  all: unset;
+  padding: 0rem 0.75rem;
+  min-height: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid blue; }
+  .cliphist button.item:last-child {
+    border-bottom: none; }
+  .cliphist button.item icon {
+    font-size: 2rem;
+    color: darkorange;
+    border-radius: 10rem; }
+  .cliphist button.item label {
+    color: darkorange;
+    font-weight: normal;
+    font-size: 1.25rem; }
+  .cliphist button.item.active, .cliphist button.item:focus, .cliphist button.item:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff; }
+    .cliphist button.item.active label, .cliphist button.item:focus label, .cliphist button.item:hover label {
+      text-shadow: 0.3rem 0.3rem 0.5rem #0f9bff; }
+    .cliphist button.item.active icon, .cliphist button.item:focus icon, .cliphist button.item:hover icon {
+      -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem #0f9bff;
+      animation: spin 1s linear infinite; }
+
+.cliphist scrollbar.vertical {
+  transition: 200ms;
+  background-color: rgba(23, 23, 23, 0.3);
+  margin: 0.5rem 0rem; }
+  .cliphist scrollbar.vertical:hover {
+    background-color: rgba(23, 23, 23, 0.7); }
+    .cliphist scrollbar.vertical:hover slider {
+      background-color: darkorange;
+      min-width: .5rem; }
+  .cliphist scrollbar.vertical slider {
+    background-color: rgba(15, 155, 255, 0.5);
+    border-radius: 2rem;
+    min-width: .4rem;
+    min-height: 2rem;
+    transition: 200ms; }
+
+.dashboard {
+  font-weight: bold; }
+  .dashboard.topCenter {
+    border-radius: 2rem;
+    background: rgba(0, 0, 0, 0.5);
+    margin: 0.25rem; }
+  .dashboard.leftSide {
+    border-radius: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f9bff;
+    padding: 0.5rem;
+    margin: 0.25rem; }
+  .dashboard.rightSide {
+    border-radius: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f9bff;
+    padding: 0.5rem;
+    margin: 0.25rem; }
+  .dashboard.power .powerprofiles {
+    all: unset; }
+    .dashboard.power .powerprofiles button {
+      border: 2px solid #0f9bff;
+      border-width: 5px;
+      border-radius: 2rem;
+      padding: 0.45rem 0.65rem;
+      margin: 0rem 0.5rem; }
+      .dashboard.power .powerprofiles button:first-child {
+        color: lime; }
+        .dashboard.power .powerprofiles button:first-child:hover {
+          border-left: 5px solid lime;
+          border-right: 5px solid lime;
+          border-top: 2px solid #0f9bff;
+          border-bottom: 2px solid #0f9bff;
+          border-width: 5px;
+          background: linear-gradient(0deg, lime 0%, rgba(0, 0, 0, 0) 50%, lime 100%); }
+      .dashboard.power .powerprofiles button:nth-child(2) {
+        color: yellow; }
+        .dashboard.power .powerprofiles button:nth-child(2):hover {
+          border-left: 5px dashed yellow;
+          border-right: 5px dashed yellow;
+          border-top: 2px solid #0f9bff;
+          border-bottom: 2px solid #0f9bff;
+          border-width: 5px;
+          background: linear-gradient(0deg, yellow 0%, rgba(0, 0, 0, 0) 50%, yellow 100%); }
+      .dashboard.power .powerprofiles button:last-child {
+        color: red; }
+        .dashboard.power .powerprofiles button:last-child:hover {
+          border-left: 5px dotted red;
+          border-right: 5px dotted red;
+          border-top: 2px solid #0f9bff;
+          border-bottom: 2px solid #0f9bff;
+          border-width: 5px;
+          background: linear-gradient(0deg, red 0%, rgba(0, 0, 0, 0) 50%, red 100%); }
+      .dashboard.power .powerprofiles button label {
+        font-weight: bold;
+        margin-top: 0.25rem; }
+      .dashboard.power .powerprofiles button image {
+        font-size: 1.5rem; }
+    .dashboard.power .powerprofiles .power-saver {
+      border-left-color: lime;
+      border-right-color: lime; }
+    .dashboard.power .powerprofiles .balanced {
+      border-left-color: yellow;
+      border-left-style: dashed;
+      border-right-color: yellow;
+      border-right-style: dashed; }
+    .dashboard.power .powerprofiles .performance {
+      border-left-color: red;
+      border-left-style: dotted;
+      border-right-color: red;
+      border-right-style: dotted; }
+  .dashboard.power .sessioncontrols {
+    all: unset; }
+    .dashboard.power .sessioncontrols button {
+      border-radius: 5rem;
+      border-left: 0.5rem solid #0f9bff;
+      border-right: 0.5rem solid #0f9bff;
+      background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, blue 15%, rgba(0, 0, 0, 0) 50%, blue 85%, rgba(0, 0, 255, 0.5) 100%);
+      padding: 0.5rem;
+      margin: 0rem 0.5rem; }
+      .dashboard.power .sessioncontrols button:first-child icon, .dashboard.power .sessioncontrols button:nth-child(2) icon, .dashboard.power .sessioncontrols button:nth-child(3) icon, .dashboard.power .sessioncontrols button:last-child icon {
+        font-size: 1.5rem; }
+      .dashboard.power .sessioncontrols button label,
+      .dashboard.power .sessioncontrols button icon {
+        color: darkorange;
+        font-size: 1.25rem; }
+      .dashboard.power .sessioncontrols button label {
+        font-size: 1rem; }
+      .dashboard.power .sessioncontrols button:hover icon, .dashboard.power .sessioncontrols button:focus icon, .dashboard.power .sessioncontrols button:active icon {
+        animation: spin 1s infinite; }
+      .dashboard.power .sessioncontrols button:hover {
+        border-left: 0.5rem dashed red;
+        border-right: 0.5rem dashed red;
+        background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, red 15%, rgba(0, 0, 0, 0) 50%, red 85%, rgba(255, 0, 0, 0.5) 100%); }
+        .dashboard.power .sessioncontrols button:hover label {
+          color: blue; }
+      .dashboard.power .sessioncontrols button:focus, .dashboard.power .sessioncontrols button:active {
+        border-left: 0.5rem dashed yellow;
+        border-right: 0.5rem dashed yellow;
+        background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, yellow 15%, rgba(0, 0, 0, 0) 50%, yellow 85%, rgba(255, 255, 0, 0.5) 100%); }
+      .dashboard.power .sessioncontrols button:focus label, .dashboard.power .sessioncontrols button:active label {
+        color: blue; }
+
+.launcher.container {
+  padding-right: 1rem; }
+
+.launcher.contentgrid {
+  background: url("assets/groot-thin-left.png");
+  background-color: black;
+  background-size: auto auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0rem 3rem 3rem 0rem;
+  border: 2px solid #0f9bff;
+  border-left: unset;
+  box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+
+.launcher.search {
+  margin: 1rem;
+  background: none;
+  border-bottom: 2px solid #0f9bff;
+  border-left: 2px solid #0f9bff;
+  border-right: 2px solid #0f9bff;
+  border-radius: 2rem;
+  color: darkorange;
+  padding: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+  .launcher.search selection {
+    color: black;
+    background-color: #0f9bff; }
+
+.launcher.app {
+  all: unset;
+  padding: 0rem 0.75rem;
+  min-width: 7rem;
+  min-height: 3rem;
+  border-bottom: 1px solid rgba(0, 0, 155, 0.7); }
+  .launcher.app:last-child {
+    border-bottom: none; }
+  .launcher.app icon {
+    font-size: 2rem;
+    color: darkorange;
+    border-radius: 10rem; }
+  .launcher.app label {
+    color: darkorange;
+    font-weight: normal;
+    font-size: 1.25rem; }
+  .launcher.app.active, .launcher.app:focus, .launcher.app:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff; }
+    .launcher.app.active label, .launcher.app:focus label, .launcher.app:hover label {
+      text-shadow: 0.3rem 0.3rem 0.5rem #0f9bff; }
+    .launcher.app.active icon, .launcher.app:focus icon, .launcher.app:hover icon {
+      -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem #0f9bff;
+      animation: spin 1s linear infinite; }
+
+.launcher .switcher {
+  color: darkorange;
+  padding: 0.5rem 0rem;
+  padding-left: 0.75rem; }
+  .launcher .switcher button {
+    background: none; }
+    .launcher .switcher button.active {
+      background-color: black;
+      border-radius: 2rem;
+      border: 2px solid #0f9bff; }
+      .launcher .switcher button.active icon {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
+        border-radius: 3rem 0rem 0rem 3rem; }
+    .launcher .switcher button:focus-visible, .launcher .switcher button:focus, .launcher .switcher button:hover {
+      background: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, blue 15%, rgba(0, 0, 0, 0) 50%, blue 85%, rgba(0, 0, 55, 0.5) 100%);
+      background-color: black;
+      border-radius: 2rem; }
+    .launcher .switcher button icon {
+      padding: 10px;
+      color: darkorange;
+      font-size: 2rem; }
+
+.launcher scrollbar.vertical {
+  transition: 200ms;
+  background-color: rgba(23, 23, 23, 0.3);
+  margin: 0.5rem 0rem; }
+  .launcher scrollbar.vertical:hover {
+    background-color: rgba(23, 23, 23, 0.7); }
+    .launcher scrollbar.vertical:hover slider {
+      background-color: darkorange;
+      min-width: .5rem; }
+  .launcher scrollbar.vertical slider {
+    background-color: rgba(15, 155, 255, 0.5);
+    border-radius: 2rem;
+    min-width: .4rem;
+    min-height: 2rem;
+    transition: 200ms; }
+
+.ticker.container {
+  border-top: 2px solid #0f9bff;
+  border-radius: 3rem;
+  padding: 0rem 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+  min-width: 1rem; }
+
+.ticker.nomedia {
+  color: darkorange; }
+
+.ticker tooltip {
+  font-weight: bold;
+  padding: 10px; }
+
+.ticker:hover .ticker.track {
+  color: blue; }
+
+.ticker:hover .ticker.artist {
+  color: darkorange; }
+
+.ticker:hover icon {
+  animation: spin 1s infinite; }
+
+.ticker.artist {
+  color: #0f9bff;
+  font-size: 1rem; }
+
+.ticker.track {
+  font-size: 1rem;
+  color: darkorange; }
+
+.ticker.icon {
+  color: red; }
+
+.tickerbox {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; }
+
+.player {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0px;
+  border: 2px solid #0f9bff;
+  border-radius: 3rem;
+  min-width: 400px;
+  min-height: 100px;
+  padding-left: 8rem;
+  padding-top: 0.5rem;
+  box-shadow: inset -0.75rem 0rem 1rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5); }
+  .player .mediainfo {
+    padding-left: 0rem;
+    margin-left: 6rem;
+    margin-right: 2rem; }
+  .player .playercontrols {
+    margin-top: -1rem;
+    margin-bottom: 0.75rem; }
+  .player .positioncontainer {
+    margin-left: 0.5rem; }
+
+.trackposition, .tracklength {
+  color: darkorange;
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5); }
+
+.trackimg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 3rem 0rem 0rem 3rem;
+  margin-right: 0.25rem; }
+
+.playicon {
+  color: darkorange;
+  -gtk-icon-style: symbolic;
+  -gtk-icon-shadow: 0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.5); }
+
+.trackinfo {
+  min-width: 250px; }
+
+.tracktitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: darkorange;
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5); }
+
+.artist {
+  font-size: 1.1rem;
+  color: #0f9bff;
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5); }
+
+.player button {
+  color: #cdd6f4;
+  border: 2px solid rgba(0, 0, 0, 0); }
+  .player button icon {
+    font-size: 2rem;
+    margin: 0rem 0.25rem; }
+  .player button.playicon {
+    -gtk-icon-shadow: 0rem 0.2rem 0.25rem rgba(0, 0, 0, 0.5); }
+    .player button.playicon:hover {
+      -gtk-icon-shadow: 0rem 0.2rem 0.25rem #0f9bff; }
+  .player button.previous {
+    -gtk-icon-shadow: -0.2rem 0.2rem rgba(0, 0, 0, 0.5); }
+    .player button.previous:hover {
+      color: red;
+      -gtk-icon-shadow: -0.2rem 0.2rem blue; }
+  .player button.play-pause {
+    margin: 0rem 0.25rem;
+    -gtk-icon-shadow: 0.1rem 0.3rem rgba(0, 0, 0, 0.5); }
+    .player button.play-pause:hover {
+      color: yellow;
+      -gtk-icon-shadow: 0.1rem 0.3rem red; }
+  .player button.next {
+    -gtk-icon-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 0.5); }
+    .player button.next:hover {
+      color: blue;
+      -gtk-icon-shadow: 0.2rem 0.2rem yellow; }
+  .player button.close {
+    margin-right: -0.3rem;
+    border-radius: 3rem 0rem 0rem 3rem;
+    background: #0f9bff;
+    color: darkorange;
+    opacity: 0.1;
+    box-shadow: -0.5rem 0rem 1rem 0.5rem black; }
+    .player button.close:hover {
+      color: red;
+      opacity: 1; }
+
+.notif .outerbox {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 2rem;
+  padding: 0.35rem; }
+
+.notif.panel {
+  padding: 0rem 0.5rem;
+  padding-bottom: 0.25rem; }
+  .notif.panel .header {
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff;
+    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0rem; }
+    .notif.panel .header label {
+      font-size: 1.1rem;
+      color: darkorange; }
+    .notif.panel .header button {
+      color: darkorange; }
+      .notif.panel .header button icon {
+        font-size: 1.1rem; }
+      .notif.panel .header button:hover icon {
+        color: blue; }
+
+.notif .titlebox {
+  border-bottom: 2px solid #0f9bff;
+  border-radius: 2rem;
+  padding: 0rem 1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+  .notif .titlebox .title {
+    font-size: 1.1rem;
+    font-weight: bolder; }
+  .notif .titlebox .subtitle {
+    color: darkorange;
+    font-size: 1rem;
+    font-weight: normal; }
+
+.notif .body {
+  color: #9bff0f;
+  font-size: 0.9rem;
+  font-weight: normal;
+  padding: 0rem 1rem; }
+
+.notif .icondatetime {
+  padding: 0.5rem; }
+  .notif .icondatetime icon {
+    font-size: 2.5rem; }
+  .notif .icondatetime .datetime {
+    padding: 0.25rem;
+    font-weight: normal; }
+    .notif .icondatetime .datetime label {
+      color: #0f9bff;
+      font-size: 0.8rem; }
+
+.notif .actions button {
+  border: 2px solid #0f9bff;
+  border-radius: 2rem;
+  margin: 0 0.4rem;
+  margin-top: 0.8rem;
+  font-size: 1.35rem;
+  padding: 0.1rem; }
+  .notif .actions button:first-child {
+    margin-left: 0.25rem; }
+  .notif .actions button:last-child {
+    margin-right: 0.25rem; }
+  .notif .actions button:hover {
+    background-color: #08204C; }
+    .notif .actions button:hover label {
+      font-weight: bolder;
+      color: red; }
+
+.notif .level2.outerbox {
+  border: 3px dotted red; }
+
+.notif .level2 .title {
+  color: red; }
+
+.notif .level2 .body {
+  color: #9bff0f; }
+
+.notif .level2 .icondatetime icon {
+  color: red; }
+
+.notif .level2 .icondatetime .datetime label {
+  color: #0f9bff; }
+
+.notif .level1.outerbox {
+  border: 3px dashed #0f9bff; }
+
+.notif .level1 .title {
+  color: darkorange; }
+
+.notif .level1 .body {
+  color: #9bff0f; }
+
+.notif .level1 .icondatetime icon {
+  color: #0f9bff; }
+
+.notif .level1 .icondatetime .datetime label {
+  color: #0f9bff; }
+
+.notif .levelundefined.outerbox,
+.notif .level0.outerbox {
+  border: 3px groove white; }
+
+.notif .levelundefined .title,
+.notif .level0 .title {
+  color: darkorange; }
+
+.notif .levelundefined .body,
+.notif .level0 .body {
+  color: #9bff0f; }
+
+.notif .levelundefined .icondatetime icon,
+.notif .level0 .icondatetime icon {
+  color: white; }
+
+.close-button {
+  font-size: 1.5rem;
+  margin-left: 0.25rem; }
+
+@keyframes lowBlink {
+  0% {
+    color: #ff0000; }
+  50% {
+    color: #ffff00; }
+  100% {
+    color: #000066; } }
+
+.battery {
+  border: none;
+  color: darkorange;
+  font-size: 0.5rem; }
+
+.battery icon.charging {
+  color: yellow; }
+
+.battery icon.discharging {
+  color: red; }
+
+.battery.low {
+  animation: lowBlink 3s infinite; }
+  .battery.low label {
+    animation: lowBlink 2s infinite; }
+  .battery.low icon {
+    animation: lowBlink 2s infinite; }
+
+.battery:hover {
+  color: blue; }
+
+.battery trough {
+  border-radius: 10rem;
+  min-width: 75px; }
+  .battery trough block {
+    min-height: 10px;
+    border: 1px solid #0f9bff;
+    border-radius: 10rem;
+    margin: 0px 0.25px; }
+    .battery trough block.empty {
+      background: linear-gradient(90deg, red, black 100%); }
+    .battery trough block.filled {
+      background: linear-gradient(90deg, black, lime 100%); }
+
+.tray {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #0f9bff;
+  border-radius: 2rem;
+  padding: 0.25rem; }
+  .tray > * {
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-color: transparent;
+    font-weight: bold; }
+  .tray button image,
+  .tray button icon {
+    color: darkorange;
+    font-size: 1.5rem;
+    border-radius: 2rem; }
+  .tray button:hover {
+    background-color: #1e1e2e;
+    border-radius: 2rem;
+    border: 2px solid #0f9bff; }
+
+menu > menuitem {
+  background: black;
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  color: darkorange;
+  margin: 0.5px;
+  padding: 5px; }
+  menu > menuitem:hover {
+    color: blue;
+    border-right: 2px solid #0f9bff;
+    border-left: 2px solid #0f9bff;
+    border-bottom: none;
+    font-weight: bolder;
+    border-color: red; }
+    menu > menuitem:hover icon,
+    menu > menuitem:hover image {
+      color: red; }
+  menu > menuitem icon,
+  menu > menuitem image {
+    color: darkorange; }
+  menu > menuitem:disabled {
+    color: gray;
+    background: rgba(39, 38, 38, 0.5);
+    border: none; }
+
+.audio-mixer {
+  color: darkorange; }
+  .audio-mixer.header {
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff;
+    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0rem; }
+  .audio-mixer.settings-button {
+    color: darkorange; }
+  .audio-mixer.container {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: calc($radius * 1.25);
+    border: 2px solid #0f9bff;
+    padding: 1rem; }
+
+.muted {
+  color: red; }
+  .muted icon {
+    color: red; }
+
+.volume-indicator:hover {
+  color: blue; }
+
+.volumemixer .menu {
+  all: unset; }
+  .volumemixer .menu.app-mixer .title {
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0.25rem 0.25rem 1rem black;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 0.25rem;
+    border-radius: 3rem;
+    padding: .25rem 0.75rem;
+    color: #0f9bff; }
+  .volumemixer .menu.app-mixer .icon {
+    margin-right: 0.5rem;
+    margin-top: 0.25rem; }
+  .volumemixer .menu.sink-selector {
+    color: darkorange; }
+    .volumemixer .menu.sink-selector .title {
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0.25rem 0.25rem 1rem black;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-top: 0.25rem;
+      border-radius: 3rem;
+      padding: .25rem 0.75rem;
+      color: #0f9bff; }
+    .volumemixer .menu.sink-selector .icon {
+      margin-right: 0.5rem;
+      margin-top: 0.25rem;
+      color: #0f9bff; }
+
+.mixeritem {
+  color: darkorange;
+  margin-right: 0.65rem; }
+  .mixeritemicon {
+    color: darkorange;
+    margin-right: 0.25rem;
+    margin-top: 0.25rem; }
+  .mixeritemlabel {
+    color: darkorange;
+    margin-top: 0.25rem; }
+  .mixeritem:last-child {
+    margin-bottom: 0.5rem; }
+
+.sinkitembox {
+  margin-top: 0.25rem; }
+
+.sinkitemicon {
+  margin-right: 0.25rem;
+  color: darkorange; }
+
+.sinkitemlabel {
+  margin-top: 0.25rem;
+  color: darkorange; }
+
+.sinkitem:last-child {
+  margin-bottom: 0.5rem; }
+
+.hyprworkspaces {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  margin-left: 0.5rem;
+  padding: 0rem 0.5rem; }
+  .hyprworkspaces .urgent {
+    color: red; }
+    .hyprworkspaces .urgent:hover icon {
+      color: blue; }
+    .hyprworkspaces .urgent:hover label {
+      color: blue; }
+  .hyprworkspaces .occupied {
+    color: #0f9bff; }
+    .hyprworkspaces .occupied:hover icon {
+      color: blue; }
+    .hyprworkspaces .occupied:hover label {
+      color: blue; }
+  .hyprworkspaces .focused {
+    all: unset;
+    background-image: radial-gradient(circle at center, black, darkorange 1.5rem);
+    border: 1px solid #0f9bff;
+    border-radius: 2rem;
+    padding: 0.2rem;
+    color: #9bff0f; }
+    .hyprworkspaces .focused:hover icon {
+      color: blue; }
+    .hyprworkspaces .focused:hover label {
+      color: blue; }
+  .hyprworkspaces button {
+    transition: all 2s cubic-bezier(0.5, 2, 0, 1);
+    color: darkorange; }
+    .hyprworkspaces button icon {
+      font-size: 0.8rem; }
+    .hyprworkspaces button label {
+      font-size: 0.9rem; }
+    .hyprworkspaces button:first-child {
+      margin-right: 0.25rem; }
+    .hyprworkspaces button:nth-child(1n+0) {
+      margin: 0rem 0.25rem; }
+    .hyprworkspaces button:last-child {
+      margin-left: 0.25rem; }
+    .hyprworkspaces button:hover icon {
+      animation: spin 1s linear infinite;
+      color: blue; }
+    .hyprworkspaces button:hover label {
+      color: blue; }
+
+.riverworkspaces {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem; }
+  .riverworkspaces .urgent {
+    color: red; }
+    .riverworkspaces .urgent:hover icon {
+      color: blue; }
+    .riverworkspaces .urgent:hover label {
+      color: blue; }
+  .riverworkspaces .occupied {
+    color: #0f9bff; }
+    .riverworkspaces .occupied:hover icon {
+      color: blue; }
+    .riverworkspaces .occupied:hover label {
+      color: blue; }
+  .riverworkspaces .focused {
+    all: unset;
+    border-bottom: 1px solid #0f9bff;
+    border-radius: 2rem;
+    padding: 0rem 0.2rem;
+    color: #9bff0f; }
+    .riverworkspaces .focused:hover icon {
+      color: blue; }
+    .riverworkspaces .focused:hover label {
+      color: blue; }
+  .riverworkspaces button {
+    color: darkorange; }
+    .riverworkspaces button icon {
+      font-size: 0.8rem; }
+    .riverworkspaces button label {
+      font-size: 0.9rem; }
+    .riverworkspaces button:first-child {
+      margin-right: 0.25rem; }
+    .riverworkspaces button:nth-child(1n+0) {
+      margin: 0rem 0.25rem; }
+    .riverworkspaces button:last-child {
+      margin-left: 0.25rem; }
+    .riverworkspaces button:hover icon {
+      animation: spin 1s linear infinite;
+      color: blue; }
+    .riverworkspaces button:hover label {
+      color: blue; }
+
+.sessioncontrols.window {
+  all: unset;
+  background: rgba(0, 0, 0, 0.5); }
+  .sessioncontrols.window.container {
+    color: #0f9bff;
+    font-size: 2rem;
+    font-weight: bold;
+    min-width: 5rem; }
+  .sessioncontrols.window.box {
+    background: rgba(0, 0, 0, 0.5);
+    border-top: 2px solid #0f9bff;
+    border-bottom: 2px solid #0f9bff;
+    border-radius: calc($radius * 2);
+    border-width: calc($border-width / 2);
+    padding: 2rem; }
+  .sessioncontrols.window button {
+    border-radius: 5rem;
+    min-width: 10rem;
+    min-height: 10rem;
+    border-left: 0.5rem solid #0f9bff;
+    border-right: 0.5rem solid #0f9bff;
+    background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, blue 15%, rgba(0, 0, 0, 0) 50%, blue 85%, rgba(0, 0, 255, 0.5) 100%);
+    padding: 0.5rem;
+    margin: 0rem 2rem; }
+    .sessioncontrols.window button:first-child icon, .sessioncontrols.window button:nth-child(2) icon, .sessioncontrols.window button:nth-child(3) icon, .sessioncontrols.window button:last-child icon {
+      min-width: 2em;
+      min-height: 2em;
+      font-size: 3rem; }
+    .sessioncontrols.window button label,
+    .sessioncontrols.window button icon {
+      color: darkorange;
+      font-size: 2rem; }
+    .sessioncontrols.window button label {
+      font-size: 1.75rem; }
+    .sessioncontrols.window button:hover icon, .sessioncontrols.window button:focus icon, .sessioncontrols.window button:active icon {
+      animation: spin 1s infinite; }
+    .sessioncontrols.window button:hover {
+      border-left: 0.5rem dashed red;
+      border-right: 0.5rem dashed red;
+      background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, red 15%, rgba(0, 0, 0, 0) 50%, red 85%, rgba(255, 0, 0, 0.5) 100%); }
+      .sessioncontrols.window button:hover label {
+        color: blue; }
+    .sessioncontrols.window button:focus, .sessioncontrols.window button:active {
+      border-left: 0.5rem dashed yellow;
+      border-right: 0.5rem dashed yellow;
+      background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, yellow 15%, rgba(0, 0, 0, 0) 50%, yellow 85%, rgba(255, 255, 0, 0.5) 100%); }
+    .sessioncontrols.window button:focus label, .sessioncontrols.window button:active label {
+      color: blue; }
+
+.bluetooth.devicelist-header {
+  color: darkorange;
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  padding: 0.25rem 1rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+  .bluetooth.devicelist-header.controls {
+    border: unset;
+    box-shadow: unset;
+    padding: unset; }
+    .bluetooth.devicelist-header.controls button.power-on {
+      color: #9bff0f; }
+    .bluetooth.devicelist-header.controls button.power-off {
+      color: red; }
+    .bluetooth.devicelist-header.controls button:hover label {
+      color: blue; }
+    .bluetooth.devicelist-header.controls button:hover icon {
+      color: blue; }
+  .bluetooth.devicelist-header .refreshing {
+    color: #9bff0f; }
+    .bluetooth.devicelist-header .refreshing icon {
+      animation: spin 1s infinite linear; }
+
+.bluetooth.devicelist-inner {
+  color: darkorange;
+  padding: 0.25rem; }
+  .bluetooth.devicelist-inner.controls {
+    all: unset;
+    background: transparent;
+    border-radius: 2rem;
+    border-left: 2px solid #0f9bff;
+    padding: 0rem 0.5rem;
+    box-shadow: -0.75rem 0rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+    .bluetooth.devicelist-inner.controls icon {
+      font-size: 1.25rem; }
+    .bluetooth.devicelist-inner.controls button {
+      all: unset; }
+      .bluetooth.devicelist-inner.controls button:hover label {
+        color: blue; }
+      .bluetooth.devicelist-inner.controls button:hover icon {
+        color: blue; }
+  .bluetooth.devicelist-inner.items {
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff; }
+    .bluetooth.devicelist-inner.items button label {
+      color: darkorange; }
+    .bluetooth.devicelist-inner.items button icon {
+      color: darkorange; }
+    .bluetooth.devicelist-inner.items button:hover label {
+      color: blue; }
+    .bluetooth.devicelist-inner.items button:hover icon {
+      color: blue; }
+    .bluetooth.devicelist-inner.items.itemicon {
+      color: #9bff0f; }
+    .bluetooth.devicelist-inner.items.connected {
+      border-color: #9bff0f; }
+      .bluetooth.devicelist-inner.items.connected label {
+        color: #9bff0f; }
+
+.bluetooth.barbutton:hover {
+  color: blue; }
+
+.bluetooth.barbutton-label {
+  color: #0f9bff; }
+
+.network.barbutton {
+  color: darkorange; }
+  .network.barbutton:hover {
+    color: blue; }
+
+.network .ethernet.container {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  color: darkorange;
+  padding: 0.5rem 1rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8); }
+
+.network .ethernet.dim {
+  opacity: 0.7; }
+
+.network .wifi.container {
+  color: darkorange;
+  padding: 0.5rem 1rem; }
+
+.network .wifi entry {
+  box-shadow: inset 0px 0px 7px rgba(15, 155, 255, 0.8);
+  border-radius: 2rem;
+  border: 1px solid #0f9bff;
+  padding: 0.1rem 0.75rem; }
+  .network .wifi entry selection {
+    color: blue;
+    background: rgba(255, 140, 0, 0.7); }
+
+.network .wifi.header {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  color: darkorange;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+  padding: 0.25rem 1rem; }
+  .network .wifi.header button.enabled {
+    color: #9bff0f; }
+  .network .wifi.header button.disabled {
+    color: grey; }
+  .network .wifi.header button:hover {
+    color: blue; }
+
+.network .wifi.connected {
+  background: transparent;
+  border-bottom: 2px solid #9bff0f;
+  border-radius: 2rem;
+  padding: 0.25rem 0.5rem; }
+  .network .wifi.connected label {
+    color: #9bff0f; }
+  .network .wifi.connected.controls {
+    all: unset;
+    background: transparent;
+    border-radius: 2rem;
+    border-left: 2px solid #0f9bff;
+    padding: 0rem 0.5rem;
+    box-shadow: -0.75rem 0rem 0.35rem -0.25rem rgba(15, 155, 255, 0.8); }
+    .network .wifi.connected.controls icon {
+      font-size: 1rem; }
+    .network .wifi.connected.controls button {
+      all: unset; }
+      .network .wifi.connected.controls button:hover icon {
+        color: red; }
+
+.corner {
+  background: linear-gradient(0deg, black 0%, #0f9bff 54%, black 100%);
+  border-radius: 1rem;
+  margin: 3rem 10rem; }
+
+.angleRight {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff; }
+
+.angleLeft {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff; }
+
+.angleLarge {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+  border-width: calc($border-width / 2); }
+
+.spacer {
+  min-width: 10px; }
+
+.Slider {
+  min-width: 15rem; }
+  .Slider trough {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, lime 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 20rem;
+    min-height: 12px; }
+  .Slider highlight {
+    background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, cyan 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
+    border-radius: 20rem;
+    min-width: 16px; }
+  .Slider slider {
+    min-height: 15px;
+    min-width: 15px;
+    border-radius: 20px;
+    background-color: blue;
+    border: none;
+    box-shadow: 0px 0px 4px white; }
+
+.stackSidebar,
+.stackSwitcher {
+  color: darkorange; }
+  .stackSidebar .needsAttention,
+  .stackSwitcher .needsAttention {
+    border-radius: 2rem;
+    border-bottom: 2px solid #0f9bff;
+    border-color: red; }
+  .stackSidebar button,
+  .stackSwitcher button {
+    border-radius: 2rem;
+    padding: 0rem 0.5rem; }
+    .stackSidebar button:checked,
+    .stackSwitcher button:checked {
+      border-radius: 2rem;
+      border-bottom: 2px solid #0f9bff; }
+    .stackSidebar button:hover,
+    .stackSwitcher button:hover {
+      box-shadow: inset 0px -2px 6px #0f9bff; }
+
+.stackSidebar {
+  background-color: red;
+  min-height: 10rem;
+  min-width: 2rem; }
+
+spinner {
+  color: #9bff0f;
+  animation: spin 1s linear infinite; }
+
+@keyframes lowBlink {
+  0% {
+    color: #ff0000; }
+  50% {
+    color: #ffff00; }
+  100% {
+    color: #000066; } }
+
+.BarBTN {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  -gtk-icon-style: symbolic; }
+  .BarBTN icon {
+    font-size: 1.15rem; }
+  .BarBTN:hover {
+    color: blue; }
+    .BarBTN:hover icon {
+      animation: spin 1s infinite; }
+
+.BarBTN2 {
+  font-size: 1.4rem;
+  -gtk-icon-style: symbolic; }
+  .BarBTN2:hover {
+    color: blue;
+    animation: spin 1s infinite; }
+
+tooltip * {
+  all: unset;
+  background-color: transparent;
+  border: none; }
+
+tooltip > * > * {
+  background: black;
+  border-radius: 2rem;
+  border: calc($border-width / 10) solid rgba(0, 0, 0, 0);
+  color: darkorange;
+  padding: 0.75rem;
+  margin: 4px;
+  box-shadow: 0 0 5px 0 #0f9bff; }

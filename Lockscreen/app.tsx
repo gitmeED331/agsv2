@@ -93,12 +93,7 @@ function loginGrid() {
         />
     );
 
-    const grid = new Grid({
-        className: "logingrid",
-        halign: Gtk.Align.CENTER, valign: Gtk.Align.CENTER,
-        hexpand: true, vexpand: true, rowSpacing: 15,
-        visible: true,
-    });
+    const grid = <Grid className={"logingrid"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true} rowSpacing={15} visible={true} />
 
     grid.attach(currentUser, 0, 0, 1, 1);
     // if (prompt.get().length > 0) {
@@ -159,10 +154,13 @@ function Lockscreen({ monitor }: { monitor: number }) {
     // const fixedLoginGrid = new Fixed({
     //     hexpand: true, vexpand: true, visible: true,
     //     widthRequest: 250, heightRequest: 500,
-    //     child: loginGrid(),
     // })
 
-    // fixedLoginGrid.move(loginGrid(), 250, 500)
+    const tsxFixed = (<Fixed hexpand={true} vexpand={true} visible={true} widthRequest={250} heightRequest={500} />)
+    tsxFixed.put(loginGrid(), 250, 400)
+
+    // fixedLoginGrid.put(loginGrid(), 250, 400)
+
 
     return (
         <window
@@ -185,8 +183,8 @@ function Lockscreen({ monitor }: { monitor: number }) {
                 hexpand={true} vexpand={true}
             >
                 {overlayBox}
-                {/* {fixedLoginGrid} */}
-                {loginGrid()}
+                {tsxFixed}
+                {/* {loginGrid()} */}
             </overlay>
         </window>
     );

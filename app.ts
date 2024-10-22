@@ -1,32 +1,34 @@
 #!/usr/bin/gjs -m
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { GLib, execAsync, monitorFile } from "astal";
-
-// import DirectoryMonitorService from "./modules/lib/DirectoryMonitorService";
-
-// const Icons = `${GLib.get_user_data_dir()}/icons/Astal`
-// const STYLEDIR = `${GLib.get_user_config_dir()}/ags/style`
-
-// const css = `${STYLEDIR}/style.css`
-// const scss = `${STYLEDIR}/main.scss`
-
-// function applyScss() {
-//   const compileScss = () => {
-//     execAsync(`sass ${scss} ${css}`);
-//     console.log("Scss compiled");
-//   };
-
-//   const resetAndApplyCss = () => {
-//     App.reset_css();
-//     console.log("Reset");
-//     App.apply_css(css);
-//     console.log("Compiled css applied");
-//   };
-
-//   monitorFile(`${STYLEDIR}`, resetAndApplyCss);
-// }
-
+import { GLib, Gio, execAsync, monitorFile } from "astal";
 import style from "./style/main.scss";
+
+
+
+async function monitorStyle() {
+	const Globals = `${SRC}/style/globals`;
+	const Components = `${SRC}/style/components`;
+	const scss = `${SRC}/style/main.scss`;
+	const css = `${SRC}/style/style.css`;
+
+	monitorFile(Globals, () => transpileAndApply());
+	monitorFile(Components, () => transpileAndApply());
+
+	async function transpileAndApply() {
+		try {
+			await execAsync(`sass ${scss} ${css}`);
+			App.apply_css(css, true);
+			print("CSS applied successfully!");
+		} catch (error) {
+			print("Error transpiling SCSS:", error);
+		}
+	}
+
+	return await transpileAndApply();
+}
+
+monitorStyle()
+
 import {
 	Bar,
 	Dashboard,
