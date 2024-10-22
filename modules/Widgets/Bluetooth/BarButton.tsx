@@ -56,11 +56,13 @@ function BluetoothButton() {
       valign={Gtk.Align.CENTER}
       onClick={(_, event) => {
         if (event.button === Gdk.BUTTON_PRIMARY) {
+          const dashTab = "bluetooth"
           const win = App.get_window("dashboard");
+          const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
+          const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
           if (win) {
-            if (win.visible === false && dashboardRightStack.get_visible_child_name() !== "bluetooth") { dashboardRightStack.set_visible_child_name("bluetooth"); win.visible = !win.visible; }
-            else if (win.visible === true && dashboardRightStack.get_visible_child_name() !== "bluetooth") { dashboardRightStack.set_visible_child_name("bluetooth") }
-            else if (win.visible === true && dashboardRightStack.get_visible_child_name() === "bluetooth") { win.visible = !win.visible; }
+            if (win.visible === true && !dashboardTab) { setDashboardTab }
+            else if (win.visible === true && dashboardTab) { win.visible = !win.visible; }
             else { win.visible = !win.visible }
           }
         }

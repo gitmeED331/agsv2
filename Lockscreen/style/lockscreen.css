@@ -1,0 +1,511 @@
+* {
+  all: unset;
+  font-family: "Liberation Mono";
+  font-size: 10pt;
+}
+
+.player {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0px;
+  border: 2px solid #0f9bff;
+  border-radius: 3rem;
+  min-width: 400px;
+  min-height: 100px;
+  padding-left: 2.5rem;
+  padding-right: 0.25rem;
+  padding-top: 0.5rem;
+  box-shadow: inset -0.75rem 0rem 1rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5), inset 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0.5);
+}
+.player .mediainfo {
+  padding-left: 0rem;
+  margin-left: 6rem;
+  margin-right: 2rem;
+}
+.player .playercontrols {
+  margin-top: -1rem;
+  margin-bottom: 0.75rem;
+}
+.player .positioncontainer {
+  margin-left: 0.5rem;
+}
+.player .trackposition, .player .tracklength {
+  color: rgb(255, 140, 0);
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+.player .trackimg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 3rem 0rem 0rem 3rem;
+  margin-right: 0.25rem;
+}
+.player .trackinfo {
+  min-width: 250px;
+}
+.player .tracktitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: rgb(255, 140, 0);
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+.player .artist {
+  font-size: 1.1rem;
+  color: rgb(15, 155, 255);
+  text-shadow: 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+.player .player button {
+  color: #cdd6f4;
+  border: 2px solid rgba(0, 0, 0, 0);
+}
+.player .player button icon {
+  font-size: 2rem;
+  margin: 0rem 0.25rem;
+}
+.player .player button.previous {
+  -gtk-icon-shadow: -0.2rem 0.2rem rgba(0, 0, 0, 0.5);
+}
+.player .player button.previous:hover {
+  color: red;
+  -gtk-icon-shadow: -0.2rem 0.2rem rgb(0, 0, 255);
+}
+.player .player button.play-pause {
+  margin: 0rem 0.25rem;
+  -gtk-icon-shadow: 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+}
+.player .player button.play-pause:hover {
+  color: yellow;
+  -gtk-icon-shadow: 0.1rem 0.3rem rgb(255, 0, 0);
+}
+.player .player button.next {
+  -gtk-icon-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 0.5);
+}
+.player .player button.next:hover {
+  color: rgb(0, 0, 255);
+  -gtk-icon-shadow: 0.2rem 0.2rem yellow;
+}
+
+@keyframes lowBlink {
+  0% {
+    color: #ff0000;
+  }
+  50% {
+    color: #ffff00;
+  }
+  100% {
+    color: #000066;
+  }
+}
+.battery {
+  border: none;
+  color: rgb(255, 140, 0);
+  font-size: 0.5rem;
+}
+.battery icon.charging {
+  color: yellow;
+}
+.battery icon.discharging {
+  color: red;
+}
+.battery.low {
+  animation: lowBlink 3s infinite;
+}
+.battery.low label {
+  animation: lowBlink 2s infinite;
+}
+.battery.low icon {
+  animation: lowBlink 2s infinite;
+}
+.battery:hover {
+  color: rgb(0, 0, 255);
+}
+.battery trough {
+  border-radius: 10rem;
+  min-width: 75px;
+}
+.battery trough block {
+  min-height: 10px;
+  border: 1px solid rgb(15, 155, 255);
+  border-radius: 10rem;
+  margin: 0px 0.25px;
+}
+.battery trough block.empty {
+  background: linear-gradient(90deg, red, black 100%);
+}
+.battery trough block.filled {
+  background: linear-gradient(90deg, black, lime 100%);
+}
+
+.bluetooth.devicelist-header {
+  color: rgb(255, 140, 0);
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  padding: 0.25rem 1rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.bluetooth.devicelist-header.controls {
+  border: unset;
+  box-shadow: unset;
+  padding: unset;
+}
+.bluetooth.devicelist-header.controls button.power-on {
+  color: rgb(155, 255, 15);
+}
+.bluetooth.devicelist-header.controls button.power-off {
+  color: rgb(255, 0, 0);
+}
+.bluetooth.devicelist-header.controls button:hover label {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-header.controls button:hover icon {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-header .refreshing {
+  color: rgb(155, 255, 15);
+}
+.bluetooth.devicelist-header .refreshing icon {
+  animation: spin 1s infinite linear;
+}
+.bluetooth.devicelist-inner {
+  color: rgb(255, 140, 0);
+  padding: 0.25rem;
+}
+.bluetooth.devicelist-inner.controls {
+  all: unset;
+  background: transparent;
+  border-radius: 2rem;
+  border-left: 2px solid #0f9bff;
+  padding: 0rem 0.5rem;
+  box-shadow: -0.75rem 0rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.bluetooth.devicelist-inner.controls icon {
+  font-size: 1.25rem;
+}
+.bluetooth.devicelist-inner.controls button {
+  all: unset;
+}
+.bluetooth.devicelist-inner.controls button:hover label {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-inner.controls button:hover icon {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-inner.items {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+}
+.bluetooth.devicelist-inner.items button label {
+  color: rgb(255, 140, 0);
+}
+.bluetooth.devicelist-inner.items button icon {
+  color: rgb(255, 140, 0);
+}
+.bluetooth.devicelist-inner.items button:hover label {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-inner.items button:hover icon {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.devicelist-inner.items.itemicon {
+  color: rgb(155, 255, 15);
+}
+.bluetooth.devicelist-inner.items.connected {
+  border-color: rgb(155, 255, 15);
+}
+.bluetooth.devicelist-inner.items.connected label {
+  color: rgb(155, 255, 15);
+}
+.bluetooth.barbutton:hover {
+  color: rgb(0, 0, 255);
+}
+.bluetooth.barbutton-label {
+  color: rgb(15, 155, 255);
+}
+
+.network.barbutton {
+  color: rgb(255, 140, 0);
+}
+.network.barbutton:hover {
+  color: rgb(0, 0, 255);
+}
+.network .ethernet.container {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  color: rgb(255, 140, 0);
+  padding: 0.5rem 1rem;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.network .ethernet.dim {
+  opacity: 0.7;
+}
+
+.network .wifi.container {
+  color: rgb(255, 140, 0);
+  padding: 0.5rem 1rem;
+}
+.network .wifi entry {
+  box-shadow: inset 0px 0px 7px rgba(15, 155, 255, 0.8);
+  border-radius: 2rem;
+  border: 1px solid rgb(15, 155, 255);
+  padding: 0.1rem 0.75rem;
+}
+.network .wifi entry selection {
+  color: rgb(0, 0, 255);
+  background: rgba(255, 140, 0, 0.7);
+}
+.network .wifi.header {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  color: rgb(255, 140, 0);
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+  padding: 0.25rem 1rem;
+}
+.network .wifi.header button.enabled {
+  color: rgb(155, 255, 15);
+}
+.network .wifi.header button.disabled {
+  color: grey;
+}
+.network .wifi.header button:hover {
+  color: rgb(0, 0, 255);
+}
+.network .wifi.connected {
+  background: transparent;
+  border-bottom: 2px solid rgb(155, 255, 15);
+  border-radius: 2rem;
+  padding: 0.25rem 0.5rem;
+}
+.network .wifi.connected label {
+  color: rgb(155, 255, 15);
+}
+.network .wifi.connected.controls {
+  all: unset;
+  background: transparent;
+  border-radius: 2rem;
+  border-left: 2px solid #0f9bff;
+  padding: 0rem 0.5rem;
+  box-shadow: -0.75rem 0rem 0.35rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+.network .wifi.connected.controls icon {
+  font-size: 1rem;
+}
+.network .wifi.connected.controls button {
+  all: unset;
+}
+.network .wifi.connected.controls button:hover icon {
+  color: rgb(255, 0, 0);
+}
+
+.lockscreen {
+  background-image: url("assets/overviewBG.png");
+  background-color: red;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.lockscreen .topright {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 3rem 0rem 0rem 3rem;
+  border-bottom: 2px solid #0f9bff;
+  border-left: 2px solid #0f9bff;
+  color: rgb(255, 140, 0);
+}
+.lockscreen .controls {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0rem 3rem 3rem 0rem;
+  border-bottom: 2px solid #0f9bff;
+  border-right: 2px solid #0f9bff;
+  color: rgb(255, 140, 0);
+}
+.lockscreen .logingrid {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2rem;
+  border: 2px solid #0f9bff;
+}
+.lockscreen .logingrid .password {
+  background: rgba(0, 0, 0, 0.5);
+}
+.lockscreen .mastergrd {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2rem;
+  border: 2px solid #0f9bff;
+}
+
+.clock {
+  background: rgba(0, 0, 0, 0.5);
+  color: rgb(255, 140, 0);
+  border-top: 2px solid #0f9bff;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0rem 0.5rem;
+}
+.clock label {
+  font-size: 1rem;
+}
+.clock icon {
+  color: rgb(0, 0, 255);
+}
+.clock:hover {
+  color: rgb(0, 0, 255);
+}
+.clock:hover icon {
+  color: rgb(255, 140, 0);
+  animation: spin 1s linear infinite;
+}
+
+.muted {
+  color: red;
+}
+.muted icon {
+  color: red;
+}
+
+.volumebtn {
+  color: rgb(255, 140, 0);
+}
+.volumebtn icon,
+.volumebtn image {
+  font-size: 1.15rem;
+}
+.volumebtn button:hover {
+  color: rgb(0, 0, 255);
+}
+
+.corner {
+  background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(15, 155, 255) 54%, rgb(0, 0, 0) 100%);
+  border-radius: 1rem;
+  margin: 3rem 10rem;
+}
+
+.angleRight {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+}
+.angleLeft {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+}
+
+.angleLarge {
+  color: #0f9bff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0f9bff;
+  border-width: 0.5rem;
+}
+
+.spacer {
+  min-width: 10px;
+}
+
+.Slider {
+  min-width: 15rem;
+}
+.Slider trough {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, rgb(0, 255, 0) 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
+  border-radius: 20rem;
+  min-height: 12px;
+}
+.Slider highlight {
+  background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgb(0, 255, 255) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
+  border-radius: 20rem;
+  min-width: 16px;
+}
+.Slider slider {
+  min-height: 15px;
+  min-width: 15px;
+  border-radius: 20px;
+  background-color: blue;
+  border: none;
+  box-shadow: 0px 0px 4px white;
+}
+
+.stackSidebar,
+.stackSwitcher {
+  color: rgb(255, 140, 0);
+}
+.stackSidebar .needsAttention,
+.stackSwitcher .needsAttention {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+  border-color: red;
+}
+.stackSidebar button,
+.stackSwitcher button {
+  border-radius: 2rem;
+  padding: 0rem 0.5rem;
+}
+.stackSidebar button:checked,
+.stackSwitcher button:checked {
+  border-radius: 2rem;
+  border-bottom: 2px solid #0f9bff;
+}
+.stackSidebar button:hover,
+.stackSwitcher button:hover {
+  box-shadow: inset 0px -2px 6px #0f9bff;
+}
+
+.stackSidebar {
+  background-color: rgb(255, 0, 0);
+  min-height: 10rem;
+  min-width: 2rem;
+}
+
+spinner {
+  color: rgb(155, 255, 15);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes lowBlink {
+  0% {
+    color: #ff0000;
+  }
+  50% {
+    color: #ffff00;
+  }
+  100% {
+    color: #000066;
+  }
+}
+.BarBTN {
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #0f9bff;
+  border-radius: 1rem;
+  -gtk-icon-style: symbolic;
+}
+.BarBTN icon {
+  font-size: 1.15rem;
+}
+.BarBTN:hover {
+  color: rgb(0, 0, 255);
+}
+.BarBTN:hover icon {
+  animation: spin 1s infinite;
+}
+
+.BarBTN2 {
+  font-size: 1.4rem;
+  -gtk-icon-style: symbolic;
+}
+.BarBTN2:hover {
+  color: rgb(0, 0, 255);
+  animation: spin 1s infinite;
+}
+
+tooltip * {
+  all: unset;
+  background-color: transparent;
+  border: none;
+}
+tooltip > * > * {
+  background: black;
+  border-radius: 2rem;
+  border: 0.1rem solid rgba(0, 0, 0, 0);
+  color: rgb(255, 140, 0);
+  padding: 0.75rem;
+  margin: 4px;
+  box-shadow: 0 0 5px 0 rgb(15, 155, 255);
+}
+
+/*# sourceMappingURL=lockscreen.css.map */

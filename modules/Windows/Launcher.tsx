@@ -420,7 +420,9 @@ App.connect("window-toggled", (_, win) => {
 	if (win.visible === false && win.name === "launcher") {
 		query = ""
 		entry.set_text("")
+		entry.grab_focus()
 		theStack.set_visible_child_name("All Apps")
+
 	}
 })
 

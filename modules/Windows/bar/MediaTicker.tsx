@@ -62,36 +62,6 @@ const NoMedia = (
     label={"No Media"}
   />
 );
-function TickerBox() {
-  return (
-    <box
-      className={"ticker box"}
-      visible={true}
-      vertical={false}
-      hexpand={true}
-      vexpand={false}
-      valign={Gtk.Align.CENTER}
-    >
-      {bind(player, "playbackStatus").as((status) => {
-        switch (status) {
-          case Mpris.PlaybackStatus.STOPPED:
-            return NoMedia;
-          case Mpris.PlaybackStatus.PLAYING:
-          case Mpris.PlaybackStatus.PAUSED:
-            return (
-              <box vertical={false} visible={true} spacing={5}>
-                <TickerTrack />
-                <TickerIcon />
-                <TickerArtist />
-              </box>
-            );
-          default:
-            return NoMedia;
-        }
-      })}
-    </box>
-  );
-}
 
 function MediaTickerButton() {
   return (

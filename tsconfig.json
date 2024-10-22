@@ -1,9 +1,13 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        // "experimentalDecorators": true,
+        "experimentalDecorators": true,
         "strict": true,
         "target": "ES2023",
+        "lib": [
+            "ES2023",
+            "DOM"
+        ],
         "moduleResolution": "Bundler",
         // "checkJs": true,
         // "allowJs": true,

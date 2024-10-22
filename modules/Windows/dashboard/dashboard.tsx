@@ -2,7 +2,8 @@ import { Astal, Gtk, App, Gdk, astalify, ConstructProps } from "astal/gtk3";
 import { GObject } from "astal"
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
-import Grid from "../../Astalified/Grid";
+import { Grid } from "../../Astalified/index";
+import ClickToClose from "../../lib/ClickToClose";
 
 // --- imported widgets ---
 import { Player, Tray, } from "../../Widgets/index";
@@ -10,24 +11,6 @@ import LeftSide, { dashboardLeftStack } from "./LeftSide";
 import RightSide, { dashboardRightStack } from "./RightSide";
 
 const player = Mpris.Player.new("Deezer");
-
-function eventHandler(eh: number, width: number, height: number) {
-	const eventbox = <eventbox
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
-		onClick={(_, event) => {
-			const win = App.get_window("dashboard");
-			if (event.button === Gdk.BUTTON_PRIMARY) {
-				if (win && win.visible === true) {
-					win.visible = false;
-				}
-			}
-		}}
-		widthRequest={winwidth(width)}
-		heightRequest={winheight(height)}
-	/>;
-	return eventbox;
-}
 
 function Dashboard({ monitor }: { monitor: number }) {
 	const content = new Grid({
@@ -70,12 +53,12 @@ function Dashboard({ monitor }: { monitor: number }) {
 		content.attach(thePlayer, 1, 0, 3, 1);
 	} else { content.remove_row(0) }
 
-	content.attach(eventHandler(1, .25, .1), 0, 0, 1, 2) // left side
+	content.attach(ClickToClose(1, .25, .1, "dashboard"), 0, 0, 1, 2) // left side
 	content.attach(LeftSide(), 1, 1, 1, 1)
 	content.attach(Tray(), 2, 1, 1, 1)
 	content.attach(RightSide(), 3, 1, 1, 1)
-	content.attach(eventHandler(2, .25, .1), 4, 0, 1, 2) // right side
-	content.attach(eventHandler(3, 1, .5), 0, 2, 5, 1) // bottom
+	content.attach(ClickToClose(2, .25, .1, "dashboard"), 4, 0, 1, 2) // right side
+	content.attach(ClickToClose(3, 1, .5, "dashboard"), 0, 2, 5, 1) // bottom
 
 	return (
 		<window
@@ -94,7 +77,9 @@ function Dashboard({ monitor }: { monitor: number }) {
 				}
 			}}
 		>
-			{content}
+			<box>
+				{content}
+			</box>
 		</window>
 	);
 }

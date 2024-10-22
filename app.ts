@@ -36,7 +36,7 @@ import {
 	sessioncontrol,
 	Launcher,
 	cliphist,
-	WallpaperChooser
+	wallpapers
 } from "./modules/Windows/index";
 
 App.start({
@@ -50,6 +50,6 @@ App.start({
 		NotificationPopups({ monitor: 0 });
 		// Overview();
 		sessioncontrol({ monitor: 0 });
-		WallpaperChooser();
+		wallpapers();
 	},
 });

@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "jsxImportSource": "/home/demeter/.local/share/ags/gtk3",
+        "paths": {
+            "astal": [
+                "/home/demeter/.local/share/ags"
+            ],
+            "astal/*": [
+                "/home/demeter/.local/share/ags/*"
+            ]
+        },
+    }
+}

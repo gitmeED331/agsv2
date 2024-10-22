@@ -1,4 +1,6 @@
-import { execAsync, App, Astal, bind, Gtk, GObject, Gdk } from "astal"
+import {App, Gtk, Gdk} from "astal/gtk3" // or import {App, Gtk, Gdk} from "astal/gtk4"
+import { execAsync, exec, Astal, bind, GObject } from "astal"
+import { readFile, writeFile, monitorfile, writefileasync, readfileasync } from "astal/io"
 import Hyprland from "gi://AstalHyprland"
 import Battery from "gi://AstalBattery"
 import Bluetooth from "gi://AstalBluetooth"

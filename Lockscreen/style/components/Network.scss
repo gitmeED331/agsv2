@@ -1,0 +1,117 @@
+.network {
+	&.barbutton {
+		color: $font-color1;
+
+		&:hover {
+			color: $font-color5;
+		}
+
+		&.wifi {
+		}
+
+		&.wired {
+		}
+	}
+
+	&.dashboard {
+		// border-radius: $radius-rlbottom;
+		// border: $border;
+		// border-top: none;
+		// background-color: $TertiaryBG;
+	}
+}
+
+.network .ethernet {
+	&.container {
+		border-radius: $radius;
+		border-bottom: $border;
+		color: $font-color1;
+		padding: 0.5rem 1rem;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+	}
+
+	&.dim {
+		opacity: 0.7;
+	}
+}
+
+.network .wifi {
+	&.container {
+		color: $font-color1;
+		padding: 0.5rem 1rem;
+	}
+	entry {
+		box-shadow: inset 0px 0px 7px rgba(15, 155, 255, 0.8);
+		border-radius: $radius;
+		border: 1px solid $font-color2;
+		padding: 0.1rem 0.75rem;
+
+		selection {
+			color: $font-color5;
+			background: rgba(255, 140, 0, 0.7);
+		}
+	}
+	&.header {
+		border-radius: $radius;
+		border-bottom: $border;
+		color: $font-color1;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		padding: 0.25rem 1rem;
+
+		button {
+			&.enabled {
+				color: $font-color3;
+			}
+
+			&.disabled {
+				color: grey;
+			}
+
+			// &.scanning {
+			//     color: $font-color4;
+
+			//     icon {
+			//         animation: spin 1s linear infinite;
+			//     }
+			// }
+
+			&:hover {
+				color: $font-color5;
+			}
+		}
+	}
+
+	&.connected {
+		background: transparent;
+		border-bottom: 2px solid $font-color3;
+		border-radius: $radius;
+		padding: 0.25rem 0.5rem;
+
+		label {
+			color: $font-color3;
+		}
+
+		&.controls {
+			all: unset;
+			background: transparent;
+			border-radius: $radius;
+			border-left: $border;
+			padding: 0rem 0.5rem;
+			box-shadow: -0.75rem 0rem 0.35rem -0.25rem rgba(15, 155, 255, 0.8);
+
+			icon {
+				font-size: 1rem;
+			}
+
+			button {
+				all: unset;
+
+				&:hover {
+					icon {
+						color: $font-color4;
+					}
+				}
+			}
+		}
+	}
+}

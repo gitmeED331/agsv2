@@ -1,9 +1,10 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { execAsync, GLib, } from "astal";
 import Pango from "gi://Pango"
-import { Grid } from "../Astalified/index"
+import { Grid, Fixed } from "../Astalified/index"
 import { winwidth, winheight } from "../lib/screensizeadjust";
 import Icon from "../lib/icons"
+import ClickToClose from "../lib/ClickToClose";
 
 type EntryObject = {
     id: string;
@@ -150,21 +151,6 @@ function ClipHistWidget() {
 }
 
 function cliphist({ monitor }: { monitor: number }) {
-    const eventHandler = (
-        <eventbox
-            halign={Gtk.Align.FILL}
-            valign={Gtk.Align.FILL}
-            onClick={(_, event) => {
-                const win = App.get_window("cliphist");
-                if (event.button === Gdk.BUTTON_PRIMARY && win?.visible) {
-                    win.visible = false;
-                }
-            }}
-            widthRequest={winwidth(0.75)}
-            heightRequest={winheight(0.75)}
-        />
-    );
-
     const masterGrid = new Grid({
         className: "cliphist mastergrid",
         halign: Gtk.Align.FILL,
@@ -174,7 +160,7 @@ function cliphist({ monitor }: { monitor: number }) {
         visible: true,
     });
 
-    masterGrid.attach(eventHandler, 1, 1, 1, 1);
+    masterGrid.attach(ClickToClose(1, 0.75, 0.75, "cliphist"), 1, 1, 1, 1);
     masterGrid.attach(ClipHistWidget(), 2, 1, 1, 1);
 
     return <window
@@ -182,10 +168,14 @@ function cliphist({ monitor }: { monitor: number }) {
         className={"cliphist"}
         application={App}
         layer={Astal.Layer.OVERLAY}
-        exclusivity={Astal.Exclusivity.NORMAL}
-        keymode={Astal.Keymode.ON_DEMAND}
+        exclusivity={Astal.Exclusivity.EXCLUSIVE}
+        keymode={Astal.Keymode.EXCLUSIVE}
         visible={false}
-        anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT}
+        anchor={Astal.WindowAnchor.TOP
+            | Astal.WindowAnchor.BOTTOM
+            | Astal.WindowAnchor.RIGHT
+            | Astal.WindowAnchor.LEFT
+        }
         onKeyPressEvent={(_, event) => {
             const win = App.get_window("cliphist");
             if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {
@@ -200,6 +190,7 @@ function cliphist({ monitor }: { monitor: number }) {
 App.connect("window-toggled", (_, win) => {
     if (win.name === "cliphist") {
         entry.set_text("");
+        entry.grab_focus();
         repopulate();
     }
 })

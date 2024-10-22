@@ -1,3 +1,10 @@
+#!/usr/bin/gjs -m
+// import { App } from "astal/gtk3";
+
+// import lockstyle from "./style/Lockscreen.scss"
+
+// import Lockscreen from "./Lockscreen";
+
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
 import { execAsync, bind, Variable, timeout } from "astal";
 import Lock from "gi://GtkSessionLock";
@@ -9,15 +16,22 @@ import { Grid } from "../modules/Astalified/index";
 import Controls from "./Controls";
 import { BatteryButton, BluetoothButton, VolumeIndicator, NetworkButton } from "../modules/Widgets/index";
 import Player from "./MediaPlayer";
-import { winwidth, winheight } from "../modules/lib/screensizeadjust";
 import Clock from "./clock";
 
-const player = AstalMpris.Player.new("Deezer");
+import lockstyle from "./style/Lockscreen.scss"
 
+if (!Lock.is_supported()) {
+    print("Error: ext-session-lock-v1 is not supported")
+    App.quit()
+} else {
+    print("ext-session-lock-v1 is supported")
+}
+
+const player = AstalMpris.Player.new("Deezer");
+const pam = new AstalAuth.Pam();
 const prompt = Variable("");
 const inputVisible = Variable(true);
 const inputNeeded = Variable(false);
-const pam = new AstalAuth.Pam();
 const sessionLock = Lock.prepare_lock();
 
 function authMessage(msg, type) {
@@ -73,13 +87,14 @@ function loginGrid() {
                     pam.supply_secret(self.text);
                     self.text = "";
                 }
-            }}
+            }
+            }
             hexpand={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             onRealize={(self) => self.grab_focus()}
         />
     );
     const passwordPrompt = (
-        <box vertical spacing={10}>
+        <box vertical spacing={10} >
             {[promptLabel, PasswordEntry]}
         </box>
     )
@@ -123,7 +138,7 @@ function topRightGrid() {
 
     return (
         <box className={"topright"} vertical={false} hexpand={true} spacing={5}
-            halign={Gtk.Align.END} valign={Gtk.Align.START} visible={true}>
+            halign={Gtk.Align.END} valign={Gtk.Align.START} visible={true} >
             {grid}
         </box>
     )
@@ -134,7 +149,6 @@ function topRightGrid() {
 //     widthRequest: winwidth(1), heightRequest: winheight(1),
 //     halign: Gtk.Align.FILL, valign: Gtk.Align.FILL,
 //     hexpand: true, vexpand: true, visible: true,
-//     width_request: winwidth(1), height_request: winheight(1),
 // });
 
 // overlayGrid.attach(Controls(), 0, 0, 1, 1);
@@ -147,8 +161,8 @@ function topRightGrid() {
 
 function Lockscreen({ monitor }: { monitor: number }) {
     const overlayBox = (
-        <box halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true}>
-            <centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true}>
+        <box halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} >
+            <centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} >
                 {Controls()}
                 {Clock()}
                 {topRightGrid()}
@@ -159,7 +173,8 @@ function Lockscreen({ monitor }: { monitor: number }) {
 
     return (
         <window
-            name={`lockscreen-${monitor}`}
+            name={`lockscreen-${monitor}`
+            }
             className={"lockscreen"}
             anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
             // layer={Astal.Layer.TOP}
@@ -182,8 +197,7 @@ function Lockscreen({ monitor }: { monitor: number }) {
     );
 }
 
-const display = Gdk.Display.get_default();
-const windows: { window: Gtk.Window }[] = [];
+const windows: { window: Gtk.Window, monitor: any }[] = [];
 
 function createWindow(monitor) {
     const lockscreenWindow = Lockscreen({ monitor });
@@ -193,7 +207,8 @@ function createWindow(monitor) {
     };
 }
 
-App.connect("activate", () => {
+function startLock() {
+    const display = Gdk.Display.get_default();
     if (display) {
         for (let m = 0; m < display.get_n_monitors(); m++) {
             const monitor = display.get_monitor(m);
@@ -204,7 +219,11 @@ App.connect("activate", () => {
                 windows.push(w);
             }
         }
-
+        sessionLock.lock_lock()
+        windows.forEach(w => {
+            sessionLock.new_surface(w.window, w.monitor)
+            w.window.show()
+        })
         display.connect("monitor-added", (disp, monitor) => {
             const w = createWindow(monitor);
             if (w && sessionLock) {
@@ -214,9 +233,12 @@ App.connect("activate", () => {
             }
         });
 
-        sessionLock.lock_lock();
+        display.connect("monitor-removed", (disp, monitor) => {
+        });
+
     }
-});
+};
+
 
 const isAuthenticating = Variable(false);
 
@@ -242,10 +264,10 @@ pam.connect("auth-prompt-hidden", () => {
 
 pam.connect("success", () => {
     isAuthenticating.set(false);
-    // execAsync("ags -i lockscreen -q");
-    if (sessionLock) {
-        sessionLock.unlock_and_destroy();
-    }
+    execAsync("ags -i lockscreen -q");
+    // if (sessionLock) {
+    //     sessionLock.unlock_and_destroy();
+    // }
     App.quit();
 });
 
@@ -259,14 +281,20 @@ pam.connect("fail", () => {
     });
 });
 
-sessionLock.lock_lock();
-sessionLock.connect("locked", () => {
-    pam.start_authenticate();
-});
-sessionLock.connect("finished", () => {
-    sessionLock.destroy();
-    Gdk.Display.get_default()?.sync();
-    App.quit();
+// sessionLock.lock_lock();
+// sessionLock.connect("locked", () => {
+//     pam.start_authenticate();
+// });
+// sessionLock.connect("finished", () => {
+//     sessionLock.destroy();
+//     Gdk.Display.get_default()?.sync();
+//     App.quit();
+// });
+App.connect("activate", () => {
+    startLock();
 });
 
-export default Lockscreen;
+App.start({
+    instanceName: "lockscreen",
+    css: lockstyle,
+});

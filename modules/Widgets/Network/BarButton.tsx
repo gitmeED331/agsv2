@@ -17,7 +17,7 @@ const NetworkWidget = () => {
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
 			<label
 				className={"barbutton wifi label"}
-				label={"--"} // Default label, will be updated dynamically
+				label={"--"}
 			/>
 		</revealer>
 	);
@@ -27,10 +27,8 @@ const NetworkWidget = () => {
 		wifiLabel.label = wifi && wifi.ssid ? `${wifi.ssid.substring(0, 7)}` : "--";
 	};
 
-	// Initial label setup
 	updateWifiLabel();
 
-	// Watch for changes in WiFi state
 	network.connect("notify::wifi", updateWifiLabel);
 
 	const wifiIndicator = (
@@ -68,11 +66,13 @@ function NetworkButton() {
 			valign={Gtk.Align.CENTER}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
+					const dashTab = "network"
 					const win = App.get_window("dashboard");
+					const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
+					const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
 					if (win) {
-						if (win.visible === false && dashboardRightStack.get_visible_child_name() !== "network") { dashboardRightStack.set_visible_child_name("network"); win.visible = !win.visible; }
-						else if (win.visible === true && dashboardRightStack.get_visible_child_name() !== "network") { dashboardRightStack.set_visible_child_name("network") }
-						else if (win.visible === true && dashboardRightStack.get_visible_child_name() === "network") { win.visible = !win.visible; }
+						if (win.visible === true && !dashboardTab) { setDashboardTab }
+						else if (win.visible === true && dashboardTab) { win.visible = !win.visible; }
 						else { win.visible = !win.visible }
 					}
 				}

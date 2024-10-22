@@ -11,7 +11,7 @@ import NotificationPopups from "./notificationPopups";
 import sessioncontrol from "./sessioncontrol";
 // import powerprofiles from "./powerprofile";
 import Launcher from "./Launcher";
-import WallpaperChooser from "./Wallpapers";
+import wallpapers from "./Wallpapers";
 
 export {
 	Bar,
@@ -25,5 +25,5 @@ export {
 	// Overview,
 	// powerprofiles,
 	sessioncontrol,
-	WallpaperChooser
+	wallpapers
 };

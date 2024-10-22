@@ -5,7 +5,7 @@ import { dashboardRightStack } from "../dashboard/RightSide";
 
 export default function Clock() {
   const time = Variable("").poll(1000, 'date "+%H:%M:%S"');
-  const date = Variable("").poll(1000, 'date "+%a %b %d"');
+  const date = Variable("").poll(3600000, 'date "+%a %b %d"');
   return (
     <button
       className="clock"

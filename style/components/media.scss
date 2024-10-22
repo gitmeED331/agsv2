@@ -62,8 +62,7 @@
 	border-radius: $radius * 1.5;
 	min-width: 400px;
 	min-height: 100px;
-	padding-left: 2.5rem;
-	padding-right: 0.25rem;
+	padding-left: 8rem;
 	padding-top: 0.5rem;
 	box-shadow: inset -0.75rem 0rem 1rem 0rem $PrimaryBG,
 		inset 0rem 0rem 0rem 0rem $PrimaryBG,
@@ -160,7 +159,7 @@
 	border: 2px solid rgba(0, 0, 0, 0);
 
 	icon {
-		font-size: 1.5rem;
+		font-size: 2rem;
 		margin: 0rem 0.25rem;
 	}
 

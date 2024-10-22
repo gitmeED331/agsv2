@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { GLib } from "astal";
+import { GLib, bind } from "astal";
 // ----- Widgets -----
 import Clock from "./clock";
 import SysInfo from "./sysinfo";
@@ -43,7 +43,6 @@ function LeftBar() {
     </box>
   );
 }
-
 
 function CenterBar() {
   return (

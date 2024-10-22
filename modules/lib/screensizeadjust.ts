@@ -6,13 +6,19 @@ import { Gdk, Gtk } from "astal/gtk3";
  */
 
 export const winheight = (value: number) => {
-  const screenHeight = Gdk.Screen.get_default()?.get_height()!;
+  const screenHeight = Gdk.Screen.get_default()?.get_height();
+  if (screenHeight === undefined) {
+    throw new Error("No default screen available");
+  }
   const winheight = screenHeight * value;
   return winheight;
 };
 
 export const winwidth = (value: number) => {
-  const screenWidth = Gdk.Screen.get_default()?.get_width()!;
+  const screenWidth = Gdk.Screen.get_default()?.get_width();
+  if (!screenWidth) {
+    throw new Error("No default screen available");
+  }
   const winwidth = screenWidth * value;
   return winwidth;
 };

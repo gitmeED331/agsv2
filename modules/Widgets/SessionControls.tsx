@@ -8,7 +8,7 @@ const SysButton = (action: string, label: string) => {
     const command = (() => {
         switch (action) {
             case "lock":
-                return "hyprlock";
+                return `ags -c ${SRC}/Lockscreen/`;
             case "reboot":
                 return "systemctl reboot";
             case "logout":
@@ -30,19 +30,18 @@ const SysButton = (action: string, label: string) => {
             onClick={(_, event) => {
                 const win = App.get_window("sessioncontrols");
                 if (event.button === Gdk.BUTTON_PRIMARY) {
+                    // if (win && win.visible === true) {.visible = false; }
+                    App.toggle_window("sessioncontrols");
                     execAsync(command);
-                    if (win && win.visible === true) { win.visible = false; }
                 }
-            }
-            }
+            }}
             onKeyPressEvent={(_, event) => {
                 const win = App.get_window("sessioncontrols");
                 if (event.get_keyval()[1] === Gdk.KEY_Return) {
+                    App.toggle_window("sessioncontrols");
                     execAsync(command);
-                    if (win && !win.visible) { win.visible = false; }
                 }
-            }
-            }
+            }}
             canFocus={true}
             hasDefault={false}
         >

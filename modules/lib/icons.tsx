@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { GLib } from "astal";
 
 const substitutes = {
@@ -20,8 +20,8 @@ const substitutes = {
   //"filen-desktop": "filen-desktop-symbolic",
   "filen-desktop-symbolic": "filen-desktop-symbolic",
   "WebCord": "discord-symbolic",
-  "armcord-symbolic": "discord-symbolic",
-  "ArmCord": "discord-symbolic",
+  // "armcord-symbolic": "discord-symbolic",
+  // "ArmCord": "discord-symbolic",
   "deezer-enhanced-symbolic": "deezer-symbolic",
   "com.visualstudio.code.oss-symbolic": "vs-code-symbolic",
   "code-oss": "vs-code-symbolic",
@@ -223,16 +223,16 @@ App.add_icons(`${GLib.get_user_data_dir()}/icons/Astal`);
 type SubstitutesType = {
   [key: string]: string;
 };
-// export function Icons(name: string | null, fallback = Icon.missing) {
-//   if (!name) return fallback || "";
+export function Icons(name: string | null, fallback = Icon.missing) {
+  if (!name) return fallback || "";
 
-//   if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
+  if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
 
-//   const icon = (substitutes as SubstitutesType)[name] || name;
+  const icon = (substitutes as SubstitutesType)[name] || name;
 
-//   if (Astal.lookup_icon(icon)) return icon;
-//   console.log(Astal.lookup_icon(icon));
+  if (Widget.Icon.lookup_icon(icon)) return icon;
+  console.log(Widget.Icon.lookup_icon(icon));
 
-//   print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`);
-//   return fallback;
-// }
+  print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`);
+  return fallback;
+}

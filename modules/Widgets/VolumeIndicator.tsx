@@ -24,34 +24,20 @@ function VolumeIndicator() {
 			className={bind(volumeIndicatorClassName)}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
+					const dashTab = "settings"
 					const win = App.get_window("dashboard");
-					// if (win) {
-					// 	if (win.visible === false && dashboardLeftStack.get_visible_child_name() !== "settings") { dashboardLeftStack.set_visible_child_name("settings"); win.visible = !win.visible; }
-					// 	else if (win.visible === true && dashboardLeftStack.get_visible_child_name() !== "settings") { dashboardLeftStack.set_visible_child_name("settings") }
-					// 	else if (win.visible === true && dashboardLeftStack.get_visible_child_name() === "settings") { win.visible = !win.visible; }
-					// 	else { win.visible = !win.visible }
-					// }
+					const dashboardTab = dashboardLeftStack.get_visible_child_name() === dashTab;
+					const setDashboardTab = dashboardLeftStack.set_visible_child_name(dashTab);
 					if (win) {
-						const visibleChildName = dashboardLeftStack.get_visible_child_name();
-						if (visibleChildName !== "settings") {
-							dashboardLeftStack.set_visible_child_name("settings");
-						}
-						win.visible = !win.visible;
+						if (win.visible === true && !dashboardTab) { setDashboardTab }
+						else if (win.visible === true && dashboardTab) { win.visible = !win.visible; }
+						else { win.visible = !win.visible }
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					Speaker?.set_mute(!Speaker.get_mute());
 				}
 			}}
-			// onScroll={(_, { delta_y }) => {
-			// 	if (delta_y < 0) {
-			// 		Speaker?.set_volume(Speaker.volume + 0.05);
-			// 		Speaker?.set_mute(false);
-			// 	} else {
-			// 		Speaker?.set_volume(Speaker.volume - 0.05);
-			// 		Speaker?.set_mute(false);
-			// 	}
-			// }}
 			onScroll={(_, { delta_y }) => {
 				const volumeChange = delta_y < 0 ? 0.05 : -0.05;
 				Speaker?.set_volume(Speaker.volume + volumeChange);
