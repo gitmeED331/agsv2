@@ -3,12 +3,13 @@ import { App } from "astal/gtk3";
 import { execAsync, monitorFile } from "astal";
 // import style from "./style/main.scss";
 
+/* CSS Hot Reload */
 async function monitorStyle() {
-	const Globals = `${SRC}/style/globals`;
-	const Components = `${SRC}/style/components`;
-	const variables = `${SRC}/style/variables.scss`;
-	const scss = `${SRC}/style/main.scss`;
-	const css = `/tmp/style.css`;
+	const Globals = `${SRC}/style/globals`; // monitored/read for changes
+	const Components = `${SRC}/style/components`; // monitored/read for changes
+	const variables = `${SRC}/style/variables.scss`; // monitored/read for changes
+	const scss = `${SRC}/style/main.scss`; // monitored/read for changes
+	const css = `/tmp/style.css`; // output file
 
 	monitorFile(Globals, () => transpileAndApply());
 	monitorFile(Components, () => transpileAndApply());

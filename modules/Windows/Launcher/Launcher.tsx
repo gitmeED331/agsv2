@@ -250,6 +250,7 @@ const entry = (
 		secondary_icon_sensitive={true}
 		secondary_icon_activatable={true}
 		secondary_icon_tooltip_text={"Clear input"}
+		populateAll={true}
 	/>
 );
 
