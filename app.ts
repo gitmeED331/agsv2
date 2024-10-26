@@ -3,38 +3,13 @@ import { App } from "astal/gtk3";
 import { execAsync, monitorFile } from "astal";
 
 /* CSS Hot Reload */
-// async function monitorStyle() {
-// 	const Globals = `${SRC}/style/globals`; // monitored/read for changes
-// 	const Components = `${SRC}/style/components`; // monitored/read for changes
-// 	const Variables = `${SRC}/style/variables.scss`; // monitored/read for changes
-// 	const Main = `${SRC}/style/main.scss`;
-// 	const scss = `${SRC}/style/main.scss`; // monitored/read for changes
-// 	const css = `/tmp/style.css`; // output file
-
-// 	monitorFile(Globals, () => transpileAndApply());
-// 	monitorFile(Components, () => transpileAndApply());
-// 	monitorFile(Variables, () => transpileAndApply());
-// 	monitorFile(Main, () => transpileAndApply());
-
-// 	async function transpileAndApply() {
-// 		try {
-// 			await execAsync(`sass ${scss} ${css}`);
-// 			App.apply_css(css, true);
-// 			print("CSS applied successfully!");
-// 		} catch (error) {
-// 			print("Error transpiling SCSS:", error);
-// 			execAsync(`notify-send -u critical "Error transpiling SCSS" "${error}"`);
-// 		}
-// 	}
-// 	return transpileAndApply();
-// }
-
 async function monitorStyle() {
 	const pathsToMonitor = [
 		`${SRC}/style/globals`,
 		`${SRC}/style/components`,
 		`${SRC}/style/variables.scss`,
-	]; // monitored/read for changes
+	]; // paths monitored/read for changes
+
 	const mainScss = `${SRC}/style/main.scss`; // SCSS input file to compile
 	const css = `/tmp/style.css`; // CSS output file
 
@@ -86,3 +61,31 @@ App.start({
 		wallpapers();
 	},
 });
+
+/* old css hot reload
+async function monitorStyle() {
+	const Globals = `${SRC}/style/globals`; // monitored/read for changes
+	const Components = `${SRC}/style/components`; // monitored/read for changes
+	const Variables = `${SRC}/style/variables.scss`; // monitored/read for changes
+	const Main = `${SRC}/style/main.scss`;
+	const scss = `${SRC}/style/main.scss`; // monitored/read for changes
+	const css = `/tmp/style.css`; // output file
+
+	monitorFile(Globals, () => transpileAndApply());
+	monitorFile(Components, () => transpileAndApply());
+	monitorFile(Variables, () => transpileAndApply());
+	monitorFile(Main, () => transpileAndApply());
+
+	async function transpileAndApply() {
+		try {
+			await execAsync(`sass ${scss} ${css}`);
+			App.apply_css(css, true);
+			print("CSS applied successfully!");
+		} catch (error) {
+			print("Error transpiling SCSS:", error);
+			execAsync(`notify-send -u critical "Error transpiling SCSS" "${error}"`);
+		}
+	}
+	return transpileAndApply();
+}
+	*/
