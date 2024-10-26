@@ -2,9 +2,10 @@ import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, execAsync, GLib } from "astal";
 import AstalApps from "gi://AstalApps";
 import Pango from "gi://Pango";
-import Icon from "../lib/icons";
-import { winwidth, winheight } from "../lib/screensizeadjust";
-import { Stack, Grid } from "../Astalified/index";
+import Icon from "../../lib/icons";
+import { winwidth, winheight } from "../../lib/screensizeadjust";
+import { Stack, Grid } from "../../Astalified/index";
+import Calculator from "./Calculator";
 
 const Apps = new AstalApps.Apps({
 	include_entry: true,
@@ -19,13 +20,14 @@ function createAppGrid(appList) {
 		return a.get_name().localeCompare(b.get_name());
 	});
 
-	const grid = new Gtk.Grid({
-		hexpand: true,
-		vexpand: true,
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		visible: true,
-	});
+	const grid = (
+		<Grid
+			hexpand={true}
+			vexpand={true}
+			halign={Gtk.Align.FILL}
+			valign={Gtk.Align.FILL}
+			visible={true}
+		/>)
 
 	appList.forEach((app, index) => {
 		const appButton = (
@@ -46,7 +48,7 @@ function createAppGrid(appList) {
 			>
 				<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5} widthRequest={winwidth(0.15)}>
 					<icon icon={bind(app, "icon_name").as((i) => i) || app.get_icon_name() || Icon.missing} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-					<label label={bind(app, "name").as((i) => i) || app.get_name()} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END}
+					<label label={app.get_name()} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END}
 						maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
 				</box>
 			</button>
@@ -57,23 +59,22 @@ function createAppGrid(appList) {
 	return grid;
 }
 
-function createScrollablePage(appList) {
-	return (
-		<scrollable
-			vscroll={Gtk.PolicyType.AUTOMATIC}
-			hscroll={Gtk.PolicyType.NEVER}
-			vexpand={true}
-			hexpand={true}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
-			visible={true}
-			heightRequest={winheight(0.9)}
-			css={`padding: 1rem;`}
-		>
-			{createAppGrid(appList)}
-		</scrollable>
-	);
-}
+const createScrollablePage = (appList) => (
+	<scrollable
+		vscroll={Gtk.PolicyType.AUTOMATIC}
+		hscroll={Gtk.PolicyType.NEVER}
+		vexpand={true}
+		hexpand={true}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		visible={true}
+		heightRequest={winheight(0.9)}
+		css={`padding: 1rem;`}
+	>
+		{createAppGrid(appList)}
+	</scrollable>
+);
+
 
 function getCategories(app) {
 	const mainCategories = ["AudioVideo", "Audio", "Video", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"];
@@ -182,16 +183,37 @@ const handleTerminalCommand = (query, state, self) => {
 	}
 };
 
-let currentQuery = "";
+const handleCalculatorCommand = (query, self) => {
+	const expression = query.slice(6).trim(); // Extract expression after "CALC::"
 
+	if (expression) {
+		// Remove existing calculator page if it exists
+		const existingChild = theStack.get_visible_child();
+		if (existingChild && theStack.get_visible_child_name() === "calculator") {
+			theStack.remove(existingChild);
+		}
+
+		// Recreate the calculator page with the new expression
+		const calculatorPage = (
+			<Grid name="calculator" columnSpacing={10} rowSpacing={10}>
+				<Calculator expression={expression} />
+			</Grid>
+		);
+
+		theStack.add_named(calculatorPage, "calculator");
+		theStack.set_visible_child_name("calculator");
+	}
+};
+
+let currentQuery = "";
 const entry = (
 	<entry
-		className={"input"}
-		placeholder_text="Search apps, C:: for teriminal commands..."
+		className="launcher search"
+		placeholder_text="Search apps, C:: for teriminal commands, CALC:: for calculator..."
 		on_changed={(self) => {
 			const query = self.get_text().trim();
 			currentQuery = query;
-			if (!query.startsWith("C::") && !query.startsWith("W::")) {
+			if (!query.startsWith("C::") && !query.startsWith("CALC::")) {
 				Search(query);
 			}
 		}}
@@ -200,10 +222,14 @@ const entry = (
 			const state = event.get_state()[1];
 			const query = currentQuery.trim();
 
-			if (keyval === Gdk.KEY_Return) {
+			if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
 				switch (true) {
 					case query.startsWith("C::"):
 						handleTerminalCommand(query, state, self);
+						break;
+					case query.startsWith("CALC::"):
+						handleCalculatorCommand(query, self);
+						theStack.set_visible_child_name("calculator");
 						break;
 					default:
 						break;
@@ -211,48 +237,26 @@ const entry = (
 			}
 		}}
 		hexpand={true}
+		vexpand={false}
 		halign={Gtk.Align.FILL}
 		valign={Gtk.Align.CENTER}
-		tooltip_text={"Search applications, or use C:: for terminal commands"}
+		tooltip_text={"Search applications, or use C:: for terminal commands, CALC:: for calculator"}
 		activates_default={true}
 		focusOnClick={true}
+		primary_icon_name={Icon.launcher.search}
+		primary_icon_activatable={false}
+		primary_icon_sensitive={false}
+		secondary_icon_name={Icon.launcher.clear}
+		secondary_icon_sensitive={true}
+		secondary_icon_activatable={true}
+		secondary_icon_tooltip_text={"Clear input"}
 	/>
 );
-const SearchInput = () => {
-	const icon = (<icon icon={Icon.launcher.search} />);
 
-	const clear = (
-		<button
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					entry.set_text("");
-					theStack.set_visible_child_name("All Apps");
-				}
-			}}
-			tooltip_text={"Clear search"}
-			visible={bind(entry, "text").as((text) => text.length > 0)}
-			halign={Gtk.Align.END}
-		>
-			<icon icon={Icon.launcher.clear} />
-		</button>
-	);
-
-	const SIGrid = new Grid({
-
-		hexpand: true,
-		vexpand: true,
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.CENTER,
-		columnSpacing: 5,
-
-	});
-
-	SIGrid.attach(icon, 0, 0, 1, 1);
-	SIGrid.attach(entry, 1, 0, 1, 1);
-	SIGrid.attach(clear, 2, 0, 1, 1);
-
-	return <box className="launcher search" >{SIGrid}</box>;
-};
+entry.connect("icon-press", (_, event) => {
+	entry.set_text("");
+	theStack.set_visible_child_name("All Apps");
+});
 
 const allAppsPage = (
 	<box key="All Apps" name="All Apps" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
@@ -271,22 +275,20 @@ const categoryPages = uniqueCategories.map((category) => {
 		</box>
 	);
 });
-const theStack = new Stack({
-	className: "launcher stack",
-	transitionType: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
-	transitionDuration: 300,
-	halign: Gtk.Align.FILL,
-	valign: Gtk.Align.FILL,
-	hhomogeneous: true,
-	vhomogeneous: false,
-	visible: true,
-	hexpand: false,
-	vexpand: true,
-});
 
-[allAppsPage, ...categoryPages].forEach((page) => {
-	theStack.add_named(page, page.name);
-});
+
+const theStack = (
+	<Stack
+		className={"launcher stack"} transitionDuration={300} transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+		halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hhomogeneous={true} vhomogeneous={false} visible={true} hexpand={false} vexpand={true}
+	/>
+)
+
+{
+	[allAppsPage, ...categoryPages].forEach((page) => {
+		theStack.add_named(page, page.name);
+	})
+}
 
 const Switcher = () => {
 	const handleSwitch = (name) => {
@@ -374,7 +376,7 @@ function Launcher({ monitor }: { monitor: number }) {
 		visible: true,
 	});
 
-	theGrid.attach(SearchInput(), 0, 0, 2, 1);
+	theGrid.attach(entry, 0, 0, 2, 1);
 	theGrid.attach(Switcher(), 0, 1, 1, 1);
 	theGrid.attach(theStack, 1, 1, 1, 1);
 
@@ -422,7 +424,6 @@ App.connect("window-toggled", (_, win) => {
 		entry.set_text("")
 		entry.grab_focus()
 		theStack.set_visible_child_name("All Apps")
-
 	}
 })
 

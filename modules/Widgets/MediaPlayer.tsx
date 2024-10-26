@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { bind, execAsync, GLib } from "astal";
+import { bind, execAsync } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index"

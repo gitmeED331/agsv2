@@ -10,7 +10,7 @@ import NotificationPopups from "./notificationPopups";
 // import Overview from "./overview/Overview";
 import sessioncontrol from "./sessioncontrol";
 // import powerprofiles from "./powerprofile";
-import Launcher from "./Launcher";
+import Launcher from "./Launcher/Launcher";
 import wallpapers from "./Wallpapers";
 
 export {

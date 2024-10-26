@@ -45,10 +45,7 @@ function GridCalendar() {
         const updatedWeeks = generateCalendar(currentMonth, currentYear);
 
         if (!gridCalendar) {
-            gridCalendar = new Grid({
-                halign: Gtk.Align.CENTER,
-                valign: Gtk.Align.CENTER,
-            });
+            gridCalendar = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} columnSpacing={1} rowSpacing={1} rowHomogeneous={true} columnHomogeneous={true} />
         }
 
         dayLabels.forEach(label => gridCalendar!.remove(label));
@@ -112,44 +109,59 @@ function GridCalendar() {
     };
 
     const monthLabel = <label label={monthNamesShort[currentMonth]} />;
-    monthLabel.get_style_context().add_class("calendar-month-label");
+    monthLabel.get_style_context().add_class("month");
 
     const yearLabel = <label label={currentYear.toString()} />;
-    yearLabel.get_style_context().add_class("calendar-year-label");
+    yearLabel.get_style_context().add_class("year");
 
-    const header = (
-        <box orientation={Gtk.Orientation.HORIZONTAL} spacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar month arrow-left"} onClick={() => changeMonth(-1)}>
-                <Widget.Icon icon={"arrow-back-circle-symbolic"} />
-            </button>
-            {monthLabel}
-            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar month arrow-right"} onClick={() => changeMonth(1)}>
-                <Widget.Icon icon={"arrow-forward-circle-symbolic"} />
-            </button>
-            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar return-today"} onClick={() => {
+    function header() {
+        const prevMonth = (
+            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-left"} onClick={() => changeMonth(-1)}>
+                <icon icon={"arrow-back-circle-symbolic"} />
+            </button>)
+
+        const nextMonth = (
+            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-right"} onClick={() => changeMonth(1)}>
+                <icon icon={"arrow-forward-circle-symbolic"} />
+            </button>)
+
+        const returnToday = (
+            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"return-today"} onClick={() => {
                 currentMonth = new Date().getMonth();
                 currentYear = new Date().getFullYear();
                 monthLabel.set_text(monthNamesShort[currentMonth]);
                 yearLabel.set_text(currentYear.toString());
                 updateGridCalendar();
             }}>
-                <Widget.Icon icon={"nix-snowflake-symbolic"} />
-            </button>
-            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar year arrow-left"} onClick={() => changeYear(-1)}>
-                <Widget.Icon icon={"arrow-back-circle-symbolic"} />
-            </button>
-            {yearLabel}
-            <button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"calendar year arrow-right"} onClick={() => changeYear(1)}>
-                <Widget.Icon icon={"arrow-forward-circle-symbolic"} />
-            </button>
-        </box>
-    );
+                <icon icon={"nix-snowflake-symbolic"} />
+            </button>)
+
+        const prevYear = (<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-left"} onClick={() => changeYear(-1)}>
+            <icon icon={"arrow-back-circle-symbolic"} />
+        </button>)
+
+        const nextYear = (<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-right"} onClick={() => changeYear(1)}>
+            <icon icon={"arrow-forward-circle-symbolic"} />
+        </button>)
+
+        const headerGrid = <Grid className={"calendar header"} columnSpacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={false} columnHomogeneous={false} />
+
+        headerGrid.attach(prevMonth, 0, 0, 1, 1);
+        headerGrid.attach(monthLabel, 1, 0, 1, 1);
+        headerGrid.attach(nextMonth, 2, 0, 1, 1);
+        headerGrid.attach(returnToday, 3, 0, 1, 1);
+        headerGrid.attach(prevYear, 4, 0, 1, 1);
+        headerGrid.attach(yearLabel, 5, 0, 1, 1);
+        headerGrid.attach(nextYear, 6, 0, 1, 1);
+
+        return headerGrid
+    }
 
     updateGridCalendar();
 
     return (
-        <box name={"calendar"} orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
-            {header}
+        <box name={"calendar"} orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} >
+            {header()}
             {gridCalendar}
         </box>
     )

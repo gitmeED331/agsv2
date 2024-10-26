@@ -1,5 +1,5 @@
 import { Gtk } from "astal/gtk3";
-import { StackSwitcher } from "../../Astalified/index";
+import { StackSwitcher, Stack } from "../../Astalified/index";
 
 // --- imported widgets ---
 import { BrightnessSlider, GridCalendar, PowerProfiles, AudioMixer, SessionControls } from "../../Widgets/index";
@@ -20,17 +20,11 @@ export default function LeftSide() {
 		</box>
 	);
 
-	const leftStack = new Gtk.Stack({
-		transitionType: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT,
-		transitionDuration: 300,
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hhomogeneous: true,
-		vhomogeneous: false,
-		visible: true,
-		hexpand: true,
-		vexpand: true,
-	});
+	const leftStack = <Stack transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT} transitionDuration={300}
+		halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+		hhomogeneous={true} vhomogeneous={false}
+		visible={true} hexpand={true} vexpand={true}
+	/>
 
 	dashboardLeftStack = leftStack
 
@@ -38,13 +32,13 @@ export default function LeftSide() {
 	leftStack.add_titled(power, "power", "System Controls");
 	leftStack.add_titled(settings, "settings", "Settings");
 
-	const stackSwitcher = new StackSwitcher({
-		className: "dashboard stackSwitcher",
-		stack: leftStack,
-		halign: Gtk.Align.CENTER,
-		valign: Gtk.Align.START,
-		spacing: 10,
-	});
+	const stackSwitcher = <StackSwitcher
+		className={"dashboard stackSwitcher"}
+		stack={leftStack}
+		halign={Gtk.Align.CENTER}
+		valign={Gtk.Align.START}
+		spacing={10}
+	/>
 
 	return (
 		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>

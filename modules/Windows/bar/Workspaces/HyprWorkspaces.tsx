@@ -11,12 +11,6 @@ const dispatch = (arg: string | number) => {
 const moveSilently = (arg: string | number) => {
 	execAsync(`hyprctl dispatch movetoworkspacesilent ${arg}`);
 };
-const openOverview = (arg: string | number) => {
-	const win = App.get_window("overview");
-	if (win) {
-		win.visible = !win.visible;
-	}
-};
 
 // --- signal handler ---
 function ws(id: number) {
@@ -61,9 +55,8 @@ function Workspaces({ id }: { id: number }) {
 							case Gdk.BUTTON_SECONDARY:
 								moveSilently(id);
 								break;
-							case Gdk.BUTTON_MIDDLE:
-								openOverview(id);
-								break;
+							// case Gdk.BUTTON_MIDDLE:
+							// 	break;
 							default:
 								break;
 						}

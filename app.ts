@@ -1,18 +1,18 @@
 #!/usr/bin/gjs -m
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { GLib, Gio, execAsync, monitorFile } from "astal";
-import style from "./style/main.scss";
-
-
+import { App } from "astal/gtk3";
+import { execAsync, monitorFile } from "astal";
+// import style from "./style/main.scss";
 
 async function monitorStyle() {
 	const Globals = `${SRC}/style/globals`;
 	const Components = `${SRC}/style/components`;
+	const variables = `${SRC}/style/variables.scss`;
 	const scss = `${SRC}/style/main.scss`;
-	const css = `${SRC}/style/style.css`;
+	const css = `/tmp/style.css`;
 
 	monitorFile(Globals, () => transpileAndApply());
 	monitorFile(Components, () => transpileAndApply());
+	monitorFile(variables, () => transpileAndApply());
 
 	async function transpileAndApply() {
 		try {
@@ -21,10 +21,10 @@ async function monitorStyle() {
 			print("CSS applied successfully!");
 		} catch (error) {
 			print("Error transpiling SCSS:", error);
+			execAsync(`notify-send -u critical "Error transpiling SCSS" "${error}"`);
 		}
 	}
-
-	return await transpileAndApply();
+	return transpileAndApply();
 }
 
 monitorStyle()
@@ -42,7 +42,7 @@ import {
 } from "./modules/Windows/index";
 
 App.start({
-	css: style,
+	// css: style,
 	main() {
 		Bar({ monitor: 0 });
 		cliphist({ monitor: 0 });

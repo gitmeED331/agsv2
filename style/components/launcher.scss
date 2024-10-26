@@ -17,33 +17,37 @@
 
 	&.search {
 		margin: 1rem;
+		color: $font-color1;
 		background: none;
 		border-bottom: $border;
-		border-left: $border;
-		border-right: $border;
+		// border-left: $border;
+		// border-right: $border;
 		border-radius: $radius;
-		color: $font-color1;
-		padding: 0.5rem;
 		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		padding: 0.35rem 0.75rem;
+
+		image.left {
+			margin-right: 0.5rem;
+		}
+
+		image.right:hover {
+			color: $font-color5;
+			animation: spin 3s linear infinite;
+
+		}
+
+		window.popup {
+			background: $PrimaryBG;
+			border: $border;
+			border-radius: $radius;
+			color: $font-color1;
+			box-shadow: 0.5rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		}
 
 		selection {
 			color: black;
 			background-color: $font-color2;
 		}
-
-		// &.input {
-
-		// 	& .left {
-		// 		margin-right: 0.25rem;
-		// 		padding-right: 0.25rem;
-		// 		border-right: $border;
-		// 		border-radius: $radius;
-		// 	}
-
-		// 	& .right {
-		// 		margin-left: 0.5rem;
-		// 	}
-		// }
 	}
 
 	&.app {
