@@ -6,52 +6,35 @@ import { Grid } from "../../Astalified/index";
 import ClickToClose from "../../lib/ClickToClose";
 
 // --- imported widgets ---
-import { Player, Tray, } from "../../Widgets/index";
+import { Tray, Player } from "../../Widgets/index";
 import LeftSide, { dashboardLeftStack } from "./LeftSide";
 import RightSide, { dashboardRightStack } from "./RightSide";
+// import Player from "../../Widgets/MediaPlayer-2";
 
 const player = Mpris.Player.new("Deezer");
 
 function Dashboard({ monitor }: { monitor: number }) {
-	const content = new Grid({
-		className: "dashboard grid",
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-		baseline_row: 1,
-		column_spacing: 5,
-		row_spacing: 5,
-	});
+	const content = <Grid
+		className={"dashboard grid"}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		hexpand={true}
+		vexpand={true}
+		visible={true}
+		column_spacing={5}
+		row_spacing={5}
+	/>
 
-	// const content = <Grid
-	// 	className={"dashboard grid"}
-	// 	halign={Gtk.Align.FILL}
-	// 	valign={Gtk.Align.FILL}
-	// 	hexpand={true}
-	// 	vexpand={true}
-	// 	visible={true}
-	// 	column_spacing={5}
-	// 	row_spacing={5}
-	// >
-	// 	{[
-	// 		thePlayer,
-	// 		eventHandler(1, .25, .1),
-	// 		LeftSide(),
-	// 		Tray(),
-	// 		RightSide(),
-	// 		eventHandler(2, .25, .1),
-	// 		eventHandler(3, 1, .5)
-	// 	]}
-	// </Grid>
+	// if (Player.length > 0) {
+	// content.insert_row(0);
+	content.attach(<Player player={player} />, 1, 0, 3, 1);
+	// content.attach(Player, 1, 0, 3, 1);
+	// } else { content.remove_row(0) }
 
-	const thePlayer = <Player player={player} />
-
-	if (thePlayer) {
-		content.insert_row(0);
-		content.attach(thePlayer, 1, 0, 3, 1);
-	} else { content.remove_row(0) }
+	// if (Player.length > 0) {
+	// 	content.insert_row(0);
+	// 	content.attach(Player, 1, 0, 3, 1);
+	// } else { content.remove_row(0) }
 
 	content.attach(ClickToClose(1, .25, .1, "dashboard"), 0, 0, 1, 2) // left side
 	content.attach(LeftSide(), 1, 1, 1, 1)

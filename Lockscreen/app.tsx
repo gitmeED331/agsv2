@@ -6,7 +6,7 @@
 // import Lockscreen from "./Lockscreen";
 
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
-import { execAsync, bind, Variable, timeout } from "astal";
+import { execAsync, bind, Variable, timeout, GLib } from "astal";
 import Lock from "gi://GtkSessionLock";
 import AstalAuth from "gi://AstalAuth";
 import AstalMpris from "gi://AstalMpris";
@@ -93,14 +93,23 @@ function loginGrid() {
         />
     );
 
+    const currentDesktop = (
+        <label
+            className={"desktop"}
+            label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""}
+            halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
+        />
+    );
+
     const grid = <Grid className={"logingrid"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true} rowSpacing={15} visible={true} />
 
     grid.attach(currentUser, 0, 0, 1, 1);
+    grid.attach(currentDesktop, 0, 1, 1, 1);
     // if (prompt.get().length > 0) {
     // grid.attach(promptLabel, 0, 1, 1, 1);
     // }
-    grid.attach(passwordPrompt, 0, 1, 1, 1);
-    grid.attach(authMessages(), 0, 2, 1, 1);
+    grid.attach(passwordPrompt, 0, 2, 1, 1);
+    grid.attach(authMessages(), 0, 3, 1, 1);
 
     return grid;
 }

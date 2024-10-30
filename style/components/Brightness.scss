@@ -9,4 +9,12 @@
     icon {
         font-size: 1.25rem;
     }
+
+    .header {
+        border-radius: $radius;
+        border-bottom: $border;
+        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+        margin-bottom: 0.5rem;
+        padding: 0rem 1rem;
+    }
 }

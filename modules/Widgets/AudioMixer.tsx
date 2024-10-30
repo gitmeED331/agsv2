@@ -109,21 +109,20 @@ function AppMixerItem({ stream }) {
 			</box>
 		</button>
 	);
-
+	const streamSlider = <slider
+		className={"audio-mixer item Slider"}
+		halign={Gtk.Align.CENTER}
+		valign={Gtk.Align.CENTER}
+		hexpand={true}
+		draw_value={false}
+		value={bind(stream, "volume")}
+		onDragged={({ value }) => {
+			stream.volume = value;
+		}}
+	/>
 	return (
 		<box className={"audio-mixer item"} visible={true} hexpand={false} halign={Gtk.Align.CENTER} vertical={true} spacing={2}>
-			{mixerLabel}
-			<slider
-				className={"audio-mixer item Slider"}
-				halign={Gtk.Align.CENTER}
-				valign={Gtk.Align.CENTER}
-				hexpand={true}
-				draw_value={false}
-				value={bind(stream, "volume")}
-				onDragged={({ value }) => {
-					stream.volume = value;
-				}}
-			/>
+			{[mixerLabel, streamSlider]}
 		</box>
 	);
 }
@@ -155,6 +154,7 @@ export default function AudioMixer() {
 	);
 	return (
 		<box vertical={true} className={"audio-mixer container"} spacing={10} hexpand={false}>
+			<label className={"header"} label={"Audio Devices & Streams"} halign={Gtk.Align.CENTER} />
 			<DeviceControlGroup devices={[Speaker, Microphone]} />
 			{activeStreams}
 			<SettingsButton />

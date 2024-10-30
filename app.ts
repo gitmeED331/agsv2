@@ -8,20 +8,17 @@ async function monitorStyle() {
 		`${SRC}/style/globals`,
 		`${SRC}/style/components`,
 		`${SRC}/style/variables.scss`,
-	]; // paths monitored/read for changes
+	]; // Paths to monitor
 
 	const mainScss = `${SRC}/style/main.scss`; // SCSS input file to compile
 	const css = `/tmp/style.css`; // CSS output file
 
-	let debounceTimeout;
-	function debouncedTranspileAndApply() {
-		clearTimeout(debounceTimeout);
-		debounceTimeout = setTimeout(transpileAndApply, 100);
-	}
-
-	pathsToMonitor.forEach(path => monitorFile(path, debouncedTranspileAndApply));
+	let isApplying = false;
 
 	async function transpileAndApply() {
+		if (isApplying) return;
+		isApplying = true;
+
 		try {
 			await execAsync(`sass ${mainScss} ${css}`);
 			App.apply_css(css, true);
@@ -29,8 +26,13 @@ async function monitorStyle() {
 		} catch (error) {
 			print("Error transpiling SCSS:", error);
 			execAsync(`notify-send -u critical "Error transpiling SCSS" "${error}"`);
+		} finally {
+			isApplying = false;
 		}
 	}
+
+	pathsToMonitor.forEach(path => monitorFile(path, transpileAndApply));
+
 	return transpileAndApply();
 }
 

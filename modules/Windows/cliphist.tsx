@@ -12,6 +12,8 @@ type EntryObject = {
     entry: string;
 };
 
+const background = `${SRC}/assets/groot-thin-left.png`;
+
 function ClipHistItem(entry: string) {
     const [id, ..._content] = entry.split("\t");
     const content = _content.join(" ").trim();
@@ -131,14 +133,15 @@ function ClipHistWidget() {
         </box>
     };
 
-    const theGrid = new Grid({
-        className: "cliphist contentgrid",
-        halign: Gtk.Align.FILL,
-        valign: Gtk.Align.FILL,
-        hexpand: true,
-        vexpand: true,
-        visible: true,
-    });
+    const theGrid = (<Grid
+        className={"cliphist contentgrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+        hexpand={true} vexpand={true} visible={true}
+        css={`background-image: url('${background}'); 
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-color: rgba(0, 0, 0, 1);`}
+    />);
 
     theGrid.attach(header(), 1, 1, 1, 1);
     theGrid.attach(scrollableList, 1, 2, 1, 1);

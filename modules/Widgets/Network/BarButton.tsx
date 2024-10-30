@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { bind, Variable, Binding } from "astal";
+import { bind, Variable, execAsync } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
@@ -13,27 +13,25 @@ let netreveal = Variable(false);
 const NetworkWidget = () => {
 	const wifiIcon = <icon className={"barbutton wifi icon"} icon={bind(Wifi, "icon_name")} />;
 
-	const wifiLabel = (
-		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
-			<label
-				className={"barbutton wifi label"}
-				label={"--"}
-			/>
-		</revealer>
-	);
+	const wifiLabel = <label className={"barbutton wifi label"} />
 
-	const updateWifiLabel = () => {
+	function updateWifiLabel() {
 		const wifi = network.wifi;
-		wifiLabel.label = wifi && wifi.ssid ? `${wifi.ssid.substring(0, 7)}` : "--";
+		wifiLabel.set_label(wifi.ssid ? `${wifi.ssid.substring(0, 15)}` : "--");
 	};
 
 	updateWifiLabel();
 
 	network.connect("notify::wifi", updateWifiLabel);
 
+	const wifiLabelRevealer = (
+		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
+			{wifiLabel}
+		</revealer>
+	)
 	const wifiIndicator = (
 		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={bind(network, "wifi").as((showLabel) => !!showLabel)}>
-			{[wifiIcon, wifiLabel]}
+			{[wifiIcon, wifiLabelRevealer]}
 		</box>
 	);
 

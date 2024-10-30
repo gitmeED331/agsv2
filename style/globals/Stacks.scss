@@ -7,13 +7,17 @@
 		border-bottom: $border;
 		border-color: red;
 	}
+
 	button {
 		border-radius: $radius;
 		padding: 0rem 0.5rem;
+
 		&:checked {
 			border-radius: $radius;
 			border-bottom: $border;
+			box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		}
+
 		&:hover {
 			box-shadow: inset 0px -2px 6px $border-color;
 		}

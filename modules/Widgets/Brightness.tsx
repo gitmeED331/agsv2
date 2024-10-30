@@ -59,6 +59,7 @@ export default function BrightnessSlider() {
 
     const theTitle = (
         <label
+            className={"header"}
             wrap={false}
             hexpand={true}
             halign={Gtk.Align.CENTER}

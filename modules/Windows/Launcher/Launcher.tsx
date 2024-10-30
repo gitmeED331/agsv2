@@ -6,6 +6,8 @@ import Icon from "../../lib/icons";
 import { winwidth, winheight } from "../../lib/screensizeadjust";
 import { Stack, Grid } from "../../Astalified/index";
 import Calculator from "./Calculator";
+import ClickToClose from "../../lib/ClickToClose";
+import terminal from "./Terminal"
 
 const Apps = new AstalApps.Apps({
 	include_entry: true,
@@ -14,6 +16,8 @@ const Apps = new AstalApps.Apps({
 });
 const Applications = Apps.get_list();
 
+const background = `${SRC}/assets/groot-thin-right.png`;
+
 function createAppGrid(appList) {
 	const columnCount = 1;
 	appList = appList.sort((a, b) => {
@@ -21,13 +25,7 @@ function createAppGrid(appList) {
 	});
 
 	const grid = (
-		<Grid
-			hexpand={true}
-			vexpand={true}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
-			visible={true}
-		/>)
+		<Grid hexpand={true} vexpand={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} />)
 
 	appList.forEach((app, index) => {
 		const appButton = (
@@ -61,15 +59,9 @@ function createAppGrid(appList) {
 
 const createScrollablePage = (appList) => (
 	<scrollable
-		vscroll={Gtk.PolicyType.AUTOMATIC}
-		hscroll={Gtk.PolicyType.NEVER}
-		vexpand={true}
-		hexpand={true}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
-		visible={true}
-		heightRequest={winheight(0.9)}
-		css={`padding: 1rem;`}
+		visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER}
+		vexpand={true} hexpand={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+		heightRequest={winheight(0.9)} css={`padding: 1rem;`}
 	>
 		{createAppGrid(appList)}
 	</scrollable>
@@ -118,6 +110,7 @@ function getRelevanceScore(appName, appDescription, query) {
 }
 
 let query = "";
+
 function Search(query) {
 	const results = Applications.filter((app) => getRelevanceScore(app.get_name(), app.get_description(), query) > 0);
 
@@ -142,6 +135,7 @@ function Search(query) {
 	}
 }
 
+// fuzzy search
 // function Search(query) {
 // 	const lowerCaseQuery = query.toLowerCase();
 
@@ -170,7 +164,7 @@ function Search(query) {
 // }
 
 const handleTerminalCommand = (query, state, self) => {
-	const command = query.slice(3).trim();
+	const command = query.slice(6).trim();
 
 	if (command) {
 		const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
@@ -184,16 +178,14 @@ const handleTerminalCommand = (query, state, self) => {
 };
 
 const handleCalculatorCommand = (query, self) => {
-	const expression = query.slice(6).trim(); // Extract expression after "CALC::"
+	const expression = query.slice(6).trim();
 
 	if (expression) {
-		// Remove existing calculator page if it exists
 		const existingChild = theStack.get_visible_child();
 		if (existingChild && theStack.get_visible_child_name() === "calculator") {
 			theStack.remove(existingChild);
 		}
 
-		// Recreate the calculator page with the new expression
 		const calculatorPage = (
 			<Grid name="calculator" columnSpacing={10} rowSpacing={10}>
 				<Calculator expression={expression} />
@@ -209,11 +201,13 @@ let currentQuery = "";
 const entry = (
 	<entry
 		className="launcher search"
-		placeholder_text="Search apps, C:: for teriminal commands, CALC:: for calculator..."
+		placeholder_text="Search apps, TERM:: for teriminal commands, CALC:: for calculator..."
 		on_changed={(self) => {
 			const query = self.get_text().trim();
 			currentQuery = query;
-			if (!query.startsWith("C::") && !query.startsWith("CALC::")) {
+			if (query.startsWith("CALC::")) {
+				theStack.set_visible_child_name("calculator");
+			} else if (!query.startsWith("TERM::") && !query.startsWith("CALC::")) {
 				Search(query);
 			}
 		}}
@@ -224,7 +218,7 @@ const entry = (
 
 			if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
 				switch (true) {
-					case query.startsWith("C::"):
+					case query.startsWith("TERM::"):
 						handleTerminalCommand(query, state, self);
 						break;
 					case query.startsWith("CALC::"):
@@ -236,21 +230,11 @@ const entry = (
 				}
 			}
 		}}
-		hexpand={true}
-		vexpand={false}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.CENTER}
+		hexpand={true} vexpand={false} halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER}
 		tooltip_text={"Search applications, or use C:: for terminal commands, CALC:: for calculator"}
-		activates_default={true}
-		focusOnClick={true}
-		primary_icon_name={Icon.launcher.search}
-		primary_icon_activatable={false}
-		primary_icon_sensitive={false}
-		secondary_icon_name={Icon.launcher.clear}
-		secondary_icon_sensitive={true}
-		secondary_icon_activatable={true}
-		secondary_icon_tooltip_text={"Clear input"}
-		populateAll={true}
+		activates_default={true} focusOnClick={true}
+		primary_icon_name={Icon.launcher.search} primary_icon_activatable={false} primary_icon_sensitive={false}
+		secondary_icon_name={Icon.launcher.clear} secondary_icon_sensitive={true} secondary_icon_activatable={true} secondary_icon_tooltip_text={"Clear input"}
 	/>
 );
 
@@ -286,7 +270,7 @@ const theStack = (
 )
 
 {
-	[allAppsPage, ...categoryPages].forEach((page) => {
+	[allAppsPage, ...categoryPages, terminal()].forEach((page) => {
 		theStack.add_named(page, page.name);
 	})
 }
@@ -341,57 +325,53 @@ const Switcher = () => {
 		);
 	});
 
+	const terminalButton = (
+		<button
+			className={bind(theStack, "visible_child_name").as((name) => (name === "terminal" ? "active" : ""))}
+			onClick={(_, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					handleSwitch("Terminal");
+				}
+			}}
+			onKeyPressEvent={(_, event) => {
+				if (event.get_keyval()[1] === Gdk.KEY_Return) {
+					handleSwitch("Terminal");
+				}
+			}}
+			tooltip_text={"Terminal"}
+		>
+			<icon icon={Icon.launcher.hyprland} />
+		</button>
+	)
 	return (
-		<box className={"launcher switcher"} vertical halign={Gtk.Align.CENTER} valign={Gtk.Align.START}>
-			{allAppsButton}
-			{categoryButtons}
+		<box className={"launcher switcher"} vertical halign={Gtk.Align.CENTER} valign={Gtk.Align.FILL} >
+			{[allAppsButton, categoryButtons, terminalButton]}
 		</box>
 	);
 };
 
 function Launcher({ monitor }: { monitor: number }) {
-	const eventHandler = (
-		<eventbox
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
-			onClick={(_, event) => {
-				const win = App.get_window("launcher");
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					if (win && win.visible === true) {
-						query = "";
-						win.visible = false;
-					}
-				}
-			}}
-			widthRequest={winwidth(0.8)}
-			heightRequest={winheight(0.8)}
-		/>
-	);
+	const contentGrid = (<Grid
+		className={"launcher contentgrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+		hexpand={true} vexpand={true} visible={true}
+		css={`background-image: url('${background}'); 
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-color: rgba(0, 0, 0, 1);`}
+	/>)
 
-	const theGrid = new Grid({
-		className: "launcher contentgrid",
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-	});
+	contentGrid.attach(entry, 0, 0, 2, 1);
+	contentGrid.attach(Switcher(), 0, 1, 1, 1);
+	contentGrid.attach(theStack, 1, 1, 1, 1);
 
-	theGrid.attach(entry, 0, 0, 2, 1);
-	theGrid.attach(Switcher(), 0, 1, 1, 1);
-	theGrid.attach(theStack, 1, 1, 1, 1);
+	const masterGrid = <Grid
+		className={"launcher containergrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+		hexpand={true} vexpand={true} visible={true}
+	/>
 
-	const masterGrid = new Grid({
-		className: "launcher containergrid",
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-	});
-
-	masterGrid.attach(theGrid, 1, 1, 1, 1);
-	masterGrid.attach(eventHandler, 2, 1, 1, 1);
+	masterGrid.attach(contentGrid, 1, 1, 1, 1);
+	masterGrid.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
 
 	return (
 		<window
@@ -423,7 +403,6 @@ App.connect("window-toggled", (_, win) => {
 	if (win.visible === false && win.name === "launcher") {
 		query = ""
 		entry.set_text("")
-		entry.grab_focus()
 		theStack.set_visible_child_name("All Apps")
 	}
 })

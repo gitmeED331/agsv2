@@ -5,6 +5,7 @@
     margin-left: 0.5rem;
     padding: 0rem 0.5rem;
 
+
     & .urgent {
         color: $font-color4;
 
@@ -40,6 +41,7 @@
         border-radius: 2rem;
         padding: 0.2rem;
         color: $font-color3;
+        transition: all 2s ease;
 
         &:hover {
             icon {

@@ -1,13 +1,15 @@
 .bar {
   color: $color7;
   background: none;
-  // min-height: 8px;
+  min-height: 8px;
+
 
   &left,
   &center,
   &right {
     min-width: 100px;
   }
+
 }
 
 /* --- AppTitleTicker --- */
