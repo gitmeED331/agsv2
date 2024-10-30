@@ -1,0 +1,27 @@
+.stackSidebar,
+.stackSwitcher {
+	color: $font-color1;
+
+	.needsAttention {
+		border-radius: $radius;
+		border-bottom: $border;
+		border-color: red;
+	}
+	button {
+		border-radius: $radius;
+		padding: 0rem 0.5rem;
+		&:checked {
+			border-radius: $radius;
+			border-bottom: $border;
+		}
+		&:hover {
+			box-shadow: inset 0px -2px 6px $border-color;
+		}
+	}
+}
+
+.stackSidebar {
+	background-color: rgb(255, 0, 0);
+	min-height: 10rem;
+	min-width: 2rem;
+}

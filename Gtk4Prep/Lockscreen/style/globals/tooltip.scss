@@ -1,0 +1,17 @@
+tooltip {
+    * {
+        all: unset;
+        background-color: transparent;
+        border: none;
+    }
+
+    >*>* {
+        background: black;
+        border-radius: $radius;
+        border: calc($border-width / 10) solid $popover-border-color;
+        color: $font-color1;
+        padding: 0.75rem;
+        margin: 4px;
+        box-shadow: 0 0 5px 0 $shadow-color;
+    }
+}

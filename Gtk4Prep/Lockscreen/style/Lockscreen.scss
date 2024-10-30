@@ -1,0 +1,11 @@
+* {
+	//:not(selection)
+	all: unset;
+	font-family: "Liberation Mono";
+	font-size: 10pt;
+}
+
+// Components
+@import "variables";
+@import "components/index";
+@import "globals/index";

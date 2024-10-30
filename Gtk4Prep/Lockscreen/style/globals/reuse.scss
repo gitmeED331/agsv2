@@ -1,0 +1,42 @@
+@keyframes lowBlink {
+    0% {
+        color: #ff0000;
+    }
+
+    50% {
+        color: #ffff00;
+    }
+
+    100% {
+        color: #000066;
+    }
+}
+
+.BarBTN {
+    background: $PrimaryBG;
+    border-top: $border;
+    border-radius: 1rem;
+    -gtk-icon-style: symbolic;
+
+    icon {
+        font-size: 1.15rem;
+    }
+
+    &:hover {
+        color: $font-color5;
+
+        icon {
+            animation: spin 1s infinite;
+        }
+    }
+}
+
+.BarBTN2 {
+    font-size: 1.4rem;
+    -gtk-icon-style: symbolic;
+
+    &:hover {
+        color: $font-color5;
+        animation: spin 1s infinite;
+    }
+}
