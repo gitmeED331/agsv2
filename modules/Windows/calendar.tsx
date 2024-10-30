@@ -1,7 +1,6 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { execAsync } from "astal";
 import { GridCalendar } from "../Widgets/index";
-import { winheight, winwidth } from "../lib/screensizeadjust";
 
 export default function Calendar() {
   return (

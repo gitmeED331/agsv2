@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import AudioMixer from "../Widgets/AudioMixer"
+import { AudioMixer } from "../Widgets/index"
 
 export default () => <window
     name={"audiomixerwindow"}
@@ -10,7 +10,6 @@ export default () => <window
     keymode={Astal.Keymode.EXCLUSIVE}
     visible={false}
     application={App}
-    margin-right={50}
 >
     <eventbox onKeyPressEvent={(_, event) => {
         if (event.get_keyval()[1] === Gdk.KEY_Escape) { App.toggle_window("audiomixerwindow") }

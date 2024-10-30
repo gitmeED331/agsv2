@@ -34,7 +34,7 @@
     icon {
       color: $font-color1;
       animation: spin 1s linear infinite;
-      /* -gtk-icon-transform: scale(2); */
+      -gtk-icon-transform: scale(2);
     }
 
     label {
