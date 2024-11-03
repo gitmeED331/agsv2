@@ -1,10 +1,18 @@
-import { Gtk } from "astal/gtk3";
-import { StackSwitcher, Stack } from "../../Astalified/index";
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
 
-// --- imported widgets ---
+import { Gtk } from "astal/gtk3";
+import { StackSwitcher, Stack, StackSidebar } from "../../Astalified/index";
+
 import { BrightnessSlider, GridCalendar, PowerProfiles, AudioMixer, SessionControls } from "../../Widgets/index";
 
-export let dashboardLeftStack
+export let dashboardLeftStack;
 
 export default function LeftSide() {
 	const settings = (
@@ -20,25 +28,29 @@ export default function LeftSide() {
 		</box>
 	);
 
-	const leftStack = <Stack transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT} transitionDuration={300}
-		halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
-		hhomogeneous={true} vhomogeneous={false}
-		visible={true} hexpand={true} vexpand={true}
-	/>
-
-	dashboardLeftStack = leftStack
+	const leftStack = (
+		<Stack
+			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+			transitionDuration={300}
+			halign={Gtk.Align.FILL}
+			valign={Gtk.Align.FILL}
+			hhomogeneous={true}
+			vhomogeneous={false}
+			visible={true}
+			hexpand={true}
+			vexpand={true}
+		/>
+	);
 
 	leftStack.add_titled(GridCalendar(), "calendar", "Calendar");
-	leftStack.add_titled(power, "power", "System Controls");
+	leftStack.add_titled(power, "power", "Power");
 	leftStack.add_titled(settings, "settings", "Settings");
 
-	const stackSwitcher = <StackSwitcher
-		className={"dashboard stackSwitcher"}
-		stack={leftStack}
-		halign={Gtk.Align.CENTER}
-		valign={Gtk.Align.START}
-		spacing={10}
-	/>
+	const stackSwitcher = (
+		<StackSwitcher className={"dashboard stackSwitcher"} stack={leftStack as Stack} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} spacing={10} iconSize={Gtk.IconSize.BUTTON} />
+	);
+
+	dashboardLeftStack = leftStack;
 
 	return (
 		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>

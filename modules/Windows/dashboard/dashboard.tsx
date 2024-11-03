@@ -1,5 +1,14 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, App, Gdk, astalify, ConstructProps } from "astal/gtk3";
-import { GObject } from "astal"
+import { GObject } from "astal";
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import Mpris from "gi://AstalMpris";
 import { Grid } from "../../Astalified/index";
@@ -14,16 +23,7 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 const player = Mpris.Player.new("Deezer");
 
 function Dashboard({ monitor }: { monitor: number }) {
-	const content = <Grid
-		className={"dashboard grid"}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
-		hexpand={true}
-		vexpand={true}
-		visible={true}
-		column_spacing={5}
-		row_spacing={5}
-	/>
+	const content = <Grid className={"dashboard grid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} column_spacing={5} row_spacing={5} />;
 
 	// if (Player.length > 0) {
 	// content.insert_row(0);
@@ -36,12 +36,12 @@ function Dashboard({ monitor }: { monitor: number }) {
 	// 	content.attach(Player, 1, 0, 3, 1);
 	// } else { content.remove_row(0) }
 
-	content.attach(ClickToClose(1, .25, .1, "dashboard"), 0, 0, 1, 2) // left side
-	content.attach(LeftSide(), 1, 1, 1, 1)
-	content.attach(Tray(), 2, 1, 1, 1)
-	content.attach(RightSide(), 3, 1, 1, 1)
-	content.attach(ClickToClose(2, .25, .1, "dashboard"), 4, 0, 1, 2) // right side
-	content.attach(ClickToClose(3, 1, .5, "dashboard"), 0, 2, 5, 1) // bottom
+	content.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
+	content.attach(LeftSide(), 1, 1, 1, 1);
+	content.attach(Tray(), 2, 1, 1, 1);
+	content.attach(RightSide(), 3, 1, 1, 1);
+	content.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
+	content.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
 
 	return (
 		<window
@@ -56,22 +56,22 @@ function Dashboard({ monitor }: { monitor: number }) {
 			onKeyPressEvent={(_, event) => {
 				const win = App.get_window("dashboard");
 				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-					if (win && win.visible === true) { win.visible = false; }
+					if (win && win.visible === true) {
+						win.visible = false;
+					}
 				}
 			}}
 		>
-			<box>
-				{content}
-			</box>
+			<box>{content}</box>
 		</window>
 	);
 }
 
 App.connect("window-toggled", (_, win) => {
 	if (win.visible === false && win.name === "dashboard") {
-		dashboardLeftStack.set_visible_child_name("calendar")
-		dashboardRightStack.set_visible_child_name("notifications")
+		dashboardLeftStack.set_visible_child_name("calendar");
+		dashboardRightStack.set_visible_child_name("notifications");
 	}
-})
+});
 
 export default Dashboard;

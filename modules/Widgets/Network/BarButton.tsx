@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, Variable, execAsync } from "astal";
 import Icon, { Icons } from "../../lib/icons";
@@ -13,12 +22,12 @@ let netreveal = Variable(false);
 const NetworkWidget = () => {
 	const wifiIcon = <icon className={"barbutton wifi icon"} icon={bind(Wifi, "icon_name")} />;
 
-	const wifiLabel = <label className={"barbutton wifi label"} />
+	const wifiLabel = <label className={"barbutton wifi label"} />;
 
 	function updateWifiLabel() {
 		const wifi = network.wifi;
 		wifiLabel.set_label(wifi.ssid ? `${wifi.ssid.substring(0, 15)}` : "--");
-	};
+	}
 
 	updateWifiLabel();
 
@@ -28,7 +37,7 @@ const NetworkWidget = () => {
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
 			{wifiLabel}
 		</revealer>
-	)
+	);
 	const wifiIndicator = (
 		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={bind(network, "wifi").as((showLabel) => !!showLabel)}>
 			{[wifiIcon, wifiLabelRevealer]}
@@ -64,14 +73,18 @@ function NetworkButton() {
 			valign={Gtk.Align.CENTER}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					const dashTab = "network"
+					const dashTab = "network";
 					const win = App.get_window("dashboard");
 					const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
 					const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
 					if (win) {
-						if (win.visible === true && !dashboardTab) { setDashboardTab }
-						else if (win.visible === true && dashboardTab) { win.visible = !win.visible; }
-						else { win.visible = !win.visible }
+						if (win.visible === true && !dashboardTab) {
+							setDashboardTab;
+						} else if (win.visible === true && dashboardTab) {
+							win.visible = !win.visible;
+						} else {
+							win.visible = !win.visible;
+						}
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {

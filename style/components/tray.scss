@@ -1,65 +1,76 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 .tray {
-  background: $TertiaryBG;
-  border: $border;
-  border-radius: $radius;
-  padding: 0.25rem;
+	background: $TertiaryBG;
+	border: $border;
+	border-radius: $radius;
+	padding: 0.25rem;
 
-  >* {
-    border: 2px solid rgba(0, 0, 0, 0);
-    background-color: transparent;
-    font-weight: bold;
-  }
+	> * {
+		border: 2px solid rgba(0, 0, 0, 0);
+		background-color: transparent;
+		font-weight: bold;
+	}
 
-  button {
+	button {
+		image,
+		icon {
+			color: $font-color1;
+			font-size: 1.5rem;
+			border-radius: $radius;
+		}
 
-    image,
-    icon {
-      color: $font-color1;
-      font-size: 1.5rem;
-      border-radius: $radius;
-    }
+		&:hover {
+			background-color: #1e1e2e;
+			border-radius: $radius;
+			border: $border;
 
-    &:hover {
-      background-color: #1e1e2e;
-      border-radius: $radius;
-      border: $border;
-
-      // image {
-      // }
-    }
-  }
+			// image {
+			// }
+		}
+	}
 }
 
-menu>menuitem {
-  background: rgba(0, 0, 0, 1);
-  border-radius: $radius;
-  border-bottom: $border;
-  color: $font-color1;
-  margin: 0.5px;
-  padding: 5px;
+menu > menuitem {
+	background: rgba(0, 0, 0, 1);
+	border-radius: $radius;
+	border-bottom: $border;
+	color: $font-color1;
+	margin: 0.5px;
+	padding: 5px;
 
-  &:hover {
-    color: $font-color5;
-    border-right: $border;
-    border-left: $border;
-    border-bottom: none;
-    font-weight: bolder;
-    border-color: $font-color4;
+	&:hover {
+		color: $font-color5;
+		border-right: $border;
+		border-left: $border;
+		border-bottom: none;
+		font-weight: bolder;
+		border-color: $font-color4;
 
-    icon,
-    image {
-      color: $font-color4;
-    }
-  }
+		icon,
+		image {
+			color: $font-color4;
+		}
+	}
 
-  icon,
-  image {
-    color: $font-color1;
-  }
+	icon,
+	image {
+		color: $font-color1;
+	}
 
-  &:disabled {
-    color: gray;
-    background: rgba(39, 38, 38, 0.5);
-    border: none;
-  }
+	&:disabled {
+		color: gray;
+		background: rgba(39, 38, 38, 0.5);
+		border: none;
+	}
 }

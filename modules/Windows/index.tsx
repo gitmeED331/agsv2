@@ -1,4 +1,13 @@
-import Bar from "./bar/Bar"
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
+import Bar from "./bar/Bar";
 
 import Dashboard from "./dashboard/dashboard";
 import MediaPlayerWindow from "./MediaPlayer";
@@ -25,5 +34,5 @@ export {
 	// Overview,
 	// powerprofiles,
 	sessioncontrol,
-	wallpapers
+	wallpapers,
 };

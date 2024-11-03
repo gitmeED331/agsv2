@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, GLib, Variable } from "astal";
 import Mpris from "gi://AstalMpris";
@@ -67,33 +76,39 @@ function TrackPosition() {
 	// 		halign={Gtk.Align.FILL}
 	// 	/>
 	// );
-	const position = bind(player, "position").as(n => parseInt(n.toString()))
-	const length = bind(player, "length").as(n => parseInt(n.toString()))
-	const trackPercent = Variable.derive(
-		[position, length],
-		(position, length) => {
-			return (position / length).toFixed(2)
-		}
-	)
+	const position = bind(player, "position").as((n) => parseInt(n.toString()));
+	const length = bind(player, "length").as((n) => parseInt(n.toString()));
+	const trackPercent = Variable.derive([position, length], (position, length) => {
+		return (position / length).toFixed(2);
+	});
 	const lengthLabel = <label className={"tracklength"} halign={Gtk.Align.START} label={bind(player, "length").as(lengthStr)} />;
 
 	const positionLabel = <label className={"trackposition"} halign={Gtk.Align.END} label={bind(player, "position").as(lengthStr)} />;
 
-	return <box className={"positioncontainer"} valign={Gtk.Align.CENTER} halign={Gtk.Align.FILL} hexpand={true} vertical={true} spacing={5} visible={bind(player, "length").as((length) => (length > 0 ? true : false))} >
-		<circularprogress className={"circularprogress"} value={Number(trackPercent())} startAt={0.75} endAt={-0.25}
-			rounded={true} inverted={false} >
-			<box vertical valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
-				{[lengthLabel, positionLabel]}
-			</box>
-		</circularprogress>
-		{/* {positionSlider}
+	return (
+		<box
+			className={"positioncontainer"}
+			valign={Gtk.Align.CENTER}
+			halign={Gtk.Align.FILL}
+			hexpand={true}
+			vertical={true}
+			spacing={5}
+			visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
+		>
+			<circularprogress className={"circularprogress"} value={Number(trackPercent())} startAt={0.75} endAt={-0.25} rounded={true} inverted={false}>
+				<box vertical valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+					{[lengthLabel, positionLabel]}
+				</box>
+			</circularprogress>
+			{/* {positionSlider}
 		<centerbox
 			halign={Gtk.Align.FILL}
 		 	valign={Gtk.Align.CENTER}
 		 	startWidget={lengthLabel}
 		 	endWidget={positionLabel}
 		 /> */}
-	</box>;
+		</box>
+	);
 }
 
 function PlayerIcon() {
@@ -145,7 +160,7 @@ const blurCoverArtCss = async (cover_art: string): Promise<string> => {
 	 */
 	const playerBGgen = (bg: string, color: string): string =>
 		`background-image: radial-gradient(circle at center, rgba(0, 0, 0, 0), ${color} 12rem), url('${bg}');
-         background-position: center; 
+         background-position: center;
          background-size: contain;
          transition: all 0.7s ease;
          background-repeat: no-repeat;
@@ -178,14 +193,11 @@ function Player({ player }: { player: Mpris.Player }) {
 		});
 	}
 
-	const position = bind(player, "position").as(n => parseInt(n.toString()))
-	const length = bind(player, "length").as(n => parseInt(n.toString()))
-	const trackPercent = Variable.derive(
-		[position, length],
-		(position, length) => {
-			return (position / length).toFixed(2)
-		}
-	)
+	const position = bind(player, "position").as((n) => parseInt(n.toString()));
+	const length = bind(player, "length").as((n) => parseInt(n.toString()));
+	const trackPercent = Variable.derive([position, length], (position, length) => {
+		return (position / length).toFixed(2);
+	});
 
 	const mediaInfoGrid = new Grid({
 		className: "mediainfo",
@@ -195,7 +207,7 @@ function Player({ player }: { player: Mpris.Player }) {
 		vexpand: true,
 		visible: true,
 		rowSpacing: 10,
-	})
+	});
 
 	mediaInfoGrid.attach(PlayerIcon(), 0, 0, 1, 1);
 	mediaInfoGrid.attach(TrackInfo(), 0, 1, 1, 1);
@@ -203,17 +215,33 @@ function Player({ player }: { player: Mpris.Player }) {
 	mediaInfoGrid.attach(PlayerControls(), 0, 3, 2, 1);
 
 	return (
-		<box className={"outer"} halign={Gtk.Align.CENTER} valign={Gtk.Align.END} setup={setup} css={`border-radius: 50rem;`}>
-			<circularprogress className={"player"} hexpand={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
-				visible={bind(player, "available").as((a) => a === true)} value={Number(trackPercent())} startAt={0.75} endAt={-0.25}
-				rounded={true} inverted={false} >
-				<eventbox className={"inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} >
+		<box
+			className={"outer"}
+			halign={Gtk.Align.CENTER}
+			valign={Gtk.Align.END}
+			setup={setup}
+			css={`
+				border-radius: 50rem;
+			`}
+		>
+			<circularprogress
+				className={"player"}
+				hexpand={true}
+				halign={Gtk.Align.CENTER}
+				valign={Gtk.Align.CENTER}
+				visible={bind(player, "available").as((a) => a === true)}
+				value={Number(trackPercent())}
+				startAt={0.75}
+				endAt={-0.25}
+				rounded={true}
+				inverted={false}
+			>
+				<eventbox className={"inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
 					{mediaInfoGrid}
 				</eventbox>
 			</circularprogress>
-		</box >
+		</box>
 	);
 }
 
 export default Player;
-

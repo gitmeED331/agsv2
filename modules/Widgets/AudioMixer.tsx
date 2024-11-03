@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, execAsync, GLib, Variable } from "astal";
 import Icon from "../lib/icons";
@@ -65,8 +74,7 @@ function DeviceSlider({ device }) {
 
 function DeviceControlGroup({ devices }) {
 	return (
-		<box className={"audio-mixer devices"} vertical={true} vexpand={true} spacing={10}
-			valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+		<box className={"audio-mixer devices"} vertical={true} vexpand={true} spacing={10} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
 			{devices.map((device) => (
 				<box spacing={5} key={device.id}>
 					<DeviceIdentifier device={device} />
@@ -109,17 +117,19 @@ function AppMixerItem({ stream }) {
 			</box>
 		</button>
 	);
-	const streamSlider = <slider
-		className={"audio-mixer item Slider"}
-		halign={Gtk.Align.CENTER}
-		valign={Gtk.Align.CENTER}
-		hexpand={true}
-		draw_value={false}
-		value={bind(stream, "volume")}
-		onDragged={({ value }) => {
-			stream.volume = value;
-		}}
-	/>
+	const streamSlider = (
+		<slider
+			className={"audio-mixer item Slider"}
+			halign={Gtk.Align.CENTER}
+			valign={Gtk.Align.CENTER}
+			hexpand={true}
+			draw_value={false}
+			value={bind(stream, "volume")}
+			onDragged={({ value }) => {
+				stream.volume = value;
+			}}
+		/>
+	);
 	return (
 		<box className={"audio-mixer item"} visible={true} hexpand={false} halign={Gtk.Align.CENTER} vertical={true} spacing={2}>
 			{[mixerLabel, streamSlider]}

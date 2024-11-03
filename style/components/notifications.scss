@@ -1,196 +1,208 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 .notif {
-  .outerbox {
-    background: $TertiaryBG;
-    border-radius: $radius;
-    padding: 0.35rem;
-  }
+	.outerbox {
+		background: $TertiaryBG;
+		border-radius: $radius;
+		padding: 0.35rem;
+	}
 
-  &.panel {
-    //margin-top: 0.25rem;
-    padding: 0rem 0.5rem;
-    padding-bottom: 0.25rem;
-    // background: $TertiaryBG;
-    // border-radius: $radius-rlbottom;
-    // border: $border;
-    // border-top: none;
+	&.panel {
+		//margin-top: 0.25rem;
+		padding: 0rem 0.5rem;
+		padding-bottom: 0.25rem;
+		// background: $TertiaryBG;
+		// border-radius: $radius-rlbottom;
+		// border: $border;
+		// border-top: none;
 
-    .header {
-      border-radius: $radius;
-      border-bottom: $border;
-      box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
-      margin-bottom: 0.5rem;
-      padding: 0.25rem 0rem;
+		.header {
+			border-radius: $radius;
+			border-bottom: $border;
+			box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+			margin-bottom: 0.5rem;
+			padding: 0.25rem 0rem;
 
-      label {
-        font-size: 1.1rem;
-        color: $font-color1;
-      }
+			label {
+				font-size: 1.1rem;
+				color: $font-color1;
+			}
 
-      button {
-        color: $font-color1;
+			button {
+				color: $font-color1;
 
-        icon {
-          font-size: 1.1rem;
-        }
+				icon {
+					font-size: 1.1rem;
+				}
 
-        &:hover {
-          icon {
-            color: $font-color5;
-          }
-        }
-      }
-    }
-  }
+				&:hover {
+					icon {
+						color: $font-color5;
+					}
+				}
+			}
+		}
+	}
 
-  .titlebox {
-    border-bottom: $border;
-    border-radius: $radius;
-    padding: 0rem 1rem;
-    margin-bottom: 0.5rem;
-    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+	.titlebox {
+		border-bottom: $border;
+		border-radius: $radius;
+		padding: 0rem 1rem;
+		margin-bottom: 0.5rem;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-    .title {
-      font-size: 1.1rem;
-      font-weight: bolder;
-    }
+		.title {
+			font-size: 1.1rem;
+			font-weight: bolder;
+		}
 
-    .subtitle {
-      color: $font-color1;
-      font-size: 1rem;
-      font-weight: normal;
-    }
-  }
+		.subtitle {
+			color: $font-color1;
+			font-size: 1rem;
+			font-weight: normal;
+		}
+	}
 
-  .body {
-    color: $font-color3;
-    font-size: 0.9rem;
-    font-weight: normal;
-    padding: 0rem 1rem;
-  }
+	.body {
+		color: $font-color3;
+		font-size: 0.9rem;
+		font-weight: normal;
+		padding: 0rem 1rem;
+	}
 
-  .icondatetime {
-    padding: 0.5rem;
+	.icondatetime {
+		padding: 0.5rem;
 
-    icon {
-      font-size: 2.5rem;
-    }
+		icon {
+			font-size: 2.5rem;
+		}
 
-    .datetime {
-      padding: 0.25rem;
-      font-weight: normal;
+		.datetime {
+			padding: 0.25rem;
+			font-weight: normal;
 
-      label {
-        color: $font-color2;
-        font-size: 0.8rem;
-      }
-    }
-  }
+			label {
+				color: $font-color2;
+				font-size: 0.8rem;
+			}
+		}
+	}
 
-  .actions {
-    button {
-      border: $border;
-      border-radius: $radius;
-      margin: 0 0.4rem;
-      margin-top: 0.8rem;
-      font-size: 1.35rem;
-      padding: 0.1rem;
+	.actions {
+		button {
+			border: $border;
+			border-radius: $radius;
+			margin: 0 0.4rem;
+			margin-top: 0.8rem;
+			font-size: 1.35rem;
+			padding: 0.1rem;
 
-      &:first-child {
-        margin-left: 0.25rem;
-      }
+			&:first-child {
+				margin-left: 0.25rem;
+			}
 
-      &:last-child {
-        margin-right: 0.25rem;
-      }
+			&:last-child {
+				margin-right: 0.25rem;
+			}
 
-      &:hover {
-        background-color: $color7;
+			&:hover {
+				background-color: $color7;
 
-        label {
-          font-weight: bolder;
-          color: $font-color4;
-        }
-      }
-    }
-  }
+				label {
+					font-weight: bolder;
+					color: $font-color4;
+				}
+			}
+		}
+	}
 
-  .level2 {
-    &.outerbox {
-      border: 3px dotted rgba(255, 0, 0, 1);
-    }
+	.level2 {
+		&.outerbox {
+			border: 3px dotted rgba(255, 0, 0, 1);
+		}
 
-    .title {
-      color: $font-color4;
-    }
+		.title {
+			color: $font-color4;
+		}
 
-    .body {
-      color: $font-color3;
-    }
+		.body {
+			color: $font-color3;
+		}
 
-    .icondatetime {
-      icon {
-        color: $font-color4;
-      }
+		.icondatetime {
+			icon {
+				color: $font-color4;
+			}
 
-      .datetime {
-        label {
-          color: $font-color2;
-        }
-      }
-    }
-  }
+			.datetime {
+				label {
+					color: $font-color2;
+				}
+			}
+		}
+	}
 
-  .level1 {
-    &.outerbox {
-      border: 3px dashed rgba(15, 155, 255, 1);
-    }
+	.level1 {
+		&.outerbox {
+			border: 3px dashed rgba(15, 155, 255, 1);
+		}
 
-    .title {
-      color: $font-color1;
-    }
+		.title {
+			color: $font-color1;
+		}
 
-    .body {
-      color: $font-color3;
-    }
+		.body {
+			color: $font-color3;
+		}
 
-    .icondatetime {
-      icon {
-        color: $font-color2;
-      }
+		.icondatetime {
+			icon {
+				color: $font-color2;
+			}
 
-      .datetime {
-        label {
-          color: $font-color2;
-        }
-      }
-    }
-  }
+			.datetime {
+				label {
+					color: $font-color2;
+				}
+			}
+		}
+	}
 
-  .levelundefined,
-  .level0 {
-    &.outerbox {
-      border: 3px groove white;
-    }
+	.levelundefined,
+	.level0 {
+		&.outerbox {
+			border: 3px groove white;
+		}
 
-    .title {
-      color: $font-color1;
-    }
+		.title {
+			color: $font-color1;
+		}
 
-    .body {
-      color: $font-color3;
-    }
+		.body {
+			color: $font-color3;
+		}
 
-    .icondatetime {
-      icon {
-        color: white;
-      }
-    }
-  }
+		.icondatetime {
+			icon {
+				color: white;
+			}
+		}
+	}
 }
 
 .close-button {
-  font-size: 1.5rem;
-  margin-left: 0.25rem;
+	font-size: 1.5rem;
+	margin-left: 0.25rem;
 }
 
 //

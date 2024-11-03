@@ -1,14 +1,20 @@
 #!/usr/bin/gjs -m
+
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { App } from "astal/gtk3";
 import { execAsync, monitorFile } from "astal";
 
 /* CSS Hot Reload */
 async function monitorStyle() {
-	const pathsToMonitor = [
-		`${SRC}/style/globals`,
-		`${SRC}/style/components`,
-		`${SRC}/style/variables.scss`,
-	]; // Paths to monitor
+	const pathsToMonitor = [`${SRC}/style/globals`, `${SRC}/style/components`, `${SRC}/style/variables.scss`]; // Paths to monitor
 
 	const mainScss = `${SRC}/style/main.scss`; // SCSS input file to compile
 	const css = `/tmp/style.css`; // CSS output file
@@ -31,12 +37,12 @@ async function monitorStyle() {
 		}
 	}
 
-	pathsToMonitor.forEach(path => monitorFile(path, transpileAndApply));
+	pathsToMonitor.forEach((path) => monitorFile(path, transpileAndApply));
 
 	return transpileAndApply();
 }
 
-monitorStyle()
+monitorStyle();
 
 import {
 	Bar,
@@ -47,7 +53,7 @@ import {
 	sessioncontrol,
 	Launcher,
 	cliphist,
-	wallpapers
+	wallpapers,
 } from "./modules/Windows/index";
 
 App.start({
@@ -58,7 +64,6 @@ App.start({
 		Launcher({ monitor: 0 });
 		MediaPlayerWindow();
 		NotificationPopups({ monitor: 0 });
-		// Overview();
 		sessioncontrol({ monitor: 0 });
 		wallpapers();
 	},

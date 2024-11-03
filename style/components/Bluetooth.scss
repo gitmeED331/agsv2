@@ -1,132 +1,141 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 .bluetooth {
-    // &.container {
-    //     background: $TertiaryBG;
-    //     border-radius: $radius-rlbottom;
-    //     border: $border;
-    //     border-top: none;
-    // }
+	// &.container {
+	//     background: $TertiaryBG;
+	//     border-radius: $radius-rlbottom;
+	//     border: $border;
+	//     border-top: none;
+	// }
 
-    &.devicelist-header {
-        color: $font-color1;
-        border-radius: $radius;
-        border-bottom: $border;
-        padding: 0.25rem 1rem;
-        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+	&.devicelist-header {
+		color: $font-color1;
+		border-radius: $radius;
+		border-bottom: $border;
+		padding: 0.25rem 1rem;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-        &.controls {
-            border: unset;
-            box-shadow: unset;
-            padding: unset;
+		&.controls {
+			border: unset;
+			box-shadow: unset;
+			padding: unset;
 
-            button {
+			button {
+				&.power-on {
+					color: $font-color3;
+				}
 
-                &.power-on {
-                    color: $font-color3;
-                }
+				&.power-off {
+					color: $font-color4;
+				}
 
-                &.power-off {
-                    color: $font-color4;
-                }
+				&:hover {
+					label {
+						color: $font-color5;
+					}
 
-                &:hover {
-                    label {
-                        color: $font-color5;
-                    }
+					icon {
+						color: $font-color5;
+					}
+				}
+			}
+		}
 
-                    icon {
-                        color: $font-color5;
-                    }
-                }
-            }
-        }
+		.refreshing {
+			color: $font-color3;
 
-        .refreshing {
-            color: $font-color3;
+			icon {
+				animation: spin 1s infinite linear;
+			}
+		}
+	}
 
-            icon {
-                animation: spin 1s infinite linear;
-            }
-        }
-    }
+	&.devicelist-inner {
+		color: $font-color1;
+		padding: 0.25rem;
 
-    &.devicelist-inner {
-        color: $font-color1;
-        padding: 0.25rem;
+		&.controls {
+			all: unset;
+			background: transparent;
+			border-radius: $radius;
+			border-left: $border;
+			padding: 0rem 0.5rem;
+			box-shadow: -0.75rem 0rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-        &.controls {
-            all: unset;
-            background: transparent;
-            border-radius: $radius;
-            border-left: $border;
-            padding: 0rem 0.5rem;
-            box-shadow: -0.75rem 0rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+			icon {
+				font-size: 1.25rem;
+			}
 
-            icon {
-                font-size: 1.25rem;
-            }
+			button {
+				all: unset;
 
-            button {
-                all: unset;
+				&:hover {
+					label {
+						color: $font-color5;
+					}
 
-                &:hover {
-                    label {
-                        color: $font-color5;
-                    }
+					icon {
+						color: $font-color5;
+					}
+				}
+			}
+		}
 
-                    icon {
-                        color: $font-color5;
-                    }
-                }
-            }
-        }
+		&.items {
+			border-radius: $radius;
+			border-bottom: $border;
 
-        &.items {
-            border-radius: $radius;
-            border-bottom: $border;
+			button {
+				label {
+					color: $font-color1;
+				}
 
-            button {
-                label {
-                    color: $font-color1;
-                }
+				icon {
+					color: $font-color1;
+				}
 
-                icon {
-                    color: $font-color1;
-                }
+				&:hover {
+					label {
+						color: $font-color5;
+					}
 
-                &:hover {
-                    label {
-                        color: $font-color5;
-                    }
+					icon {
+						color: $font-color5;
+					}
+				}
+			}
 
-                    icon {
-                        color: $font-color5;
-                    }
-                }
-            }
+			&.itemicon {
+				color: $font-color3;
+			}
 
-            &.itemicon {
-                color: $font-color3;
-            }
+			&.connected {
+				border-color: $font-color3;
 
-            &.connected {
-                border-color: $font-color3;
+				label {
+					color: $font-color3;
+				}
+			}
+		}
+	}
 
-                label {
-                    color: $font-color3;
-                }
-            }
+	&.barbutton {
+		&:hover {
+			color: $font-color5;
+		}
 
-
-        }
-    }
-
-    &.barbutton {
-        &:hover {
-            color: $font-color5
-        }
-
-        &-label {
-            color: $font-color2;
-        }
-    }
+		&-label {
+			color: $font-color2;
+		}
+	}
 }

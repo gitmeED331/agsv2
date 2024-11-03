@@ -1,133 +1,159 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 .cliphist {
-    &.container {}
+	&.container {
+	}
 
-    &.contentgrid {
-        background: $GrootRightBG;
-        background-color: black;
-        background-size: auto auto;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: $radius-tbleft;
-        border: $border;
-        border-right: unset;
-        box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
-        padding: 0rem 1rem;
-    }
+	&.contentgrid {
+		background: $GrootRightBG;
+		background-color: black;
+		background-size: auto auto;
+		background-position: center;
+		background-repeat: no-repeat;
+		border-radius: $radius-tbleft;
+		border: $border;
+		border-right: unset;
+		box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		padding: 0rem 1rem;
+	}
 
-    &.header {
-        margin: 1rem;
-        background: none;
-        border-bottom: $border;
-        border-left: $border;
-        border-right: $border;
-        border-radius: $radius;
-        color: $font-color1;
-        padding: 0.5rem;
-        box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+	&.header {
+		margin: 1rem;
+		background: none;
+		border-bottom: $border;
+		border-left: $border;
+		border-right: $border;
+		border-radius: $radius;
+		color: $font-color1;
+		padding: 0.5rem;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-        .clear_hist {
-            color: $font-color1;
-            border-radius: $radius;
+		.clear_hist {
+			color: $font-color1;
+			border-radius: $radius;
 
-            icon {
-                font-size: 2rem;
-                margin: -0.25rem;
-            }
+			icon {
+				font-size: 2rem;
+				margin: -0.25rem;
+			}
 
-            &:hover {
-                color: $font-color2;
-                background: $font-color4
-            }
-        }
+			&:hover {
+				color: $font-color2;
+				background: $font-color4;
+			}
+		}
 
-        .refresh_hist {
-            color: $font-color1;
-            border-radius: $radius;
+		.refresh_hist {
+			color: $font-color1;
+			border-radius: $radius;
 
-            icon {
-                font-size: 1.5rem;
-                margin: -0.25rem;
-            }
+			icon {
+				font-size: 1.5rem;
+				margin: -0.25rem;
+			}
 
-            &:hover {
-                color: $font-color2;
-                background: $font-color4
-            }
-        }
+			&:hover {
+				color: $font-color2;
+				background: $font-color4;
+			}
+		}
 
-        .search {
-            border-radius: $radius;
-            padding: 0rem 0.5rem;
+		.search {
+			border-radius: $radius;
+			padding: 0rem 0.5rem;
 
-            selection {
-                color: black;
-                background-color: $font-color2;
-            }
-        }
-    }
+			selection {
+				color: black;
+				background-color: $font-color2;
+			}
+		}
+	}
 
-    button.item {
-        all: unset;
-        padding: 0rem 0.75rem;
-        min-height: 1.5rem;
-        margin-bottom: 0.5rem;
-        border-bottom: 2px solid rgba(0, 0, 255, 1);
+	button.item {
+		all: unset;
+		padding: 0rem 0.75rem;
+		min-height: 1.5rem;
+		margin-bottom: 0.5rem;
+		border-bottom: 2px solid rgba(0, 0, 255, 1);
 
-        &:last-child {
-            border-bottom: none;
-        }
+		&:last-child {
+			border-bottom: none;
+		}
 
-        icon {
-            font-size: 2rem;
-            color: $font-color1;
-            border-radius: 10rem;
-        }
+		icon {
+			font-size: 2rem;
+			color: $font-color1;
+			border-radius: 10rem;
+		}
 
-        label {
-            color: $font-color1;
-            font-weight: normal;
-            font-size: 1.25rem;
-        }
+		label {
+			color: $font-color1;
+			font-weight: normal;
+			font-size: 1.25rem;
+		}
 
-        //&:focus-visible,
-        &.active,
-        &:focus,
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: $radius;
-            border-bottom: $border;
+		//&:focus-visible,
+		&.active,
+		&:focus,
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.8);
+			border-radius: $radius;
+			border-bottom: $border;
 
-            label {
-                text-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
-            }
+			label {
+				text-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+			}
 
-            icon {
-                -gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
-                animation: spin 1s linear infinite;
-            }
-        }
-    }
+			icon {
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+				animation: spin 1s linear infinite;
+			}
+		}
 
-    scrollbar.vertical {
-        transition: 200ms;
-        background-color: rgba(23, 23, 23, 0.3);
-        margin: 0.5rem 0rem;
+		.idlabel {
+			border-right: $border;
+			border-radius: $radius;
+			padding: 0.5rem;
+		}
+		.imagePreview {
+			background-size: contain;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-color: rgba(255, 255, 255, 0.25);
+			border-radius: $radius;
+		}
+	}
 
-        &:hover {
-            background-color: rgba(23, 23, 23, 0.7);
+	scrollbar.vertical {
+		transition: 200ms;
+		background-color: rgba(23, 23, 23, 0.3);
+		margin: 0.5rem 0rem;
 
-            slider {
-                background-color: $font-color1;
-                min-width: .5rem;
-            }
-        }
+		&:hover {
+			background-color: rgba(23, 23, 23, 0.7);
 
-        slider {
-            background-color: rgba(15, 155, 255, 0.5);
-            border-radius: $radius;
-            min-width: .4rem;
-            min-height: 2rem;
-            transition: 200ms;
-        }
-    }
+			slider {
+				background-color: $font-color1;
+				min-width: 0.5rem;
+			}
+		}
+
+		slider {
+			background-color: rgba(15, 155, 255, 0.5);
+			border-radius: $radius;
+			min-width: 0.4rem;
+			min-height: 2rem;
+			transition: 200ms;
+		}
+	}
 }

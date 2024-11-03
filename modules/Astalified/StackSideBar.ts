@@ -1,21 +1,23 @@
-import { Gtk, Gdk, Widget, astalify, ConstructProps } from "astal/gtk3"
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
+import { Gtk, Gdk, Widget, astalify, ConstructProps } from "astal/gtk3";
 import { GObject } from "astal";
 
-
-// export type StackSidebarProps = Widget.ConstructProps<Gtk.StackSidebar, Gtk.StackSidebar.ConstructorProps>;
-
-// export const StackSidebar = Widget.astalify<typeof Gtk.StackSidebar, StackSidebarProps, "StackSidebar">(Gtk.StackSidebar);
-// export type StackSidebar = ReturnType<typeof StackSidebar>;
-
 class StackSidebar extends astalify(Gtk.StackSidebar) {
-    static { GObject.registerClass(this) }
+	static {
+		GObject.registerClass(this);
+	}
 
-    constructor(props: ConstructProps<
-        StackSidebar,
-        Gtk.StackSidebar.ConstructorProps
-    >) {
-        super(props as any)
-    }
+	constructor(props: ConstructProps<StackSidebar, Gtk.StackSidebar.ConstructorProps>) {
+		super(props as any);
+	}
 }
 
-export default StackSidebar
+export default StackSidebar;

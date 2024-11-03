@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, execAsync, exec, Variable } from "astal";
 import Icon from "../../lib/icons";
@@ -9,7 +18,6 @@ const Bluetooth = AstalBluetooth.get_default();
 const Adapter = Bluetooth.adapter;
 
 function btControls() {
-
 	const btPower = (
 		<button
 			className={bind(Bluetooth, "is_powered").as((v) => (v ? "bluetooth power-on" : "bluetooth power-off"))}
@@ -31,12 +39,7 @@ function btControls() {
 	}
 
 	const Refresh = (
-		<stack
-			visible={true}
-			halign={Gtk.Align.END}
-			visible_child_name={bind(Adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))}
-			homogeneous={false}
-		>
+		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))} homogeneous={false}>
 			<button
 				name={"iconbtn"}
 				onClick={(_, event) => {
@@ -66,27 +69,25 @@ function btControls() {
 				valign={Gtk.Align.CENTER}
 				tooltip_text={"Stop Discovery"}
 			>
-				<Spinner
-					setup={spinSetup}
-					halign={Gtk.Align.CENTER}
-					valign={Gtk.Align.CENTER}
-				/>
+				<Spinner setup={spinSetup} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 			</button>
 		</stack>
 	);
-	const blueman = <button
-		onClick={(_, event) => {
-			if (event.button === Gdk.BUTTON_PRIMARY) {
-				execAsync("blueman-manager");
-				App.toggle_window("dashboard");
-			}
-		}}
-		halign={Gtk.Align.END}
-		valign={Gtk.Align.CENTER}
-		tooltip_text={"Blueman Manager"}
-	>
-		<icon icon={Icon.ui.settings} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
-	</button>
+	const blueman = (
+		<button
+			onClick={(_, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					execAsync("blueman-manager");
+					App.toggle_window("dashboard");
+				}
+			}}
+			halign={Gtk.Align.END}
+			valign={Gtk.Align.CENTER}
+			tooltip_text={"Blueman Manager"}
+		>
+			<icon icon={Icon.ui.settings} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+		</button>
+	);
 	return (
 		<box className={"bluetooth devicelist-header controls"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={15}>
 			{btPower}
@@ -94,7 +95,7 @@ function btControls() {
 			{blueman}
 		</box>
 	);
-};
+}
 
 function content(device) {
 	const DeviceButton = () => {
@@ -103,11 +104,7 @@ function content(device) {
 		const DeviceTypeIcon = <icon icon={device.icon || "bluetooth-symbolic"} halign={Gtk.Align.START} valign={Gtk.Align.CENTER} />;
 
 		return (
-			<button
-				halign={Gtk.Align.FILL}
-				valign={Gtk.Align.CENTER}
-				onClick={() => execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`)}
-			>
+			<button halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} onClick={() => execAsync(`bluetoothctl ${device.connected ? "disconnect" : "connect"} ${device.address}`)}>
 				<centerbox halign={Gtk.Align.START} valign={Gtk.Align.CENTER} spacing={5} startWidget={DeviceTypeIcon} centerWidget={btDeviceLabel} />
 			</button>
 		);
@@ -118,9 +115,9 @@ function content(device) {
 				className={"bluetooth devicelist-inner controls pair"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						exec(`bluetoothctl ${device.paired === true ? "Unpair" : "Pair"} ${device.address}`)
+						exec(`bluetoothctl ${device.paired === true ? "Unpair" : "Pair"} ${device.address}`);
 					} else if (event.button === Gdk.BUTTON_SECONDARY) {
-						exec(`bluetoothctl cancelpair ${device.address}`)
+						exec(`bluetoothctl cancelpair ${device.address}`);
 					}
 				}}
 				halign={Gtk.Align.END}
@@ -211,17 +208,7 @@ function BluetoothDevices() {
 	return (
 		<box className={"bluetooth container"} name={"Bluetooth"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={10}>
 			<centerbox className={"bluetooth devicelist-header"} vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} centerWidget={<label label={"Bluetooth"} />} endWidget={btControls()} />
-			<scrollable
-				halign={Gtk.Align.FILL}
-				valign={Gtk.Align.FILL}
-				visible={true}
-				vscroll={Gtk.PolicyType.AUTOMATIC}
-				hscroll={Gtk.PolicyType.NEVER}
-				vexpand={true}
-				css={`
-					min-height: 200px;
-				`}
-			>
+			<scrollable halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} expand>
 				<box className={"bluetooth devicelist-inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={5}>
 					{btdevicelist}
 				</box>

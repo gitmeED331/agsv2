@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Gtk, Gdk } from "astal/gtk3";
 import { timeout, bind } from "astal";
 import Icon from "../../lib/icons";
@@ -16,11 +25,9 @@ const NotifBox = (
 			})}
 		</box>
 	</scrollable>
-)
+);
 
-const Header = (
-	<label label="Notifications" valign={Gtk.Align.START} halign={Gtk.Align.END} />
-)
+const Header = <label label="Notifications" valign={Gtk.Align.START} halign={Gtk.Align.END} />;
 
 const Controls = (
 	<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} vertical={false} spacing={20}>
@@ -44,14 +51,10 @@ const Controls = (
 				}
 			}}
 		>
-			<icon
-				icon={bind(Notif, "dont_disturb").as((d) => (d === false ? "bell-enabled-symbolic" : "bell-disabled-symbolic"))}
-				valign={Gtk.Align.CENTER}
-				halign={Gtk.Align.CENTER}
-			/>
+			<icon icon={bind(Notif, "dont_disturb").as((d) => (d === false ? "bell-enabled-symbolic" : "bell-disabled-symbolic"))} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} />
 		</button>
 	</box>
-)
+);
 
 export default function NotificationList() {
 	return (

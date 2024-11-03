@@ -1,116 +1,124 @@
-.calendarbox {
-  background: $TertiaryBG;
-  border-radius: 2rem;
-  border: $border;
-  padding: 1rem;
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+.calendarbox {
+	background: $TertiaryBG;
+	border-radius: 2rem;
+	border: $border;
+	padding: 1rem;
 }
 
 .dashcal {
-  border-top: $border;
-  border-radius: $radius-rltop;
-  padding: 0.5rem 2.5rem;
+	border-top: $border;
+	border-radius: $radius-rltop;
+	padding: 0.5rem 2.5rem;
 }
 
 .calendar {
-  font-family: $font;
+	font-family: $font;
 
-  &-grid {
-    border-radius: $radius;
-    padding: 0.25rem;
-    color: $font-color1;
-    font-size: 1.5rem;
+	&-grid {
+		border-radius: $radius;
+		padding: 0.25rem;
+		color: $font-color1;
+		font-size: 1.5rem;
 
-    label {
-      margin: 3px;
-    }
-  }
+		label {
+			margin: 3px;
+		}
+	}
 
-  &.header {
-    color: $font-color3;
-    margin: 0rem 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
+	&.header {
+		color: $font-color3;
+		margin: 0rem 1rem;
+		margin-bottom: 0.5rem;
+		font-size: 2rem;
 
-    .year,
-    .month {}
+		.year,
+		.month {
+		}
 
-    label {
-      color: $font-color1;
-      font-size: 1.75rem;
-    }
+		label {
+			color: $font-color1;
+			font-size: 1.75rem;
+		}
 
-    icon {
-      font-size: 1.5rem;
-    }
+		icon {
+			font-size: 1.5rem;
+		}
 
-    .arrow-left {
-      color: $font-color4;
-    }
+		.arrow-left {
+			color: $font-color4;
+		}
 
-    .arrow-right {
-      color: $font-color3;
-    }
+		.arrow-right {
+			color: $font-color3;
+		}
 
-    .arrow-right,
-    .arrow-left {
-      font-size: 3rem;
+		.arrow-right,
+		.arrow-left {
+			font-size: 3rem;
 
-      &:hover {
-        color: $font-color5;
-      }
-    }
+			&:hover {
+				color: $font-color5;
+			}
+		}
 
+		.return-today {
+			color: $font-color1;
+			background: $BGG5;
+			border-radius: $radius;
+			min-width: 50px;
+			min-height: 30px;
+			padding: 0.25rem 0.5rem;
 
-    .return-today {
-      color: $font-color1;
-      background: $BGG5;
-      border-radius: $radius;
-      min-width: 50px;
-      min-height: 30px;
-      padding: 0.25rem 0.5rem;
+			image {
+				font-size: 1.25rem;
+				padding: 0.25rem 1.5rem;
+			}
 
-      image {
-        font-size: 1.25rem;
-        padding: 0.25rem 1.5rem;
-      }
+			&:hover {
+				background: $BGG3;
 
-      &:hover {
-        background: $BGG3;
+				image {
+					color: $font-color3;
+					animation: spin 1s infinite;
+				}
+			}
+		}
+	}
 
-        image {
-          color: $font-color3;
-          animation: spin 1s infinite;
-        }
-      }
-    }
-  }
+	&-days {
+		color: $color6;
+		border-bottom: $border;
+		border-radius: $radius;
+		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		font-size: 1.5rem;
+		padding: 0.5rem;
+	}
 
-  &-days {
-    color: $color6;
-    border-bottom: $border;
-    border-radius: $radius;
-    box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
-    font-size: 1.5rem;
-    padding: 0.5rem;
+	&-day {
+		color: $font-color1;
+		margin: 0.1rem 0.25rem;
+		padding: 0.2rem 0.6rem;
+		border-radius: $radius;
+		font-size: 1.5rem;
+		font-weight: 100;
+	}
 
-  }
-
-  &-day {
-    color: $font-color1;
-    margin: 0.1rem 0.25rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: $radius;
-    font-size: 1.5rem;
-    font-weight: 100;
-  }
-
-  &-today {
-    background: radial-gradient(rgba(0, 0, 0, 1) 25%,
-        rgba(15, 155, 255, 1) 100%);
-    color: red;
-    border-radius: $radius;
-    font-weight: bolder;
-  }
-
+	&-today {
+		background: radial-gradient(rgba(0, 0, 0, 1) 25%, rgba(15, 155, 255, 1) 100%);
+		color: red;
+		border-radius: $radius;
+		font-weight: bolder;
+	}
 }

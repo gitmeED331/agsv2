@@ -1,187 +1,195 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 .hyprworkspaces {
-    background: $PrimaryBG;
-    border-top: $border;
-    border-radius: 1rem;
-    margin-left: 0.5rem;
-    padding: 0rem 0.5rem;
+	background: $PrimaryBG;
+	border-top: $border;
+	border-radius: 1rem;
+	margin-left: 0.5rem;
+	padding: 0rem 0.5rem;
 
+	& .urgent {
+		color: $font-color4;
 
-    & .urgent {
-        color: $font-color4;
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+	& .occupied {
+		color: rgba(15, 155, 255, 1);
 
-    & .occupied {
-        color: rgba(15, 155, 255, 1);
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+	& .focused {
+		all: unset;
+		background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $font-color1 1.5rem);
+		border: 1px solid $font-color2;
+		border-radius: 2rem;
+		padding: 0.2rem;
+		color: $font-color3;
+		transition: all 2s ease;
 
-    & .focused {
-        all: unset;
-        background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $font-color1 1.5rem);
-        border: 1px solid $font-color2;
-        border-radius: 2rem;
-        padding: 0.2rem;
-        color: $font-color3;
-        transition: all 2s ease;
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+	& button {
+		transition: all 2s cubic-bezier(0.5, 2, 0, 1);
+		color: $font-color1;
 
-    & button {
-        transition: all 2s cubic-bezier(0.5, 2, 0, 1);
-        color: $font-color1;
+		icon {
+			font-size: 0.8rem;
+		}
 
-        icon {
-            font-size: 0.8rem;
-        }
+		label {
+			font-size: 0.9rem;
+		}
 
-        label {
-            font-size: 0.9rem;
-        }
+		&:first-child {
+			margin-right: 0.25rem;
+		}
 
-        &:first-child {
-            margin-right: 0.25rem;
-        }
+		&:nth-child(1n + 0) {
+			margin: 0rem 0.25rem;
+		}
 
-        &:nth-child(1n+0) {
-            margin: 0rem 0.25rem;
-        }
+		&:last-child {
+			margin-left: 0.25rem;
+		}
 
-        &:last-child {
-            margin-left: 0.25rem;
-        }
+		&:hover {
+			icon {
+				animation: spin 1s linear infinite;
+				color: $font-color5;
+				// -gtk-icon-transform: scale(2);
+			}
 
-        &:hover {
-
-            icon {
-                animation: spin 1s linear infinite;
-                color: $font-color5;
-                // -gtk-icon-transform: scale(2);
-            }
-
-            label {
-                color: $font-color5;
-            }
-        }
-    }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 }
 
 .riverworkspaces {
-    background: $PrimaryBG;
-    border-top: $border;
-    border-radius: 1rem;
-    padding: 0rem 0.5rem;
+	background: $PrimaryBG;
+	border-top: $border;
+	border-radius: 1rem;
+	padding: 0rem 0.5rem;
 
-    & .urgent {
-        color: $font-color4;
+	& .urgent {
+		color: $font-color4;
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
-    & .occupied {
-        color: rgba(15, 155, 255, 1);
+	& .occupied {
+		color: rgba(15, 155, 255, 1);
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
+	& .focused {
+		all: unset;
+		//background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $font-color1 1.5rem);
+		border-bottom: 1px solid $font-color2;
+		border-radius: 2rem;
+		padding: 0rem 0.2rem;
+		color: $font-color3;
 
-    & .focused {
-        all: unset;
-        //background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $font-color1 1.5rem);
-        border-bottom: 1px solid $font-color2;
-        border-radius: 2rem;
-        padding: 0rem 0.2rem;
-        color: $font-color3;
+		&:hover {
+			icon {
+				color: $font-color5;
+			}
 
-        &:hover {
-            icon {
-                color: $font-color5;
-            }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 
-            label {
-                color: $font-color5
-            }
-        }
-    }
+	& button {
+		// transition: all 2s cubic-bezier(0.5, 2, 0, 1);
+		color: $font-color1;
 
-    & button {
-        // transition: all 2s cubic-bezier(0.5, 2, 0, 1);
-        color: $font-color1;
+		icon {
+			font-size: 0.8rem;
+		}
 
-        icon {
-            font-size: 0.8rem;
-        }
+		label {
+			font-size: 0.9rem;
+		}
 
-        label {
-            font-size: 0.9rem;
-        }
+		&:first-child {
+			margin-right: 0.25rem;
+		}
 
-        &:first-child {
-            margin-right: 0.25rem;
-        }
+		&:nth-child(1n + 0) {
+			margin: 0rem 0.25rem;
+		}
 
-        &:nth-child(1n+0) {
-            margin: 0rem 0.25rem;
-        }
+		&:last-child {
+			margin-left: 0.25rem;
+		}
 
-        &:last-child {
-            margin-left: 0.25rem;
-        }
+		&:hover {
+			icon {
+				animation: spin 1s linear infinite;
+				color: $font-color5;
+				// -gtk-icon-transform: scale(2);
+			}
 
-        &:hover {
-
-            icon {
-                animation: spin 1s linear infinite;
-                color: $font-color5;
-                // -gtk-icon-transform: scale(2);
-            }
-
-            label {
-                color: $font-color5;
-            }
-        }
-    }
+			label {
+				color: $font-color5;
+			}
+		}
+	}
 }

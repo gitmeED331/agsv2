@@ -1,15 +1,22 @@
 #!/bin/bash
 
-# Define cache directory and source directory
+# MIT License
+#
+# Copyright (c) 2024 TopsyKrets
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 CACHE_DIR="/tmp/wallpaper_cache"
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
-# Function to create cache directory if it doesn't exist
 initialize_cache_directory() {
     mkdir -p "$CACHE_DIR"
 }
 
-# Function to scale and cache an image
 scale_and_cache_image() {
     local original_path="$1"
     local width="$2"
@@ -17,12 +24,10 @@ scale_and_cache_image() {
     local cached_image_path
     cached_image_path="${CACHE_DIR}/$(basename "$original_path")"
 
-    # Scale the image and save to cache
     convert "$original_path" -resize "${width}x${height}" "$cached_image_path"
     echo "Cached image: $cached_image_path"
 }
 
-# Function to remove cached images that no longer have a corresponding original image
 remove_orphaned_cached_images() {
     echo "Checking for orphaned cached images..."
     for cached_file in "$CACHE_DIR"/*; do
@@ -34,25 +39,21 @@ remove_orphaned_cached_images() {
     done
 }
 
-# Function to update the cache based on the wallpapers folder
 update_cache() {
     echo "Updating cache based on wallpapers folder..."
     local wallpapers=()
     local unique_basenames=()
 
-    # Iterate through .png, .jpg, and .jpeg files in the directory
     while IFS= read -r -d '' file; do
         local base_name
         base_name=$(basename "$file" | sed 's/\.[^.]*$//')
 
-        # If basename is unique, add to array and cache image if needed
         if [[ ! " ${unique_basenames[@]} " =~ " ${base_name} " ]]; then
             unique_basenames+=("$base_name")
             wallpapers+=("$file")
         fi
     done < <(find "$WALLPAPER_DIR" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -print0)
 
-    # Process each wallpaper
     for wallpaper in "${wallpapers[@]}"; do
         cached_image="${CACHE_DIR}/$(basename "$wallpaper")"
         if [ ! -f "$cached_image" ]; then
@@ -62,7 +63,6 @@ update_cache() {
     done
 }
 
-# Main execution
 initialize_cache_directory
 remove_orphaned_cached_images
 update_cache

@@ -1,8 +1,17 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
-import { Grid } from "../Astalified/index"
+import { Grid } from "../Astalified/index";
 import Icon from "../lib/icons";
 import TrimTrackTitle from "../lib/TrimTrackTitle";
 
@@ -95,15 +104,20 @@ function Player({ player }: { player: Mpris.Player }) {
 
 		const positionLabel = <label className={"trackposition"} halign={Gtk.Align.END} label={bind(player, "position").as(lengthStr)} />;
 
-		return <box className={"positioncontainer"} valign={Gtk.Align.CENTER} halign={Gtk.Align.FILL} hexpand={true} vertical={true} spacing={5} visible={bind(player, "length").as((length) => (length > 0 ? true : false))} >
-			{positionSlider}
-			<centerbox
-				halign={Gtk.Align.FILL}
+		return (
+			<box
+				className={"positioncontainer"}
 				valign={Gtk.Align.CENTER}
-				startWidget={lengthLabel}
-				endWidget={positionLabel}
-			/>
-		</box>;
+				halign={Gtk.Align.FILL}
+				hexpand={true}
+				vertical={true}
+				spacing={5}
+				visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
+			>
+				{positionSlider}
+				<centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} startWidget={lengthLabel} endWidget={positionLabel} />
+			</box>
+		);
 	}
 
 	const PlayerIcon = (
@@ -145,8 +159,7 @@ function Player({ player }: { player: Mpris.Player }) {
 				<icon icon={Icon.mpris.controls.NEXT} />
 			</button>
 		</box>
-	)
-
+	);
 
 	const CloseIcon = (
 		<button
@@ -160,25 +173,14 @@ function Player({ player }: { player: Mpris.Player }) {
 		</button>
 	);
 
-	const mediaInfoGrid = (
-		<Grid
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			rowSpacing={10}
-		/>
-	)
+	const mediaInfoGrid = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true} visible={true} rowSpacing={10} />;
 	mediaInfoGrid.attach(TrackInfo, 0, 0, 1, 1);
 	mediaInfoGrid.attach(PlayerIcon, 1, 0, 1, 1);
 	mediaInfoGrid.attach(TrackPosition(), 0, 1, 2, 1);
 	mediaInfoGrid.attach(PlayerControls, 0, 2, 2, 1);
 
 	return (
-		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START}
-			visible={bind(player, "available").as((a) => a === true)}
-			setup={setup}>
+		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} visible={bind(player, "available").as((a) => a === true)} setup={setup}>
 			{mediaInfoGrid}
 			{CloseIcon}
 		</box>

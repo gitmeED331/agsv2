@@ -1,3 +1,12 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
+ *
+ */
+
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, Variable } from "astal";
 import AstalRiver from "gi://AstalRiver";
@@ -15,7 +24,7 @@ const classname = (i) => {
 		if ((isUrgent & (1 << (i - 1))) !== 0) classList.push("urgent");
 		return classList.join(" ");
 	});
-}
+};
 
 const WorkspaceButton = (i) => (
 	<button
@@ -26,7 +35,7 @@ const WorkspaceButton = (i) => (
 		cursor="pointer"
 		onClick={(_, event) => {
 			if (event.button === Gdk.BUTTON_PRIMARY) output.focused_tags = 1 << (i - 1);
-			if (event.button === Gdk.BUTTON_SECONDARY) output.focused_tags ^= (1 << (i - 1));
+			if (event.button === Gdk.BUTTON_SECONDARY) output.focused_tags ^= 1 << (i - 1);
 		}}
 	>
 		<label label={`${i}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
@@ -41,7 +50,6 @@ const Workspaces = () => {
 			{workspaceButtons}
 		</box>
 	);
-}
+};
 
 export default Workspaces;
-
