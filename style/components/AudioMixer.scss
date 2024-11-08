@@ -12,30 +12,21 @@
 
 //------------- VOLUME SLIDER ---------------------
 .audio-mixer {
-	color: $font-color1;
+	color: $color1;
 
 	.header {
 		border-radius: $radius;
 		border-bottom: $border;
-		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		margin-bottom: 0.5rem;
-		padding: 0rem 1rem;
-	}
-
-	// &Label {
-	//     font-size: 1.25rem;
-	//     font-weight: bold;
-	//     color: $font-color1;
-	// }
-
-	&.item {
+		padding: 0 1rem;
 	}
 
 	&.settings-button {
-		color: $font-color1;
+		color: $color1;
 
 		&:hover {
-			color: $font-color5;
+			color: $color5;
 		}
 	}
 
@@ -50,39 +41,20 @@
 .muted {
 	color: red;
 
-	icon {
+	.icon {
 		color: red;
 	}
 }
 
 .volume-indicator:hover {
-	color: $font-color5;
+	color: $color5;
 }
 
 .volumemixer .menu {
 	all: unset;
 
-	&.app-mixer {
-		.title {
-			background: $PrimaryBG;
-			box-shadow: inset 0.25rem 0.25rem 1rem rgba(0, 0, 0, 1);
-			font-size: 1.25rem;
-			font-weight: bold;
-			margin-top: 0.25rem;
-			border-radius: 3rem;
-			padding: 0.25rem 0.75rem;
-			color: rgba(15, 155, 255, 1);
-		}
-
-		.icon {
-			margin-right: 0.5rem;
-			margin-top: 0.25rem;
-		}
-	}
-
+	&.app-mixer,
 	&.sink-selector {
-		color: $font-color1;
-
 		.title {
 			background: $PrimaryBG;
 			box-shadow: inset 0.25rem 0.25rem 1rem rgba(0, 0, 0, 1);
@@ -102,39 +74,16 @@
 	}
 }
 
-.mixeritem {
-	color: $font-color1;
+.mixeritem,
+.sinkitem {
+	color: $color1;
 	margin-right: 0.65rem;
 
-	&icon {
-		color: $font-color1;
+	&.icon,
+	&.label {
+		color: $color1;
+		margin-top: 0.25rem;
 		margin-right: 0.25rem;
-		margin-top: 0.25rem;
-	}
-
-	&label {
-		color: $font-color1;
-		margin-top: 0.25rem;
-	}
-
-	&:last-child {
-		margin-bottom: 0.5rem;
-	}
-}
-
-.sinkitem {
-	&box {
-		margin-top: 0.25rem;
-	}
-
-	&icon {
-		margin-right: 0.25rem;
-		color: $font-color1;
-	}
-
-	&label {
-		margin-top: 0.25rem;
-		color: $font-color1;
 	}
 
 	&:last-child {

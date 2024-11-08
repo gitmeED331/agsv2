@@ -22,85 +22,73 @@ const columnCount = 5;
 GLib.mkdir_with_parents(cacheDir, 0o755);
 
 async function getCachedImagePath(wallpaperPath: string, width: number, height: number): Promise<string> {
-	try {
-		const stdout = await execAsync(`${shellScriptPath} "${wallpaperPath}" ${width} ${height}`);
-		return stdout.trim();
-	} catch (error) {
-		console.error(`Error retrieving cached image path: ${error.message}`);
-		return wallpaperPath;
-	}
+	const stdout = await execAsync(`${shellScriptPath} "${wallpaperPath}" ${width} ${height}`);
+	return stdout.trim();
 }
 
 async function getWallpapers(): Promise<Array<{ name: string; path: string; originalPath: string }>> {
-	try {
-		const stdout = await execAsync(`${shellScriptPath}`);
-		const paths = stdout
-			.trim()
-			.split("\n")
-			.filter((path) => path.trim() !== "");
+	const stdout = await execAsync(`${shellScriptPath}`);
+	const paths = stdout
+		.trim()
+		.split("\n")
+		.filter((path) => path.trim() !== "");
 
-		return paths.map((path) => ({
-			name: path.split("/").pop() || "Unknown",
-			path,
-			originalPath: path.replace(cacheDir, originalPath),
-		}));
-	} catch (error) {
-		console.error("Error executing script to retrieve wallpapers:", error);
-		return [];
-	}
+	return paths.map((path) => ({
+		name: path.split("/").pop() || "Unknown",
+		path,
+		originalPath: path.replace(cacheDir, originalPath),
+	}));
 }
 
 async function createWallpaperGrid(wps) {
-	const grid = (
-		<Grid
-			hexpand={true}
-			vexpand={false}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
-			rowHomogeneous={true}
-			columnHomogeneous={true}
-			row_spacing={10}
-			column_spacing={5}
-			widthRequest={winwidth(0.35)}
-			heightRequest={winheight(0.35)}
-			css={`
-				padding: 1rem;
-			`}
-		/>
-	);
-
-	for (const [index, wp] of wps.entries()) {
-		const cachedImagePath = await getCachedImagePath(wp.originalPath, winwidth(0.05), winheight(0.05));
-
-		const wpButton = (
-			<button
-				className={"launcher app"}
-				name={wp.name}
-				tooltip_text={wp.name}
-				on_clicked={() => {
-					execAsync(`swww img "${wp.originalPath}"`);
-					App.toggle_window("wallpapers");
-				}}
-				widthRequest={winwidth(0.1)}
-				heightRequest={winheight(0.1)}
-				halign={Gtk.Align.CENTER}
-				valign={Gtk.Align.CENTER}
-			>
-				<box
-					className={"wallpaper image"}
-					halign={Gtk.Align.FILL}
-					valign={Gtk.Align.FILL}
-					css={`
-						background-image: url("${cachedImagePath}");
-						background-size: cover;
-						background-repeat: no-repeat;
-						border-radius: 3rem;
-					`}
-				/>
-			</button>
-		);
-		grid.attach(wpButton, index % columnCount, Math.floor(index / columnCount), 1, 1);
-	}
+	const grid = <Grid
+		hexpand={true}
+		vexpand={false}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		rowHomogeneous={true}
+		columnHomogeneous={true}
+		row_spacing={10}
+		column_spacing={5}
+		widthRequest={winwidth(0.35)}
+		heightRequest={winheight(0.35)}
+		css={`
+			padding: 1rem;
+		`}
+		setup={async (self) => {
+			for (const [index, wp] of wps.entries()) {
+				const cachedImagePath = await getCachedImagePath(wp.originalPath, winwidth(0.05), winheight(0.05));
+				const wpButton = (
+					<button
+						className={"launcher app"}
+						name={wp.name}
+						tooltip_text={wp.name}
+						on_clicked={() => {
+							execAsync(`swww img "${wp.originalPath}"`);
+							App.toggle_window("wallpapers");
+						}}
+						widthRequest={winwidth(0.1)}
+						heightRequest={winheight(0.1)}
+						halign={Gtk.Align.CENTER}
+						valign={Gtk.Align.CENTER}
+					>
+						<box
+							className={"wallpaper image"}
+							halign={Gtk.Align.FILL}
+							valign={Gtk.Align.FILL}
+							css={`
+								background-image: url("${cachedImagePath}");
+								background-size: cover;
+								background-repeat: no-repeat;
+								border-radius: 3rem;
+							`}
+						/>
+					</button>
+				);
+				self.attach(wpButton, index % columnCount, Math.floor(index / columnCount), 1, 1);
+			}
+		}}
+	/>
 
 	return grid;
 }
@@ -227,43 +215,44 @@ async function createScrollablePage(wps) {
 }
 
 export default async function () {
-	const wallpaperGrid = new Grid({
-		hexpand: true,
-		vexpand: true,
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		visible: true,
-	});
-
 	const wps = await getWallpapers();
 	const gridContent = await createScrollablePage(wps);
-	wallpaperGrid.attach(gridContent, 1, 1, 1, 1);
 
-	wallpaperGrid.attach(ClickToClose(1, 0.25, 0.25, "wallpapers"), 0, 0, 3, 1); // Top
-	wallpaperGrid.attach(ClickToClose(2, 0.25, 0.25, "wallpapers"), 0, 1, 1, 1); // Left
-	wallpaperGrid.attach(ClickToClose(3, 0.25, 0.25, "wallpapers"), 2, 1, 1, 1); // Right
-	wallpaperGrid.attach(ClickToClose(4, 0.25, 0.25, "wallpapers"), 0, 2, 3, 1); // Bottom
+	const masterGrid = <Grid
+		hexpand={true}
+		vexpand={true}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		visible={true}
+		setup={(self) => {
+			self.attach(gridContent, 1, 1, 1, 1);
 
-	const window = (
-		<window
-			name="wallpapers"
-			className="wallpapers window"
-			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
-			layer={Astal.Layer.OVERLAY}
-			exclusivity={Astal.Exclusivity.NORMAL}
-			keymode={Astal.Keymode.EXCLUSIVE}
-			visible={false}
-			application={App}
-			onKeyPressEvent={(_, event) => {
-				const win = App.get_window("wallpapers");
-				if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {
-					win.visible = false;
-				}
-			}}
-		>
-			{wallpaperGrid}
-		</window>
-	);
+			self.attach(ClickToClose(1, 0.25, 0.25, "wallpapers"), 0, 0, 3, 1); // Top
+			self.attach(ClickToClose(2, 0.25, 0.25, "wallpapers"), 0, 1, 1, 1); // Left
+			self.attach(ClickToClose(3, 0.25, 0.25, "wallpapers"), 2, 1, 1, 1); // Right
+			self.attach(ClickToClose(4, 0.25, 0.25, "wallpapers"), 0, 2, 3, 1); // Bottom
+		}}
+	/>
 
-	return window;
+	const win = <window
+		name="wallpapers"
+		className="wallpapers window"
+		anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+		layer={Astal.Layer.OVERLAY}
+		exclusivity={Astal.Exclusivity.NORMAL}
+		keymode={Astal.Keymode.EXCLUSIVE}
+		visible={false}
+		application={App}
+		onKeyPressEvent={(_, event) => {
+			const win = App.get_window("wallpapers");
+			if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {
+				win.visible = false;
+			}
+		}}
+	>
+		{masterGrid}
+	</window>
+
+	return win;
 }
+

@@ -29,7 +29,7 @@
 	&-grid {
 		border-radius: $radius;
 		padding: 0.25rem;
-		color: $font-color1;
+		color: $color1;
 		font-size: 1.5rem;
 
 		label {
@@ -38,17 +38,12 @@
 	}
 
 	&.header {
-		color: $font-color3;
-		margin: 0rem 1rem;
-		margin-bottom: 0.5rem;
+		color: $color3;
+		margin: 0 1rem 0.5rem;
 		font-size: 2rem;
 
-		.year,
-		.month {
-		}
-
 		label {
-			color: $font-color1;
+			color: $color1;
 			font-size: 1.75rem;
 		}
 
@@ -56,25 +51,27 @@
 			font-size: 1.5rem;
 		}
 
-		.arrow-left {
-			color: $font-color4;
+		.year,
+		.month {
+			// Additional styles if needed
 		}
 
+		.arrow-left,
 		.arrow-right {
-			color: $font-color3;
-		}
-
-		.arrow-right,
-		.arrow-left {
 			font-size: 3rem;
+			color: $color3;
 
 			&:hover {
-				color: $font-color5;
+				color: $color5;
 			}
 		}
 
+		.arrow-left {
+			color: $color4;
+		}
+
 		.return-today {
-			color: $font-color1;
+			color: $color1;
 			background: $BGG5;
 			border-radius: $radius;
 			min-width: 50px;
@@ -90,7 +87,7 @@
 				background: $BGG3;
 
 				image {
-					color: $font-color3;
+					color: $color3;
 					animation: spin 1s infinite;
 				}
 			}
@@ -101,13 +98,13 @@
 		color: $color6;
 		border-bottom: $border;
 		border-radius: $radius;
-		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		font-size: 1.5rem;
 		padding: 0.5rem;
 	}
 
 	&-day {
-		color: $font-color1;
+		color: $color1;
 		margin: 0.1rem 0.25rem;
 		padding: 0.2rem 0.6rem;
 		border-radius: $radius;

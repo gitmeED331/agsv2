@@ -45,17 +45,20 @@ function Controls() {
 		);
 	};
 
-	const CGrid = new Grid({
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-		columnSpacing: 10,
-	});
+	const CGrid = <Grid
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		hexpand={true}
+		vexpand={true}
+		visible={true}
+		columnSpacing={10}
+		setup={(grid) => {
+			grid.attach(SysButton("reboot"), 0, 0, 1, 1);
+			grid.attach(SysButton("shutdown"), 1, 0, 1, 1);
+		}}
+	/>
 
-	CGrid.attach(SysButton("reboot"), 0, 0, 1, 1);
-	CGrid.attach(SysButton("shutdown"), 1, 0, 1, 1);
+
 
 	return (
 		<box className={"controls"} vertical={false} vexpand={true} spacing={5} halign={Gtk.Align.START} valign={Gtk.Align.START} visible={true}>

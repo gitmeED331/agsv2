@@ -162,15 +162,19 @@ function GridCalendar() {
 			</button>
 		);
 
-		const headerGrid = <Grid className={"calendar header"} columnSpacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={false} columnHomogeneous={false} />;
+		const headerGrid = <Grid className={"calendar header"} columnSpacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={false} columnHomogeneous={false}
+			setup={(self) => {
+				self.attach(prevMonth, 0, 0, 1, 1);
+				self.attach(monthLabel, 1, 0, 1, 1);
+				self.attach(nextMonth, 2, 0, 1, 1);
+				self.attach(returnToday, 3, 0, 1, 1);
+				self.attach(prevYear, 4, 0, 1, 1);
+				self.attach(yearLabel, 5, 0, 1, 1);
+				self.attach(nextYear, 6, 0, 1, 1);
+			}}
+		/>;
 
-		headerGrid.attach(prevMonth, 0, 0, 1, 1);
-		headerGrid.attach(monthLabel, 1, 0, 1, 1);
-		headerGrid.attach(nextMonth, 2, 0, 1, 1);
-		headerGrid.attach(returnToday, 3, 0, 1, 1);
-		headerGrid.attach(prevYear, 4, 0, 1, 1);
-		headerGrid.attach(yearLabel, 5, 0, 1, 1);
-		headerGrid.attach(nextYear, 6, 0, 1, 1);
+
 
 		return headerGrid;
 	}

@@ -35,7 +35,7 @@
 	}
 
 	&:hover {
-		color: $font-color5;
+		color: $color5;
 
 		icon {
 			animation: spin 1s infinite;
@@ -48,7 +48,7 @@
 	-gtk-icon-style: symbolic;
 
 	&:hover {
-		color: $font-color5;
+		color: $color5;
 		animation: spin 1s infinite;
 	}
 }

@@ -173,11 +173,16 @@ function Player({ player }: { player: Mpris.Player }) {
 		</button>
 	);
 
-	const mediaInfoGrid = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true} visible={true} rowSpacing={10} />;
-	mediaInfoGrid.attach(TrackInfo, 0, 0, 1, 1);
-	mediaInfoGrid.attach(PlayerIcon, 1, 0, 1, 1);
-	mediaInfoGrid.attach(TrackPosition(), 0, 1, 2, 1);
-	mediaInfoGrid.attach(PlayerControls, 0, 2, 2, 1);
+	const mediaInfoGrid = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
+		hexpand={true} vexpand={true} visible={true} rowSpacing={10}
+		setup={(self) => {
+			self.attach(TrackInfo, 0, 0, 1, 1);
+			self.attach(PlayerIcon, 1, 0, 1, 1);
+			self.attach(TrackPosition(), 0, 1, 2, 1);
+			self.attach(PlayerControls, 0, 2, 2, 1);
+		}}
+	/>;
+
 
 	return (
 		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} visible={bind(player, "available").as((a) => a === true)} setup={setup}>

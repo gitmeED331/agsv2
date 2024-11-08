@@ -23,25 +23,18 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 const player = Mpris.Player.new("Deezer");
 
 function Dashboard({ monitor }: { monitor: number }) {
-	const content = <Grid className={"dashboard grid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} column_spacing={5} row_spacing={5} />;
-
-	// if (Player.length > 0) {
-	// content.insert_row(0);
-	content.attach(<Player player={player} />, 1, 0, 3, 1);
-	// content.attach(Player, 1, 0, 3, 1);
-	// } else { content.remove_row(0) }
-
-	// if (Player.length > 0) {
-	// 	content.insert_row(0);
-	// 	content.attach(Player, 1, 0, 3, 1);
-	// } else { content.remove_row(0) }
-
-	content.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
-	content.attach(LeftSide(), 1, 1, 1, 1);
-	content.attach(Tray(), 2, 1, 1, 1);
-	content.attach(RightSide(), 3, 1, 1, 1);
-	content.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
-	content.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
+	const content = <Grid className={"dashboard grid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+		hexpand={true} vexpand={true} visible={true} column_spacing={5} row_spacing={5}
+		setup={(self) => {
+			self.attach(<Player player={player} />, 1, 0, 3, 1);
+			self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
+			self.attach(LeftSide(), 1, 1, 1, 1);
+			self.attach(Tray(), 2, 1, 1, 1);
+			self.attach(RightSide(), 3, 1, 1, 1);
+			self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
+			self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
+		}}
+	/>;
 
 	return (
 		<window

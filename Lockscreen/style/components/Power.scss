@@ -29,7 +29,7 @@
 .battery {
 	& {
 		border: none;
-		color: $font-color1;
+		color: $color1;
 		font-size: 0.5rem;
 	}
 
@@ -54,7 +54,7 @@
 	}
 
 	&:hover {
-		color: $font-color5;
+		color: $color5;
 	}
 
 	& trough {
@@ -63,7 +63,7 @@
 
 		block {
 			min-height: 10px;
-			border: 1px solid $font-color2;
+			border: 1px solid $color2;
 			border-radius: $radius * 5;
 			margin: 0px 0.25px;
 
@@ -86,7 +86,7 @@
 //   //   border-radius: calc($radius / 2);
 //   //   background: $TertiaryBG;
 //   //   font-size: 1rem;
-//   //   color: $font-color1;
+//   //   color: $color1;
 //   // }
 
 //   // &.header {

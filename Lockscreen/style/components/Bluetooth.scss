@@ -19,7 +19,7 @@
 	// }
 
 	&.devicelist-header {
-		color: $font-color1;
+		color: $color1;
 		border-radius: $radius;
 		border-bottom: $border;
 		padding: 0.25rem 1rem;
@@ -32,27 +32,27 @@
 
 			button {
 				&.power-on {
-					color: $font-color3;
+					color: $color3;
 				}
 
 				&.power-off {
-					color: $font-color4;
+					color: $color4;
 				}
 
 				&:hover {
 					label {
-						color: $font-color5;
+						color: $color5;
 					}
 
 					icon {
-						color: $font-color5;
+						color: $color5;
 					}
 				}
 			}
 		}
 
 		.refreshing {
-			color: $font-color3;
+			color: $color3;
 
 			icon {
 				animation: spin 1s infinite linear;
@@ -61,7 +61,7 @@
 	}
 
 	&.devicelist-inner {
-		color: $font-color1;
+		color: $color1;
 		padding: 0.25rem;
 
 		&.controls {
@@ -81,11 +81,11 @@
 
 				&:hover {
 					label {
-						color: $font-color5;
+						color: $color5;
 					}
 
 					icon {
-						color: $font-color5;
+						color: $color5;
 					}
 				}
 			}
@@ -97,33 +97,33 @@
 
 			button {
 				label {
-					color: $font-color1;
+					color: $color1;
 				}
 
 				icon {
-					color: $font-color1;
+					color: $color1;
 				}
 
 				&:hover {
 					label {
-						color: $font-color5;
+						color: $color5;
 					}
 
 					icon {
-						color: $font-color5;
+						color: $color5;
 					}
 				}
 			}
 
 			&.itemicon {
-				color: $font-color3;
+				color: $color3;
 			}
 
 			&.connected {
-				border-color: $font-color3;
+				border-color: $color3;
 
 				label {
-					color: $font-color3;
+					color: $color3;
 				}
 			}
 		}
@@ -131,11 +131,11 @@
 
 	&.barbutton {
 		&:hover {
-			color: $font-color5;
+			color: $color5;
 		}
 
 		&-label {
-			color: $font-color2;
+			color: $color2;
 		}
 	}
 }

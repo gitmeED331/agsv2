@@ -16,17 +16,14 @@
 		background: $PrimaryBG;
 
 		&.container {
-			color: $font-color2;
+			color: $color2;
 			font-size: 2rem;
 			font-weight: bold;
-			// background: $PrimaryBG;
-			// padding: 0rem 2rem;
 			min-width: 5rem;
 		}
 
 		&.box {
 			background: $PrimaryBG;
-			// border-top: 3px solid rgba(0, 0, 0, 0);
 			border-top: $border;
 			border-bottom: $border;
 			border-radius: calc($radius * 2);
@@ -42,29 +39,21 @@
 			border-right: 0.5rem solid #0f9bff;
 			background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 255, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 255, 1) 85%, rgba(0, 0, 255, 0.5) 100%);
 			padding: 0.5rem;
-			margin: 0rem 2rem;
+			margin: 0 2rem;
 
-			&:first-child,
-			&:nth-child(2),
-			&:nth-child(3),
-			&:last-child {
-				icon {
-					//@include button;
-					//border-radius: $radius;
-					min-width: 2em;
-					min-height: 2em;
-					font-size: 3rem;
-				}
+			icon {
+				min-width: 2em;
+				min-height: 2em;
+				font-size: 3rem;
 			}
 
 			label,
 			icon {
-				color: $font-color1;
+				color: $color1;
 				font-size: 2rem;
 			}
 
 			label {
-				//margin-top: 0rem;
 				font-size: 1.75rem;
 			}
 
@@ -82,20 +71,18 @@
 				background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 0, 0, 1) 85%, rgba(255, 0, 0, 0.5) 100%);
 
 				label {
-					color: $font-color5;
+					color: $color5;
 				}
 			}
 
 			&:focus,
 			&:active {
-				& {
-					border-left: 0.5rem dashed rgba(255, 255, 0, 1);
-					border-right: 0.5rem dashed rgba(255, 255, 0, 1);
-					background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 0, 1) 85%, rgba(255, 255, 0, 0.5) 100%);
-				}
+				border-left: 0.5rem dashed rgba(255, 255, 0, 1);
+				border-right: 0.5rem dashed rgba(255, 255, 0, 1);
+				background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 0, 1) 85%, rgba(255, 255, 0, 0.5) 100%);
 
 				label {
-					color: $font-color5;
+					color: $color5;
 				}
 			}
 		}

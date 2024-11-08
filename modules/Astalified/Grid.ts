@@ -7,7 +7,7 @@
  *
  */
 
-import { Gtk, Gdk, Widget, astalify, type ConstructProps } from "astal/gtk3";
+import { Gtk, astalify, type ConstructProps } from "astal/gtk3";
 import { GObject } from "astal";
 
 class Grid extends astalify(Gtk.Grid) {
@@ -15,7 +15,7 @@ class Grid extends astalify(Gtk.Grid) {
 		GObject.registerClass(this);
 	}
 
-	constructor(props: ConstructProps<Grid, Gtk.Grid.ConstructorProps, { onAttach: [widget: Widget, column: number, row: number, colSpan: number, rowSpan: number] }>) {
+	constructor(props: ConstructProps<Grid, Gtk.Grid.ConstructorProps>) {
 		super(props as any);
 	}
 }

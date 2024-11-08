@@ -35,11 +35,11 @@
 
 			label {
 				font-size: 1.1rem;
-				color: $font-color1;
+				color: $color1;
 			}
 
 			button {
-				color: $font-color1;
+				color: $color1;
 
 				icon {
 					font-size: 1.1rem;
@@ -47,7 +47,7 @@
 
 				&:hover {
 					icon {
-						color: $font-color5;
+						color: $color5;
 					}
 				}
 			}
@@ -67,14 +67,14 @@
 		}
 
 		.subtitle {
-			color: $font-color1;
+			color: $color1;
 			font-size: 1rem;
 			font-weight: normal;
 		}
 	}
 
 	.body {
-		color: $font-color3;
+		color: $color3;
 		font-size: 0.9rem;
 		font-weight: normal;
 		padding: 0rem 1rem;
@@ -92,7 +92,7 @@
 			font-weight: normal;
 
 			label {
-				color: $font-color2;
+				color: $color2;
 				font-size: 0.8rem;
 			}
 		}
@@ -120,7 +120,7 @@
 
 				label {
 					font-weight: bolder;
-					color: $font-color4;
+					color: $color4;
 				}
 			}
 		}
@@ -132,21 +132,21 @@
 		}
 
 		.title {
-			color: $font-color4;
+			color: $color4;
 		}
 
 		.body {
-			color: $font-color3;
+			color: $color3;
 		}
 
 		.icondatetime {
 			icon {
-				color: $font-color4;
+				color: $color4;
 			}
 
 			.datetime {
 				label {
-					color: $font-color2;
+					color: $color2;
 				}
 			}
 		}
@@ -158,21 +158,21 @@
 		}
 
 		.title {
-			color: $font-color1;
+			color: $color1;
 		}
 
 		.body {
-			color: $font-color3;
+			color: $color3;
 		}
 
 		.icondatetime {
 			icon {
-				color: $font-color2;
+				color: $color2;
 			}
 
 			.datetime {
 				label {
-					color: $font-color2;
+					color: $color2;
 				}
 			}
 		}
@@ -185,11 +185,11 @@
 		}
 
 		.title {
-			color: $font-color1;
+			color: $color1;
 		}
 
 		.body {
-			color: $font-color3;
+			color: $color3;
 		}
 
 		.icondatetime {
@@ -204,71 +204,3 @@
 	font-size: 1.5rem;
 	margin-left: 0.25rem;
 }
-
-//
-//---------------- dashboard notifications
-// //
-// .notif {
-//   //dashboard panel box
-//   // all:unset;
-//   background-color: transparent;
-
-//   &Item {
-//     box {
-//       margin: unset;
-//     }
-
-//     &Body {
-//       padding: 0.1rem;
-//       //border-radius: $radius;
-//       color: white;
-//     }
-
-//     &Icon {
-//       font-size: 4rem;
-
-//       box {
-//         background-color: transparent;
-//       }
-//     }
-
-//     &Title {
-//       text-shadow: none;
-//       font-size: 1.15rem;
-//       font-weight: bold;
-//     }
-
-//     &Description {
-//       color: white;
-//       text-shadow: none;
-//       font-size: 0.9rem;
-//     }
-//   }
-
-//   &.empty {
-//     label {
-//       all: unset;
-//       //color: $font-color1;
-//       font-size: 5rem;
-//       text-shadow:
-//         15px 0px 10px yellow,
-//         -15px 0px 10px yellow,
-//         0px 0px 0px yellow;
-//     }
-//   }
-// }
-
-// // ------------- bar
-// .barNotification {
-//   background-color: #1e1e2e;
-//   border-radius: 2rem;
-//   border: 2px solid #11111b;
-//   color: #cdd6f4;
-//   font-weight: bold;
-//   margin-right: 10px;
-//   padding: 1px 15px;
-// }
-
-// window.notification-popups box.notifications {
-//   padding: 0.5rem;
-// }

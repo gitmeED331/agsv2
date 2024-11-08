@@ -55,14 +55,9 @@ export default function NotifWidget({ item }) {
 		</box>
 	);
 
-	const theGrid = new Grid({
-		className: `level${item.get_hint("urgency")?.unpack()} outerbox`,
-		halign: Gtk.Align.FILL,
-		valign: Gtk.Align.FILL,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-	});
+	const theGrid = (
+		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} rowSpacing={5} />
+	);
 
 	theGrid.attach(iconDateTime, 0, 0, 1, 3);
 	theGrid.attach(notifTitle, 1, 0, 1, 1);

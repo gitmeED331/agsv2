@@ -11,77 +11,63 @@
  */
 
 .cliphist {
-	&.container {
-	}
-
 	&.contentgrid {
-		background: $GrootRightBG;
-		background-color: black;
+		background: $GrootRightBG black center no-repeat;
 		background-size: auto auto;
-		background-position: center;
-		background-repeat: no-repeat;
 		border-radius: $radius-tbleft;
 		border: $border;
-		border-right: unset;
+		border-right: none;
 		box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
-		padding: 0rem 1rem;
+		padding: 0 1rem;
 	}
 
 	&.header {
 		margin: 1rem;
 		background: none;
-		border-bottom: $border;
-		border-left: $border;
-		border-right: $border;
+		border: $border;
+		border-top: none;
 		border-radius: $radius;
-		color: $font-color1;
+		color: $color1;
 		padding: 0.5rem;
-		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
-		.clear_hist {
-			color: $font-color1;
+		.clear_hist,
+		.refresh_hist {
+			color: $color1;
 			border-radius: $radius;
 
 			icon {
-				font-size: 2rem;
 				margin: -0.25rem;
 			}
 
 			&:hover {
-				color: $font-color2;
-				background: $font-color4;
+				color: $color2;
+				background: $color4;
 			}
 		}
 
-		.refresh_hist {
-			color: $font-color1;
-			border-radius: $radius;
+		.clear_hist icon {
+			font-size: 2rem;
+		}
 
-			icon {
-				font-size: 1.5rem;
-				margin: -0.25rem;
-			}
-
-			&:hover {
-				color: $font-color2;
-				background: $font-color4;
-			}
+		.refresh_hist icon {
+			font-size: 1.5rem;
 		}
 
 		.search {
 			border-radius: $radius;
-			padding: 0rem 0.5rem;
+			padding: 0 0.5rem;
 
 			selection {
 				color: black;
-				background-color: $font-color2;
+				background-color: $color2;
 			}
 		}
 	}
 
 	button.item {
 		all: unset;
-		padding: 0rem 0.75rem;
+		padding: 0 0.75rem;
 		min-height: 1.5rem;
 		margin-bottom: 0.5rem;
 		border-bottom: 2px solid rgba(0, 0, 255, 1);
@@ -92,17 +78,16 @@
 
 		icon {
 			font-size: 2rem;
-			color: $font-color1;
+			color: $color1;
 			border-radius: 10rem;
 		}
 
 		label {
-			color: $font-color1;
+			color: $color1;
 			font-weight: normal;
 			font-size: 1.25rem;
 		}
 
-		//&:focus-visible,
 		&.active,
 		&:focus,
 		&:hover {
@@ -111,11 +96,11 @@
 			border-bottom: $border;
 
 			label {
-				text-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+				text-shadow: 0.3rem 0.3rem 0.5rem $color2;
 			}
 
 			icon {
-				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $color2;
 				animation: spin 1s linear infinite;
 			}
 		}
@@ -125,9 +110,10 @@
 			border-radius: $radius;
 			padding: 0.5rem;
 		}
+
 		.imagePreview {
 			background-size: contain;
-			background-position: center center;
+			background-position: center;
 			background-repeat: no-repeat;
 			background-color: rgba(255, 255, 255, 0.25);
 			border-radius: $radius;
@@ -137,13 +123,13 @@
 	scrollbar.vertical {
 		transition: 200ms;
 		background-color: rgba(23, 23, 23, 0.3);
-		margin: 0.5rem 0rem;
+		margin: 0.5rem 0;
 
 		&:hover {
 			background-color: rgba(23, 23, 23, 0.7);
 
 			slider {
-				background-color: $font-color1;
+				background-color: $color1;
 				min-width: 0.5rem;
 			}
 		}

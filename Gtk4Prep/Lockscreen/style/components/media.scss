@@ -1,0 +1,116 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+.player {
+	background: $PrimaryBG;
+	padding: 0px;
+	border: $border;
+	border-radius: calc($radius * 5);
+	min-width: 300px;
+	min-height: 300px;
+	font-size: 6px;
+	padding: 1rem;
+	background-color: #131313;
+	color: $font-color2;
+	margin-bottom: 3rem;
+	box-shadow:
+		inset -0.75rem 0rem 1rem 0rem $PrimaryBG,
+		inset 0rem 0rem 0rem 0rem $PrimaryBG,
+		inset 0rem 0rem 0rem 0rem $PrimaryBG;
+
+	.inner {
+		border-radius: 50rem;
+		padding: 0.25rem;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.8);
+		}
+	}
+
+	.playercontrols {
+		// margin-top: -1rem;
+		// margin-bottom: 0.75rem;
+
+		button {
+			color: #cdd6f4;
+			border: 2px solid rgba(0, 0, 0, 0);
+
+			icon {
+				font-size: 2.5rem;
+				margin: 0rem 0.25rem;
+			}
+
+			&.previous {
+				-gtk-icon-shadow: -0.2rem 0.2rem $PrimaryBG;
+
+				&:hover {
+					color: red;
+					-gtk-icon-shadow: -0.2rem 0.2rem $font-color5;
+				}
+			}
+
+			&.play-pause {
+				margin: 0rem 0.25rem;
+				-gtk-icon-shadow: 0.1rem 0.3rem $PrimaryBG;
+
+				&:hover {
+					color: yellow;
+					-gtk-icon-shadow: 0.1rem 0.3rem $font-color4;
+				}
+			}
+
+			&.next {
+				-gtk-icon-shadow: 0.2rem 0.2rem $PrimaryBG;
+
+				&:hover {
+					color: $font-color5;
+					-gtk-icon-shadow: 0.2rem 0.2rem yellow;
+				}
+			}
+		}
+	}
+
+	.track {
+		&position,
+		&length {
+			color: $font-color1;
+			text-shadow: 0.1rem 0.1rem $PrimaryBG;
+		}
+
+		&img {
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-radius: $radius-tbleft;
+			margin-right: 0.25rem;
+		}
+	}
+
+	.track {
+		&info {
+			// min-width: 250px;
+		}
+
+		&title {
+			font-size: 1.5rem;
+			font-weight: bold;
+			color: $font-color1;
+			text-shadow: 0.1rem 0.1rem $PrimaryBG;
+		}
+
+		.artist {
+			font-size: 1.3rem;
+			color: $font-color2;
+			text-shadow: 0.1rem 0.1rem $PrimaryBG;
+		}
+	}
+}

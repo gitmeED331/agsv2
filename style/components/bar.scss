@@ -9,7 +9,6 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 .bar {
 	color: $color7;
 	background: none;
@@ -28,71 +27,70 @@
 	border-radius: 1rem;
 	border-top: $border;
 	min-width: 50px;
-	padding: 0rem 0.5rem;
+	padding: 0 0.5rem;
 
 	icon {
-		color: $font-color5;
+		color: $color5;
 		font-size: 1rem;
 	}
 
 	label {
-		color: $font-color1;
+		color: $color1;
 		font-weight: bold;
 	}
 
 	&:hover {
 		icon {
-			color: $font-color1;
+			color: $color1;
 			animation: spin 1s linear infinite;
 			-gtk-icon-transform: scale(2);
 		}
 
 		label {
-			color: $font-color5;
+			color: $color5;
 		}
 	}
 }
 
 /* --- Clock --- */
-
 .clock {
 	background: $PrimaryBG;
-	color: $font-color1;
+	color: $color1;
 	border-top: $border;
 	font-weight: bold;
 	border-radius: 1rem;
-	padding: 0rem 0.5rem;
+	padding: 0 0.5rem;
 
 	label {
 		font-size: 1rem;
+		color: inherit; // keeps label consistent with parent
 	}
 
 	icon {
-		color: $font-color5;
+		color: $color5;
 	}
 
 	&:hover {
-		color: $font-color5;
+		color: $color5;
 
 		icon {
-			color: $font-color1;
+			color: $color1;
 			animation: spin 1s linear infinite;
 		}
 	}
 }
 
 /* --- sysinfo --- */
-
 .sysinfo {
 	background: $PrimaryBG;
 	border-top: $border;
-	color: $font-color1;
+	color: $color1;
 	font-weight: bold;
 	border-radius: 1rem;
-	padding: 0rem 0.5rem;
+	padding: 0 0.5rem;
 
 	.volumebtn {
-		color: $font-color1;
+		color: inherit;
 
 		icon,
 		image {
@@ -100,7 +98,7 @@
 		}
 
 		button:hover {
-			color: $font-color5;
+			color: $color5;
 		}
 	}
 }

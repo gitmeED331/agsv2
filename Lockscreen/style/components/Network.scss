@@ -12,10 +12,10 @@
 
 .network {
 	&.barbutton {
-		color: $font-color1;
+		color: $color1;
 
 		&:hover {
-			color: $font-color5;
+			color: $color5;
 		}
 
 		&.wifi {
@@ -37,7 +37,7 @@
 	&.container {
 		border-radius: $radius;
 		border-bottom: $border;
-		color: $font-color1;
+		color: $color1;
 		padding: 0.5rem 1rem;
 		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 	}
@@ -49,30 +49,30 @@
 
 .network .wifi {
 	&.container {
-		color: $font-color1;
+		color: $color1;
 		padding: 0.5rem 1rem;
 	}
 	entry {
 		box-shadow: inset 0px 0px 7px rgba(15, 155, 255, 0.8);
 		border-radius: $radius;
-		border: 1px solid $font-color2;
+		border: 1px solid $color2;
 		padding: 0.1rem 0.75rem;
 
 		selection {
-			color: $font-color5;
+			color: $color5;
 			background: rgba(255, 140, 0, 0.7);
 		}
 	}
 	&.header {
 		border-radius: $radius;
 		border-bottom: $border;
-		color: $font-color1;
+		color: $color1;
 		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		padding: 0.25rem 1rem;
 
 		button {
 			&.enabled {
-				color: $font-color3;
+				color: $color3;
 			}
 
 			&.disabled {
@@ -80,7 +80,7 @@
 			}
 
 			// &.scanning {
-			//     color: $font-color4;
+			//     color: $color4;
 
 			//     icon {
 			//         animation: spin 1s linear infinite;
@@ -88,19 +88,19 @@
 			// }
 
 			&:hover {
-				color: $font-color5;
+				color: $color5;
 			}
 		}
 	}
 
 	&.connected {
 		background: transparent;
-		border-bottom: 2px solid $font-color3;
+		border-bottom: 2px solid $color3;
 		border-radius: $radius;
 		padding: 0.25rem 0.5rem;
 
 		label {
-			color: $font-color3;
+			color: $color3;
 		}
 
 		&.controls {
@@ -120,7 +120,7 @@
 
 				&:hover {
 					icon {
-						color: $font-color4;
+						color: $color4;
 					}
 				}
 			}

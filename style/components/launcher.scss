@@ -18,34 +18,31 @@
 	}
 
 	&.contentgrid {
-		// background-image: url("groot-thin-right.png");
-		// background-color: black;
 		background-size: contain;
 		background-position: center;
 		background-repeat: no-repeat;
 		border-radius: $radius-tbright;
 		border: $border;
-		border-left: unset;
-		box-shadow: 1.5rem 1.5rem 1.5rem 0rem rgba(15, 155, 255, 0.8);
+		border-left: none;
+		box-shadow: 1.5rem 1.5rem 1.5rem 0 rgba(15, 155, 255, 0.8);
 	}
 
 	&.search {
 		margin: 1rem;
-		color: $font-color1;
+		color: $color1;
 		background: none;
-		border-bottom: $border;
-		border-left: $border;
-		border-right: $border;
+		border: $border;
+		border-top: none;
 		border-radius: $radius;
-		box-shadow: 0rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		padding: 0.35rem 0.75rem;
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 
 		image.left {
 			margin-right: 0.5rem;
 		}
 
 		image.right:hover {
-			color: $font-color5;
+			color: $color5;
 			animation: spin 3s linear infinite;
 		}
 
@@ -53,22 +50,21 @@
 			background: $PrimaryBG;
 			border: $border;
 			border-radius: $radius;
-			color: $font-color1;
+			color: $color1;
 			box-shadow: 0.5rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		}
 
 		selection {
 			color: black;
-			background-color: $font-color2;
+			background-color: $color2;
 		}
 	}
 
 	&.app {
 		all: unset;
-		padding: 0rem 0.75rem;
+		padding: 0 0.75rem;
 		min-width: 7rem;
 		min-height: 3rem;
-		//margin: 1rem;
 		border-bottom: 1px solid rgba(0, 0, 155, 0.7);
 
 		&:last-child {
@@ -77,17 +73,16 @@
 
 		icon {
 			font-size: 2rem;
-			color: $font-color1;
+			color: $color1;
 			border-radius: 10rem;
 		}
 
 		label {
-			color: $font-color1;
+			color: $color1;
 			font-weight: normal;
 			font-size: 1.25rem;
 		}
 
-		//&:focus-visible,
 		&.active,
 		&:focus,
 		&:hover {
@@ -96,19 +91,18 @@
 			border-bottom: $border;
 
 			label {
-				text-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+				text-shadow: 0.3rem 0.3rem 0.5rem $color2;
 			}
 
 			icon {
-				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $font-color2;
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $color2;
 				animation: spin 1s linear infinite;
 			}
 		}
 	}
 
 	.switcher {
-		// all: unset;
-		color: $font-color1;
+		color: $color1;
 		padding: 0.5rem 0.75rem;
 		border-radius: $radius;
 		border-right: $border;
@@ -138,7 +132,7 @@
 
 			icon {
 				padding: 10px;
-				color: $font-color1;
+				color: $color1;
 				font-size: 2rem;
 			}
 		}
@@ -147,13 +141,13 @@
 	scrollbar.vertical {
 		transition: 200ms;
 		background-color: rgba(23, 23, 23, 0.3);
-		margin: 0.5rem 0rem;
+		margin: 0.5rem 0;
 
 		&:hover {
 			background-color: rgba(23, 23, 23, 0.7);
 
 			slider {
-				background-color: $font-color1;
+				background-color: $color1;
 				min-width: 0.5rem;
 			}
 		}

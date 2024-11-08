@@ -1,0 +1,70 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 TopsyKrets
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+//--------- Variables -------------
+// --------- fonts
+$font: Liberation Mono;
+$font-color1: rgba(255, 140, 0, 1); // rgba(15,155,255,1); // -- Orange #ff8c00
+$font-color2: rgba(15, 155, 255, 1); // -- Blue #0f9bff
+$font-color3: rgba(155, 255, 15, 1); // -- green
+$font-color4: rgba(255, 0, 0, 1); // -- red #ff0000
+$font-color5: rgba(0, 0, 255, 1);
+$color6: #27d8de;
+$color7: #08204c;
+$font-size: 10px;
+
+//------- Transitions
+$transition: 100ms;
+$materialStandard: cubic-bezier(0.2, 0, 0, 1);
+$materialAccel: cubic-bezier(0.3, 0, 1, 1);
+$materialDecel: cubic-bezier(0, 0, 0, 1);
+$squeezebezier: cubic-bezier(0.5, 3, 0, 1);
+
+//--------- msic
+$boxshad-bg: rgba(15, 155, 255, 0.5);
+$shadow-color: rgba(15, 155, 255, 1);
+$popover-border-color: rgba(0, 0, 0, 0); //#99ccff;
+$popover-radius: 1rem;
+$popover-padding: 0.5rem;
+$GrootLeftBG: url("assets/groot-thin-left.png");
+$GrootRightBG: url("assets/groot-thin-right.png");
+$OverviewBG: url("assets/groot-full.jpg");
+
+//--------- Solids
+$PrimaryBG: rgba(0, 0, 0, 0.5);
+$SecondaryBG: #0e0e1e;
+$TertiaryBG: rgba(0, 0, 0, 0.8);
+$HoverBG: rgba(15, 155, 255, 1);
+$NotificationBG: rgba(0, 0, 0, 0.75);
+
+//---------Gradients
+$BGG1: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(255, 0, 0, 1) 50%, rgba(55, 0, 0, 1) 100%);
+$BGG2: linear-gradient(0deg, rgba(15, 155, 255, 0.5) 0%, rgba(0, 0, 0, 1) 50%, rgba(15, 155, 255, 1) 100%);
+$BGG3: linear-gradient(0deg, rgba(0, 0, 55, 0.5) 0%, rgba(0, 0, 255, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 255, 1) 85%, rgba(0, 0, 55, 0.5) 100%);
+$BGG4: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(15, 155, 255, 0.5) 50%, rgba(0, 0, 0, 0.25) 100%);
+$BGG5: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.5) 100%);
+
+//--------- Borders
+$border: 2px solid #0f9bff;
+$border-width: 1rem;
+$border-color: #0f9bff; //rgba(15,155,255,1);
+$radius: 2rem;
+$radius-tbleft: 3rem 0rem 0rem 3rem;
+$radius-tbright: 0rem 3rem 3rem 0rem;
+$radius-rltop: 3rem 3rem 0rem 0rem;
+$radius-rlbottom: 0rem 0rem 3rem 3rem;
+$padding: 0.3rem;
+$spacing: 0.3rem;
+
+//--------- Sliders
+$SliderTrough: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 30%, rgba(0, 255, 0, 1) 50%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.1) 100%);
+$SliderHighlight: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgba(0, 255, 255, 1) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);

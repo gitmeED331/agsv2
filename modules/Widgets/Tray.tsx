@@ -10,7 +10,6 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind } from "astal";
 import AstalTray from "gi://AstalTray";
-import Icon from "../lib/icons";
 
 const SystemTray = AstalTray.Tray.get_default();
 

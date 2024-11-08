@@ -21,14 +21,18 @@ function CTC(eh, w) {
 	return ClickToClose(eh, w, 0.25, "sessioncontrols");
 }
 
-const theGrid = <Grid halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} />;
+const theGrid = <Grid halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true}
+	setup={(self) => {
+		self.attach(SessionControls(), 2, 2, 1, 1);
 
-theGrid.attach(SessionControls(), 2, 2, 1, 1);
+		self.attach(CTC(1, 1), 1, 1, 3, 1);
+		self.attach(CTC(2, 0.2), 1, 2, 1, 1);
+		self.attach(CTC(3, 0.2), 3, 2, 1, 1);
+		self.attach(CTC(4, 1), 1, 3, 3, 1);
+	}}
+/>;
 
-theGrid.attach(CTC(1, 1), 1, 1, 3, 1);
-theGrid.attach(CTC(2, 0.2), 1, 2, 1, 1);
-theGrid.attach(CTC(3, 0.2), 3, 2, 1, 1);
-theGrid.attach(CTC(4, 1), 1, 3, 3, 1);
+
 
 export default ({ monitor }: { monitor: number }) => {
 	<window

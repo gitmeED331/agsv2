@@ -28,23 +28,22 @@ export default function LeftSide() {
 		</box>
 	);
 
-	const leftStack = (
-		<Stack
-			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
-			transitionDuration={300}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
-			hhomogeneous={true}
-			vhomogeneous={false}
-			visible={true}
-			hexpand={true}
-			vexpand={true}
-		/>
-	);
-
-	leftStack.add_titled(GridCalendar(), "calendar", "Calendar");
-	leftStack.add_titled(power, "power", "Power");
-	leftStack.add_titled(settings, "settings", "Settings");
+	const leftStack = <Stack
+		transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+		transitionDuration={300}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		hhomogeneous={true}
+		vhomogeneous={false}
+		visible={true}
+		hexpand={true}
+		vexpand={true}
+		setup={(self) => {
+			self.add_titled(GridCalendar(), "calendar", "Calendar");
+			self.add_titled(power, "power", "Power");
+			self.add_titled(settings, "settings", "Settings");
+		}}
+	/>
 
 	const stackSwitcher = (
 		<StackSwitcher className={"dashboard stackSwitcher"} stack={leftStack as Stack} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} spacing={10} iconSize={Gtk.IconSize.BUTTON} />

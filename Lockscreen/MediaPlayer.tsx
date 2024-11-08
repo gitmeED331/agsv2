@@ -178,9 +178,7 @@ function trackTime() {
 	const totalLength = bind(player, "length").as(lengthStr);
 
 	return (
-		<label className="tracklength" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-			{position}/{totalLength}
-		</label>
+		<label className="tracklength" label={`${position} / ${totalLength}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 	);
 }
 
@@ -199,20 +197,22 @@ function Player({ player }: { player: Mpris.Player }) {
 		return (position / length).toFixed(2);
 	});
 
-	const mediaInfoGrid = new Grid({
-		className: "mediainfo",
-		halign: Gtk.Align.CENTER,
-		valign: Gtk.Align.CENTER,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-		rowSpacing: 10,
-	});
+	const mediaInfoGrid = <Grid
+		className={"mediainfo"}
+		halign={Gtk.Align.CENTER}
+		valign={Gtk.Align.CENTER}
+		hexpand={true}
+		vexpand={true}
+		visible={true}
+		rowSpacing={10}
+		setup={(grid) => {
+			grid.attach(PlayerIcon(), 0, 0, 1, 1);
+			grid.attach(TrackInfo(), 0, 1, 1, 1);
+			grid.attach(trackTime(), 0, 2, 2, 1);
+			grid.attach(PlayerControls(), 0, 3, 2, 1);
+		}}
 
-	mediaInfoGrid.attach(PlayerIcon(), 0, 0, 1, 1);
-	mediaInfoGrid.attach(TrackInfo(), 0, 1, 1, 1);
-	mediaInfoGrid.attach(trackTime(), 0, 2, 2, 1);
-	mediaInfoGrid.attach(PlayerControls(), 0, 3, 2, 1);
+	/>
 
 	return (
 		<box

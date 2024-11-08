@@ -34,33 +34,40 @@ function createAppGrid(appList) {
 		return a.get_name().localeCompare(b.get_name());
 	});
 
-	const grid = <Grid hexpand={true} vexpand={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} />;
-
-	appList.forEach((app, index) => {
-		const appButton = (
-			<button
-				className={"launcher app"}
-				name={app.get_name()}
-				tooltip_text={app.get_description()}
-				on_clicked={() => {
-					app.launch();
-					App.toggle_window("launcher");
-				}}
-				onKeyPressEvent={(_, event) => {
-					if (event.get_keyval()[1] === Gdk.KEY_Return) {
-						app.launch();
-						App.toggle_window("launcher");
-					}
-				}}
-			>
-				<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5} widthRequest={winwidth(0.15)}>
-					<icon icon={bind(app, "icon_name").as((i) => i) || app.get_icon_name() || Icon.missing} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-					<label label={app.get_name()} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
-				</box>
-			</button>
-		);
-		grid.attach(appButton, index % columnCount, Math.floor(index / columnCount), 1, 1);
-	});
+	const grid = <Grid
+		hexpand={true}
+		vexpand={true}
+		halign={Gtk.Align.FILL}
+		valign={Gtk.Align.FILL}
+		visible={true}
+		setup={(self) => {
+			appList.forEach((app, index) => {
+				const appButton = (
+					<button
+						className={"launcher app"}
+						name={app.get_name()}
+						tooltip_text={app.get_description()}
+						on_clicked={() => {
+							app.launch();
+							App.toggle_window("launcher");
+						}}
+						onKeyPressEvent={(_, event) => {
+							if (event.get_keyval()[1] === Gdk.KEY_Return) {
+								app.launch();
+								App.toggle_window("launcher");
+							}
+						}}
+					>
+						<box vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} spacing={5} widthRequest={winwidth(0.15)}>
+							<icon icon={bind(app, "icon_name").as((i) => i) || app.get_icon_name() || Icon.missing} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+							<label label={app.get_name()} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
+						</box>
+					</button>
+				);
+				self.attach(appButton, index % columnCount, Math.floor(index / columnCount), 1, 1);
+			});
+		}}
+	/>
 
 	return grid;
 }
@@ -135,18 +142,18 @@ function Search(query) {
 		return scoreB - scoreA;
 	});
 
-	let searchResultsPage = theStack.get_child_by_name("search_results");
+	let searchResultsPage = (theStack as Stack).get_child_by_name("search_results");
 
 	if (sortedResults.length > 0) {
 		if (searchResultsPage) {
-			theStack.remove(searchResultsPage);
+			(theStack as Stack).remove(searchResultsPage);
 		}
 
 		searchResultsPage = createScrollablePage(sortedResults);
-		theStack.add_named(searchResultsPage, "search_results");
-		theStack.set_visible_child_name("search_results");
+		(theStack as Stack).add_named(searchResultsPage, "search_results");
+		(theStack as Stack).set_visible_child_name("search_results");
 	} else {
-		theStack.set_visible_child_name("All Apps");
+		(theStack as Stack).set_visible_child_name("All Apps");
 	}
 }
 
@@ -196,9 +203,9 @@ const handleCalculatorCommand = (query, self) => {
 	const expression = query.slice(6).trim();
 
 	if (expression) {
-		const existingChild = theStack.get_visible_child();
-		if (existingChild && theStack.get_visible_child_name() === "calculator") {
-			theStack.remove(existingChild);
+		const existingChild = (theStack as Stack).get_visible_child();
+		if (existingChild && (theStack as Stack).get_visible_child_name() === "calculator") {
+			(theStack as Stack).remove(existingChild);
 		}
 
 		const calculatorPage = (
@@ -207,8 +214,8 @@ const handleCalculatorCommand = (query, self) => {
 			</Grid>
 		);
 
-		theStack.add_named(calculatorPage, "calculator");
-		theStack.set_visible_child_name("calculator");
+		(theStack as Stack).add_named(calculatorPage, "calculator");
+		(theStack as Stack).set_visible_child_name("calculator");
 	}
 };
 
@@ -221,7 +228,7 @@ const entry = (
 			const query = self.get_text().trim();
 			currentQuery = query;
 			if (query.startsWith("CALC::")) {
-				theStack.set_visible_child_name("calculator");
+				(theStack as Stack).set_visible_child_name("calculator");
 			} else if (!query.startsWith("TERM::") && !query.startsWith("CALC::")) {
 				Search(query);
 			}
@@ -238,7 +245,7 @@ const entry = (
 						break;
 					case query.startsWith("CALC::"):
 						handleCalculatorCommand(query, self);
-						theStack.set_visible_child_name("calculator");
+						(theStack as Stack).set_visible_child_name("calculator");
 						break;
 					default:
 						break;
@@ -264,7 +271,7 @@ const entry = (
 
 entry.connect("icon-press", (_, event) => {
 	entry.set_text("");
-	theStack.set_visible_child_name("All Apps");
+	(theStack as Stack).set_visible_child_name("All Apps");
 });
 
 const allAppsPage = (
@@ -283,7 +290,7 @@ const categoryPages = uniqueCategories.map((category) => {
 	);
 });
 
-const theStack = (
+const theStack =
 	<Stack
 		className={"launcher stack"}
 		transitionDuration={300}
@@ -295,18 +302,16 @@ const theStack = (
 		visible={true}
 		hexpand={false}
 		vexpand={true}
+		setup={(self) => {
+			[allAppsPage, ...categoryPages, terminal()].forEach((page) => {
+				self.add_named(page, page.name);
+			});
+		}}
 	/>
-);
-
-{
-	[allAppsPage, ...categoryPages, terminal()].forEach((page) => {
-		theStack.add_named(page, page.name);
-	});
-}
 
 const Switcher = () => {
 	const handleSwitch = (name) => {
-		theStack.set_visible_child_name(name);
+		(theStack as Stack).set_visible_child_name(name);
 		query = "";
 		entry.set_text("");
 	};
@@ -395,17 +400,21 @@ function Launcher({ monitor }: { monitor: number }) {
 				background-position: center;
 				background-color: rgba(0, 0, 0, 1);
 			`}
+			setup={(self) => {
+				self.attach(entry, 0, 0, 2, 1);
+				self.attach(Switcher(), 0, 1, 1, 1);
+				self.attach(theStack, 1, 1, 1, 1);
+			}}
 		/>
 	);
 
-	contentGrid.attach(entry, 0, 0, 2, 1);
-	contentGrid.attach(Switcher(), 0, 1, 1, 1);
-	contentGrid.attach(theStack, 1, 1, 1, 1);
+	const masterGrid = <Grid className={"launcher containergrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true}
+		setup={(self) => {
+			self.attach(contentGrid, 1, 1, 1, 1);
+			self.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
+		}}
+	/>;
 
-	const masterGrid = <Grid className={"launcher containergrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} />;
-
-	masterGrid.attach(contentGrid, 1, 1, 1, 1);
-	masterGrid.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
 
 	return (
 		<window
@@ -437,7 +446,7 @@ App.connect("window-toggled", (_, win) => {
 	if (win.visible === false && win.name === "launcher") {
 		query = "";
 		entry.set_text("");
-		theStack.set_visible_child_name("All Apps");
+		(theStack as Stack).set_visible_child_name("All Apps");
 	}
 });
 

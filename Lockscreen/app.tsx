@@ -9,14 +9,8 @@
  *
  */
 
-// import { App } from "astal/gtk3";
-
-// import lockstyle from "./style/Lockscreen.scss"
-
-// import Lockscreen from "./Lockscreen";
-
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
-import { execAsync, bind, Variable, timeout, GLib } from "astal";
+import { bind, Variable, timeout, GLib } from "astal";
 import Lock from "gi://GtkSessionLock";
 import AstalAuth from "gi://AstalAuth";
 import AstalMpris from "gi://AstalMpris";
@@ -85,6 +79,7 @@ function loginGrid() {
 			onRealize={(self) => self.grab_focus()}
 		/>
 	);
+
 	const passwordPrompt = (
 		<box vertical spacing={10}>
 			{[promptLabel, PasswordEntry]}
@@ -97,55 +92,36 @@ function loginGrid() {
 		<label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 	);
 
-	const grid = <Grid className={"logingrid"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true} rowSpacing={15} visible={true} />;
+	const grid = <Grid
+		className={"logingrid"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true}
+		rowSpacing={15} visible={true}
+		setup={(self) => {
+			self.attach(currentUser, 0, 0, 1, 1);
+			self.attach(currentDesktop, 0, 1, 1, 1);
+			self.attach(passwordPrompt, 0, 2, 1, 1);
+			self.attach(authMessages(), 0, 3, 1, 1);
+		}}
+	/>
 
-	grid.attach(currentUser, 0, 0, 1, 1);
-	grid.attach(currentDesktop, 0, 1, 1, 1);
-	// if (prompt.get().length > 0) {
-	// grid.attach(promptLabel, 0, 1, 1, 1);
-	// }
-	grid.attach(passwordPrompt, 0, 2, 1, 1);
-	grid.attach(authMessages(), 0, 3, 1, 1);
 
 	return grid;
 }
 
-function topRightGrid() {
-	const grid = new Grid({
-		halign: Gtk.Align.END,
-		valign: Gtk.Align.START,
-		hexpand: true,
-		vexpand: true,
-		visible: true,
-		columnSpacing: 10,
-	});
-
-	grid.attach(VolumeIndicator(), 0, 0, 1, 1);
-	grid.attach(NetworkButton(), 1, 0, 1, 1);
-	grid.attach(BluetoothButton(), 2, 0, 1, 1);
-	grid.attach(BatteryButton(), 3, 0, 1, 1);
-
-	return (
-		<box className={"topright"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.END} valign={Gtk.Align.START} visible={true}>
-			{grid}
-		</box>
-	);
-}
-
-// const overlayGrid = new Grid({
-//     className: "overlayGrid",
-//     widthRequest: winwidth(1), heightRequest: winheight(1),
-//     halign: Gtk.Align.FILL, valign: Gtk.Align.FILL,
-//     hexpand: true, vexpand: true, visible: true,
-// });
-
-// overlayGrid.attach(Controls(), 0, 0, 1, 1);
-// overlayGrid.attach(Clock(), 1, 0, 1, 1);
-// overlayGrid.attach(topRightGrid(), 2, 0, 1, 1);
-// const thePlayer = <Player player={player} />;
-// if (thePlayer) {
-//     overlayGrid.attach(thePlayer, 0, 1, 3, 1);
-// }
+const topRightGrid = <Grid
+	className={"topright"}
+	halign={Gtk.Align.END}
+	valign={Gtk.Align.START}
+	hexpand={true}
+	vexpand={true}
+	visible={true}
+	columnSpacing={10}
+	setup={(self) => {
+		self.attach(VolumeIndicator(), 0, 0, 1, 1);
+		self.attach(NetworkButton(), 1, 0, 1, 1);
+		self.attach(BluetoothButton(), 2, 0, 1, 1);
+		self.attach(BatteryButton(), 3, 0, 1, 1);
+	}}
+/>
 
 function Lockscreen({ monitor }: { monitor: number }) {
 	const overlayBox = (
@@ -153,20 +129,15 @@ function Lockscreen({ monitor }: { monitor: number }) {
 			<centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true}>
 				{Controls()}
 				{Clock()}
-				{topRightGrid()}
+				{topRightGrid}
 			</centerbox>
 			<Player player={player} />
 		</box>
 	);
-	// const fixedLoginGrid = new Fixed({
-	//     hexpand: true, vexpand: true, visible: true,
-	//     widthRequest: 250, heightRequest: 500,
-	// })
 
 	const tsxFixed = <Fixed hexpand={true} vexpand={true} visible={true} widthRequest={250} heightRequest={500} />;
+	// @ts-expect-error
 	tsxFixed.put(loginGrid(), 250, 400);
-
-	// fixedLoginGrid.put(loginGrid(), 250, 400)
 
 	return (
 		<window
@@ -183,7 +154,6 @@ function Lockscreen({ monitor }: { monitor: number }) {
 			<overlay visible={true} passThrough={true} clickThrough={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true}>
 				{overlayBox}
 				{tsxFixed}
-				{/* {loginGrid()} */}
 			</overlay>
 		</window>
 	);
@@ -200,6 +170,7 @@ function createWindow(monitor) {
 
 function startLock() {
 	const display = Gdk.Display.get_default();
+	// @ts-expect-error
 	for (let m = 0; m < display?.get_n_monitors(); m++) {
 		const monitor = display?.get_monitor(m);
 		createWindow(monitor);

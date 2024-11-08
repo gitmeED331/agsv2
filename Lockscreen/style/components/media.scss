@@ -20,7 +20,7 @@
 	font-size: 6px;
 	padding: 1rem;
 	background-color: #131313;
-	color: $font-color2;
+	color: $color2;
 	margin-bottom: 3rem;
 	box-shadow:
 		inset -0.75rem 0rem 1rem 0rem $PrimaryBG,
@@ -54,7 +54,7 @@
 
 				&:hover {
 					color: red;
-					-gtk-icon-shadow: -0.2rem 0.2rem $font-color5;
+					-gtk-icon-shadow: -0.2rem 0.2rem $color5;
 				}
 			}
 
@@ -64,7 +64,7 @@
 
 				&:hover {
 					color: yellow;
-					-gtk-icon-shadow: 0.1rem 0.3rem $font-color4;
+					-gtk-icon-shadow: 0.1rem 0.3rem $color4;
 				}
 			}
 
@@ -72,7 +72,7 @@
 				-gtk-icon-shadow: 0.2rem 0.2rem $PrimaryBG;
 
 				&:hover {
-					color: $font-color5;
+					color: $color5;
 					-gtk-icon-shadow: 0.2rem 0.2rem yellow;
 				}
 			}
@@ -82,7 +82,7 @@
 	.track {
 		&position,
 		&length {
-			color: $font-color1;
+			color: $color1;
 			text-shadow: 0.1rem 0.1rem $PrimaryBG;
 		}
 
@@ -103,13 +103,13 @@
 		&title {
 			font-size: 1.5rem;
 			font-weight: bold;
-			color: $font-color1;
+			color: $color1;
 			text-shadow: 0.1rem 0.1rem $PrimaryBG;
 		}
 
 		.artist {
 			font-size: 1.3rem;
-			color: $font-color2;
+			color: $color2;
 			text-shadow: 0.1rem 0.1rem $PrimaryBG;
 		}
 	}
