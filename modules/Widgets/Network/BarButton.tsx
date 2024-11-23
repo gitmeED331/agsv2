@@ -13,20 +13,14 @@ import Icon, { Icons } from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
-const network = AstalNetwork.get_default();
-const Wired = network.wired;
-const Wifi = network.wifi;
-
 let netreveal = Variable(false);
 
-const NetworkWidget = () => {
-	const wifiIcon = <icon className={"barbutton wifi icon"} icon={bind(Wifi, "icon_name")} />;
-
+const NetworkWidget = (network, wired, wifi) => {
+	const wifiIcon = <icon className={"barbutton wifi icon"} icon={bind(wifi, "icon_name")} />;
 	const wifiLabel = <label className={"barbutton wifi label"} />;
 
 	function updateWifiLabel() {
-		const wifi = network.wifi;
-		wifiLabel.set_label(wifi.ssid ? `${wifi.ssid.substring(0, 15)}` : "--");
+		(wifiLabel as Gtk.Label).set_label(wifi.ssid ? `${wifi.ssid.substring(0, 15)}` : "--");
 	}
 
 	updateWifiLabel();
@@ -44,7 +38,7 @@ const NetworkWidget = () => {
 		</box>
 	);
 
-	const wiredIcon = <icon className={"barbutton wired icon"} icon={bind(Wired, "icon_name").as((i) => i)} />;
+	const wiredIcon = <icon className={"barbutton wired icon"} icon={bind(wired, "icon_name").as((i) => i)} />;
 
 	const wiredLabel = (
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
@@ -64,8 +58,11 @@ const NetworkWidget = () => {
 		</box>
 	);
 };
-
 function NetworkButton() {
+	const Network = AstalNetwork.get_default();
+	const Wired = Network.wired;
+	const Wifi = Network.wifi;
+
 	return (
 		<button
 			className={"network barbutton"}
@@ -92,7 +89,7 @@ function NetworkButton() {
 				}
 			}}
 		>
-			<NetworkWidget />
+			{NetworkWidget(Network, Wired, Wifi)}
 		</button>
 	);
 }

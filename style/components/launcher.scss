@@ -160,4 +160,53 @@
 			transition: 200ms;
 		}
 	}
+
+	.favorites-bar {
+		background-color: rgba(0, 0, 0, 0);
+		box-shadow: inset 0rem 0.5rem 1.5rem 0 rgba(219, 15, 255, 0.8);
+		padding: 0.25rem 1rem;
+		border-radius: $radius;
+	}
+
+	.favorite-app {
+		padding: 0.75rem;
+		border-radius: $radius;
+		border-bottom: $border;
+		border-color: rgba(0, 0, 0, 0);
+
+		icon,
+		image {
+			font-size: 1.5rem;
+		}
+
+		&.active,
+		&:focus,
+		&:hover {
+
+			background-color: rgba(0, 0, 0, 0.8);
+			border-radius: $radius;
+			border-bottom: $border;
+
+			label {
+				text-shadow: 0.3rem 0.3rem 0.5rem $color2;
+			}
+
+			icon {
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $color2;
+				animation: spin 1s linear infinite;
+			}
+		}
+	}
+}
+
+.calculator {
+	.result {
+		color: $color1;
+		font-weight: bold;
+		font-size: 2rem;
+		padding: 0.25rem;
+		box-shadow: inset 0rem 0.5rem 1.5rem 0 rgba(219, 15, 255, 0.8);
+		border: $border;
+		border-radius: $radius;
+	}
 }

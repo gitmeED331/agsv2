@@ -12,10 +12,10 @@ import { bind, Variable } from "astal";
 import AstalWp from "gi://AstalWp";
 import { dashboardLeftStack } from "../Windows/dashboard/LeftSide";
 
-const { audio } = AstalWp.get_default();
-const Speaker = audio.get_default_speaker();
-
 function VolumeIndicator() {
+	const { audio } = AstalWp.get_default();
+	const Speaker = audio?.get_default_speaker();
+
 	const volumeIndicatorClassName = Variable.derive([bind(Speaker, "mute")], (isMuted) => {
 		const classes = ["volume-indicator"];
 		if (isMuted) {

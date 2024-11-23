@@ -13,10 +13,6 @@ import Icon from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-const { audio } = AstalWp.get_default();
-const Speaker = audio.get_default_speaker();
-const Microphone = audio.get_default_microphone();
-
 function DeviceIdentifier({ device }) {
 	const tooltipText = Variable.derive([bind(device, "volume"), bind(device, "mute")], (volume, isMuted) => (isMuted ? "Muted" : `Volume ${(volume * 100).toFixed(2)}%`));
 	const classname = Variable.derive([bind(device, "mute")], (isMuted) => {
@@ -52,6 +48,9 @@ function DeviceIdentifier({ device }) {
 }
 
 function DeviceSlider({ device }) {
+	const { audio } = AstalWp.get_default();
+	const Speaker = audio.get_default_speaker();
+
 	return (
 		<slider
 			className={`audio-mixer ${device}-slider Slider`}
@@ -155,6 +154,10 @@ function SettingsButton() {
 }
 
 export default function AudioMixer() {
+	const { audio } = AstalWp.get_default();
+	const Speaker = audio.get_default_speaker();
+	const Microphone = audio.get_default_microphone();
+
 	const getStreams = audio.get_streams();
 	const activeStreams = (
 		<box vertical={true}>

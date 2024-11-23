@@ -9,12 +9,11 @@
 
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { Variable, bind } from "astal";
-import { dashboardLeftStack } from "../dashboard/LeftSide";
-import { dashboardRightStack } from "../dashboard/RightSide";
 
 export default function Clock() {
 	const time = Variable("").poll(1000, 'date "+%H:%M:%S"');
 	const date = Variable("").poll(3600000, 'date "+%a %b %d"');
+
 	return (
 		<button
 			className="clock"
@@ -35,7 +34,7 @@ export default function Clock() {
 		>
 			<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={5}>
 				<label label={bind(date)} />
-				<icon icon="nix-snowflake-symbolic" />
+				<icon icon="nix-snowflake-symbolic" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} />
 				<label label={bind(time)} />
 			</box>
 		</button>

@@ -14,40 +14,37 @@ import AstalBluetooth from "gi://AstalBluetooth";
 import Pango from "gi://Pango";
 import Spinner from "../../Astalified/Spinner";
 
-const Bluetooth = AstalBluetooth.get_default();
-const Adapter = Bluetooth.adapter;
-
-function btControls() {
+function btControls(bluetooth, adapter) {
 	const btPower = (
 		<button
-			className={bind(Bluetooth, "is_powered").as((v) => (v ? "bluetooth power-on" : "bluetooth power-off"))}
+			className={bind(bluetooth, "is_powered").as((v) => `bluetooth ${v ? "power-on" : "power-off"}`)}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`bluetoothctl power ${Bluetooth.is_powered ? "off" : "on"}`);
+					execAsync(`bluetoothctl power ${bluetooth.is_powered ? "off" : "on"}`);
 				}
 			}}
 			halign={Gtk.Align.END}
 			valign={Gtk.Align.CENTER}
-			tooltip_text={bind(Bluetooth, "is_powered").as((v) => (v ? "Power off" : "Power on"))}
+			tooltip_text={bind(bluetooth, "is_powered").as((v) => `Power ${v ? "off" : "on"}`)}
 		>
-			<icon icon={bind(Bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+			<icon icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 		</button>
 	);
 
 	function spinSetup(spinner: Spinner) {
-		bind(Adapter, "discovering").as((s) => (s === true ? spinner.start : spinner.stop));
+		bind(adapter, "discovering").as((s) => (s === true ? spinner.start : spinner.stop));
 	}
 
 	const Refresh = (
-		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))} homogeneous={false}>
+		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))} homogeneous={false}>
 			<button
 				name={"iconbtn"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
 						//execAsync(`bluetoothctl --timeout 120 scan on`)
-						Adapter.start_discovery();
+						adapter.start_discovery();
 						setTimeout(() => {
-							Adapter.stop_discovery();
+							adapter.stop_discovery();
 						}, 120000);
 					}
 				}}
@@ -62,7 +59,7 @@ function btControls() {
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
 						//execAsync("bluetoothctl scan off")
-						Adapter.stop_discovery();
+						adapter.stop_discovery();
 					}
 				}}
 				halign={Gtk.Align.CENTER}
@@ -188,6 +185,9 @@ function content(device) {
 }
 
 function BluetoothDevices() {
+	const Bluetooth = AstalBluetooth.get_default();
+	const Adapter = Bluetooth.adapter;
+
 	const btdevicelist = bind(Bluetooth, "devices").as((devices) => {
 		const availableDevices = devices
 			.filter((btDev) => {
@@ -207,7 +207,14 @@ function BluetoothDevices() {
 
 	return (
 		<box className={"bluetooth container"} name={"Bluetooth"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={10}>
-			<centerbox className={"bluetooth devicelist-header"} vertical={false} halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} centerWidget={<label label={"Bluetooth"} />} endWidget={btControls()} />
+			<centerbox
+				className={"bluetooth devicelist-header"}
+				vertical={false}
+				halign={Gtk.Align.FILL}
+				valign={Gtk.Align.CENTER}
+				centerWidget={<label label={"Bluetooth"} />}
+				endWidget={btControls(Bluetooth, Adapter)}
+			/>
 			<scrollable halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} expand>
 				<box className={"bluetooth devicelist-inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={5}>
 					{btdevicelist}

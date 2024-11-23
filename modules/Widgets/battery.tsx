@@ -14,23 +14,18 @@ import Icon from "../lib/icons";
 import powerProfiles from "gi://AstalPowerProfiles";
 import Battery from "gi://AstalBattery";
 
-const battery = Battery.get_default();
-const PowerProfiles = powerProfiles.get_default();
-const percentage = bind(battery, "percentage");
-const charging = bind(battery, "charging");
+const chargeTooltip = (charging) => (charging.get() ? "Charging" : "Discharging");
 
-const chargeTooltip = () => (charging.get() ? "Charging" : "Discharging");
+const chargeIcon = (charging: boolean) => (charging ? Icon.battery.Charging : Icon.battery.Discharging);
 
-const chargeIcon = () => (charging.get() ? Icon.battery.Charging : Icon.battery.Discharging);
-
-const ChargeIndicatorIcon = () => {
-	return <icon className={bind(battery, "charging").as((c) => (c === true ? "charging" : "discharging"))} tooltipText={charging.as(chargeTooltip)} icon={charging.as(chargeIcon)} />;
-};
+const ChargeIndicatorIcon = (battery, charging) => (
+	<icon className={bind(battery, "charging").as((c) => (c === true ? "charging" : "discharging"))} tooltipText={chargeTooltip(charging)} icon={charging.as(chargeIcon)} />
+);
 
 const PercentageReveal = Variable(true);
 
-const TheLabelReveal = () => {
-	const PercentLabel = <label label={bind(battery, "percentage").as((p) => `${p * 100}%`)} tooltipText={bind(battery, "charging").as(chargeTooltip)} />;
+const TheLabelReveal = (battery, charging) => {
+	const PercentLabel = <label label={bind(battery, "percentage").as((p) => `${p * 100}%`)} tooltipText={chargeTooltip(charging)} />;
 	return (
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} transitionDuration={300} clickThrough={true} revealChild={bind(battery, "charging").as((c) => (c ? false : true))}>
 			{PercentLabel}
@@ -38,26 +33,31 @@ const TheLabelReveal = () => {
 	);
 };
 
-const BatteryLevelBar = ({ blocks = 10 }) => (
+const BatteryLevelBar = (percent, power, blocks: number) => (
 	<levelbar
 		orientation={Gtk.Orientation.HORIZONTAL}
 		halign={Gtk.Align.CENTER}
 		valign={Gtk.Align.CENTER}
 		max_value={blocks}
 		mode={Gtk.LevelBarMode.CONTINUOUS}
-		tooltipText={bind(PowerProfiles, "active_profile")}
-		value={percentage.as((p) => p * blocks)}
+		tooltipText={bind(power, "active_profile")}
+		value={percent.as((p) => p * blocks)}
 	/>
 );
 
 function BatteryButton() {
+	const battery = Battery.get_default();
+	const PowerProfiles = powerProfiles.get_default();
+	const Percentage = bind(battery, "percentage");
+	const Charging = bind(battery, "charging");
+
 	const batterybuttonclassname = () => {
 		const classes = [];
 
-		if (percentage.get() <= 0.3) {
+		if (Percentage.get() <= 0.3) {
 			classes.push("low");
 		}
-		if (charging.get()) {
+		if (Charging.get()) {
 			classes.push("charging");
 		} else {
 			classes.push("discharging");
@@ -69,7 +69,7 @@ function BatteryButton() {
 
 	return (
 		<button
-			className={`${batterybuttonclassname()}`}
+			className={batterybuttonclassname()}
 			hexpand={true}
 			visible={true}
 			onClick={(_, event) => {
@@ -85,9 +85,11 @@ function BatteryButton() {
 			}}
 		>
 			<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={3}>
-				<TheLabelReveal />
-				<ChargeIndicatorIcon />
-				<BatteryLevelBar />
+				{[
+					TheLabelReveal(battery, Charging),
+					ChargeIndicatorIcon(battery, Charging),
+					BatteryLevelBar(Percentage, PowerProfiles, 10)
+				]}
 			</box>
 		</button>
 	);

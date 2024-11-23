@@ -25,27 +25,51 @@ function getIconForBrightness(value) {
 }
 
 function getValue() {
-	const brightness = parseInt(exec("light -G").trim()) || 0;
-	return brightness;
+	try {
+		const output = exec("light -G").trim();
+		const brightness = parseFloat(output);
+		if (!isNaN(brightness)) {
+			return brightness;
+		}
+	} catch (error) {
+		console.error("Error fetching brightness:", error);
+	}
+	// Fallback to a default value if parsing fails
+	return 0;
 }
 
-let currentBrightness = Variable(getValue());
+
+let currentBrightness = Variable(getValue() || 0);
 let currentIcon = BrightLevel.b1;
 
 export default function BrightnessSlider() {
-	function initializeValues() {
-		currentBrightness = getValue();
-		currentIcon = getIconForBrightness(currentBrightness);
 
-		slider.value = currentBrightness;
-		theIcon.icon = currentIcon;
+	function initializeValues() {
+		const brightness = getValue();
+		if (!isNaN(brightness) && brightness >= 0 && brightness <= 100) {
+			currentBrightness = Variable(brightness);
+			currentIcon = getIconForBrightness(brightness);
+
+			slider.value = brightness;
+			theIcon.icon = currentIcon;
+		} else {
+			console.warn("Invalid brightness value:", brightness);
+			slider.value = 0; // Fallback value
+		}
 	}
+
 	monitorFile("/sys/class/backlight/intel_backlight/actual_brightness", () => {
-		currentBrightness = getValue();
-		currentIcon = getIconForBrightness(currentBrightness);
-		theIcon.icon = currentIcon;
-		slider.value = currentBrightness;
+		const brightness = getValue();
+		if (!isNaN(brightness) && brightness >= 0 && brightness <= 100) {
+			currentBrightness = Variable(brightness);
+			currentIcon = getIconForBrightness(brightness);
+			theIcon.icon = currentIcon;
+			slider.value = brightness;
+		} else {
+			console.warn("Invalid brightness update:", brightness);
+		}
 	});
+
 	const slider = (
 		<slider
 			className={"Slider"}
@@ -66,7 +90,8 @@ export default function BrightnessSlider() {
 		/>
 	);
 
-	const theTitle = <label className={"header"} wrap={false} hexpand={true} halign={Gtk.Align.CENTER} xalign={0} yalign={0} ellipsize={Pango.EllipsizeMode.END} label="Brightness" />;
+	const theTitle = <label className={"header"} wrap={false} hexpand={true}
+		halign={Gtk.Align.CENTER} xalign={0} yalign={0} ellipsize={Pango.EllipsizeMode.END} label="Brightness" />;
 
 	const theIcon = <icon halign={Gtk.Align.START} valign={Gtk.Align.CENTER} icon={getIconForBrightness(getValue())} />;
 

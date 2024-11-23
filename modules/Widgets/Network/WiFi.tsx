@@ -15,34 +15,26 @@ import Pango from "gi://Pango";
 import NM from "gi://NM";
 import Spinner from "../../Astalified/Spinner";
 
-const network = AstalNetwork.get_default();
-const Wifi = network.wifi;
-
-function Header() {
+function Header(wifi) {
 	function spinSetup(spinner: Spinner) {
-		bind(Wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop));
+		bind(wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop));
 	}
 
-	const theSpinner = new Spinner({
-		name: "refreshspinner",
-		setup: spinSetup,
-		halign: Gtk.Align.CENTER,
-		valign: Gtk.Align.CENTER,
-	});
+	const theSpinner = <Spinner name={"refreshspinner"} setup={spinSetup} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />;
 
 	const refresh = (
-		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(Wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
+		<stack visible={true} halign={Gtk.Align.END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
 			{theSpinner}
 			<button
 				name={"refreshbtn"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						Wifi.scan();
+						wifi.scan();
 					}
 				}}
 				halign={Gtk.Align.CENTER}
 				valign={Gtk.Align.CENTER}
-				tooltip_text={bind(Wifi, "scanning").as((v) => (v ? "wifi scanning" : ""))}
+				tooltip_text={bind(wifi, "scanning").as((v) => (v ? "wifi scanning" : ""))}
 			>
 				<icon icon={"view-refresh-symbolic"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 			</button>
@@ -52,14 +44,14 @@ function Header() {
 		<button
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`nmcli radio wifi ${Wifi.enabled ? "off" : "on"}`);
+					execAsync(`nmcli radio wifi ${wifi.enabled ? "off" : "on"}`);
 				}
 			}}
 			halign={Gtk.Align.CENTER}
 			valign={Gtk.Align.CENTER}
-			tooltip_text={bind(Wifi, "enabled").as((v) => (v ? "Disable" : "Enable"))}
+			tooltip_text={bind(wifi, "enabled").as((v) => (v ? "Disable" : "Enable"))}
 		>
-			<icon icon={bind(Wifi, "enabled").as((v) => (v ? Icon.network.wifi.enabled : Icon.network.wifi.disabled))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
+			<icon icon={bind(wifi, "enabled").as((v) => (v ? Icon.network.wifi.enabled : Icon.network.wifi.disabled))} halign={Gtk.Align.END} valign={Gtk.Align.CENTER} />
 		</button>
 	);
 	const head = <label label={"Wi-Fi"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />;
@@ -81,11 +73,13 @@ function Header() {
 	);
 }
 
-function WifiAP(ap) {
-	const isActiveAP = Wifi.active_access_point && Wifi.active_access_point.ssid === ap.ssid ? true : false;
+function WifiAP(ap, wifi) {
+	const isActiveAP = wifi.active_access_point && wifi.active_access_point.ssid === ap.ssid ? true : false;
 	const isConnecting = NM.State.CONNECTING === ap.state ? true : false;
 	const passreveal = Variable(false);
+	// @ts-ignore
 	const noPw = NM["80211ApSecurityFlags"].NONE;
+	// @ts-ignore
 	const apPrivacy = NM["80211ApFlags"].NONE;
 	const SecuredAP = !apPrivacy && !noPw;
 
@@ -269,10 +263,13 @@ function WifiAP(ap) {
 }
 
 function WifiAPs() {
+	const Network = AstalNetwork.get_default();
+	const Wifi = Network.wifi;
+
 	const APList = bind(Wifi, "accessPoints").as((aps) => {
 		const activeAP = Wifi.active_access_point || null;
 
-		const groupedAPs = aps.reduce((acc, ap) => {
+		const groupedAPs = aps.reduce((acc: any, ap: any) => {
 			const ssid = ap.ssid ? ap.ssid.trim() : null;
 			if (!ssid) return acc;
 
@@ -284,8 +281,8 @@ function WifiAPs() {
 			return acc;
 		}, {});
 
-		const sortedAPGroups = Object.values(groupedAPs).map((apGroup) => {
-			apGroup.sort((a, b) => {
+		const sortedAPGroups = Object.values(groupedAPs).map((apGroup: any) => {
+			apGroup.sort((a: any, b: any) => {
 				if (a === activeAP) return -1;
 				if (b === activeAP) return 1;
 
@@ -302,12 +299,12 @@ function WifiAPs() {
 			return b.strength - a.strength;
 		});
 
-		return sortedAPGroups.map((ap) => WifiAP(ap));
+		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi));
 	});
 
 	return (
 		<box className={"network wifi container"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} visible={true} vertical={true} spacing={10}>
-			<Header />
+			{Header(Wifi)}
 			<scrollable halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} vexpand={true}>
 				<box className={"wifi aplist-inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} visible={true} vertical={true} spacing={5}>
 					{APList}

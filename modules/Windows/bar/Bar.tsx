@@ -13,38 +13,31 @@ import { GLib, bind } from "astal";
 import Clock from "./clock";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
+// import systemStats from "../../Widgets/systemStats";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-function loadWorkspaces(wm: string) {
-	if (wm === "hyprland") {
-		const { default: HyprWorkspaces } = require("./Workspaces/HyprWorkspaces");
-		return HyprWorkspaces;
-	} else if (wm === "river") {
-		const { default: RiverWorkspaces } = require("./Workspaces/RiverWorkspaces");
-		return RiverWorkspaces;
-	}
-}
-
-function loadAppTitleTicker(wm: string) {
-	if (wm === "hyprland") {
-		const { default: HyprAppTitleTicker } = require("./AppTitleTicker/HyprAppTitleTicker");
-		return HyprAppTitleTicker;
-	} else if (wm === "river") {
-		const { default: RiverAppTitleTicker } = require("./AppTitleTicker/RiverAppTitleTicker");
-		return RiverAppTitleTicker;
-	}
-}
-
 function LeftBar() {
-	const WorkspacesComponent = loadWorkspaces(wm);
-	const AppTitleTickerComponent = loadAppTitleTicker(wm);
-
 	return (
-		<box className="left" halign={Gtk.Align.START} valign={Gtk.Align.START} spacing={5}>
-			<WorkspacesComponent id={Number()} />
-			<AppTitleTickerComponent />
-		</box>
+		<box
+			className={"left"}
+			halign={Gtk.Align.START}
+			valign={Gtk.Align.START}
+			spacing={5}
+			setup={async (self) => {
+				if (wm === "river") {
+					const { default: RiveWorkspaces } = await import("./Workspaces/RiverWorkspaces");
+					const { default: RiverAppTitleTicker } = await import("./AppTitleTicker/RiverAppTitleTicker");
+					self.add(RiveWorkspaces());
+					self.add(RiverAppTitleTicker());
+				} else if (wm === "hyprland") {
+					const { default: HyprWorkspaces } = await import("./Workspaces/HyprWorkspaces");
+					const { default: HyprAppTitleTicker } = await import("./AppTitleTicker/HyprAppTitleTicker");
+					self.add(HyprWorkspaces());
+					self.add(HyprAppTitleTicker());
+				}
+			}}
+		/>
 	);
 }
 
@@ -74,6 +67,7 @@ export default function Bar({ monitor }: { monitor: number }) {
 			application={App}
 			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
 			exclusivity={Astal.Exclusivity.EXCLUSIVE}
+			layer={Astal.Layer.TOP}
 		>
 			<centerbox
 				halign={Gtk.Align.FILL}

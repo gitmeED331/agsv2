@@ -7,32 +7,30 @@
  *
  */
 
-import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { Variable, bind } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
 import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
-const Bluetooth = AstalBluetooth.get_default();
-
 let btreveal = Variable(false);
 
-const BluetoothWidget = () => {
-	const updateLabel = (btLabel) => {
-		const btEnabled = Bluetooth.is_powered;
-		const btDevices = Bluetooth.is_connected;
-		const label = btEnabled && btDevices.length ? ` (${btDevices.length})` : btEnabled ? "On" : "Off";
+const BluetoothWidget = (bluetooth) => {
+	const updateLabel = (btLabel: any) => {
+		const btEnabled = bluetooth.is_powered;
+		const btDevices = bluetooth.is_connected;
+		const label = btEnabled ? (btDevices ? ` (${btDevices})` : "On") : "Off";
 		btLabel.label = label;
 	};
 
-	Bluetooth.connect("notify::enabled", updateLabel);
-	Bluetooth.connect("notify::connected_devices", updateLabel);
+	bluetooth.connect("notify::enabled", updateLabel);
+	bluetooth.connect("notify::connected_devices", updateLabel);
 
 	return (
 		<box className={"bluetooth barbutton content"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={true}>
-			{bind(Bluetooth, "is_powered").as((showLabel) => (
+			{bind(bluetooth, "is_powered").as((showLabel) => (
 				<box>
-					<icon className={"bluetooth barbutton-icon"} icon={bind(Bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} />
+					<icon className={"bluetooth barbutton-icon"} icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} />
 					<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(btreveal)}>
 						<label className={"bluetooth barbutton-label"} setup={updateLabel} />
 					</revealer>
@@ -41,8 +39,9 @@ const BluetoothWidget = () => {
 		</box>
 	);
 };
+export default function BluetoothButton() {
+	const Bluetooth = AstalBluetooth.get_default();
 
-function BluetoothButton() {
 	return (
 		<button
 			className={"bluetooth barbutton"}
@@ -69,8 +68,7 @@ function BluetoothButton() {
 				}
 			}}
 		>
-			<BluetoothWidget />
+			{BluetoothWidget(Bluetooth)}
 		</button>
 	);
 }
-export default BluetoothButton;

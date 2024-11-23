@@ -40,7 +40,7 @@ async function getWallpapers(): Promise<Array<{ name: string; path: string; orig
 	}));
 }
 
-async function createWallpaperGrid(wps) {
+async function createWallpaperGrid(wps: Array<{ name: string; path: string; originalPath: string }>) {
 	const grid = <Grid
 		hexpand={true}
 		vexpand={false}
@@ -93,7 +93,7 @@ async function createWallpaperGrid(wps) {
 	return grid;
 }
 
-async function updateWallpaperGrid(wallpaperGrid, wallpapers) {
+async function updateWallpaperGrid(wallpaperGrid: Grid, wallpapers: Array<{ name: string; path: string; originalPath: string }>) {
 	const sortedWallpapers = wallpapers.sort((a, b) => a.name.localeCompare(b.name));
 
 	wallpaperGrid.get_children().forEach((child) => {
@@ -137,7 +137,7 @@ async function updateWallpaperGrid(wallpaperGrid, wallpapers) {
 	wallpaperGrid.show_all();
 }
 
-function createRefreshButton(wallpaperGrid) {
+function createRefreshButton(wallpaperGrid: Grid) {
 	const theSpinner = new Spinner({
 		halign: Gtk.Align.CENTER,
 		valign: Gtk.Align.CENTER,
@@ -191,9 +191,9 @@ function createRefreshButton(wallpaperGrid) {
 	return container;
 }
 
-async function createScrollablePage(wps) {
+async function createScrollablePage(wps: Array<{ name: string; path: string; originalPath: string }>) {
 	const wallpaperGrid = await createWallpaperGrid(wps);
-	const refreshButton = createRefreshButton(wallpaperGrid);
+	const refreshButton = createRefreshButton(wallpaperGrid as Grid);
 	return (
 		<box css="background-color: rgba(0,0,0,0.75); border: 2px solid rgba(15,155,255,1); border-radius: 3rem; padding: 1rem;">
 			<scrollable

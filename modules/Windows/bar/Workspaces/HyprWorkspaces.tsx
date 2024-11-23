@@ -11,8 +11,7 @@ import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
 import Icon from "../../../lib/icons";
-
-const hyprland = Hyprland.get_default();
+import { FlowBox, FlowBoxChild } from "../../../Astalified/index";
 
 const dispatch = (arg: string | number) => {
 	execAsync(`hyprctl dispatch workspace ${arg}`);
@@ -23,26 +22,34 @@ const moveSilently = (arg: string | number) => {
 
 // --- signal handler ---
 function ws(id: number) {
-	const getWorkspace = () => hyprland.get_workspace(id) || Hyprland.Workspace.dummy(id, null);
+	const hyprland = Hyprland.get_default();
+	const getWorkspace = () => hyprland.get_workspace(id) ?? Hyprland.Workspace.dummy(id, null);
 
-	return Variable(getWorkspace()).observe(hyprland, "workspace-added", getWorkspace).observe(hyprland, "workspace-removed", getWorkspace);
+	return Variable(getWorkspace())
+		.observe(hyprland, "workspace-added", getWorkspace)
+		.observe(hyprland, "workspace-removed", getWorkspace);
 }
 // --- end signal handler ---
 
 // --- workspaces ---
-function Workspaces({ id }: { id: number }) {
+function Workspaces() {
+	const hyprland = Hyprland.get_default();
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
 			const className = Variable.derive(
-				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients"), bind(hyprland, "urgent")],
-				(focused, clients, urgent) => `
+				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
+				(focused, clients) => `
                 ${focused === ws ? "focused" : ""}
                 ${clients.length > 0 ? "occupied" : ""}
-				${urgent ? "urgent" : ""}
                 workspacebutton
-            `,
+            `
 			);
-			const isVisible = Variable.derive([bind(hyprland, "focusedWorkspace"), bind(ws, "clients")], (focused, clients) => id <= 4 || clients.length > 0 || focused === ws);
+
+			const isVisible = Variable.derive(
+				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
+				(focused, clients) => id <= 4 || clients.length > 0 || focused === ws
+			);
+
 			const wsIcon = Icon.wsicon;
 			const wsIconLabel = wsIcon[`ws${id}`] ? (
 				<icon icon={wsIcon[`ws${id}`]} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
@@ -82,10 +89,21 @@ function Workspaces({ id }: { id: number }) {
 	const workspaceButtons = [...Array(10).keys()].map((id) => workspaceButton(id + 1));
 
 	return (
-		<box className="hyprworkspaces" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-			{workspaceButtons}
-		</box>
-	);
+		<FlowBox
+			className="hyprworkspaces"
+			halign={Gtk.Align.CENTER}
+			valign={Gtk.Align.CENTER}
+			selectionMode={Gtk.SelectionMode.NONE}
+			spacing={10}
+			hexpand={true}
+		>
+			{workspaceButtons.map((button, index) => (
+				<FlowBoxChild key={index}>
+					{button}
+				</FlowBoxChild>
+			))}
+		</FlowBox>
+	)
 }
 
 export default Workspaces;

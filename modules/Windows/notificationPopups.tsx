@@ -17,7 +17,7 @@ const Notif = AstalNotifd.get_default();
 const waitTime = 3000;
 const expireTime = 20000;
 
-function removeItem(box, notificationItem) {
+function removeItem(box: Widget.Box, notificationItem: any) {
 	box.remove(notificationItem);
 }
 

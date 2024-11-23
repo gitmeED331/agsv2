@@ -22,7 +22,7 @@ type EntryObject = {
 
 const background = `${SRC}/assets/groot-thin-left.png`;
 
-function ClipHistItem(entry: string) {
+function ClipHistItem(entry) {
 	const [id, ..._content] = entry.split("\t");
 	const content = _content.join(" ").trim();
 	let clickCount = 0;
@@ -56,17 +56,21 @@ function ClipHistItem(entry: string) {
 		<label className={"contentlabel"} label={`${content}`} xalign={0} valign={Gtk.Align.CENTER} halign={Gtk.Align.START} ellipsize={Pango.EllipsizeMode.END} wrap={true} lines={2} />
 	);
 
-	const grid = <Grid attribute={{ content, id }} columnSpacing={10}
-		setup={(self) => {
-			self.attach(idLabel, 0, 0, 1, 1);
-			self.attach(contentLabel, 1, 0, 1, 1);
-			if (isImage && filePath) {
-				self.attach(revealer(), 0, 1, 2, 1);
-			}
-		}}
-	/>;
+	const grid = (
+		<Grid
+			attribute={{ content, id }}
+			columnSpacing={10}
+			setup={(self) => {
+				self.attach(idLabel, 0, 0, 1, 1);
+				self.attach(contentLabel, 1, 0, 1, 1);
+				if (isImage && filePath) {
+					self.attach(revealer(), 0, 1, 2, 1);
+				}
+			}}
+		/>
+	);
 
-	const createButton = (id: string, content: string) => (
+	const createButton = (id, content) => (
 		<button
 			className="cliphist item"
 			valign={Gtk.Align.START}
@@ -100,7 +104,7 @@ function ClipHistItem(entry: string) {
 		}
 	});
 
-	button.connect("destroy", () => {
+	button.connect("destroy", (_, id) => {
 		button.disconnect(id);
 	});
 
@@ -206,7 +210,7 @@ function ClipHistWidget() {
 				onClicked={async () => {
 					entrySet.clear();
 					list.children = [];
-					input.set_text("");
+					(input as Gtk.Entry).set_text("");
 					await repopulate();
 				}}
 			>
@@ -242,8 +246,6 @@ function ClipHistWidget() {
 		/>
 	);
 
-
-
 	return (
 		<box orientation={Gtk.Orientation.VERTICAL} className="cliphist container" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
 			{theGrid}
@@ -252,19 +254,20 @@ function ClipHistWidget() {
 }
 
 function cliphist({ monitor }: { monitor: number }) {
-	const masterGrid = <Grid
-		className={"cliphist mastergrid"}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
-		hexpand={true}
-		vexpand={true}
-		visible={true}
-		setup={(self) => {
-			self.attach(ClickToClose(1, 0.75, 0.75, "cliphist"), 1, 1, 1, 1);
-			self.attach(ClipHistWidget(), 2, 1, 1, 1);
-
-		}}
-	/>
+	const masterGrid = (
+		<Grid
+			className={"cliphist mastergrid"}
+			halign={Gtk.Align.FILL}
+			valign={Gtk.Align.FILL}
+			hexpand={true}
+			vexpand={true}
+			visible={true}
+			setup={(self) => {
+				self.attach(ClickToClose(1, 0.75, 0.75, "cliphist"), 1, 1, 1, 1);
+				self.attach(ClipHistWidget(), 2, 1, 1, 1);
+			}}
+		/>
+	);
 
 	return (
 		<window
@@ -290,7 +293,7 @@ function cliphist({ monitor }: { monitor: number }) {
 
 App.connect("window-toggled", async (_, win) => {
 	if (win.name === "cliphist") {
-		input.set_text("");
+		(input as Gtk.Entry).set_text("");
 		input.grab_focus();
 		await repopulate();
 	}

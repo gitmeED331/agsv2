@@ -55,7 +55,7 @@ const SysButton = (action: string, label: string) => {
 			hasDefault={false}
 		>
 			<box className={"sessioncontrol button"} vertical={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-				<icon icon={Icon.powermenu[action]} />
+				<icon icon={Icon.powermenu[action as "lock" | "logout" | "reboot" | "shutdown"]} />
 				<label label={label} />
 			</box>
 		</button>

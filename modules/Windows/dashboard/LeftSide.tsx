@@ -10,9 +10,15 @@
 import { Gtk } from "astal/gtk3";
 import { StackSwitcher, Stack, StackSidebar } from "../../Astalified/index";
 
-import { BrightnessSlider, GridCalendar, PowerProfiles, AudioMixer, SessionControls } from "../../Widgets/index";
+import {
+	BrightnessSlider,
+	GridCalendar,
+	PowerProfiles,
+	AudioMixer,
+	SessionControls
+} from "../../Widgets/index";
 
-export let dashboardLeftStack;
+export let dashboardLeftStack: Stack;
 
 export default function LeftSide() {
 	const settings = (
@@ -28,28 +34,28 @@ export default function LeftSide() {
 		</box>
 	);
 
-	const leftStack = <Stack
-		transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
-		transitionDuration={300}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
-		hhomogeneous={true}
-		vhomogeneous={false}
-		visible={true}
-		hexpand={true}
-		vexpand={true}
-		setup={(self) => {
-			self.add_titled(GridCalendar(), "calendar", "Calendar");
-			self.add_titled(power, "power", "Power");
-			self.add_titled(settings, "settings", "Settings");
-		}}
-	/>
-
-	const stackSwitcher = (
-		<StackSwitcher className={"dashboard stackSwitcher"} stack={leftStack as Stack} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} spacing={10} iconSize={Gtk.IconSize.BUTTON} />
+	const leftStack = (
+		<Stack
+			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+			transitionDuration={300}
+			halign={Gtk.Align.FILL}
+			valign={Gtk.Align.FILL}
+			hhomogeneous={true}
+			vhomogeneous={false}
+			visible={true}
+			hexpand={true}
+			vexpand={true}
+			setup={(self) => {
+				self.add_titled(GridCalendar(), "calendar", "Calendar");
+				self.add_titled(power, "power", "Power");
+				self.add_titled(settings, "settings", "Settings");
+			}}
+		/>
 	);
 
-	dashboardLeftStack = leftStack;
+	const stackSwitcher = <StackSwitcher className={"dashboard stackSwitcher"} stack={leftStack as Gtk.Stack} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} spacing={10} />;
+
+	dashboardLeftStack = leftStack as Stack;
 
 	return (
 		<box className={"dashboard leftSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={10}>

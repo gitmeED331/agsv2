@@ -133,7 +133,7 @@
 	border: 2px solid transparent;
 
 	icon {
-		font-size: 2rem;
+		font-size: 1.25rem;
 	}
 
 	&.playicon {
@@ -183,6 +183,39 @@
 		&:hover {
 			color: red;
 			opacity: 1;
+		}
+	}
+}
+
+.playerswitcher {
+	all: unset;
+	background: black;
+	border-radius: $radius;
+	border-left: $border;
+	border-right: $border;
+	
+	color: $color1;
+	padding: 0rem 1rem;
+
+	.needsAttention {
+		border-radius: $radius;
+		border-top: $border;
+		border-color: red;
+	}
+	
+	button {
+		border-radius: $radius;
+		padding: 0rem 0.5rem;
+		font-weight: bold;
+
+		&:checked {
+			border-radius: $radius;
+			border-top: $border;
+			box-shadow: inset 0rem -0.5rem 0.5rem -0.25rem rgba(15,155,255,0.8);
+		}
+	
+		&:hover {
+			box-shadow: inset 0px -2px 6px lime;
 		}
 	}
 }

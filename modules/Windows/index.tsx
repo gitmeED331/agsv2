@@ -19,8 +19,9 @@ import NotificationPopups from "./notificationPopups";
 // import Overview from "./overview/Overview";
 import sessioncontrol from "./sessioncontrol";
 // import powerprofiles from "./powerprofile";
-import Launcher from "./Launcher/Launcher";
 import wallpapers from "./Wallpapers";
+import Launchergrid from "./Launcher/Launcher-grid";
+import Launcherflowbox from "./Launcher/Launcher-flowbox";
 
 export {
 	Bar,
@@ -28,7 +29,8 @@ export {
 	Dashboard,
 	// Calendar,
 	cliphist,
-	Launcher,
+	Launcherflowbox,
+	Launchergrid,
 	MediaPlayerWindow,
 	NotificationPopups,
 	// Overview,

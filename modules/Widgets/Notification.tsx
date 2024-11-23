@@ -13,11 +13,7 @@ import Icon from "../lib/icons";
 import AstalNotifd from "gi://AstalNotifd";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
-
-// const Notif = AstalNotifd.get_default();
-// const item = AstalNotifd.Notification
-const Time = (time: number, format = "%H:%M") => GLib.DateTime.new_from_unix_local(time).format(format);
-const Date = (time: number, format = "%b %d") => GLib.DateTime.new_from_unix_local(time).format(format);
+import { Date, Time } from "../lib/datetime";
 
 export default function NotifWidget({ item }) {
 	const iconDateTime = (
@@ -41,7 +37,7 @@ export default function NotifWidget({ item }) {
 
 	const notifActions = (
 		<box className={"actions"} valign={Gtk.Align.END} halign={Gtk.Align.FILL}>
-			{item.get_actions().map((action) => (
+			{item.get_actions().map((action: any) => (
 				<button
 					onClick={() => {
 						item.invoke(action.id);
@@ -56,13 +52,15 @@ export default function NotifWidget({ item }) {
 	);
 
 	const theGrid = (
-		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} rowSpacing={5} />
+		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} rowSpacing={5}
+		setup={(self) => {
+			self.attach(iconDateTime, 0, 0, 1, 3);
+			self.attach(notifTitle, 1, 0, 1, 1);
+			self.attach(notifBody, 1, 1, 1, 1);
+			self.attach(notifActions, 1, 2, 1, 1);
+		}}
+		/>
 	);
-
-	theGrid.attach(iconDateTime, 0, 0, 1, 3);
-	theGrid.attach(notifTitle, 1, 0, 1, 1);
-	theGrid.attach(notifBody, 1, 1, 1, 1);
-	theGrid.attach(notifActions, 1, 2, 1, 1);
 
 	return (
 		<box vexpand={true} hexpand={false} visible={true}>

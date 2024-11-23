@@ -7,7 +7,7 @@
  *
  */
 
-import { Grid } from "../../Astalified/index";
+import { FlowBox, FlowBoxChild } from "../../Astalified/index";
 import { Gtk } from "astal/gtk3";
 import { execAsync, readFile, writeFile, GLib } from "astal";
 
@@ -18,15 +18,27 @@ type CalculatorProps = {
 };
 
 const createButton = (content: string) => {
-	const button = <button label={content} hexpand={true} halign={Gtk.Align.START} />;
+	const button = <button label={content} hexpand={true} halign={Gtk.Align.START} onClick={() => execAsync(`wl-copy "${content}"`)} />;
 
 	button.attribute = { content };
 	return button;
 };
 
 export const Calculator = ({ expression }: CalculatorProps) => {
-	const resultLabel = <label label="" hexpand={true} vexpand={false} halign={Gtk.Align.START} />;
-	const list = <box vertical={true} spacing={5} hexpand={true} vexpand={true}></box>;
+	const resultLabel = <entry placeholder_text={"0"} editable={false} can_focus={false} className={"calculator result"} hexpand={true} vexpand={false} halign={Gtk.Align.START} />;
+
+	const list = (
+		<FlowBox
+			selection_mode={Gtk.SelectionMode.NONE}
+			halign={Gtk.Align.START}
+			valign={Gtk.Align.START}
+			hexpand={true}
+			vexpand={true}
+			rowSpacing={5}
+			columnSpacing={5}
+			vertical
+		/>
+	);
 	let historyEntries: string[] = [];
 
 	const preprocessExpression = (exp: string): string => {
@@ -73,7 +85,7 @@ export const Calculator = ({ expression }: CalculatorProps) => {
 
 		historyEntries.forEach((entry) => {
 			const button = createButton(entry);
-			list.pack_start(button, false, false, 0);
+			list.add(button);
 		});
 
 		list.show_all();
@@ -81,7 +93,7 @@ export const Calculator = ({ expression }: CalculatorProps) => {
 
 	const clearHistory = () => {
 		historyEntries = [];
-		writeFile(HISTORY_FILE_PATH, ""); // Clear the file
+		writeFile(HISTORY_FILE_PATH, "");
 		updateHistoryList();
 	};
 
@@ -114,14 +126,20 @@ export const Calculator = ({ expression }: CalculatorProps) => {
 	});
 
 	return (
-		<Grid name="calculator" columnSpacing={5} rowSpacing={5} marginTop={10} marginBottom={10} marginStart={10} marginEnd={10}>
-			<box vertical={true} spacing={10} hexpand={true} vexpand={true}>
-				<box vertical={false} hexpand={true} vexpand={false} halign={Gtk.Align.START}>
-					{resultLabel}
-				</box>
-				{list}
-			</box>
-		</Grid>
+		<box
+			name="calculator"
+			vertical
+			hexpand={true}
+			vexpand={true}
+			marginTop={10}
+			marginBottom={10}
+			marginStart={10}
+			marginEnd={10}
+			spacing={10}
+		>
+			{resultLabel}
+			{list}
+		</box >
 	);
 };
 

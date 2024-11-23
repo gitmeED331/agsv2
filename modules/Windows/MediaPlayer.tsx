@@ -8,10 +8,9 @@
  */
 
 import { App, Astal, Gdk } from "astal/gtk3";
-import Mpris from "gi://AstalMpris";
-import { Player } from "../Widgets/index";
+import playerStack, { windowPlayerStack } from "../Widgets/MediaPlayer";
 
-const player = Mpris.Player.new("Deezer");
+//const player = Mpris.Player.new("Deezer");
 
 export default function MediaPlayerWindow() {
 	return (
@@ -34,12 +33,17 @@ export default function MediaPlayerWindow() {
 				}
 			}}
 		>
-			<box className={"mediaplayerbox"}>
-				<Player player={player} />
-			</box>
+			{playerStack()}
 		</window>
 	);
 }
+App.connect("window-toggled", (_, win) => {
+	if (win.visible === false && win.name === "mediaplayerwindow") {
+		if (windowPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer" && windowPlayerStack.get_visible_child_name() !== "no-media" && windowPlayerStack.length > 0) {
+			windowPlayerStack.set_visible_child_name("org.mpris.MediaPlayer2.Deezer");
+		}
+	}
+});
 
 //   {players.watch([], [
 //                 [Mpris, "player-changed"],

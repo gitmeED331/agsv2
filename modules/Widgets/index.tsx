@@ -10,7 +10,7 @@
 import BatteryButton from "./battery";
 import BrightnessSlider from "./Brightness";
 import GridCalendar from "./GridCalendar";
-import Player from "./MediaPlayer";
+import playerStack from "./MediaPlayer";
 import NotifWidget from "./Notification";
 import VolumeIndicator from "./VolumeIndicator";
 import AudioMixer from "./AudioMixer";
@@ -30,7 +30,7 @@ export {
 	GridCalendar,
 	VolumeIndicator,
 	BatteryButton,
-	Player,
+	playerStack,
 	PowerProfiles,
 	NetworkButton,
 	EthernetWidget,

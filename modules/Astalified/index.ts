@@ -8,11 +8,15 @@
  */
 
 import Fixed from "./Fixed";
+import FlowBox from "./Flowbox";
+import FlowBoxChild from "./FlowboxChild";
 import Grid from "./Grid";
 import Image from "./Image";
+import Notebook from "./NoteBook";
+import SearchEntry from "./SearchEntry";
 import Spinner from "./Spinner";
 import Stack from "./Stack";
 import StackSidebar from "./StackSideBar";
 import StackSwitcher from "./StackSwitcher";
 
-export { Fixed, Grid, Image, Spinner, Stack, StackSidebar, StackSwitcher };
+export { Fixed, FlowBox, FlowBoxChild, Grid, Image, Notebook, SearchEntry, Spinner, Stack, StackSidebar, StackSwitcher };

@@ -5,12 +5,12 @@ declare module "inline:*" {
     export default content
 }
 
-declare module "*.sass" {
+declare module "*.scss" {
     const content: string
     export default content
 }
 
-declare module "*.scss" {
+declare module "*.blp" {
     const content: string
     export default content
 }

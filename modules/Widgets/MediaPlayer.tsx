@@ -11,11 +11,9 @@ import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
-import { Grid } from "../Astalified/index";
+import { Grid, StackSwitcher, Stack } from "../Astalified/index";
 import Icon from "../lib/icons";
 import TrimTrackTitle from "../lib/TrimTrackTitle";
-
-const player = Mpris.Player.new("Deezer"); //"Deezer"  "vlc" "mpv" "spotify"
 
 /**
  * @param {string} cover_art - Cover image path.
@@ -42,7 +40,7 @@ const blurCoverArtCss = async (cover_art: string): Promise<string> => {
 };
 
 /** @param {import('types/service/mpris').MprisPlayer} player */
-function Player({ player }: { player: Mpris.Player }) {
+function Player(player: Mpris.Player) {
 	async function setup(box: Widget.Box) {
 		box.css = await blurCoverArtCss(player.cover_art);
 		box.hook(player, "notify::cover-art", async () => {
@@ -173,23 +171,89 @@ function Player({ player }: { player: Mpris.Player }) {
 		</button>
 	);
 
-	const mediaInfoGrid = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
-		hexpand={true} vexpand={true} visible={true} rowSpacing={10}
-		setup={(self) => {
-			self.attach(TrackInfo, 0, 0, 1, 1);
-			self.attach(PlayerIcon, 1, 0, 1, 1);
-			self.attach(TrackPosition(), 0, 1, 2, 1);
-			self.attach(PlayerControls, 0, 2, 2, 1);
-		}}
-	/>;
-
+	const mediaInfoGrid = (
+		<Grid
+			halign={Gtk.Align.CENTER}
+			valign={Gtk.Align.CENTER}
+			hexpand={true}
+			vexpand={true}
+			visible={true}
+			rowSpacing={10}
+			setup={(self) => {
+				self.attach(TrackInfo, 0, 0, 1, 1);
+				self.attach(PlayerIcon, 1, 0, 1, 1);
+				self.attach(TrackPosition(), 0, 1, 2, 1);
+				self.attach(PlayerControls, 0, 2, 2, 1);
+			}}
+		/>
+	);
 
 	return (
-		<box className={"player"} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} visible={bind(player, "available").as((a) => a === true)} setup={setup}>
-			{mediaInfoGrid}
-			{CloseIcon}
+		<box className={"player"} name={player.entry} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} setup={setup}>
+			{[mediaInfoGrid, CloseIcon]}
 		</box>
 	);
 }
 
-export default Player;
+export let dashboardPlayerStack;
+export let windowPlayerStack;
+
+export default function playerStack() {
+	const mpris = Mpris.get_default();
+
+	const theStack = (
+		<Stack
+			visible={true}
+			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+			transition_duration={2000}
+			homogeneous={false}
+			// setup={(self) => {
+			// 	mpris.get_players()?.forEach((p) => self.add_titled(Player(p), p.busName, p.entry.toUpperCase()));
+
+			// 	mpris.connect("player-added", (_, p) => {
+			// 		self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
+			// 	});
+
+			// 	mpris.connect("player-closed", (_, p) => {
+			// 		self.get_child_by_name(p.busName)?.destroy();
+			// 	});
+			// }}
+			setup={(self) => {
+				const players = mpris.get_players();
+				players?.forEach((p) => {
+					if (p?.entry) {
+						self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
+					} else {
+						console.error(`Player entry is invalid:`, p);
+					}
+				});
+
+				mpris.connect("player-added", (_, p) => {
+					if (p?.entry) {
+						self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
+					} else {
+						console.error(`Added player entry is invalid:`, p);
+					}
+				});
+
+				mpris.connect("player-closed", (_, p) => {
+					if (p?.busName) {
+						self.get_child_by_name(p.busName)?.destroy();
+					}
+				});
+			}}
+
+		/>
+	);
+
+	dashboardPlayerStack = theStack;
+	windowPlayerStack = theStack;
+
+	const switcher = <StackSwitcher stack={theStack as Stack} className={"playerswitcher"} visible={bind(mpris, "players").as((a) => a.length > 1)} halign={Gtk.Align.CENTER} spacing={10} te />;
+
+	return (
+		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} vertical={true} visible={bind(mpris, "players").as((a) => a.length > 0)}>
+			{[switcher, theStack]}
+		</box>
+	);
+}

@@ -7,29 +7,23 @@
  *
  */
 
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Astal, App, Widget } from "astal/gtk3";
 import { GLib } from "astal";
 
 const substitutes = {
-	geany: "geany-symbolic",
-	vivaldi: "vivaldi-symbolic",
+	"geany": "geany-symbolic",
+	"vivaldi": "vivaldi-symbolic",
 	"vivaldi-stable": "vivaldi-symbolic",
 	"org.kde.konsole": "terminal-symbolic",
-	konsole: "terminal-symbolic",
+	"konsole": "terminal-symbolic",
 	"audio-headset-bluetooth": "audio-headphones-symbolic",
 	"audio-card-analog-usb": "audio-speakers-symbolic",
 	"audio-card-analog-pci": "audio-card-symbolic",
 	"preferences-system": "emblem-system-symbolic",
-	"com.github.Aylur.ags-symbolic": "controls-symbolic",
-	"com.github.Aylur.ags": "controls-symbolic",
 	"pcloud-symbolic": "pcloud-symbolic",
-	keepassxc: "keepassxc-symbolic",
-	"org.keepassxc.KeePassXC": "keepassxc-symbolic",
-	//"filen-desktop": "filen-desktop-symbolic",
+	"KeePassXC": "keepassxc-symbolic",
 	"filen-desktop-symbolic": "filen-desktop-symbolic",
-	WebCord: "discord-symbolic",
-	// "armcord-symbolic": "discord-symbolic",
-	// "ArmCord": "discord-symbolic",
+	"legcord": "discord - symbolic",
 	"deezer-enhanced-symbolic": "deezer-symbolic",
 	"com.visualstudio.code.oss-symbolic": "vs-code-symbolic",
 	"code-oss": "vs-code-symbolic",
@@ -37,7 +31,8 @@ const substitutes = {
 	"org.kde.kate": "codepen-symbolic",
 	"dev.zed.Zed": "zed-symbolic",
 	"chromium-browser": "chromium-symbolic",
-	ente_auth: "auth-icon-symbolic",
+	"ente_auth": "auth-icon-symbolic",
+	"signal": "signal-symbolic",
 };
 
 const Icon = {
