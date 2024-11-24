@@ -32,8 +32,8 @@ App.start({
 		Bar({ monitor: 0 });
 		cliphist({ monitor: 0 });
 		Dashboard({ monitor: 0 });
-		// Launchergrid({ monitor: 0 });
-		Launcherflowbox({ monitor: 0 });
+		// Launcherflowbox({ monitor: 0 });
+		Launchergrid({ monitor: 0 });
 		MediaPlayerWindow();
 		NotificationPopups({ monitor: 0 });
 		sessioncontrol({ monitor: 0 });

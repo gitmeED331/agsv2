@@ -363,7 +363,7 @@ const Switcher = () => {
 
     const allAppsButton = (
         < button
-            className={bind(allAppsClassName())}
+            className={allAppsClassName().toString()}
 
             onClick={(_, event) => {
                 if (event.button === Gdk.BUTTON_PRIMARY) {
@@ -381,14 +381,24 @@ const Switcher = () => {
         </button >
     );
 
+    const categoryClassName = () => {
+        return Variable.derive(
+            [bind(filterContext, "selectedCategory"), bind(filterContext, "query")],
+            (selectedCategory, query) => {
+                const classList = [];
+                if (selectedCategory && !query) {
+                    classList.push("active");
+                }
+                return classList.join(" ");
+            }
+        );
+    };
     const categoryButtons = uniqueCategories.map((category) => {
         const iconName = Icon.launcher[category.toLowerCase() as keyof typeof Icon.launcher] || Icon.launcher.system;
 
         return (
             <button
-                className={bind(filterContext, "selectedCategory").as(
-                    (selectedCategory) => (selectedCategory === category.toLowerCase() ? "active" : "")
-                )}
+                className={categoryClassName().toString()}
                 key={category}
                 onClick={(_, event) => {
                     if (event.button === Gdk.BUTTON_PRIMARY) {
@@ -403,7 +413,7 @@ const Switcher = () => {
                 tooltip_text={category}
             >
                 <icon icon={iconName} />
-            </button>
+            </button >
         );
     });
 
@@ -491,5 +501,6 @@ App.connect("window-toggled", (_, win) => {
         }
     }
 });
+
 
 export default Launcherflowbox;

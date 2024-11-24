@@ -14,6 +14,8 @@ import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
 // import systemStats from "../../Widgets/systemStats";
+import HyprWorkspaces from "./Workspaces/HyprWorkspaces";
+import HyprAppTitleTicker from "./AppTitleTicker/HyprAppTitleTicker";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
@@ -35,9 +37,13 @@ function LeftBar() {
 					const { default: HyprAppTitleTicker } = await import("./AppTitleTicker/HyprAppTitleTicker");
 					self.add(HyprWorkspaces());
 					self.add(HyprAppTitleTicker());
+				} else {
+					const failure = <label label="leftbar failure" />;
+					self.add(failure);
 				}
 			}}
 		/>
+
 	);
 }
 

@@ -28,7 +28,6 @@ function ws(id: number) {
 	return Variable(getWorkspace())
 		.observe(hyprland, "workspace-added", getWorkspace)
 		.observe(hyprland, "workspace-removed", getWorkspace)
-		.observe(hyprland, "workspace-focused", getWorkspace)
 }
 // --- end signal handler ---
 
@@ -38,7 +37,7 @@ function Workspaces() {
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
 			const className = Variable.derive(
-				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients"), bind(hyprland, "urgentClient")],
+				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
 				(focused, clients) => `
                 ${focused === ws ? "focused" : ""}
                 ${clients.length > 0 ? "occupied" : ""}
@@ -52,7 +51,9 @@ function Workspaces() {
 			);
 
 			const wsIcon = Icon.wsicon;
+			// @ts-expect-error
 			const wsIconLabel = wsIcon[`ws${id}`] ? (
+				// @ts-expect-error
 				<icon icon={wsIcon[`ws${id}`]} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 			) : (
 				<label label={`${id}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
@@ -79,10 +80,9 @@ function Workspaces() {
 						}
 					}}
 				>
-					<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-						{wsIconLabel}
-					</box>
-				</button>
+
+					{wsIconLabel}
+				</button >
 			);
 		});
 	}
@@ -90,20 +90,19 @@ function Workspaces() {
 	const workspaceButtons = [...Array(10).keys()].map((id) => workspaceButton(id + 1));
 
 	return (
-		<FlowBox
+		<box
 			className="hyprworkspaces"
 			halign={Gtk.Align.CENTER}
 			valign={Gtk.Align.CENTER}
-			selectionMode={Gtk.SelectionMode.NONE}
 			// spacing={10}
 			hexpand={true}
 		>
-			{workspaceButtons.map((button, index) => (
-				<FlowBoxChild key={index}>
-					{button}
-				</FlowBoxChild>
-			))}
-		</FlowBox>
+			{
+				workspaceButtons.map((button, index) => (
+					button
+				))
+			}
+		</ box >
 	)
 }
 
