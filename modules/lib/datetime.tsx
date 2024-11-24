@@ -1,8 +1,27 @@
-import { GLib } from "astal";
+import { Variable, GLib } from "astal";
 
-export function Time(time: number, format = "%H:%M") {
-	return GLib.DateTime.new_from_unix_local(time).format(format);
+interface DateTimeLabelProps {
+	format: string,
+	interval: number | undefined | null
 }
-export function Date(date: number, format = "%b %d") {
-	return GLib.DateTime.new_from_unix_local(date).format(format);
+
+export default function DateTimeLabel({ format, interval }: DateTimeLabelProps) {
+
+	const shouldPoll = typeof interval === "number" && interval >= 1;
+
+	const currentTime = () => {
+		const dateTime = GLib.DateTime.new_now_local();
+		return dateTime.format(format) as string;
+	}
+
+	if (shouldPoll) {
+		const pollTime = new Variable(currentTime()).poll(interval || 1000, currentTime);
+		return <label label={pollTime()} />
+	} else if (interval === null || interval === undefined) {
+		const time = new Variable(currentTime())
+		return <label label={time()} />
+	} else {
+		const time = new Variable(currentTime())
+		return <label label={time()} />
+	}
 }

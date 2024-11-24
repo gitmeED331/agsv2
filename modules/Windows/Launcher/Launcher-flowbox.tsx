@@ -140,10 +140,9 @@ function createFlowbox(appList: typeof Applications) {
 
                     return matchesQuery && matchesCategory;
                 });
-            }
-            }
+            }}
         >
-            {appList.get().map((app) => createAppButton(app))}
+            {appList.get().map(createAppButton)}
         </FlowBox> as Gtk.FlowBox
     )
     return flowbox
@@ -167,9 +166,12 @@ const createScrollablePage = (appList: typeof Applications) => (
     </scrollable>
 );
 
-function getCategories(app: any) {
-    const mainCategories = ["AudioVideo", "Audio", "Video", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"];
-    const categoryMap: { [key: string]: string } = {
+function getCategories(app: any): string[] {
+    const mainCategories = [
+        "AudioVideo", "Audio", "Video", "Development", "Education", "Game",
+        "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"
+    ];
+    const categoryMap: Record<string, string> = {
         Audio: "Multimedia",
         AudioVideo: "Multimedia",
         Video: "Multimedia",
@@ -178,9 +180,7 @@ function getCategories(app: any) {
         Settings: "System",
     };
 
-    const substitute = (cat: keyof typeof categoryMap) => {
-        return categoryMap[cat] ?? cat;
-    };
+    const substitute = (cat: string): string => categoryMap[cat] ?? cat;
 
     return (
         app.app
@@ -188,43 +188,10 @@ function getCategories(app: any) {
             ?.split(";")
             .filter((c) => mainCategories.includes(c))
             .map(substitute)
-            .filter((c, i, arr) => i === arr.indexOf(c)) ?? []
+            .filter((c, i, arr) => arr.indexOf(c) === i) ?? []
     );
 }
-
 const uniqueCategories = Array.from(new Set(Applications.get().flatMap((app) => getCategories(app)))).sort((a, b) => a.localeCompare(b));
-
-function Search(query: string) {
-    const apps = new AstalApps.Apps();
-    const results = apps.fuzzy_query(query);
-
-    const searchResultsPage = (theStack as Stack).get_child_by_name("search_results");
-
-    if (results.length > 0) {
-        if (searchResultsPage) {
-            (theStack as Stack).remove(searchResultsPage);
-        }
-        const newSearchResultsPage = createScrollablePage(results);
-        (theStack as Stack).add_named(newSearchResultsPage, "search_results");
-        (theStack as Stack).set_visible_child_name("search_results");
-    } else {
-        (theStack as Stack).set_visible_child_name("All Apps");
-    }
-}
-
-const handleTerminalCommand = (query: string, state: any, self: any) => {
-    const command = query.slice(6).trim();
-
-    if (command) {
-        const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
-        const cmd = isShiftPressed ? `kitty --hold --directory=$HOME -e ${command}` : command;
-
-        execAsync(cmd);
-
-        self.set_text("");
-        App.toggle_window("launcher");
-    }
-};
 
 const handleCalculatorCommand = (query: string) => {
     const expression = query.slice(6).trim();
@@ -246,7 +213,6 @@ const handleCalculatorCommand = (query: string) => {
     }
 };
 
-
 let currentQuery = "";
 const entry = (
     <entry
@@ -259,12 +225,12 @@ const entry = (
         secondary_icon_sensitive={true}
         secondary_icon_activatable={true}
         secondary_icon_tooltip_text="Clear search"
-        hexpand={true}
+        hexpand
         vexpand={false}
         halign={Gtk.Align.FILL}
         valign={Gtk.Align.CENTER}
-        activates_default={true}
-        focusOnClick={true}
+        activates_default
+        focusOnClick
         on_changed={(self) => {
             const query = self.get_text().trim();
             filterContext.query = query;
@@ -287,26 +253,22 @@ const entry = (
             const query = self.get_text().trim();
 
             if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
-                switch (true) {
-                    case query.startsWith("TERM::"):
-                        const command = query.slice(6).trim();
-                        if (command) {
-                            const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
-                            const cmd = isShiftPressed
-                                ? `alacritty --hold--directory = $HOME - e ${command} `
-                                : command;
+                if (query.startsWith("TERM::")) {
+                    const command = query.slice(6).trim();
+                    if (command) {
+                        const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
+                        const cmd = isShiftPressed
+                            ? `alacritty --hold --directory=$HOME -e ${command}`
+                            : command;
 
-                            execAsync(cmd);
-                            self.set_text("");
-                            App.toggle_window("launcher");
-                        }
-                        break;
-                    case query.startsWith("CALC::"):
-                        handleCalculatorCommand(query);
-                        (theStack as Stack).set_visible_child_name("calculator");
-                        break;
-                    default:
-                        break;
+                        execAsync(cmd);
+                        self.set_text("");
+                        App.toggle_window("launcher");
+                    }
+                }
+                if (query.startsWith("CALC::")) {
+                    handleCalculatorCommand(query);
+                    (theStack as Stack).set_visible_child_name("calculator");
                 }
             }
         }}
@@ -324,7 +286,7 @@ entry.connect("icon-press", (_, event) => {
 const allAppsPage = (appList: typeof Applications) => (
     < box key="All Apps" name="All Apps" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} >
         {createScrollablePage(appList)}
-    </box >
+    </box>
 );
 
 

@@ -10,7 +10,7 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { GLib, bind } from "astal";
 // ----- Widgets -----
-import Clock from "./clock";
+import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
 // import systemStats from "../../Widgets/systemStats";
@@ -44,7 +44,19 @@ function LeftBar() {
 function CenterBar() {
 	return (
 		<box className={"center"} spacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.START}>
-			<Clock />
+			<button
+				className="clock"
+				cursor="pointer"
+				onClick={(_, event) => {
+					App.toggle_window("dashboard");
+				}}
+			>
+				<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={5}>
+					<DateTimeLabel format="%H:%M:%S" interval={500} />
+					<icon icon="nix-snowflake-symbolic" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} />
+					<DateTimeLabel format="%a %b %d" interval={3600000} />
+				</box>
+			</button>
 		</box>
 	);
 }

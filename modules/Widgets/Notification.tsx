@@ -13,15 +13,17 @@ import Icon from "../lib/icons";
 import AstalNotifd from "gi://AstalNotifd";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
-import { Date, Time } from "../lib/datetime";
+import DateTimeLabel from "../lib/datetime";
 
 export default function NotifWidget({ item }) {
 	const iconDateTime = (
 		<box className={"icondatetime"} vertical={true} valign={Gtk.Align.CENTER} halign={Gtk.Align.START} spacing={5}>
 			<icon className={"icon"} icon={item.get_app_icon() || item.get_desktop_entry() || Icon.fallback.notification} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} />
 			<box vertical={true} className={"datetime"}>
-				<label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} lines={1} maxWidthChars={6} visible={true} label={Date(item.time)?.toString()} />
-				<label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} lines={1} maxWidthChars={6} label={Time(item.time)?.toString()} />
+				{/* <<label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} lines={1} maxWidthChars={6} visible={true} label={Date(item.time)?.toString()} />> */}
+				{/* <label valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} lines={1} maxWidthChars={6} label={Time(item.time)?.toString()} /> */}
+				<DateTimeLabel format="%H:%M" interval={0} />
+				<DateTimeLabel format="%b %d" interval={0} />
 			</box>
 		</box>
 	);
@@ -53,12 +55,12 @@ export default function NotifWidget({ item }) {
 
 	const theGrid = (
 		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} visible={true} rowSpacing={5}
-		setup={(self) => {
-			self.attach(iconDateTime, 0, 0, 1, 3);
-			self.attach(notifTitle, 1, 0, 1, 1);
-			self.attach(notifBody, 1, 1, 1, 1);
-			self.attach(notifActions, 1, 2, 1, 1);
-		}}
+			setup={(self) => {
+				self.attach(iconDateTime, 0, 0, 1, 3);
+				self.attach(notifTitle, 1, 0, 1, 1);
+				self.attach(notifBody, 1, 1, 1, 1);
+				self.attach(notifActions, 1, 2, 1, 1);
+			}}
 		/>
 	);
 
