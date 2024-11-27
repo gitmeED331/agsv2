@@ -1,13 +1,5 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- */
-
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { execAsync, GLib, Variable, bind } from "astal";
+import { execAsync, Variable, bind } from "astal";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
@@ -22,7 +14,7 @@ type EntryObject = {
 
 const background = `${SRC}/assets/groot-thin-left.png`;
 
-function ClipHistItem(entry) {
+function ClipHistItem(entry: any) {
 	const [id, ..._content] = entry.split("\t");
 	const content = _content.join(" ").trim();
 	let clickCount = 0;
@@ -39,8 +31,8 @@ function ClipHistItem(entry) {
 			<revealer transition_type={Gtk.RevealerTransitionType.SLIDE_DOWN} reveal_child={bind(imageReveal)}>
 				<box
 					className={"imagePreview"}
-					halign={Gtk.Align.FILL}
-					valign={Gtk.Align.START}
+					halign={FILL}
+					valign={START}
 					css={`
 						background-image: url("${isImage ? filePath : null}");
 					`}
@@ -51,9 +43,9 @@ function ClipHistItem(entry) {
 		);
 	}
 
-	const idLabel = <label className={"idlabel"} label={`${id}`} xalign={0} valign={Gtk.Align.CENTER} halign={Gtk.Align.START} ellipsize={Pango.EllipsizeMode.END} />;
+	const idLabel = <label className={"idlabel"} label={`${id}`} xalign={0} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
 	const contentLabel = (
-		<label className={"contentlabel"} label={`${content}`} xalign={0} valign={Gtk.Align.CENTER} halign={Gtk.Align.START} ellipsize={Pango.EllipsizeMode.END} wrap={true} lines={2} />
+		<label className={"contentlabel"} label={`${content}`} xalign={0} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap={true} lines={2} />
 	);
 
 	const grid = (
@@ -70,11 +62,11 @@ function ClipHistItem(entry) {
 		/>
 	);
 
-	const createButton = (id, content) => (
+	const createButton = (id: string, content: string) => (
 		<button
 			className="cliphist item"
-			valign={Gtk.Align.START}
-			halign={Gtk.Align.FILL}
+			valign={START}
+			halign={FILL}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					if (isImage && filePath) {
@@ -116,8 +108,8 @@ const input = (
 		className="search"
 		placeholder_text="Search"
 		hexpand={true}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.CENTER}
+		halign={FILL}
+		valign={CENTER}
 		activates_default={true}
 		focusOnClick={true}
 		widthRequest={winwidth(0.15)}
@@ -185,7 +177,7 @@ async function copyById(id: string) {
 
 function ClipHistWidget() {
 	const scrollableList = (
-		<scrollable halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} vexpand={true}>
+		<scrollable halign={FILL} valign={FILL} vexpand={true}>
 			{list}
 		</scrollable>
 	);
@@ -193,20 +185,20 @@ function ClipHistWidget() {
 		const clear = (
 			<button
 				className="clear_hist"
-				valign={Gtk.Align.CENTER}
+				valign={CENTER}
 				on_clicked={() => {
 					clearClipboardHistory();
 					entrySet.clear();
 					list.children = [];
 				}}
 			>
-				<icon icon={Icon.cliphist.delete} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} />
+				<icon icon={Icon.cliphist.delete} halign={FILL} valign={FILL} />
 			</button>
 		);
 		const refresh = (
 			<button
 				className="refresh_hist"
-				valign={Gtk.Align.CENTER}
+				valign={CENTER}
 				onClicked={async () => {
 					entrySet.clear();
 					list.children = [];
@@ -214,7 +206,7 @@ function ClipHistWidget() {
 					await repopulate();
 				}}
 			>
-				<icon icon={Icon.ui.refresh} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} />
+				<icon icon={Icon.ui.refresh} halign={FILL} valign={FILL} />
 			</button>
 		);
 		return (
@@ -227,8 +219,8 @@ function ClipHistWidget() {
 	const theGrid = (
 		<Grid
 			className={"cliphist contentgrid"}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
+			halign={FILL}
+			valign={FILL}
 			hexpand={true}
 			vexpand={true}
 			visible={true}
@@ -247,7 +239,7 @@ function ClipHistWidget() {
 	);
 
 	return (
-		<box orientation={Gtk.Orientation.VERTICAL} className="cliphist container" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
+		<box orientation={Gtk.Orientation.VERTICAL} className="cliphist container" halign={FILL} valign={FILL}>
 			{theGrid}
 		</box>
 	);
@@ -257,8 +249,8 @@ function cliphist({ monitor }: { monitor: number }) {
 	const masterGrid = (
 		<Grid
 			className={"cliphist mastergrid"}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
+			halign={FILL}
+			valign={FILL}
 			hexpand={true}
 			vexpand={true}
 			visible={true}
@@ -278,7 +270,7 @@ function cliphist({ monitor }: { monitor: number }) {
 			exclusivity={Astal.Exclusivity.EXCLUSIVE}
 			keymode={Astal.Keymode.EXCLUSIVE}
 			visible={false}
-			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.LEFT}
+			anchor={TOP | BOTTOM | RIGHT | LEFT}
 			onKeyPressEvent={(_, event) => {
 				const win = App.get_window("cliphist");
 				if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {

@@ -1,19 +1,10 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Gdk, App } from "astal/gtk3";
 import { bind, Variable } from "astal";
 import AstalWp from "gi://AstalWp";
 import { dashboardLeftStack } from "../Windows/dashboard/LeftSide";
 
-function VolumeIndicator() {
-	const { audio } = AstalWp.get_default();
+export default function VolumeIndicator() {
+	const { audio } = AstalWp.get_default() as { audio: any }
 	const Speaker = audio?.get_default_speaker();
 
 	const volumeIndicatorClassName = Variable.derive([bind(Speaker, "mute")], (isMuted) => {
@@ -61,4 +52,4 @@ function VolumeIndicator() {
 		</button>
 	);
 }
-export default VolumeIndicator;
+

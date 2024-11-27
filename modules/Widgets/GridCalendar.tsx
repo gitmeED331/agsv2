@@ -1,19 +1,10 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { Grid } from "../Astalified/index";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-const generateCalendar = (month, year) => {
+const generateCalendar = (month: number, year: number) => {
 	const firstDayOfMonth = new Date(year, month, 1).getDay();
 	const daysInMonth = new Date(year, month + 1, 0).getDate();
 	const weeks = [];
@@ -47,14 +38,14 @@ const generateCalendar = (month, year) => {
 function GridCalendar() {
 	let currentMonth = new Date().getMonth();
 	let currentYear = new Date().getFullYear();
-	let gridCalendar;
-	let dayLabels = [];
+	let gridCalendar: JSX.Element | null = null;
+	let dayLabels: JSX.Element[] = [];
 
 	const updateGridCalendar = () => {
 		const updatedWeeks = generateCalendar(currentMonth, currentYear);
 
 		if (!gridCalendar) {
-			gridCalendar = <Grid halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} columnSpacing={1} rowSpacing={1} rowHomogeneous={true} columnHomogeneous={true} />;
+			gridCalendar = <Grid halign={CENTER} valign={CENTER} columnSpacing={1} rowSpacing={1} rowHomogeneous={true} columnHomogeneous={true} />;
 		}
 
 		dayLabels.forEach((label) => gridCalendar!.remove(label));
@@ -122,21 +113,21 @@ function GridCalendar() {
 
 	function header() {
 		const prevMonth = (
-			<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-left"} onClick={() => changeMonth(-1)}>
+			<button halign={CENTER} valign={CENTER} className={"arrow-left"} onClick={() => changeMonth(-1)}>
 				<icon icon={"arrow-back-circle-symbolic"} />
 			</button>
 		);
 
 		const nextMonth = (
-			<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-right"} onClick={() => changeMonth(1)}>
+			<button halign={CENTER} valign={CENTER} className={"arrow-right"} onClick={() => changeMonth(1)}>
 				<icon icon={"arrow-forward-circle-symbolic"} />
 			</button>
 		);
 
 		const returnToday = (
 			<button
-				halign={Gtk.Align.CENTER}
-				valign={Gtk.Align.CENTER}
+				halign={CENTER}
+				valign={CENTER}
 				className={"return-today"}
 				onClick={() => {
 					currentMonth = new Date().getMonth();
@@ -151,18 +142,18 @@ function GridCalendar() {
 		);
 
 		const prevYear = (
-			<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-left"} onClick={() => changeYear(-1)}>
+			<button halign={CENTER} valign={CENTER} className={"arrow-left"} onClick={() => changeYear(-1)}>
 				<icon icon={"arrow-back-circle-symbolic"} />
 			</button>
 		);
 
 		const nextYear = (
-			<button halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"arrow-right"} onClick={() => changeYear(1)}>
+			<button halign={CENTER} valign={CENTER} className={"arrow-right"} onClick={() => changeYear(1)}>
 				<icon icon={"arrow-forward-circle-symbolic"} />
 			</button>
 		);
 
-		const headerGrid = <Grid className={"calendar header"} columnSpacing={10} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={false} columnHomogeneous={false}
+		const headerGrid = <Grid className={"calendar header"} columnSpacing={10} halign={CENTER} valign={CENTER} hexpand={true} vexpand={false} columnHomogeneous={false}
 			setup={(self) => {
 				self.attach(prevMonth, 0, 0, 1, 1);
 				self.attach(monthLabel, 1, 0, 1, 1);
@@ -182,7 +173,7 @@ function GridCalendar() {
 	updateGridCalendar();
 
 	return (
-		<box name={"calendar"} orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+		<box name={"calendar"} orientation={Gtk.Orientation.VERTICAL} halign={CENTER} valign={CENTER}>
 			{header()}
 			{gridCalendar}
 		</box>

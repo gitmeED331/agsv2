@@ -1,73 +1,59 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { bind, Variable, execAsync } from "astal";
-import Icon, { Icons } from "../../lib/icons";
+import { Gtk, Gdk, App } from "astal/gtk3";
+import { bind, Variable } from "astal";
 import AstalNetwork from "gi://AstalNetwork";
 import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 let netreveal = Variable(false);
 
-const NetworkWidget = (network, wired, wifi) => {
-	const wifiIcon = <icon className={"barbutton wifi icon"} icon={bind(wifi, "icon_name")} />;
-	const wifiLabel = <label className={"barbutton wifi label"} />;
+function NetworkWidget(network: any) {
+	const icon = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
+		switch (primary) {
+			case AstalNetwork.Primary.WIFI:
+				return wifi.icon_name
+			case AstalNetwork.Primary.WIRED:
+				return wired.icon_name
+			default:
+				return "network-disconnected"
+		}
+	})
 
-	function updateWifiLabel() {
-		(wifiLabel as Gtk.Label).set_label(wifi.ssid ? `${wifi.ssid.substring(0, 15)}` : "--");
-	}
+	const label = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
+		switch (primary) {
+			case AstalNetwork.Primary.WIFI:
+				return "Wifi"
+			case AstalNetwork.Primary.WIRED:
+				return "Wired"
+			default:
+				return "Disconnected"
+		}
+	});
 
-	updateWifiLabel();
+	const tooltip = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
+		switch (primary) {
+			case AstalNetwork.Primary.WIFI:
+				return `Connectd to "${wifi.ssid}"`
+			case AstalNetwork.Primary.WIRED:
+				return "Connected to LAN"
+			default:
+				return "No connection"
+		}
+	})
 
-	network.connect("notify::wifi", updateWifiLabel);
-
-	const wifiLabelRevealer = (
+	return <box tooltipMarkup={bind(tooltip)} >
+		<icon icon={bind(icon)} />
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
-			{wifiLabel}
+			<label label={bind(label)} />
 		</revealer>
-	);
-	const wifiIndicator = (
-		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={bind(network, "wifi").as((showLabel) => !!showLabel)}>
-			{[wifiIcon, wifiLabelRevealer]}
-		</box>
-	);
-
-	const wiredIcon = <icon className={"barbutton wired icon"} icon={bind(wired, "icon_name").as((i) => i)} />;
-
-	const wiredLabel = (
-		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
-			<label className={"network wired label"} label={"Wired"} />
-		</revealer>
-	);
-
-	const wiredIndicator = (
-		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={bind(network, "wired").as((showLabel) => !!showLabel)}>
-			{[wiredIcon, wiredLabel]}
-		</box>
-	);
-
-	return (
-		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} className={"barbutton box"} visible={true}>
-			{bind(network, "primary").as((w) => (w === AstalNetwork.Primary.WIRED ? wiredIndicator : wifiIndicator))}
-		</box>
-	);
-};
+	</box>
+}
 function NetworkButton() {
 	const Network = AstalNetwork.get_default();
-	const Wired = Network.wired;
-	const Wifi = Network.wifi;
 
 	return (
 		<button
 			className={"network barbutton"}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "network";
@@ -89,7 +75,7 @@ function NetworkButton() {
 				}
 			}}
 		>
-			{NetworkWidget(Network, Wired, Wifi)}
+			{NetworkWidget(Network)}
 		</button>
 	);
 }

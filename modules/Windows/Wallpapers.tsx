@@ -1,17 +1,7 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { execAsync, GLib, Gio } from "astal";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
+import { execAsync, GLib } from "astal";
 import { Grid, Spinner } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
-import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
 import Icon from "../lib/icons";
 import ClickToClose from "../lib/ClickToClose";
 
@@ -44,8 +34,8 @@ async function createWallpaperGrid(wps: Array<{ name: string; path: string; orig
 	const grid = <Grid
 		hexpand={true}
 		vexpand={false}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
+		halign={FILL}
+		valign={FILL}
 		rowHomogeneous={true}
 		columnHomogeneous={true}
 		row_spacing={10}
@@ -69,13 +59,13 @@ async function createWallpaperGrid(wps: Array<{ name: string; path: string; orig
 						}}
 						widthRequest={winwidth(0.1)}
 						heightRequest={winheight(0.1)}
-						halign={Gtk.Align.CENTER}
-						valign={Gtk.Align.CENTER}
+						halign={CENTER}
+						valign={CENTER}
 					>
 						<box
 							className={"wallpaper image"}
-							halign={Gtk.Align.FILL}
-							valign={Gtk.Align.FILL}
+							halign={FILL}
+							valign={FILL}
 							css={`
 								background-image: url("${cachedImagePath}");
 								background-size: cover;
@@ -114,13 +104,13 @@ async function updateWallpaperGrid(wallpaperGrid: Grid, wallpapers: Array<{ name
 				}}
 				widthRequest={winwidth(0.1)}
 				heightRequest={winheight(0.1)}
-				halign={Gtk.Align.CENTER}
-				valign={Gtk.Align.CENTER}
+				halign={CENTER}
+				valign={CENTER}
 			>
 				<box
 					className={"wallpaper image"}
-					halign={Gtk.Align.FILL}
-					valign={Gtk.Align.FILL}
+					halign={FILL}
+					valign={FILL}
 					css={`
 						background-image: url("${cachedImagePath}");
 						background-size: cover;
@@ -138,11 +128,11 @@ async function updateWallpaperGrid(wallpaperGrid: Grid, wallpapers: Array<{ name
 }
 
 function createRefreshButton(wallpaperGrid: Grid) {
-	const theSpinner = new Spinner({
-		halign: Gtk.Align.CENTER,
-		valign: Gtk.Align.CENTER,
-		visible: false,
-	});
+	const theSpinner = <Spinner
+		halign={CENTER}
+		valign={CENTER}
+		visible={false}
+	/> as Spinner
 
 	const handleClick = () => {
 		execAsync(`notify-send "Refreshing" "Starting wallpaper refresh process."`);
@@ -176,13 +166,13 @@ function createRefreshButton(wallpaperGrid: Grid) {
 	};
 
 	const theButton = (
-		<button className={"refresh button"} tooltip_text={"Refresh Wallpapers"} on_clicked={handleClick} halign={Gtk.Align.START} valign={Gtk.Align.START}>
+		<button className={"refresh button"} tooltip_text={"Refresh Wallpapers"} on_clicked={handleClick} halign={START} valign={START}>
 			<icon icon={Icon.ui.refresh} />
 		</button>
 	);
 
 	const container = (
-		<box hexpand={false} vexpand={false} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+		<box hexpand={false} vexpand={false} halign={CENTER} valign={CENTER}>
 			{theSpinner}
 			{theButton}
 		</box>
@@ -201,8 +191,8 @@ async function createScrollablePage(wps: Array<{ name: string; path: string; ori
 				hscroll={Gtk.PolicyType.NEVER}
 				vexpand={true}
 				hexpand={true}
-				halign={Gtk.Align.FILL}
-				valign={Gtk.Align.FILL}
+				halign={FILL}
+				valign={FILL}
 				visible={true}
 				widthRequest={winwidth(0.35)}
 				heightRequest={winheight(0.35)}
@@ -221,8 +211,8 @@ export default async function () {
 	const masterGrid = <Grid
 		hexpand={true}
 		vexpand={true}
-		halign={Gtk.Align.FILL}
-		valign={Gtk.Align.FILL}
+		halign={FILL}
+		valign={FILL}
 		visible={true}
 		setup={(self) => {
 			self.attach(gridContent, 1, 1, 1, 1);
@@ -237,7 +227,7 @@ export default async function () {
 	const win = <window
 		name="wallpapers"
 		className="wallpapers window"
-		anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+		anchor={TOP | BOTTOM | LEFT | RIGHT}
 		layer={Astal.Layer.OVERLAY}
 		exclusivity={Astal.Exclusivity.NORMAL}
 		keymode={Astal.Keymode.EXCLUSIVE}

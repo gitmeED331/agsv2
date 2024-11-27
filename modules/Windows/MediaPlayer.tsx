@@ -1,12 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { App, Astal, Gdk } from "astal/gtk3";
 import playerStack, { windowPlayerStack } from "../Widgets/MediaPlayer";
 
@@ -17,7 +8,7 @@ export default function MediaPlayerWindow() {
 		<window
 			name={"mediaplayerwindow"}
 			className={"window media-player"}
-			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+			anchor={TOP | RIGHT}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.NORMAL}
 			keymode={Astal.Keymode.EXCLUSIVE}

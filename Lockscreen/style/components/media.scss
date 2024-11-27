@@ -12,7 +12,6 @@
 
 .player {
 	background: $PrimaryBG;
-	padding: 0px;
 	border: $border;
 	border-radius: calc($radius * 5);
 	min-width: 300px;
@@ -80,6 +79,7 @@
 	}
 
 	.track {
+
 		&position,
 		&length {
 			color: $color1;

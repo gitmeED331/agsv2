@@ -170,7 +170,7 @@ function createWindow(monitor) {
 
 function startLock() {
 	const display = Gdk.Display.get_default();
-	// @ts-expect-error
+// @ts-expect-error
 	for (let m = 0; m < display?.get_n_monitors(); m++) {
 		const monitor = display?.get_monitor(m);
 		createWindow(monitor);

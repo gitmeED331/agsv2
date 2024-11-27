@@ -1,16 +1,7 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Gdk, App } from "astal/gtk3";
 import { bind, Variable } from "astal";
 import Pango from "gi://Pango";
-import Icon, { Icons } from "../../../lib/icons";
+import { Icons } from "../../../lib/icons";
 import AstalHyprland from "gi://AstalHyprland";
 
 function AppTitleTicker() {
@@ -21,8 +12,8 @@ function AppTitleTicker() {
 
 	const appIcon = (
 		<icon
-			valign={Gtk.Align.CENTER}
-			halign={Gtk.Align.CENTER}
+			valign={CENTER}
+			halign={CENTER}
 			icon={bind(focusedIcon)}
 		// icon={bind(hyprland, "focusedClient").as((client) => Icons(client.get_class()))}
 		/>
@@ -30,13 +21,13 @@ function AppTitleTicker() {
 
 	const appTitle = (
 		<label
-			valign={Gtk.Align.CENTER}
-			halign={Gtk.Align.CENTER}
+			valign={CENTER}
+			halign={CENTER}
 			hexpand={true}
 			ellipsize={Pango.EllipsizeMode.END}
 			useMarkup={true}
-			label={bind(focusedTitle)}
-		// label={bind(hyprland, "focusedClient").as((client) => client.get_title())}
+			// label={bind(focusedTitle)}
+			label={bind(hyprland, "focusedClient").as((client) => client.get_title())}
 		/>
 	);
 
@@ -115,8 +106,8 @@ export default AppTitleTicker;
 
 // 	const appIcon = (
 // 		<icon
-// 			valign={Gtk.Align.CENTER}
-// 			halign={Gtk.Align.CENTER}
+// 			valign={CENTER}
+// 			halign={CENTER}
 // 			icon={bind(focusedIcon)}
 // 		// icon={bind(hyprland, "focusedClient").as((client) => client?.get_class())}
 // 		/>
@@ -124,8 +115,8 @@ export default AppTitleTicker;
 
 // 	const appTitle = (
 // 		<label
-// 			valign={Gtk.Align.CENTER}
-// 			halign={Gtk.Align.CENTER}
+// 			valign={CENTER}
+// 			halign={CENTER}
 // 			hexpand={true}
 // 			ellipsize={Pango.EllipsizeMode.END}
 // 			useMarkup={true}

@@ -1,9 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- */
-
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, execAsync, GLib, Variable } from "astal";
 import AstalApps from "gi://AstalApps";
@@ -21,20 +15,20 @@ const Apps = new AstalApps.Apps({
     nameMultiplier: 2,
     entryMultiplier: 0,
     executableMultiplier: 2,
-    minScore: 2,
+    minScore: .5,
 });
 
-const Applications = bind(Apps, "list").as((apps) => apps.sort((a, b) =>
-    a.get_name().localeCompare(b.get_name())
-));
+const Applications = Apps.get_list()
+const sortedAppList = Applications.sort((a, b) => a.get_name().localeCompare(b.get_name()));
 
 let query = "";
+
 const filterContext = new Variable({
     query: "",
-    selectedCategory: null,
+    selectedCategory: "" as string | null,
 });
 
-const favorites = Applications.get().filter((app) => ["Zed", "Code - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
+const favorites = Applications.filter((app) => ["Zed", "Code - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
 
 /* keep for looking up app names */
 // console.log(Applications.map(app => app.get_name()));
@@ -79,22 +73,22 @@ function createAppButton(app: AstalApps.Application) {
             >
                 <box
                     vertical={false}
-                    halign={Gtk.Align.FILL}
-                    valign={Gtk.Align.FILL}
+                    halign={FILL}
+                    valign={FILL}
                     spacing={5}
                     widthRequest={winwidth(0.15)}
                 >
                     {validIcon && (
                         <icon
                             icon={iconName}
-                            halign={Gtk.Align.CENTER}
-                            valign={Gtk.Align.CENTER}
+                            halign={CENTER}
+                            valign={CENTER}
                         />
                     )}
                     <label
                         label={app.get_name()}
-                        halign={Gtk.Align.CENTER}
-                        valign={Gtk.Align.CENTER}
+                        halign={CENTER}
+                        valign={CENTER}
                         ellipsize={Pango.EllipsizeMode.END}
                         maxWidthChars={30}
                         lines={1}
@@ -115,37 +109,44 @@ function createAppButton(app: AstalApps.Application) {
 let flowbox: Gtk.FlowBox | null = null;
 
 function createFlowbox(appList: typeof Applications) {
-
     if (!flowbox) (
         flowbox = <FlowBox
-            halign={Gtk.Align.FILL}
-            valign={Gtk.Align.START}
+            halign={FILL}
+            valign={START}
             selection_mode={Gtk.SelectionMode.NONE}
             vexpand
             setup={(self) => {
+                const query = filterContext.get().query?.toLowerCase() || '';
+                const selectedCategory = filterContext.get().selectedCategory;
 
-                self.set_filter_func((child) => {
-                    const appName = child.get_name()?.toLowerCase();
-                    const app = Applications.get().find((a) => a.get_name().toLowerCase() === appName);
 
-                    if (!app) return false;
+                const apps = new AstalApps.Apps();
+                const results = apps.fuzzy_query(query);
 
-                    const matchesQuery = filterContext.query
-                        ? app.get_name().toLowerCase().includes(filterContext.query.toLowerCase())
+                const sortedResults = results.sort((a, b) => apps.fuzzy_score(query, b) - apps.fuzzy_score(query, a));
+
+                const filteredResults = sortedResults.filter(app => {
+                    const matchesCategory = selectedCategory !== null
+                        ? getCategories(app).includes(selectedCategory)
                         : true;
-
-                    const matchesCategory = filterContext.selectedCategory
-                        ? getCategories(app).includes(filterContext.selectedCategory)
-                        : true;
-
-                    return matchesQuery && matchesCategory;
+                    return matchesCategory;
                 });
+
+                if (filteredResults.length > 0) {
+                    self.set_filter_func((child) => {
+                        const appName = child.get_name()?.toLowerCase();
+                        const app = Applications.find((a) => a.get_name().toLowerCase() === appName);
+                        return app && filteredResults.includes(app) || false;
+                    });
+                } else {
+                    self.set_filter_func(() => true);
+                }
             }}
         >
-            {appList.get().map(createAppButton)}
+            {appList.map(createAppButton)}
         </FlowBox> as Gtk.FlowBox
     )
-    return flowbox
+    return flowbox;
 }
 
 const createScrollablePage = (appList: typeof Applications) => (
@@ -155,8 +156,8 @@ const createScrollablePage = (appList: typeof Applications) => (
         hscroll={Gtk.PolicyType.NEVER}
         vexpand={true}
         hexpand={true}
-        halign={Gtk.Align.FILL}
-        valign={Gtk.Align.FILL}
+        halign={FILL}
+        valign={FILL}
         heightRequest={winheight(0.9)}
         css={`
 			padding: 1rem;
@@ -191,15 +192,15 @@ function getCategories(app: any): string[] {
             .filter((c, i, arr) => arr.indexOf(c) === i) ?? []
     );
 }
-const uniqueCategories = Array.from(new Set(Applications.get().flatMap((app) => getCategories(app)))).sort((a, b) => a.localeCompare(b));
+const uniqueCategories = Array.from(new Set(Applications.flatMap((app) => getCategories(app)))).sort((a, b) => a.localeCompare(b));
 
 const handleCalculatorCommand = (query: string) => {
     const expression = query.slice(6).trim();
 
     if (expression) {
-        const existingChild = (theStack as Stack).get_child_by_name("calculator");
+        const existingChild = theStack.get_child_by_name("calculator");
         if (existingChild) {
-            (theStack as Stack).remove(existingChild);
+            theStack.remove(existingChild);
         }
 
         const calculatorPage = (
@@ -208,12 +209,11 @@ const handleCalculatorCommand = (query: string) => {
             </box>
         );
 
-        (theStack as Stack).add_named(calculatorPage, "calculator");
-        (theStack as Stack).set_visible_child_name("calculator");
+        theStack.add_named(calculatorPage, "calculator");
+        theStack.set_visible_child_name("calculator");
     }
 };
 
-let currentQuery = "";
 const entry = (
     <entry
         className="launcher search"
@@ -227,16 +227,16 @@ const entry = (
         secondary_icon_tooltip_text="Clear search"
         hexpand
         vexpand={false}
-        halign={Gtk.Align.FILL}
-        valign={Gtk.Align.CENTER}
+        halign={FILL}
+        valign={CENTER}
         activates_default
         focusOnClick
         on_changed={(self) => {
             const query = self.get_text().trim();
-            filterContext.query = query;
+            filterContext.get().query = query;
 
-            if (query.startsWith("CALC::") && (theStack as Stack).get_visible_child_name() !== "calculator") {
-                (theStack as Stack).set_visible_child_name("calculator");
+            if (query.startsWith("CALC::") && theStack.get_visible_child_name() !== "calculator") {
+                theStack.set_visible_child_name("calculator");
                 return;
             }
 
@@ -268,27 +268,26 @@ const entry = (
                 }
                 if (query.startsWith("CALC::")) {
                     handleCalculatorCommand(query);
-                    (theStack as Stack).set_visible_child_name("calculator");
+                    theStack.set_visible_child_name("calculator");
                 }
             }
         }}
-    />
+    /> as Gtk.Entry
 );
 
 entry.connect("icon-press", (_, event) => {
-    (entry as Gtk.Entry).set_text("");
-    filterContext.query = "";
-    (theStack as Stack).set_visible_child_name("All Apps");
+    entry.set_text("");
+    filterContext.get().query = "";
+    theStack.set_visible_child_name("All Apps");
 
     (flowbox as Gtk.FlowBox).invalidate_filter();
 });
 
-const allAppsPage = (appList: typeof Applications) => (
-    < box key="All Apps" name="All Apps" halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} >
-        {createScrollablePage(appList)}
+const allAppsPage = () => (
+    < box key="All Apps" name="All Apps" halign={FILL} valign={FILL} >
+        {createScrollablePage(sortedAppList)}
     </box>
 );
-
 
 function calculatorPage() {
     const expression = query.slice(6).trim();
@@ -300,8 +299,8 @@ const theStack = (
         className={"launcher stack"}
         transitionDuration={300}
         transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
-        halign={Gtk.Align.FILL}
-        valign={Gtk.Align.FILL}
+        halign={FILL}
+        valign={FILL}
         hhomogeneous={true}
         vhomogeneous={false}
         visible={true}
@@ -311,14 +310,14 @@ const theStack = (
             self.add_named(allAppsPage(Applications), "All Apps");
             self.add_named(calculatorPage(), "calculator");
         }}
-    />
+    /> as Stack
 );
 
 const Switcher = () => {
     const handleSwitch = (name: any) => {
         if (name === "All Apps") {
-            filterContext.query = "";
-            filterContext.selectedCategory = null;
+            filterContext.get().query = "";
+            filterContext.get().selectedCategory = null;
 
             if (flowbox) {
                 flowbox.set_filter_func(() => true);
@@ -326,15 +325,15 @@ const Switcher = () => {
             }
 
             (entry as Gtk.SearchEntry).set_text("");
-            if ((theStack as Stack).get_visible_child_name() !== "All Apps") {
-                (theStack as Stack).set_visible_child_name("All Apps");
+            if (theStack.get_visible_child_name() !== "All Apps") {
+                theStack.set_visible_child_name("All Apps");
             }
         } else if (uniqueCategories.map((c) => c.toLowerCase()).includes(name)) {
-            filterContext.selectedCategory = name;
+            filterContext.get().selectedCategory = name;
 
             if (flowbox) {
                 flowbox.set_filter_func((child: Gtk.FlowBoxChild) => {
-                    const category = child.category;
+                    const category = (child as Gtk.FlowBoxChild & { category: string }).category;
                     return category.includes(name);
                 });
                 flowbox.invalidate_filter();
@@ -342,8 +341,8 @@ const Switcher = () => {
 
             query = "";
             (entry as Gtk.SearchEntry).set_text("");
-            if ((theStack as Stack).get_visible_child_name() !== "All Apps") {
-                (theStack as Stack).set_visible_child_name("All Apps");
+            if (theStack.get_visible_child_name() !== "All Apps") {
+                theStack.set_visible_child_name("All Apps");
             }
         }
     };
@@ -418,7 +417,7 @@ const Switcher = () => {
     });
 
     return (
-        <box className={"launcher switcher"} vertical halign={Gtk.Align.CENTER} valign={Gtk.Align.FILL}>
+        <box className={"launcher switcher"} vertical halign={CENTER} valign={FILL}>
             {[allAppsButton, categoryButtons]}
         </box>
     );
@@ -427,7 +426,7 @@ const Switcher = () => {
 function Launcherflowbox({ monitor }: { monitor: number }) {
     const contentGrid = (
         <Grid
-            className={"launcher contentgrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+            className={"launcher contentgrid"} halign={FILL} valign={FILL}
             hexpand={true} vexpand={true} visible={true}
             css={`
 				background-image: url("${background}");
@@ -447,7 +446,7 @@ function Launcherflowbox({ monitor }: { monitor: number }) {
 
     const masterGrid = (
         <Grid
-            className={"launcher containergrid"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}
+            className={"launcher containergrid"} halign={FILL} valign={FILL}
             hexpand={true} vexpand={true} visible={true}
             setup={(self) => {
                 self.attach(contentGrid, 1, 1, 1, 1);
@@ -460,7 +459,7 @@ function Launcherflowbox({ monitor }: { monitor: number }) {
         <window
             name={"launcher"}
             className={"launcher window"}
-            anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+            anchor={TOP | BOTTOM | LEFT | RIGHT}
             layer={Astal.Layer.OVERLAY}
             exclusivity={Astal.Exclusivity.NORMAL}
             keymode={Astal.Keymode.ON_DEMAND}
@@ -486,11 +485,11 @@ App.connect("window-toggled", (_, win) => {
     if (win.name === "launcher") {
         if (win.visible === false) {
             query = "";
-            filterContext.query = "";
-            filterContext.selectedCategory = null;
+            filterContext.get().query = "";
+            filterContext.get().selectedCategory = null;
 
-            (entry as Gtk.Entry).set_text("");
-            (theStack as Stack).set_visible_child_name("All Apps");
+            entry.set_text("");
+            theStack.set_visible_child_name("All Apps");
             if (flowbox) {
                 flowbox.set_filter_func(() => true);
                 flowbox.invalidate_filter();
@@ -502,5 +501,6 @@ App.connect("window-toggled", (_, win) => {
     }
 });
 
+createFlowbox(Applications);
 
 export default Launcherflowbox;

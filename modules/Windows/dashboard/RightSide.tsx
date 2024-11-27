@@ -1,12 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Widget, Gtk } from "astal/gtk3";
 import { StackSwitcher, Stack, StackSidebar } from "../../Astalified/index";
 
@@ -21,8 +12,8 @@ export default function RightSide() {
 		<Stack
 			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
 			transitionDuration={300}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
+			halign={FILL}
+			valign={FILL}
 			hhomogeneous={true}
 			vhomogeneous={false}
 			visible={true}
@@ -39,15 +30,15 @@ export default function RightSide() {
 				);
 				self.add_titled(BluetoothDevices(), "bluetooth", "Bluetooth");
 			}}
-		/>
+		/> as Stack
 	);
 
-	dashboardRightStack = rightStack as Stack;
+	dashboardRightStack = rightStack;
 
-	const stackSwitcher = <StackSwitcher className={"dashboard stackSwitcher"} stack={rightStack as Gtk.Stack} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} spacing={10} />;
+	const stackSwitcher = <StackSwitcher className={"dashboard stackSwitcher"} stack={rightStack} halign={CENTER} valign={START} spacing={10} />;
 
 	return (
-		<box className={"dashboard rightSide"} vertical={true} halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true} spacing={5} heightRequest={500} widthRequest={50}>
+		<box className={"dashboard rightSide"} vertical={true} halign={FILL} valign={START} hexpand={true} vexpand={true} spacing={5} heightRequest={500} widthRequest={50}>
 			{[stackSwitcher, rightStack]}
 		</box>
 	);

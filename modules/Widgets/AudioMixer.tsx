@@ -7,8 +7,8 @@
  *
  */
 
-import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { bind, execAsync, GLib, Variable } from "astal";
+import { Gdk, App } from "astal/gtk3";
+import { bind, execAsync, Variable } from "astal";
 import Icon from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
@@ -48,14 +48,14 @@ function DeviceIdentifier({ device }) {
 }
 
 function DeviceSlider({ device }) {
-	const { audio } = AstalWp.get_default();
+	const { audio } = AstalWp.get_default() as { audio: any };
 	const Speaker = audio.get_default_speaker();
 
 	return (
 		<slider
 			className={`audio-mixer ${device}-slider Slider`}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			vexpand={true}
 			drawValue={false}
 			min={0}
@@ -71,9 +71,9 @@ function DeviceSlider({ device }) {
 	);
 }
 
-function DeviceControlGroup({ devices }) {
+function DeviceControlGroup({ devices }: { devices: any[] }) {
 	return (
-		<box className={"audio-mixer devices"} vertical={true} vexpand={true} spacing={10} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+		<box className={"audio-mixer devices"} vertical={true} vexpand={true} spacing={10} valign={CENTER} halign={CENTER}>
 			{devices.map((device) => (
 				<box spacing={5} key={device.id}>
 					<DeviceIdentifier device={device} />
@@ -84,7 +84,7 @@ function DeviceControlGroup({ devices }) {
 	);
 }
 
-function AppMixerItem({ stream }) {
+function AppMixerItem({ stream }: { stream: any }) {
 	const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
 		const classList = ["audio-mixer", "item"];
 		if (isMuted) {
@@ -110,17 +110,17 @@ function AppMixerItem({ stream }) {
 				}
 			}}
 		>
-			<box spacing={5} vertical={false} valign={Gtk.Align.CENTER}>
-				<icon valign={Gtk.Align.START} tooltip_text={bind(stream, "description").as((n) => n || "")} icon={bind(stream, "icon").as((n) => n || Icon.audio.type.speaker)} />
-				<label valign={Gtk.Align.CENTER} xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(stream, "description").as((d) => d || "")} />
+			<box spacing={5} vertical={false} valign={CENTER}>
+				<icon valign={START} tooltip_text={bind(stream, "description").as((n) => n || "")} icon={bind(stream, "icon").as((n) => n || Icon.audio.type.speaker)} />
+				<label valign={CENTER} xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(stream, "description").as((d) => d || "")} />
 			</box>
 		</button>
 	);
 	const streamSlider = (
 		<slider
 			className={"audio-mixer item Slider"}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			hexpand={true}
 			draw_value={false}
 			value={bind(stream, "volume")}
@@ -130,7 +130,7 @@ function AppMixerItem({ stream }) {
 		/>
 	);
 	return (
-		<box className={"audio-mixer item"} visible={true} hexpand={false} halign={Gtk.Align.CENTER} vertical={true} spacing={2}>
+		<box className={"audio-mixer item"} visible={true} hexpand={false} halign={CENTER} vertical={true} spacing={2}>
 			{[mixerLabel, streamSlider]}
 		</box>
 	);
@@ -145,8 +145,8 @@ function SettingsButton() {
 				App.toggle_window("dashboard");
 			}}
 			hexpand={true}
-			halign={Gtk.Align.END}
-			valign={Gtk.Align.START}
+			halign={END}
+			valign={START}
 		>
 			<icon icon={Icon.ui.settings} />
 		</button>
@@ -154,7 +154,7 @@ function SettingsButton() {
 }
 
 export default function AudioMixer() {
-	const { audio } = AstalWp.get_default();
+	const { audio } = AstalWp.get_default() as { audio: any };
 	const Speaker = audio.get_default_speaker();
 	const Microphone = audio.get_default_microphone();
 
@@ -167,7 +167,7 @@ export default function AudioMixer() {
 	);
 	return (
 		<box vertical={true} className={"audio-mixer container"} spacing={10} hexpand={false}>
-			<label className={"header"} label={"Audio Devices & Streams"} halign={Gtk.Align.CENTER} />
+			<label className={"header"} label={"Audio Devices & Streams"} halign={CENTER} />
 			<DeviceControlGroup devices={[Speaker, Microphone]} />
 			{activeStreams}
 			<SettingsButton />

@@ -1,21 +1,11 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { GLib, timeout } from "astal";
+import { Astal, Gdk, App, Widget } from "astal/gtk3";
+import { timeout, Variable } from "astal";
 import AstalNotifd from "gi://AstalNotifd";
-import Icon, { Icons } from "../lib/icons";
 import { NotifWidget } from "../Widgets/index";
 
 const Notif = AstalNotifd.get_default();
-const waitTime = 3000;
-const expireTime = 20000;
+const waitTime = new Variable(2000);
+const expireTime = new Variable(20000);
 
 function removeItem(box: Widget.Box, notificationItem: any) {
 	box.remove(notificationItem);
@@ -51,8 +41,13 @@ function NotifItem() {
 							notification.dismiss();
 						}
 					}}
+					onHover={() => {
+						expireTime.set(0);
+						waitTime.set(0);
+					}}
 					onHoverLost={() => {
-						timeout(waitTime, () => removeItem(box, notificationItem));
+						waitTime.set(3000);
+						timeout(waitTime.get(), () => removeItem(box, notificationItem));
 					}}
 				>
 					<NotifWidget item={notification} />
@@ -61,29 +56,17 @@ function NotifItem() {
 
 			box.add(notificationItem);
 
-			notification.connect("dismissed", () => {
-				removeItem(box, notificationItem);
-			});
+			notification.connect("dismissed", () => removeItem(box, notificationItem));
 
-			timeout(expireTime, () => {
-				removeItem(box, notificationItem);
-			});
+			timeout(expireTime.get(), () => removeItem(box, notificationItem));
 		}
 	});
 
 	return box;
 }
 
-function NotifPopup() {
-	return (
-		<box className={"notif"} halign={Gtk.Align.FILL} valign={Gtk.Align.START} vexpand={true} vertical={true} spacing={10} widthRequest={450}>
-			<NotifItem />
-		</box>
-	);
-}
-
 export default ({ monitor }: { monitor: number }) => (
-	<window name={`notifications${monitor}`} anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT} className={"notifications"} hexpand={true} layer={Astal.Layer.OVERLAY} application={App}>
-		<NotifPopup />
+	<window name={`notifications${monitor}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={Astal.Layer.OVERLAY} application={App}>
+		<NotifItem />
 	</window>
 );

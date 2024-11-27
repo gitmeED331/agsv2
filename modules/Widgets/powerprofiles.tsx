@@ -1,14 +1,5 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { execAsync, exec, bind, GObject } from "astal";
+import { Gdk } from "astal/gtk3";
+import { execAsync, exec, bind } from "astal";
 import Icon, { Icons } from "../lib/icons";
 import AstalPowerProfiles from "gi://AstalPowerProfiles";
 
@@ -24,20 +15,20 @@ function PowerProfiles() {
 			"power-saver": 20,
 			balanced: 50,
 			performance: 100,
-		  };
-	
-		const setBrightness = (level:number) => {
+		};
+
+		const setBrightness = (level: number) => {
 			execAsync(`light -S ${level}`);
 		};
-	
+
 		const updateBrightness = () => {
 			const level = brightnessLevels[powerprofile.activeProfile];
 			setBrightness(level);
 		};
-	
+
 		updateBrightness();
 	});
-	
+
 	type PowerProfileActions = "balanced" | "power-saver" | "performance";
 	const SysButton = (action: string, label: string) => (
 		<button
@@ -57,7 +48,7 @@ function PowerProfiles() {
 	);
 
 	return (
-		<box className={"powerprofiles container"} name={"powerprofiles"} vertical={false} vexpand={false} hexpand={false} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+		<box className={"powerprofiles container"} name={"powerprofiles"} vertical={false} vexpand={false} hexpand={false} valign={CENTER} halign={CENTER}>
 			{SysButton("power-saver", "Saver")}
 			{SysButton("balanced", "Balanced")}
 			{SysButton("performance", "Performance")}

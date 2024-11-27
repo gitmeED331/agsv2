@@ -1,20 +1,10 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, exec, execAsync, monitorFile, Variable } from "astal";
 import Icon from "../lib/icons";
 import Pango from "gi://Pango";
 
 const BrightLevel = Icon.brightness.levels;
 
-function getIconForBrightness(value) {
+function getIconForBrightness(value: number) {
 	const brightnessLevels = Object.values(BrightLevel);
 	for (let i = 0; i < brightnessLevels.length - 1; i++) {
 		if (value < (i + 1) * 15) {
@@ -34,7 +24,6 @@ function getValue() {
 	} catch (error) {
 		console.error("Error fetching brightness:", error);
 	}
-	// Fallback to a default value if parsing fails
 	return 0;
 }
 
@@ -91,16 +80,16 @@ export default function BrightnessSlider() {
 	);
 
 	const theTitle = <label className={"header"} wrap={false} hexpand={true}
-		halign={Gtk.Align.CENTER} xalign={0} yalign={0} ellipsize={Pango.EllipsizeMode.END} label="Brightness" />;
+		halign={CENTER} xalign={0} yalign={0} ellipsize={Pango.EllipsizeMode.END} label="Brightness" />;
 
-	const theIcon = <icon halign={Gtk.Align.START} valign={Gtk.Align.CENTER} icon={getIconForBrightness(getValue())} />;
+	const theIcon = <icon halign={START} valign={CENTER} icon={getIconForBrightness(getValue())} />;
 
 	setTimeout(initializeValues, 0);
 
 	return (
-		<box className={"brightness"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} vertical={true} spacing={5}>
+		<box className={"brightness"} halign={FILL} valign={FILL} vertical={true} spacing={5}>
 			{theTitle}
-			<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={10}>
+			<box halign={CENTER} valign={CENTER} spacing={10}>
 				{theIcon}
 				{slider}
 			</box>

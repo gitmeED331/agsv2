@@ -49,12 +49,12 @@ function Player(player: Mpris.Player) {
 	}
 
 	const TrackInfo = (
-		<box className={"trackinfo"} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} hexpand={true} vertical={true} spacing={5}>
+		<box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
 			<label
 				className={"tracktitle"}
 				wrap={false}
 				hexpand={true}
-				halign={Gtk.Align.CENTER}
+				halign={CENTER}
 				ellipsize={Pango.EllipsizeMode.END}
 				maxWidthChars={35}
 				label={bind(player, "title").as((title) => TrimTrackTitle(title) || "Unknown Title")}
@@ -63,7 +63,7 @@ function Player(player: Mpris.Player) {
 				className={"artist"}
 				wrap={false}
 				hexpand={true}
-				halign={Gtk.Align.CENTER}
+				halign={CENTER}
 				ellipsize={Pango.EllipsizeMode.END}
 				maxWidthChars={30}
 				label={bind(player, "artist").as((artist) => artist || "Unknown Artist")}
@@ -94,26 +94,26 @@ function Player(player: Mpris.Player) {
 				max={bind(player, "length")}
 				min={0}
 				value={bind(player, "position")}
-				halign={Gtk.Align.FILL}
+				halign={FILL}
 			/>
 		);
 
-		const lengthLabel = <label className={"tracklength"} halign={Gtk.Align.START} label={bind(player, "length").as(lengthStr)} />;
+		const lengthLabel = <label className={"tracklength"} halign={START} label={bind(player, "length").as(lengthStr)} />;
 
-		const positionLabel = <label className={"trackposition"} halign={Gtk.Align.END} label={bind(player, "position").as(lengthStr)} />;
+		const positionLabel = <label className={"trackposition"} halign={END} label={bind(player, "position").as(lengthStr)} />;
 
 		return (
 			<box
 				className={"positioncontainer"}
-				valign={Gtk.Align.CENTER}
-				halign={Gtk.Align.FILL}
+				valign={CENTER}
+				halign={FILL}
 				hexpand={true}
 				vertical={true}
 				spacing={5}
 				visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
 			>
 				{positionSlider}
-				<centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} startWidget={lengthLabel} endWidget={positionLabel} />
+				<centerbox halign={FILL} valign={CENTER} startWidget={lengthLabel} endWidget={positionLabel} />
 			</box>
 		);
 	}
@@ -137,8 +137,8 @@ function Player(player: Mpris.Player) {
 		>
 			<icon
 				hexpand={true}
-				halign={Gtk.Align.END}
-				valign={Gtk.Align.CENTER}
+				halign={END}
+				valign={CENTER}
 				tooltip_text={bind(player, "identity")}
 				icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
 			/>
@@ -146,14 +146,14 @@ function Player(player: Mpris.Player) {
 	);
 
 	const PlayerControls = (
-		<box className={"playercontrols"} vexpand={false} hexpand={false} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={20}>
-			<button className={"previous"} valign={Gtk.Align.CENTER} onClick={() => player.previous()} visible={bind(player, "can_go_previous")}>
+		<box className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
+			<button className={"previous"} valign={CENTER} onClick={() => player.previous()} visible={bind(player, "can_go_previous")}>
 				<icon icon={Icon.mpris.controls.PREV} />
 			</button>
-			<button className={"play-pause"} valign={Gtk.Align.CENTER} onClick={() => player.play_pause()} visible={bind(player, "can_play")}>
+			<button className={"play-pause"} valign={CENTER} onClick={() => player.play_pause()} visible={bind(player, "can_play")}>
 				<icon icon={bind(player, "playbackStatus").as((s) => (s === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY))} />
 			</button>
-			<button className={"next"} valign={Gtk.Align.CENTER} onClick={() => player.next()} visible={bind(player, "can_go_next")}>
+			<button className={"next"} valign={CENTER} onClick={() => player.next()} visible={bind(player, "can_go_next")}>
 				<icon icon={Icon.mpris.controls.NEXT} />
 			</button>
 		</box>
@@ -162,7 +162,7 @@ function Player(player: Mpris.Player) {
 	const CloseIcon = (
 		<button
 			className={"close"}
-			valign={Gtk.Align.CENTER}
+			valign={CENTER}
 			onClick={() => {
 				execAsync(`bash -c 'killall "${player.entry}"'`);
 			}}
@@ -173,8 +173,8 @@ function Player(player: Mpris.Player) {
 
 	const mediaInfoGrid = (
 		<Grid
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			hexpand={true}
 			vexpand={true}
 			visible={true}
@@ -189,20 +189,20 @@ function Player(player: Mpris.Player) {
 	);
 
 	return (
-		<box className={"player"} name={player.entry} vertical={false} hexpand={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.START} setup={setup}>
+		<box className={"player"} name={player.entry} vertical={false} hexpand={true} spacing={5} halign={CENTER} valign={START} setup={setup}>
 			{[mediaInfoGrid, CloseIcon]}
 		</box>
 	);
 }
 
-export let dashboardPlayerStack;
-export let windowPlayerStack;
+export let dashboardPlayerStack: Gtk.Stack;
+export let windowPlayerStack: Gtk.Stack;
 
 export default function playerStack() {
 	const mpris = Mpris.get_default();
 
 	const theStack = (
-		<Stack
+		<stack
 			visible={true}
 			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
 			transition_duration={2000}
@@ -243,16 +243,16 @@ export default function playerStack() {
 				});
 			}}
 
-		/>
+		/> as Gtk.Stack
 	);
 
 	dashboardPlayerStack = theStack;
 	windowPlayerStack = theStack;
 
-	const switcher = <StackSwitcher stack={theStack as Stack} className={"playerswitcher"} visible={bind(mpris, "players").as((a) => a.length > 1)} halign={Gtk.Align.CENTER} spacing={10} te />;
+	const switcher = <StackSwitcher stack={theStack} className={"playerswitcher"} visible={bind(mpris, "players").as((a) => a.length > 1)} halign={CENTER} spacing={10} te />;
 
 	return (
-		<box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} vertical={true} visible={bind(mpris, "players").as((a) => a.length > 0)}>
+		<box halign={CENTER} valign={CENTER} vertical={true} visible={bind(mpris, "players").as((a) => a.length > 0)}>
 			{[switcher, theStack]}
 		</box>
 	);

@@ -1,13 +1,4 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Gdk, App } from "astal/gtk3";
 import { execAsync, GLib } from "astal";
 import Icon, { Icons } from "../lib/icons.js";
 
@@ -17,7 +8,7 @@ const SysButton = (action: string, label: string) => {
 	const command = (() => {
 		switch (action) {
 			case "lock":
-				return `ags -c ${SRC}/Lockscreen/`;
+				return `ags run -d ${SRC}/Lockscreen/`;
 			case "reboot":
 				return "systemctl reboot";
 			case "logout":
@@ -39,7 +30,6 @@ const SysButton = (action: string, label: string) => {
 			onClick={(_, event) => {
 				const win = App.get_window("sessioncontrols");
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					// if (win && win.visible === true) {.visible = false; }
 					App.toggle_window("sessioncontrols");
 					execAsync(command);
 				}
@@ -54,7 +44,7 @@ const SysButton = (action: string, label: string) => {
 			canFocus={true}
 			hasDefault={false}
 		>
-			<box className={"sessioncontrol button"} vertical={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+			<box className={"sessioncontrol button"} vertical={true} halign={CENTER} valign={CENTER}>
 				<icon icon={Icon.powermenu[action as "lock" | "logout" | "reboot" | "shutdown"]} />
 				<label label={label} />
 			</box>
@@ -62,9 +52,9 @@ const SysButton = (action: string, label: string) => {
 	);
 };
 
-function SessionControls() {
+export default function SessionControls() {
 	return (
-		<box className={"sessioncontrols container"} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} visible={true}>
+		<box className={"sessioncontrols container"} valign={CENTER} halign={CENTER} visible={true}>
 			{SysButton("lock", "Lock")}
 			{SysButton("logout", "Log Out")}
 			{SysButton("reboot", "Reboot")}
@@ -72,4 +62,3 @@ function SessionControls() {
 		</box>
 	);
 }
-export default SessionControls;

@@ -1,14 +1,4 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Astal, Gtk, App, Gdk } from "astal/gtk3";
-import { GObject } from "astal";
 import { winheight, winwidth } from "../../lib/screensizeadjust";
 import { Grid } from "../../Astalified/index";
 import ClickToClose from "../../lib/ClickToClose";
@@ -25,8 +15,8 @@ function Dashboard({ monitor }: { monitor: number }) {
 	const content = (
 		<Grid
 			className={"dashboard grid"}
-			halign={Gtk.Align.FILL}
-			valign={Gtk.Align.FILL}
+			halign={FILL}
+			valign={FILL}
 			hexpand={true}
 			vexpand={true}
 			visible={true}
@@ -48,7 +38,7 @@ function Dashboard({ monitor }: { monitor: number }) {
 		<window
 			name={"dashboard"}
 			className={"dashboard window"}
-			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.BOTTOM}
+			anchor={TOP | LEFT | RIGHT | BOTTOM}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.NORMAL}
 			keymode={Astal.Keymode.EXCLUSIVE}
@@ -63,7 +53,7 @@ function Dashboard({ monitor }: { monitor: number }) {
 				}
 			}}
 		>
-			<box>{content}</box>
+			{content}
 		</window>
 	);
 }

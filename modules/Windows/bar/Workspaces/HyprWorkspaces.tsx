@@ -1,13 +1,4 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Gdk } from "astal/gtk3";
 import { bind, execAsync, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
 import Icon from "../../../lib/icons";
@@ -54,16 +45,16 @@ function Workspaces() {
 			// @ts-expect-error
 			const wsIconLabel = wsIcon[`ws${id}`] ? (
 				// @ts-expect-error
-				<icon icon={wsIcon[`ws${id}`]} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+				<icon icon={wsIcon[`ws${id}`]} halign={CENTER} valign={CENTER} />
 			) : (
-				<label label={`${id}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+				<label label={`${id}`} halign={CENTER} valign={CENTER} />
 			);
 			return (
 				<button
 					className={className()}
 					visible={isVisible()}
-					valign={Gtk.Align.CENTER}
-					halign={Gtk.Align.CENTER}
+					valign={CENTER}
+					halign={CENTER}
 					cursor="pointer"
 					onClick={(_, event) => {
 						switch (event.button) {
@@ -92,8 +83,8 @@ function Workspaces() {
 	return (
 		<box
 			className="hyprworkspaces"
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			// spacing={10}
 			hexpand={true}
 		>

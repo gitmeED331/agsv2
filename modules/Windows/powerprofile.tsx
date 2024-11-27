@@ -1,12 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Astal, App, Gdk } from "astal/gtk3";
 import { PowerProfiles } from "../Widgets/index";
 
@@ -14,7 +5,7 @@ export default () => (
 	<window
 		name={"powerprofiles"}
 		className={"pwrprofiles window"}
-		anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.TOP}
+		anchor={TOP | TOP}
 		layer={Astal.Layer.OVERLAY}
 		exclusivity={Astal.Exclusivity.NORMAL}
 		keymode={Astal.Keymode.EXCLUSIVE}

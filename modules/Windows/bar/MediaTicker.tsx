@@ -1,14 +1,5 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { Variable, bind, GLib } from "astal";
+import { Gtk, Gdk, App } from "astal/gtk3";
+import { bind } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
@@ -22,8 +13,8 @@ function tickerButton(player: Mpris.Player) {
 			className={"ticker track"}
 			vexpand={true}
 			wrap={false}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			ellipsize={Pango.EllipsizeMode.END}
 			maxWidthChars={35}
 			label={bind(player, "title").as((title) => TrimTrackTitle(title))}
@@ -34,8 +25,8 @@ function tickerButton(player: Mpris.Player) {
 		<label
 			className={"ticker artist"}
 			wrap={false}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			ellipsize={Pango.EllipsizeMode.END}
 			// maxWidthChars={35}
 			label={bind(player, "artist").as((artist) => artist || "Unknown Artist")}
@@ -46,8 +37,8 @@ function tickerButton(player: Mpris.Player) {
 		<icon
 			className={"ticker icon"}
 			hexpand={false}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			tooltip_text={bind(player, "identity")}
 			icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
 		/>
@@ -81,7 +72,7 @@ function tickerButton(player: Mpris.Player) {
 				}
 			}}
 		>
-			<box visible={true} spacing={5} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+			<box visible={true} spacing={5} halign={CENTER} valign={CENTER}>
 				{[TickerTrack, TickerIcon, TickerArtist]}
 			</box>
 		</button>
@@ -107,8 +98,8 @@ export default function MediaTickerButton() {
 								name={"no-media"}
 								hexpand={true}
 								wrap={false}
-								halign={Gtk.Align.CENTER}
-								valign={Gtk.Align.CENTER}
+								halign={CENTER}
+								valign={CENTER}
 								label={"No Media"}
 							/>
 						);
@@ -175,7 +166,7 @@ export default function MediaTickerButton() {
 	);
 
 	return (
-		<box className={"ticker container"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+		<box className={"ticker container"} halign={CENTER} valign={CENTER}>
 			{theStack}
 		</box>
 	);

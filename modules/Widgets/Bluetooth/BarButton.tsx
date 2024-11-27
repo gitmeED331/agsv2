@@ -1,13 +1,4 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
-import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { Gtk, Gdk, App } from "astal/gtk3";
 import { Variable, bind } from "astal";
 import Icon, { Icons } from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
@@ -15,7 +6,7 @@ import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 let btreveal = Variable(false);
 
-const BluetoothWidget = (bluetooth) => {
+const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
 	const updateLabel = (btLabel: any) => {
 		const btEnabled = bluetooth.is_powered;
 		const btDevices = bluetooth.is_connected;
@@ -27,7 +18,7 @@ const BluetoothWidget = (bluetooth) => {
 	bluetooth.connect("notify::connected_devices", updateLabel);
 
 	return (
-		<box className={"bluetooth barbutton content"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={true}>
+		<box className={"bluetooth barbutton content"} halign={CENTER} valign={CENTER} visible={true}>
 			{bind(bluetooth, "is_powered").as((showLabel) => (
 				<box>
 					<icon className={"bluetooth barbutton-icon"} icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} />
@@ -45,8 +36,8 @@ export default function BluetoothButton() {
 	return (
 		<button
 			className={"bluetooth barbutton"}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "bluetooth";

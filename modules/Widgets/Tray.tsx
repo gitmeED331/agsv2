@@ -1,54 +1,8 @@
-/** 
- * MIT License
- * 
- * Copyright (c) 2024 TopsyKrets
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
- * and associated documentation files (the "Software"), to deal in the Software without restriction.
- */
-
-import { Gtk, Gdk, Widget } from "astal/gtk3";
+import { Gdk, Widget } from "astal/gtk3";
 import { bind } from "astal";
 import AstalTray from "gi://AstalTray";
-import { Icons } from "../lib/icons";
 
 type TrayItem = ReturnType<ReturnType<typeof AstalTray.Tray.get_default>["get_item"]>;
-// const resolveIcon = (item: TrayItem) => {
-// 	if (item.gicon) {
-// 		return (
-// 			<icon
-// 				g_icon={bind(item, "gicon")}
-// 				halign={Gtk.Align.CENTER}
-// 				valign={Gtk.Align.CENTER}
-// 			/>
-// 		);
-// 	} else if (item.icon_name) {
-// 		return (
-// 			<icon
-// 				icon={Icons(bind(item, "icon_name").toString())}
-// 				halign={Gtk.Align.CENTER}
-// 				valign={Gtk.Align.CENTER}
-// 			/>
-// 		);
-// 	} else if (item.icon_pixbuf) {
-// 		return (
-// 			<icon
-// 				pixbuf={item.get_icon_pixbuf()}
-// 				halign={Gtk.Align.CENTER}
-// 				valign={Gtk.Align.CENTER}
-// 			/>
-// 		);
-// 	} else {
-// 		return (
-// 			<icon
-// 				g_icon={bind(item, "gicon")}
-// 				halign={Gtk.Align.CENTER}
-// 				valign={Gtk.Align.CENTER}
-// 			/>
-// 		);
-// 	}
-// };
-
 
 const SysTrayItem = (item: TrayItem) => {
 	const menu = item.create_menu();
@@ -57,8 +11,8 @@ const SysTrayItem = (item: TrayItem) => {
 
 	const button = <button
 		className="systray-item"
-		halign={Gtk.Align.CENTER}
-		valign={Gtk.Align.CENTER}
+		halign={CENTER}
+		valign={CENTER}
 		tooltip_markup={bind(item, "tooltip_markup")}
 		focus_on_click={false}
 		use_underline={false}
@@ -82,8 +36,8 @@ const SysTrayItem = (item: TrayItem) => {
 	>
 		<icon
 			g_icon={bind(item, "gicon")}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 		/>
 	</button>
 
@@ -121,8 +75,8 @@ const Tray = () => {
 	return (
 		<box
 			className="tray container"
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			vertical={true}
 			setup={setupTray}
 		/>
