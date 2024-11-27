@@ -36,10 +36,3 @@ App.connect("window-toggled", (_, win) => {
 	}
 });
 
-//   {players.watch([], [
-//                 [Mpris, "player-changed"],
-//                 [Mpris, "player-added"],
-//                 [Mpris, "player-closed"],
-//             ], () => Mpris.players)
-//                 .transform(p => p.filter(p => p.play_back_status !== 'Stopped').map(Player))
-//             }

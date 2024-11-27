@@ -1,19 +1,10 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Gdk, App } from "astal/gtk3";
 import { bind, execAsync, Variable } from "astal";
 import Icon from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-function DeviceIdentifier({ device }) {
+function DeviceIdentifier({ device }: any) {
 	const tooltipText = Variable.derive([bind(device, "volume"), bind(device, "mute")], (volume, isMuted) => (isMuted ? "Muted" : `Volume ${(volume * 100).toFixed(2)}%`));
 	const classname = Variable.derive([bind(device, "mute")], (isMuted) => {
 		const classList = ["audio-mixer", "volume-indicator"];
@@ -29,16 +20,16 @@ function DeviceIdentifier({ device }) {
 			tooltip_text={bind(tooltipText)}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					device?.set_mute(!device?.get_mute());
+					device.set_mute(!device.get_mute());
 				}
 			}}
 			onScroll={(_, { delta_y }) => {
 				if (delta_y < 0) {
-					device?.set_volume(device.volume + 0.05);
-					device?.set_mute(false);
+					device.set_volume(device.volume + 0.05);
+					device.set_mute(false);
 				} else {
-					device?.set_volume(device.volume - 0.05);
-					device?.set_mute(false);
+					device.set_volume(device.volume - 0.05);
+					device.set_mute(false);
 				}
 			}}
 		>
@@ -47,7 +38,7 @@ function DeviceIdentifier({ device }) {
 	);
 }
 
-function DeviceSlider({ device }) {
+function DeviceSlider({ device }: any) {
 	const { audio } = AstalWp.get_default() as { audio: any };
 	const Speaker = audio.get_default_speaker();
 
@@ -158,11 +149,12 @@ export default function AudioMixer() {
 	const Speaker = audio.get_default_speaker();
 	const Microphone = audio.get_default_microphone();
 
-	const getStreams = audio.get_streams();
 	const activeStreams = (
 		<box vertical={true}>
-			<label className={"audio-mixer header"} label={"Active Audio Streams"} visible={getStreams.length > 0} />
-			{bind(audio, "streams").as((getStreams) => (getStreams.length > 0 ? getStreams.map((stream, index) => <AppMixerItem key={index} stream={stream} />) : <label label="No Active Audio Streams" />))}
+			<label className={"audio-mixer header"} label={"Active Audio Streams"} visible={audio.get_streams.length > 0} />
+			{bind(audio, "streams").as((streams) =>
+				streams.length > 0 ? streams.map((stream: any, index: any) => <AppMixerItem key={index} stream={stream} />) : <label label="No Active Audio Streams" />,
+			)}
 		</box>
 	);
 	return (

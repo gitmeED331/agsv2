@@ -1,12 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync } from "astal";
 import Mpris from "gi://AstalMpris";
@@ -207,17 +198,6 @@ export default function playerStack() {
 			transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
 			transition_duration={2000}
 			homogeneous={false}
-			// setup={(self) => {
-			// 	mpris.get_players()?.forEach((p) => self.add_titled(Player(p), p.busName, p.entry.toUpperCase()));
-
-			// 	mpris.connect("player-added", (_, p) => {
-			// 		self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
-			// 	});
-
-			// 	mpris.connect("player-closed", (_, p) => {
-			// 		self.get_child_by_name(p.busName)?.destroy();
-			// 	});
-			// }}
 			setup={(self) => {
 				const players = mpris.get_players();
 				players?.forEach((p) => {

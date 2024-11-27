@@ -35,7 +35,7 @@ const SysTrayItem = (item: TrayItem) => {
 		}}
 	>
 		<icon
-			g_icon={bind(item, "gicon")}
+			gIcon={bind(item, "gicon")}
 			halign={CENTER}
 			valign={CENTER}
 		/>

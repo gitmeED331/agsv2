@@ -1,15 +1,11 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { GLib } from "astal";
+import { GLib, bind, execAsync } from "astal";
 import AstalApps from "gi://AstalApps";
 import Pango from "gi://Pango";
-import { winwidth, winheight } from "../../lib/screensizeadjust";
-import { Grid } from "../../Astalified/index";
-import FavoritesBar from "./FavoritesBar";
-import ClickToClose from "../../lib/ClickToClose";
+import Icon, { Icons } from "../../lib/icons";
+import { Stack, Grid } from "../../Astalified/index";
 import entry, { query } from "./search";
-import { theStack, Switcher } from "./stackandswitcher";
-
-const background = `${SRC}/assets/groot-thin-right.png`;
+import { winheight, winwidth } from "../../lib/screensizeadjust";
 
 const Apps = new AstalApps.Apps({
 	nameMultiplier: 2,
@@ -22,7 +18,6 @@ const Apps = new AstalApps.Apps({
 
 const Applications = Apps.get_list();
 const sortedAppList = Applications.sort((a, b) => a.get_name().localeCompare(b.get_name()));
-const favorites = Applications.filter((app) => ["Zed", "Code - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
 
 /* keep for looking up app names */
 // console.log(Applications.map(app => app.get_name()));
@@ -90,7 +85,7 @@ function createAppGrid(appList: typeof Applications) {
 	return grid;
 }
 
-const createScrollablePage = (appList: any) => (
+export const createScrollablePage = (appList: any) => (
 	<scrollable
 		visible={true}
 		vscroll={Gtk.PolicyType.AUTOMATIC}
@@ -127,16 +122,15 @@ function getCategories(app: any) {
 		app.app
 			.get_categories()
 			?.split(";")
-			.filter((c: any) => mainCategories.includes(c))
+			.filter((c) => mainCategories.includes(c))
 			.map(substitute)
-			.filter((c: any, i: any, arr: any) => i === arr.indexOf(c)) ?? []
+			.filter((c, i, arr) => i === arr.indexOf(c)) ?? []
 	);
 }
 
 const uniqueCategories = Array.from(new Set(Applications.flatMap((app) => getCategories(app)))).sort((a, b) => a.localeCompare(b));
 
 const allAppsPage = (
-	// @ts-expect-error
 	<box key="All Apps" name="All Apps" halign={FILL} valign={FILL}>
 		{createScrollablePage(sortedAppList)}
 	</box>
@@ -146,86 +140,85 @@ const categoryPages = uniqueCategories.map((category) => {
 	const sortedAppsInCategory = sortedAppList.filter((app) => getCategories(app).includes(category)).sort((a, b) => a.get_name().localeCompare(b.get_name()));
 
 	return (
-		// @ts-expect-error
 		<box key={category} name={category.toLowerCase()} halign={FILL} valign={FILL}>
 			{createScrollablePage(sortedAppsInCategory)}
 		</box>
 	);
 });
 
-function Launchergrid({ monitor }: { monitor: number }) {
-	const contentGrid = (
-		<Grid
-			className={"launcher contentgrid"}
-			halign={FILL}
-			valign={FILL}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			css={`
-				background-image: url("${background}");
-				background-size: contain;
-				background-repeat: no-repeat;
-				background-position: center;
-				background-color: rgba(0, 0, 0, 1);
-			`}
-			setup={(self) => {
-				self.attach(entry, 0, 0, 2, 1);
-				self.attach(<FavoritesBar favorites={favorites} />, 0, 1, 2, 1);
-				self.attach(Switcher(), 0, 2, 1, 1);
-				self.attach(theStack, 1, 2, 1, 1);
-			}}
-		/>
-	);
+export const theStack = (
+	<Stack
+		className={"launcher stack"}
+		transitionDuration={300}
+		transitionType={STACK_SLIDE_LEFT_RIGHT}
+		halign={FILL}
+		valign={FILL}
+		hhomogeneous={true}
+		vhomogeneous={false}
+		visible={true}
+		hexpand={false}
+		vexpand={true}
+		setup={(self) => {
+			[allAppsPage, ...categoryPages].forEach((page) => {
+				self.add_named(page, page.name);
+			});
+		}}
+	/>
+) as Stack;
 
-	const masterGrid = (
-		<Grid
-			className={"launcher containergrid"}
-			halign={FILL}
-			valign={FILL}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			setup={(self) => {
-				self.attach(contentGrid, 1, 1, 1, 1);
-				self.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
-			}}
-		/>
-	);
-
-	return (
-		<window
-			name={"launcher"}
-			className={"launcher window"}
-			anchor={TOP | BOTTOM | LEFT | RIGHT}
-			layer={Astal.Layer.OVERLAY}
-			exclusivity={Astal.Exclusivity.NORMAL}
-			keymode={Astal.Keymode.ON_DEMAND}
-			visible={false}
-			application={App}
-			clickThrough={false}
-			onKeyPressEvent={(_, event) => {
-				const win = App.get_window("launcher");
-				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-					if (win && win.visible === true) {
-						query.set("");
-						win.visible = false;
-					}
-				}
-			}}
-		>
-			{masterGrid}
-		</window>
-	);
-}
-
-App.connect("window-toggled", (_, win) => {
-	if (win.visible === false && win.name === "launcher") {
+export const Switcher = () => {
+	const handleSwitch = (name: string) => {
+		theStack.set_visible_child_name(name);
 		query.set("");
 		entry.set_text("");
-		entry.grab_focus();
-		theStack.set_visible_child_name("All Apps");
-	}
-});
+	};
 
-export default Launchergrid;
+	const allAppsButton = (
+		<button
+			className={bind(theStack as Stack, "visible_child_name").as((name) => (name === "All Apps" ? "active" : ""))}
+			onClick={(_, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					handleSwitch("All Apps");
+				}
+			}}
+			onKeyPressEvent={(_, event) => {
+				if (event.get_keyval()[1] === Gdk.KEY_Return) {
+					handleSwitch("All Apps");
+				}
+			}}
+			tooltip_text={"All Apps"}
+		>
+			<icon icon={Icon.launcher.allapps} />
+		</button>
+	);
+
+	const categoryButtons = uniqueCategories.map((category) => {
+		const iconName = Icon.launcher[category.toLowerCase() as keyof typeof Icon.launcher] || Icon.launcher.system;
+
+		return (
+			<button
+				className={bind(theStack as Stack, "visible_child_name").as((name) => (name === category.toLowerCase() ? "active" : ""))}
+				key={category}
+				onClick={(_, event) => {
+					if (event.button === Gdk.BUTTON_PRIMARY) {
+						handleSwitch(category.toLowerCase());
+					}
+				}}
+				onKeyPressEvent={(_, event) => {
+					if (event.get_keyval()[1] === Gdk.KEY_Return) {
+						handleSwitch(category.toLowerCase());
+					}
+				}}
+				tooltip_text={category}
+			>
+				<icon icon={iconName} />
+			</button>
+		);
+	});
+
+	return (
+		<box className={"launcher switcher"} vertical halign={CENTER} valign={FILL}>
+			{[allAppsButton, categoryButtons]}
+		</box>
+	);
+};

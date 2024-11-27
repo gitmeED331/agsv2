@@ -28,7 +28,7 @@ export default function EthernetWidget() {
 		<box className={"network ethernet container"} halign={CENTER} valign={CENTER} vertical spacing={5}>
 			<label label={bind(networkStats).as((stats) => `RX: ${stats.rx} | TX: ${stats.tx}`)} />
 
-			<box>
+			<box halign={CENTER} valign={CENTER} spacing={5}>
 				{[ethernetIcon, ethernetLabel, ethernetStatus]}
 			</box>
 		</box>

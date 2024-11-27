@@ -1,6 +1,5 @@
 import { Gtk, Gdk } from "astal/gtk3";
 import { execAsync, bind, Variable } from "astal";
-import Icon from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import Pango from "gi://Pango";
 import NM from "gi://NM";
@@ -15,7 +14,7 @@ function Header(wifi: AstalNetwork.Wifi) {
 	/>;
 
 	const refresh = (
-		<stack visible={true} halign={END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
+		<stack visible halign={END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
 			{theSpinner}
 			<button
 				name={"refreshbtn"}
@@ -32,20 +31,25 @@ function Header(wifi: AstalNetwork.Wifi) {
 			</button>
 		</stack>
 	);
+
 	const enable = (
 		<button
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`nmcli radio wifi ${wifi.enabled ? "off" : "on"}`);
+					// execAsync(`nmcli radio wifi ${wifi.enabled ? "off" : "on"}`);
+					wifi.enabled = !wifi.enabled
+
+
 				}
 			}}
 			halign={CENTER}
 			valign={CENTER}
 			tooltip_text={bind(wifi, "enabled").as((v) => (v ? "Disable" : "Enable"))}
 		>
-			<icon icon={bind(wifi, "enabled").as((v) => (v ? Icon.network.wifi.enabled : Icon.network.wifi.disabled))} halign={END} valign={CENTER} />
+			<icon icon={bind(wifi, "icon_name")} halign={END} valign={CENTER} />
 		</button>
 	);
+
 	const head = <label label={"Wi-Fi"} halign={CENTER} valign={CENTER} />;
 
 	return (
