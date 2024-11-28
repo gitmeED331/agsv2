@@ -71,16 +71,11 @@ const setupTray = (box: Widget.Box) => {
 	systemTray.connect("item_removed", (_, id) => removeItem(id));
 };
 
-const Tray = () => {
-	return (
-		<box
-			className="tray container"
-			halign={CENTER}
-			valign={CENTER}
-			vertical={true}
-			setup={setupTray}
-		/>
-	);
-};
+export default () => (<box
+	className={"tray container"}
+	halign={CENTER}
+	valign={CENTER}
+	vertical={true}
+	setup={setupTray}
+/>)
 
-export default Tray;

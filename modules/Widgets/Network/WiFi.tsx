@@ -1,5 +1,6 @@
 import { Gtk, Gdk } from "astal/gtk3";
 import { execAsync, bind, Variable } from "astal";
+import Icon from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
 import Pango from "gi://Pango";
 import NM from "gi://NM";
@@ -14,13 +15,15 @@ function Header(wifi: AstalNetwork.Wifi) {
 	/>;
 
 	const refresh = (
-		<stack visible halign={END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
+		<stack visible={true} halign={END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
 			{theSpinner}
 			<button
 				name={"refreshbtn"}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						wifi.scan();
+						if (wifi.enabled && !wifi.scanning) {
+							wifi.scan();
+						}
 					}
 				}}
 				halign={CENTER}
@@ -31,25 +34,21 @@ function Header(wifi: AstalNetwork.Wifi) {
 			</button>
 		</stack>
 	);
-
 	const enable = (
 		<button
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					// execAsync(`nmcli radio wifi ${wifi.enabled ? "off" : "on"}`);
-					wifi.enabled = !wifi.enabled
-
-
+					wifi.enabled = !wifi.enabled;
 				}
 			}}
 			halign={CENTER}
 			valign={CENTER}
 			tooltip_text={bind(wifi, "enabled").as((v) => (v ? "Disable" : "Enable"))}
 		>
-			<icon icon={bind(wifi, "icon_name")} halign={END} valign={CENTER} />
+			<icon icon={bind(wifi, "enabled").as((v) => (v ? Icon.network.wifi.enabled : Icon.network.wifi.disabled))} halign={END} valign={CENTER} />
 		</button>
 	);
-
 	const head = <label label={"Wi-Fi"} halign={CENTER} valign={CENTER} />;
 
 	return (
@@ -89,145 +88,185 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 	};
 
 	const PasswordEntry = (
-		<entry
-			placeholder_text={"Enter Password"}
-			visibility={false}
-			visible={true}
-			halign={FILL}
-			valign={FILL}
-			css={`
+		<revealer halign={FILL} valign={FILL} transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN} transitionDuration={300} revealChild={bind(passreveal)} visible={bind(passreveal)}>
+			<entry
+				placeholder_text={"Enter Password"}
+				visibility={false}
+				visible={true}
+				halign={FILL}
+				valign={FILL}
+				css={`
 				min-width: 10px;
 				min-height: 10px;
 			`}
-			onActivate={(self) => {
-				const password = self.get_text();
-				if (password) {
-					execAsync(`nmcli dev wifi connect ${ap.ssid} password ${password}`).then(
-						() => {
-							execAsync(`notify-send "WiFi" "Successfully connected to Secured ${ap.ssid}"`);
-						},
-						(error) => {
-							execAsync(`notify-send -u critical "WiFi Error" "Failed to connect to ${ap.ssid}"`);
-						},
-					);
-				}
-			}}
-		/>
-	);
-
-	const PasswordReveal = (
-		<revealer halign={FILL} valign={FILL} transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN} transitionDuration={300} revealChild={bind(passreveal)} visible={bind(passreveal)}>
-			{PasswordEntry}
+				onActivate={(self) => {
+					const password = self.get_text();
+					if (password) {
+						execAsync(`nmcli dev wifi connect ${ap.ssid} password ${password}`).then(
+							() => {
+								execAsync(`notify-send "WiFi" "Successfully connected to Secured ${ap.ssid}"`);
+							},
+							(error) => {
+								execAsync(`notify-send -u critical "WiFi Error" "Failed to connect to ${ap.ssid}"`);
+							},
+						);
+					}
+				}}
+			/>
 		</revealer>
 	);
 
 	const APEntry = () => {
-		const IconLabel = (
-			<box vertical={false} spacing={5} halign={START} valign={CENTER}>
-				<icon icon={ap.icon_name} valign={CENTER} />
-				<label label={ap.ssid} valign={CENTER} ellipsize={Pango.EllipsizeMode.MIDDLE} tooltip_text={isActiveAP ? "" : SecuredAP ? "Secured: Password Required" : "Unsecured"} />
-				<label label={(ap.frequency / 1000).toFixed(1) + "GHz"} valign={CENTER} />
-				<label label={(ap.maxBitrate / 1000).toFixed(0) + "Mbps"} valign={CENTER} />
-			</box>
-		);
+		const label = Variable.derive(
+			[bind(ap, "ssid"), bind(ap, "frequency"), bind(ap, "maxBitrate")],
+			(ssid, frequency, maxBitrate) => {
+				const frequencyGHz = (frequency / 1000).toFixed(1) + "GHz";
+				const maxBitrateMbps = (maxBitrate / 1000).toFixed(0) + "Mbps";
+				return [ssid, frequencyGHz, maxBitrateMbps].join(" - ");
+			}
+		)();
 
 		return (
-			<button
-				halign={FILL}
-				valign={CENTER}
-				cursor={"pointer"}
-				onClick={async (_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						if (SecuredAP) {
-							const hasStoredPassword = await checkStoredPassword(ap.ssid);
-							if (hasStoredPassword) {
-								execAsync(`nmcli con up "${ap.ssid}"`).then(
-									() => execAsync(`notify-send "WiFi" "Connected to ${ap.ssid}"`),
-									(error) => execAsync(`notify-send -u critical "WiFi Error" "Failed to connect to ${ap.ssid}"`),
-								);
-							} else {
-								passreveal.set(true);
-								PasswordEntry.grab_focus();
-							}
-						} else {
-							execAsync(`nmcli con up ${ap.ssid}`);
-						}
-					}
-				}}
+			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}
+				tooltip_text={isActiveAP ? "" : SecuredAP ? "Secured: Password Required" : "Unsecured"}
 			>
-				{IconLabel}
-			</button>
+				<icon icon={ap.icon_name} valign={CENTER} halign={START} />
+				<label label={label} valign={CENTER} halign={START} />
+			</box>
 		);
 	};
 
-	const APDisconnect = (
-		<button
-			className={"wifi ap disconnect"}
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`nmcli con down ${ap.ssid}`).then(
-						() => {
-							execAsync(`notify-send "WiFi" "Disconnected from ${ap.ssid}"`);
-						},
-						(error) => {
-							execAsync(`notify-send -u critical "WiFi Error" "Failed to Disconnect ${ap.ssid}: ${error}"`);
-							console.error(`Failed to Disconnect ${ap.ssid}: ${error}`);
-						},
-					);
-				}
-			}}
-			halign={END}
-			valign={CENTER}
-			tooltip_text={"Disconnect"}
-			cursor={"pointer"}
-			visible={isActiveAP}
-		>
-			<icon icon={"circle-x-symbolic"} halign={END} valign={CENTER} />
-		</button>
-	);
+	const theSpinner = <Spinner
+		name={"connectionSpinner"}
+		setup={(spinner) => isConnecting ? spinner.start() : spinner.stop()}
+		halign={CENTER}
+		valign={CENTER}
+	/>
 
-	const APForget = (
-		<button
-			className={"wifi ap forget"}
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`nmcli connection delete ${ap.ssid}`).then(
-						() => {
-							execAsync(`notify-send "WiFi" "Forgot ${ap.ssid}"`);
-						},
-						(error) => {
-							execAsync(`notify-send -u critical "WiFi Error" "Failed to forget ${ap.ssid}"`);
-							console.error(`Failed to forget ${ap.ssid}: ${error}`);
-						},
-					);
-				}
-			}}
-			halign={END}
-			valign={CENTER}
-			tooltip_text={"Forget/Delete SSID"}
-			cursor={"pointer"}
-			visible={isActiveAP}
-		>
-			<icon icon={"edit-delete-symbolic"} halign={END} valign={CENTER} />
-		</button>
-	);
-	function spinSetup(spinner: Spinner) {
-		isConnecting ? spinner.start() : spinner.stop();
+	const button = (Action: "connect" | "disconnect" | "forget") => {
+		const halign = Action === "connect" ? START : END;
+
+		const content = (() => {
+			switch (Action) {
+				case "connect":
+					return <APEntry />;
+				case "disconnect":
+					return <icon icon={"circle-x-symbolic"} />;
+				case "forget":
+					return <icon icon={"edit-delete-symbolic"} />;
+			}
+		})();
+
+		const command = (() => {
+			const notify = async (title: string, message: string, urgency: string = "normal") => {
+				await execAsync(`notify-send -u ${urgency} "${title}" "${message}"`);
+			};
+
+			const handleError = async (action: string, error: any) => {
+				await notify("WiFi Error", `Failed to ${action} ${ap.ssid}: ${error}`, "critical");
+				console.error(`Failed to ${action} ${ap.ssid}: ${error}`);
+			};
+
+			switch (Action) {
+				case "connect":
+					return async () => {
+						if (SecuredAP && !isActiveAP) {
+							const hasStoredPassword = await checkStoredPassword(ap.ssid);
+							if (hasStoredPassword) {
+								try {
+									await execAsync(`nmcli con up "${ap.ssid}"`);
+									await notify("WiFi", `Connected to ${ap.ssid}`);
+								} catch (error) {
+									await handleError("connect to", error);
+								}
+							} else {
+								passreveal.set(!passreveal.get());
+								PasswordEntry.grab_focus();
+							}
+						} else if (!isActiveAP) {
+							await execAsync(`nmcli con up "${ap.ssid}"`);
+						}
+					};
+				case "disconnect":
+					return async () => {
+						try {
+							await execAsync(`nmcli con down "${ap.ssid}"`);
+							await notify("WiFi", `Disconnected from ${ap.ssid}`);
+						} catch (error) {
+							await handleError("disconnect", error);
+						}
+					};
+				case "forget":
+					return async () => {
+						try {
+							await execAsync(`nmcli connection delete "${ap.ssid}"`);
+							await notify("WiFi", `Forgot ${ap.ssid}`);
+						} catch (error) {
+							await handleError("forget", error);
+						}
+					};
+				default:
+					return () => { };
+			}
+		})();
+
+		const classname = (() => {
+			const classnameMap: { [key: string]: string } = {
+				connect: "connect",
+				disconnect: "disconnect",
+				forget: "forget",
+			};
+			return classnameMap[Action] || "";
+		})();
+
+		const tooltip = (() => {
+			const sap = SecuredAP ? "Secured: Password Required" : "Unsecured"
+			const tooltipMap: { [key: string]: string } = {
+				connect: sap,
+				disconnect: "Disconnect",
+				forget: "Forget/ Delete AP",
+			};
+			return tooltipMap[Action] || "";
+		})();
+
+		const visible = (() => {
+			switch (Action) {
+				case "connect": return true;
+				case "disconnect": return isActiveAP;
+				case "forget": return isActiveAP;
+				default:
+					return false;
+			}
+		})();
+
+		return (
+			<button
+				className={`wifi ap ${classname}`}
+				onClick={(_, event) => {
+					if (event.button === Gdk.BUTTON_PRIMARY) {
+						command()
+					}
+				}}
+				tooltip_text={tooltip}
+				halign={halign}
+				valign={CENTER}
+				cursor={"pointer"}
+				visible={visible}
+				height_request={10}
+			>
+				{content}
+			</button>
+		);
 	}
-	const theSpinner = new Spinner({
-		name: "connectionSpinner",
-		setup: spinSetup,
-		halign: CENTER,
-		valign: CENTER,
-	});
-	const APItem = (
+
+	return (
 		<box vertical={true}>
 			<centerbox
+				height_request={20}
 				className={`wifi ap ${isActiveAP ? "connected" : ""}`}
-				vertical={false}
 				halign={FILL}
 				valign={FILL}
-				startWidget={APEntry()}
+				startWidget={button("connect")}
 				endWidget={
 					<stack
 						className={"wifi connected controls"}
@@ -241,21 +280,15 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 							<label label={"Connecting..."} halign={END} valign={CENTER} />
 						</box>
 						<box name={"controls"} halign={END} spacing={5}>
-							{APDisconnect}
-							{APForget}
+							{button("disconnect")}
+							{button("forget")}
 						</box>
 					</stack>
 				}
 			/>
-			{PasswordReveal}
+			{PasswordEntry}
 		</box>
-	);
-
-	return (
-		<box vertical={true} spacing={10}>
-			{APItem}
-		</box>
-	);
+	)
 }
 
 export default function WifiAPs() {

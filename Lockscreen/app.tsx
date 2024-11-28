@@ -1,14 +1,6 @@
 #!/usr/bin/gjs -m
 
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
+import "../globals";
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
 import { bind, Variable, timeout, GLib } from "astal";
 import Lock from "gi://GtkSessionLock";
@@ -92,36 +84,44 @@ function loginGrid() {
 		<label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
 	);
 
-	const grid = <Grid
-		className={"logingrid"} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand={true} vexpand={true}
-		rowSpacing={15} visible={true}
-		setup={(self) => {
-			self.attach(currentUser, 0, 0, 1, 1);
-			self.attach(currentDesktop, 0, 1, 1, 1);
-			self.attach(passwordPrompt, 0, 2, 1, 1);
-			self.attach(authMessages(), 0, 3, 1, 1);
-		}}
-	/>
-
+	const grid = (
+		<Grid
+			className={"logingrid"}
+			halign={Gtk.Align.CENTER}
+			valign={Gtk.Align.CENTER}
+			hexpand={true}
+			vexpand={true}
+			rowSpacing={15}
+			visible={true}
+			setup={(self) => {
+				self.attach(currentUser, 0, 0, 1, 1);
+				self.attach(currentDesktop, 0, 1, 1, 1);
+				self.attach(passwordPrompt, 0, 2, 1, 1);
+				self.attach(authMessages(), 0, 3, 1, 1);
+			}}
+		/>
+	);
 
 	return grid;
 }
 
-const topRightGrid = <Grid
-	className={"topright"}
-	halign={Gtk.Align.END}
-	valign={Gtk.Align.START}
-	hexpand={true}
-	vexpand={true}
-	visible={true}
-	columnSpacing={10}
-	setup={(self) => {
-		self.attach(VolumeIndicator(), 0, 0, 1, 1);
-		self.attach(NetworkButton(), 1, 0, 1, 1);
-		self.attach(BluetoothButton(), 2, 0, 1, 1);
-		self.attach(BatteryButton(), 3, 0, 1, 1);
-	}}
-/>
+const topRightGrid = (
+	<Grid
+		className={"topright"}
+		halign={Gtk.Align.END}
+		valign={Gtk.Align.START}
+		hexpand={true}
+		vexpand={true}
+		visible={true}
+		columnSpacing={10}
+		setup={(self) => {
+			self.attach(VolumeIndicator(), 0, 0, 1, 1);
+			self.attach(NetworkButton(), 1, 0, 1, 1);
+			self.attach(BluetoothButton(), 2, 0, 1, 1);
+			self.attach(BatteryButton(), 3, 0, 1, 1);
+		}}
+	/>
+);
 
 function Lockscreen({ monitor }: { monitor: number }) {
 	const overlayBox = (
@@ -170,7 +170,7 @@ function createWindow(monitor) {
 
 function startLock() {
 	const display = Gdk.Display.get_default();
-// @ts-expect-error
+	// @ts-expect-error
 	for (let m = 0; m < display?.get_n_monitors(); m++) {
 		const monitor = display?.get_monitor(m);
 		createWindow(monitor);
