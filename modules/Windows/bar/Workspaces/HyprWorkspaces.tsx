@@ -22,24 +22,28 @@ function ws(id: number) {
 }
 // --- end signal handler ---
 
+const monitorID = Gdk.Display.get_default()!.get_n_monitors() - 1;
+
 // --- workspaces ---
 function Workspaces() {
 	const hyprland = Hyprland.get_default();
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
-			const className = Variable.derive(
-				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
-				(focused, clients) => `
-                ${focused === ws ? "focused" : ""}
+			const classname = Variable.derive(
+				// bind(hyprland, "focusedWorkspace"), ${focused === ws ? "focused" : ""}
+				[bind(ws, "clients"),
+				bind(hyprland.get_monitor(monitorID), "activeWorkspace")],
+				(clients, active) => `
                 ${clients.length > 0 ? "occupied" : ""}
+				${active === ws ? "focused" : ""}
                 workspacebutton
             `
-			);
+			)();
 
 			const isVisible = Variable.derive(
 				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
 				(focused, clients) => id <= 4 || clients.length > 0 || focused === ws
-			);
+			)();
 
 			const wsIcon = Icon.wsicon;
 			// @ts-expect-error
@@ -51,8 +55,8 @@ function Workspaces() {
 			);
 			return (
 				<button
-					className={className()}
-					visible={isVisible()}
+					className={classname}
+					visible={isVisible}
 					valign={CENTER}
 					halign={CENTER}
 					cursor="pointer"

@@ -13,6 +13,7 @@ import sessioncontrol from "./sessioncontrol";
 import wallpapers from "./Wallpapers";
 import Launchergrid from "./Launcher/Launcher-grid";
 import Launcherflowbox from "./Launcher/Launcher-flowbox";
+import SystemStats from "./SystemStats";
 
 export {
 	Bar,
@@ -27,5 +28,6 @@ export {
 	// Overview,
 	// powerprofiles,
 	sessioncontrol,
+	SystemStats,
 	wallpapers,
 };

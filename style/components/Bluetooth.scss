@@ -33,6 +33,7 @@
 				}
 
 				&:hover {
+
 					label,
 					icon {
 						color: $color5;
@@ -70,6 +71,7 @@
 				all: unset;
 
 				&:hover {
+
 					label,
 					icon {
 						color: $color5;
@@ -78,17 +80,33 @@
 			}
 		}
 
+		button {
+			&.enabled {
+				color: $color3;
+			}
+
+			&.disabled {
+				color: grey;
+			}
+
+			&:hover {
+				color: $color5;
+			}
+		}
+
 		&.items {
 			border-radius: $radius;
 			border-bottom: $border;
 
 			button {
+
 				label,
 				icon {
 					color: $color1;
 				}
 
 				&:hover {
+
 					label,
 					icon {
 						color: $color5;

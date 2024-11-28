@@ -116,7 +116,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		</revealer>
 	);
 
-	const APEntry = () => {
+	const APlabel = () => {
 		const label = Variable.derive(
 			[bind(ap, "ssid"), bind(ap, "frequency"), bind(ap, "maxBitrate")],
 			(ssid, frequency, maxBitrate) => {
@@ -127,9 +127,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		)();
 
 		return (
-			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}
-				tooltip_text={isActiveAP ? "" : SecuredAP ? "Secured: Password Required" : "Unsecured"}
-			>
+			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}	>
 				<icon icon={ap.icon_name} valign={CENTER} halign={START} />
 				<label label={label} valign={CENTER} halign={START} />
 			</box>
@@ -149,7 +147,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		const content = (() => {
 			switch (Action) {
 				case "connect":
-					return <APEntry />;
+					return <APlabel />;
 				case "disconnect":
 					return <icon icon={"circle-x-symbolic"} />;
 				case "forget":
@@ -222,7 +220,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		const tooltip = (() => {
 			const sap = SecuredAP ? "Secured: Password Required" : "Unsecured"
 			const tooltipMap: { [key: string]: string } = {
-				connect: sap,
+				connect: isActiveAP ? "Connected: Secured" : sap,
 				disconnect: "Disconnect",
 				forget: "Forget/ Delete AP",
 			};

@@ -1,30 +1,32 @@
 .stats {
-    border: $border;
-    border-radius: calc($radius * 5);
-    font-size: 6px;
-    min-width: 6rem;
-    min-height: 6rem;
-    padding: 0.5rem;
-    background-color: #131313;
-    color: $color2;
+    color: $color1;
 
-    // box-shadow:
-    //     inset -0.75rem 0rem 1rem 0rem $PrimaryBG,
-    //     inset 0rem 0rem 0rem 0rem $PrimaryBG,
-    //     inset 0rem 0rem 0rem 0rem $PrimaryBG;
+    .container {
+        border: $border;
+        background: $PrimaryBG;
+        border-radius: calc($radius * 5);
+        padding: 2rem;
+    }
 
     label {
         font-size: 1rem;
-        color: $color1;
+
     }
 
-    &.cpu {
-        color: $color5;
-        padding: 1rem;
+    image,
+    icon {
+        font-size: 1.25rem;
     }
 
-    &.ram {
-        color: $color5;
-        padding: 1rem;
+    .cpu,
+    .ram,
+    .wired,
+    .wifi {
+        border-top: $border;
+        background: $PrimaryBG;
+        border-radius: calc($radius * 5);
+        padding: 0.5rem 1rem;
+        box-shadow: inset 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
     }
+
 }

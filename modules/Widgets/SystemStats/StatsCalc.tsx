@@ -1,3 +1,7 @@
+/*
+a massive thanks to Mabi19 (https://github.com/Mabi19)for this code
+*/
+
 import { Variable } from "astal";
 import { readFileAsync } from "astal/file";
 

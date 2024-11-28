@@ -77,6 +77,20 @@
 		}
 	}
 
+	button {
+		&.enabled {
+			color: $color3;
+		}
+
+		&.disabled {
+			color: grey;
+		}
+
+		&:hover {
+			color: $color5;
+		}
+	}
+
 	&.connected {
 		background: transparent;
 		border-bottom: 2px solid $color3;

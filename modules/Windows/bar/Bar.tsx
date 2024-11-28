@@ -1,11 +1,9 @@
-import { Astal, App } from "astal/gtk3";
-import { GLib } from "astal";
+import { Astal, App, Gtk, } from "astal/gtk3";
+import { GLib, GObject } from "astal";
 // ----- Widgets -----
 import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
-
-import systemStats from "../../Widgets/SystemStats/systemStats";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
@@ -39,21 +37,19 @@ function LeftBar() {
 
 function CenterBar() {
 	return (
-		<box className={"center"} spacing={10} halign={CENTER} valign={START}>
-			<button
-				className="clock"
-				cursor="pointer"
-				onClick={(_, event) => {
-					App.toggle_window("dashboard");
-				}}
-			>
-				<box halign={CENTER} valign={CENTER} spacing={5}>
-					<DateTimeLabel format="%H:%M:%S" interval={500} />
-					<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
-					<DateTimeLabel format="%a %b %d" interval={3600000} />
-				</box>
-			</button>
-		</box>
+		<button
+			className="clock"
+			cursor="pointer"
+			onClick={(_, event) => {
+				App.toggle_window("dashboard");
+			}}
+		>
+			<box halign={CENTER} valign={CENTER} spacing={5}>
+				<DateTimeLabel format="%H:%M:%S" interval={500} />
+				<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
+				<DateTimeLabel format="%a %b %d" interval={3600000} />
+			</box>
+		</button>
 	);
 }
 

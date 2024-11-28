@@ -1,41 +1,41 @@
 import { Gtk } from "astal/gtk3";
-import { bind } from "astal";
+import { bind, Variable } from "astal";
 import { cpuUsage, memoryAvailable, memoryTotal, memoryUsage } from "./StatsCalc";
 
 
 function systemStats() {
-
-  const cpuCP = (
-    <circularprogress
-      className={"stats cpu"}
-      value={bind(cpuUsage)}
-      valign={CENTER} halign={CENTER}
-      rounded={true}
-      startAt={0.75} endAt={-0.25} inverted={false}
-    >
-      <box halign={CENTER} valign={CENTER}>
-        {cpuUsage().as(u => Math.floor(u * 100))}%
-      </box>
-    </circularprogress>
-  );
-  const ramCP = (
-    <circularprogress
-      className={"stats ram"}
-      value={bind(memoryUsage).as(f => f)}
-      valign={CENTER} halign={CENTER}
-      rounded={true}
-      startAt={0.75} endAt={- 0.25} inverted={false}
-    >
-      <box valign={CENTER} halign={CENTER}>
-        {bind(memoryAvailable).as(u => Math.abs((u / 1024) / 1024).toFixed(1))}/
-        {bind(memoryTotal).as(u => Math.abs((u / 1024) / 1024).toFixed(1))}
-      </box>
-    </circularprogress >
+  const memoryTooltip = Variable.derive(
+    [memoryAvailable, memoryTotal],
+    (available, total) => `${((total - available) / 1024 / 1024).toFixed(1)} GiB used`
   );
 
+  const CpuIndicator = () => {
+    return (
+      <box
+        className={"stats cpu"}
+        spacing={4}
+      >
+        <icon icon="device_cpu" />
+        <label label={cpuUsage((usage) => `${Math.floor(usage * 100)}%`)} />
+      </box>
+    );
+  };
+
+  const MemoryIndicator = () => {
+    return (
+      <box
+        className={"stats ram"}
+        tooltipText={memoryUsage((usage) => `${Math.floor(usage * 100)}%`)}
+        spacing={4}
+      >
+        <icon icon="gnome-dev-memory" />
+        <label label={memoryTooltip()} />
+      </box>
+    );
+  };
   return (
     <box className={"stats"} halign={CENTER} valign={CENTER} spacing={10}>
-      {[cpuCP, ramCP]}
+      {[CpuIndicator(), MemoryIndicator()]}
     </box>
   );
 }

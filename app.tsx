@@ -16,6 +16,7 @@ monitorStyle;
 
 import {
 	Bar,
+	cliphist,
 	Dashboard,
 	Launcherflowbox,
 	Launchergrid,
@@ -23,7 +24,7 @@ import {
 	NotificationPopups,
 	// Overview,
 	sessioncontrol,
-	cliphist,
+	SystemStats,
 	wallpapers,
 } from "./modules/Windows/index";
 
@@ -37,6 +38,7 @@ App.start({
 		MediaPlayerWindow();
 		NotificationPopups({ monitor: 0 });
 		sessioncontrol({ monitor: 0 });
+		SystemStats();
 		wallpapers();
 	},
 });

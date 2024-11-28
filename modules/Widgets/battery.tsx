@@ -81,7 +81,8 @@ function BatteryButton() {
 					if (win) win.visible = !win.visible;
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
-					PercentageReveal.set(!PercentageReveal.get());
+					// PercentageReveal.set(!PercentageReveal.get());
+					App.toggle_window("systemstats")
 				}
 			}}
 		>
