@@ -204,7 +204,7 @@ async function createScrollablePage(wps: Array<{ name: string; path: string; ori
 	);
 }
 
-export default async function () {
+export default async function (monitor: Gdk.Monitor) {
 	const wps = await getWallpapers();
 	const gridContent = await createScrollablePage(wps);
 
@@ -224,9 +224,10 @@ export default async function () {
 		}}
 	/>
 
-	const win = <window
+	return <window
 		name="wallpapers"
 		className="wallpapers window"
+		gdkmonitor={monitor}
 		anchor={TOP | BOTTOM | LEFT | RIGHT}
 		layer={Astal.Layer.OVERLAY}
 		exclusivity={Astal.Exclusivity.NORMAL}
@@ -242,7 +243,5 @@ export default async function () {
 	>
 		{masterGrid}
 	</window>
-
-	return win;
 }
 

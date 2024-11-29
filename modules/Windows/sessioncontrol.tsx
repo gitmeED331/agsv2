@@ -23,10 +23,11 @@ const theGrid = <Grid halign={FILL} valign={FILL} hexpand={true} vexpand={true} 
 
 
 
-export default ({ monitor }: { monitor: number }) => {
+export default (monitor: Gdk.Monitor) => {
 	<window
 		name={"sessioncontrols"}
 		className={"sessioncontrols window"}
+		gdkmonitor={monitor}
 		anchor={TOP | BOTTOM | LEFT | RIGHT}
 		layer={Astal.Layer.OVERLAY}
 		exclusivity={Astal.Exclusivity.IGNORE}

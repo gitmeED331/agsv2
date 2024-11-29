@@ -65,8 +65,8 @@ function NotifItem() {
 	return box;
 }
 
-export default ({ monitor }: { monitor: number }) => (
-	<window name={`notifications${monitor}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={Astal.Layer.OVERLAY} application={App}>
+export default (monitor: Gdk.Monitor) => (
+	<window name={`notifications${monitor}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={Astal.Layer.OVERLAY} application={App} gdkmonitor={monitor}>
 		<NotifItem />
 	</window>
 );

@@ -22,7 +22,7 @@ const Apps = new AstalApps.Apps({
 
 const Applications = Apps.get_list();
 const sortedAppList = Applications.sort((a, b) => a.get_name().localeCompare(b.get_name()));
-const favorites = Applications.filter((app) => ["Zed", "Code - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
+const favorites = Applications.filter((app) => ["Zed", "VSCodium - Wayland", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
 
 /* keep for looking up app names */
 // console.log(Applications.map(app => app.get_name()));
@@ -153,7 +153,7 @@ const categoryPages = uniqueCategories.map((category) => {
 	);
 });
 
-function Launchergrid({ monitor }: { monitor: number }) {
+function Launchergrid(monitor: Gdk.Monitor) {
 	const contentGrid = (
 		<Grid
 			className={"launcher contentgrid"}
@@ -197,6 +197,7 @@ function Launchergrid({ monitor }: { monitor: number }) {
 		<window
 			name={"launcher"}
 			className={"launcher window"}
+			gdkmonitor={monitor}
 			anchor={TOP | BOTTOM | LEFT | RIGHT}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.NORMAL}

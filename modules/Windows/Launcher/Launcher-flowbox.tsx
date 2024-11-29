@@ -423,7 +423,7 @@ const Switcher = () => {
     );
 };
 
-function Launcherflowbox({ monitor }: { monitor: number }) {
+function Launcherflowbox(monitor: Gdk.Monitor) {
     const contentGrid = (
         <Grid
             className={"launcher contentgrid"} halign={FILL} valign={FILL}
@@ -459,6 +459,7 @@ function Launcherflowbox({ monitor }: { monitor: number }) {
         <window
             name={"launcher"}
             className={"launcher window"}
+            gdkmonitor={monitor}
             anchor={TOP | BOTTOM | LEFT | RIGHT}
             layer={Astal.Layer.OVERLAY}
             exclusivity={Astal.Exclusivity.NORMAL}

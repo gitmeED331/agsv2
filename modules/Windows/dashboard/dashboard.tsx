@@ -11,7 +11,7 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 
 Gdk.Screen.get_default();
 
-function Dashboard({ monitor }: { monitor: number }) {
+function Dashboard(monitor: Gdk.Monitor) {
 	const content = (
 		<Grid
 			className={"dashboard grid"}
@@ -38,6 +38,7 @@ function Dashboard({ monitor }: { monitor: number }) {
 		<window
 			name={"dashboard"}
 			className={"dashboard window"}
+			gdkmonitor={monitor}
 			anchor={TOP | LEFT | RIGHT | BOTTOM}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.NORMAL}

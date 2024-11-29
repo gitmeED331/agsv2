@@ -9,7 +9,7 @@
  *
  */
 import "./globals"
-import { App } from "astal/gtk3";
+import { App, Gdk } from "astal/gtk3";
 import monitorStyle from "./cssHotLoad";
 
 monitorStyle;
@@ -28,17 +28,23 @@ import {
 	wallpapers,
 } from "./modules/Windows/index";
 
+const monitorID = Gdk.Display.get_default()!.get_n_monitors() - 1
+
 App.start({
 	main() {
-		Bar({ monitor: 0 });
-		cliphist({ monitor: 0 });
-		Dashboard({ monitor: 0 });
-		// Launcherflowbox({ monitor: 0 });
-		Launchergrid({ monitor: 0 });
-		MediaPlayerWindow();
-		NotificationPopups({ monitor: 0 });
-		sessioncontrol({ monitor: 0 });
-		SystemStats();
-		wallpapers();
+		for (const monitor of App.get_monitors()) {
+			Bar(monitor);
+			cliphist(monitor);
+			Dashboard(monitor);
+			// Launcherflowbox(monitor);
+			Launchergrid(monitor);
+			MediaPlayerWindow();
+			NotificationPopups(monitor);
+			sessioncontrol(monitor);
+			SystemStats(monitor);
+			wallpapers(monitor);
+		}
+
+
 	},
 });

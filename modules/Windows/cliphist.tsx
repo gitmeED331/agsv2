@@ -245,7 +245,7 @@ function ClipHistWidget() {
 	);
 }
 
-function cliphist({ monitor }: { monitor: number }) {
+function cliphist(monitor: Gdk.Monitor) {
 	const masterGrid = (
 		<Grid
 			className={"cliphist mastergrid"}
@@ -265,6 +265,7 @@ function cliphist({ monitor }: { monitor: number }) {
 		<window
 			name={"cliphist"}
 			className={"cliphist"}
+			gdkmonitor={monitor}
 			application={App}
 			layer={Astal.Layer.OVERLAY}
 			exclusivity={Astal.Exclusivity.EXCLUSIVE}

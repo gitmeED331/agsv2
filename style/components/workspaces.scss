@@ -22,6 +22,7 @@
 	.occupied,
 	.focused {
 		&:hover {
+
 			icon,
 			label {
 				color: $color5;
@@ -37,6 +38,10 @@
 		color: rgba(15, 155, 255, 1);
 	}
 
+	.active {
+		color: purple;
+	}
+
 	.focused {
 		all: unset;
 		color: $color3;
@@ -46,9 +51,11 @@
 		transition: all 2s ease;
 
 		@each $workspace in hyprworkspaces, riverworkspaces {
-			@if $workspace == hyprworkspaces {
+			@if $workspace ==hyprworkspaces {
 				background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $color1 1.5rem);
-			} @else if $workspace == riverworkspaces {
+			}
+
+			@else if $workspace ==riverworkspaces {
 				border-bottom: 1px solid $color2;
 			}
 		}

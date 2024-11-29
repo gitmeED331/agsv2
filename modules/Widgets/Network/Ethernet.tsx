@@ -24,7 +24,7 @@ export default function EthernetWidget() {
 	const ethernetLabel = <label label={"Ethernet"} />;
 
 	return (
-		<box className={"network ethernet container"} halign={CENTER} valign={CENTER} vertical spacing={5}>
+		<box className={"network ethernet container"} halign={CENTER} valign={CENTER} spacing={5}>
 
 			{[ethernetIcon, ethernetLabel, ethernetStatus]}
 
