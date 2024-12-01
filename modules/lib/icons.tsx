@@ -23,9 +23,9 @@ const substitutes = {
 	"pcloud-symbolic": "pcloud-symbolic",
 	"KeePassXC": "keepassxc-symbolic",
 	"filen-desktop-symbolic": "filen-desktop-symbolic",
-	"legcord": "discord - symbolic",
+	"webcord": "discord-symbolic",
 	"deezer-enhanced-symbolic": "deezer-symbolic",
-	"com.visualstudio.code.oss-symbolic": "vs-code-symbolic",
+	"codium": "vs-code-symbolic",
 	"code-oss": "vs-code-symbolic",
 	"kate-symbolic": "geany-symbolic",
 	"org.kde.kate": "codepen-symbolic",
@@ -33,6 +33,7 @@ const substitutes = {
 	"chromium-browser": "chromium-symbolic",
 	"ente_auth": "auth-icon-symbolic",
 	"signal": "signal-symbolic",
+	"rofi": "rofi-symbolic"
 };
 
 const Icon = {

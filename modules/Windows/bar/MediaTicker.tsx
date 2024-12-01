@@ -1,5 +1,5 @@
-import { Gtk, Gdk, App } from "astal/gtk3";
-import { bind } from "astal";
+import { Gtk, Gdk, App, Widget } from "astal/gtk3";
+import { bind, Variable } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
@@ -8,47 +8,35 @@ import Icon from "../../lib/icons";
 import { Stack } from "../../Astalified/index";
 
 function tickerButton(player: Mpris.Player) {
-	const TickerTrack = (
-		<label
-			className={"ticker track"}
-			vexpand={true}
-			wrap={false}
-			halign={CENTER}
-			valign={CENTER}
-			ellipsize={Pango.EllipsizeMode.END}
-			maxWidthChars={35}
-			label={bind(player, "title").as((title) => TrimTrackTitle(title))}
-		/>
-	);
+	const CustomLabel = ({ action }: { action: "tracks" | "artists" }) => {
+		const Bindings = Variable.derive(
+			[bind(player, "title"), bind(player, "artist")],
+			(title, artist) => ({
+				label: action === "tracks" ? TrimTrackTitle(title) : artist || "Unknown Artist",
+				classname: `ticker ${action}`
+			})
+		)();
 
-	const TickerArtist = (
-		<label
-			className={"ticker artist"}
-			wrap={false}
-			halign={CENTER}
-			valign={CENTER}
-			ellipsize={Pango.EllipsizeMode.END}
-			// maxWidthChars={35}
-			label={bind(player, "artist").as((artist) => artist || "Unknown Artist")}
-		/>
-	);
-
-	const TickerIcon = (
-		<icon
-			className={"ticker icon"}
-			hexpand={false}
-			halign={CENTER}
-			valign={CENTER}
-			tooltip_text={bind(player, "identity")}
-			icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
-		/>
-	);
+		return (
+			<label
+				className={Bindings.as(b => b.classname)}
+				label={Bindings.as(b => b.label)}
+				hexpand
+				wrap={false}
+				// maxWidthChars={35}
+				ellipsize={Pango.EllipsizeMode.END}
+				halign={CENTER}
+				valign={CENTER}
+				onDestroy={(self) => { self.destroy() }}
+			/>
+		);
+	}
 
 	return (
 		<button
 			name={player.busName}
 			vexpand={false}
-			hexpand={true}
+			hexpand
 			cursor={"pointer"}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
@@ -65,15 +53,16 @@ function tickerButton(player: Mpris.Player) {
 				// }
 			}}
 			onScroll={(_, { delta_y }) => {
-				if (delta_y < 0) {
-					player.previous();
-				} else {
-					player.next();
-				}
+				delta_y < 0 ? player.previous() : player.next();
 			}}
 		>
-			<box visible={true} spacing={5} halign={CENTER} valign={CENTER}>
-				{[TickerTrack, TickerIcon, TickerArtist]}
+			<box visible spacing={5} halign={CENTER} valign={CENTER}>
+				<CustomLabel action="tracks" />
+				<icon
+					className={"ticker icon"} hexpand={false} halign={CENTER} valign={CENTER}
+					tooltip_text={bind(player, "identity")} icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
+				/>
+				<CustomLabel action="artists" />
 			</box>
 		</button>
 	);

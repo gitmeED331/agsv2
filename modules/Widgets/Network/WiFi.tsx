@@ -1,4 +1,4 @@
-import { Gtk, Gdk } from "astal/gtk3";
+import { Gtk, Gdk, Widget } from "astal/gtk3";
 import { execAsync, bind, Variable } from "astal";
 import Icon from "../../lib/icons";
 import AstalNetwork from "gi://AstalNetwork";
@@ -8,65 +8,89 @@ import Spinner from "../../Astalified/Spinner";
 
 function Header(wifi: AstalNetwork.Wifi) {
 
-	const theSpinner = <Spinner name={"refreshspinner"} halign={CENTER} valign={CENTER}
-		setup={(spinner) => {
-			bind(wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop))
-		}}
-	/>;
+	const CustomButton = ({ action, ...props }: { action: "power" | "refresh" } & Widget.ButtonProps) => {
 
-	const refresh = (
-		<stack visible={true} halign={END} visible_child_name={bind(wifi, "scanning").as((s) => (s ? "refreshspinner" : "refreshbtn"))} homogeneous={false}>
-			{theSpinner}
+		const bindings = Variable.derive(
+			[bind(wifi, "enabled"), bind(wifi, "scanning")],
+			(enabled, scanning) => ({
+
+				command: {
+					power: () => wifi.enabled = !wifi.enabled, //execAsync(`nmcli radio wifi ${enabled ? "off" : "on"}`),
+					refresh: enabled && !scanning ? (() => wifi.scan()) : (() => { })
+				}[action],
+
+				icon: {
+					power: enabled ? Icon.network.wifi.enabled : Icon.network.wifi.disabled,
+					refresh: "view-refresh-symbolic",
+				}[action],
+
+				tooltip: {
+					power: enabled ? "Disable WiFi" : "Enable WiFi",
+					refresh: scanning ? "Scanning..." : "Refresh",
+				}[action],
+
+				className: {
+					power: enabled ? "enabled" : "disabled",
+					refresh: scanning ? "" : "refresh",
+				}[action],
+			})
+		)()
+
+
+		return (
 			<button
-				name={"refreshbtn"}
+				className={bindings.as(c => c.className)}
+				tooltip_markup={bindings.as(b => b.tooltip)}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						if (wifi.enabled && !wifi.scanning) {
-							wifi.scan();
-						}
+						bindings.get().command();
 					}
 				}}
+				{...props}
 				halign={CENTER}
 				valign={CENTER}
-				tooltip_text={bind(wifi, "scanning").as((v) => (v ? "wifi scanning" : ""))}
 			>
-				<icon icon={"view-refresh-symbolic"} halign={CENTER} valign={CENTER} />
+				<icon icon={bindings.as(b => b.icon)} halign={END} valign={CENTER} />
 			</button>
-		</stack>
-	);
-	const enable = (
-		<button
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					// execAsync(`nmcli radio wifi ${wifi.enabled ? "off" : "on"}`);
-					wifi.enabled = !wifi.enabled;
-				}
-			}}
-			halign={CENTER}
-			valign={CENTER}
-			tooltip_text={bind(wifi, "enabled").as((v) => (v ? "Disable" : "Enable"))}
-		>
-			<icon icon={bind(wifi, "enabled").as((v) => (v ? Icon.network.wifi.enabled : Icon.network.wifi.disabled))} halign={END} valign={CENTER} />
-		</button>
-	);
-	const head = <label label={"Wi-Fi"} halign={CENTER} valign={CENTER} />;
+		);
+	}
+	const head = <label label="Wi-Fi" halign={CENTER} valign={CENTER} />;
 
 	return (
 		<centerbox
-			className={"wifi header"}
+			className="wifi header"
 			halign={FILL}
 			valign={FILL}
 			vertical={false}
 			centerWidget={head}
 			endWidget={
 				<box halign={CENTER} vertical={false} spacing={15}>
-					{enable}
-					{refresh}
+
+					<CustomButton action={"power"} />
+					<stack
+						visible
+						halign={END}
+						visible_child_name={bind(wifi, "scanning").as((s) =>
+							s ? "refreshspinner" : "refreshbtn"
+						)}
+						homogeneous={false}
+					>
+						<CustomButton action={"refresh"} name={"refreshbtn"} />
+						<Spinner
+							name="refreshspinner"
+							halign={CENTER}
+							valign={CENTER}
+							setup={(spinner) => {
+								bind(wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop));
+							}}
+						/>
+					</stack>
 				</box>
 			}
 		/>
 	);
 }
+
 
 function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 	const isActiveAP = wifi.active_access_point && wifi.active_access_point.ssid === ap.ssid ? true : false;
@@ -134,125 +158,108 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		);
 	};
 
-	const theSpinner = <Spinner
-		name={"connectionSpinner"}
-		setup={(spinner) => isConnecting ? spinner.start() : spinner.stop()}
-		halign={CENTER}
-		valign={CENTER}
-	/>
+	const CustomButton = ({ action, ...props }: { action: "connect" | "disconnect" | "forget" } & Widget.ButtonProps) => {
+		const sap = SecuredAP ? "Secured: Password Required" : "Unsecured"
+		const notify = async (title: string, message: string, urgency: string = "normal") => {
+			await execAsync(`notify-send -u ${urgency} "${title}" "${message}"`);
+		};
 
-	const button = (Action: "connect" | "disconnect" | "forget") => {
-		const halign = Action === "connect" ? START : END;
+		const handleError = async (action: string, error: any) => {
+			await notify("WiFi Error", `Failed to ${action} ${ap.ssid}: ${error}`, "critical");
+			console.error(`Failed to ${action} ${ap.ssid}: ${error}`);
+		};
+		const bindings = Variable.derive(
+			[bind(ap, "ssid")],
+			(ssid) => ({
 
-		const content = (() => {
-			switch (Action) {
-				case "connect":
-					return <APlabel />;
-				case "disconnect":
-					return <icon icon={"circle-x-symbolic"} />;
-				case "forget":
-					return <icon icon={"edit-delete-symbolic"} />;
-			}
-		})();
-
-		const command = (() => {
-			const notify = async (title: string, message: string, urgency: string = "normal") => {
-				await execAsync(`notify-send -u ${urgency} "${title}" "${message}"`);
-			};
-
-			const handleError = async (action: string, error: any) => {
-				await notify("WiFi Error", `Failed to ${action} ${ap.ssid}: ${error}`, "critical");
-				console.error(`Failed to ${action} ${ap.ssid}: ${error}`);
-			};
-
-			switch (Action) {
-				case "connect":
-					return async () => {
-						if (SecuredAP && !isActiveAP) {
-							const hasStoredPassword = await checkStoredPassword(ap.ssid);
-							if (hasStoredPassword) {
-								try {
-									await execAsync(`nmcli con up "${ap.ssid}"`);
-									await notify("WiFi", `Connected to ${ap.ssid}`);
-								} catch (error) {
-									await handleError("connect to", error);
+				command: {
+					connect: async () => {
+						if (!isActiveAP) {
+							if (SecuredAP) {
+								const hasStoredPassword = await checkStoredPassword(ssid);
+								if (hasStoredPassword) {
+									try {
+										await execAsync(`nmcli con up "${ssid}"`);
+										await notify("WiFi", `Connected to ${ssid}`);
+									} catch (error) {
+										await handleError("connect to", error);
+									}
+								} else {
+									passreveal.set(!passreveal.get());
+									PasswordEntry.grab_focus();
 								}
 							} else {
-								passreveal.set(!passreveal.get());
-								PasswordEntry.grab_focus();
+								await execAsync(`nmcli con up "${ssid}"`);
 							}
-						} else if (!isActiveAP) {
-							await execAsync(`nmcli con up "${ap.ssid}"`);
 						}
-					};
-				case "disconnect":
-					return async () => {
+					},
+					disconnect: async () => {
 						try {
-							await execAsync(`nmcli con down "${ap.ssid}"`);
-							await notify("WiFi", `Disconnected from ${ap.ssid}`);
+							await execAsync(`nmcli con down "${ssid}"`);
+							await notify("WiFi", `Disconnected from ${ssid}`);
 						} catch (error) {
 							await handleError("disconnect", error);
 						}
-					};
-				case "forget":
-					return async () => {
+					},
+					forget: async () => {
 						try {
-							await execAsync(`nmcli connection delete "${ap.ssid}"`);
-							await notify("WiFi", `Forgot ${ap.ssid}`);
+							await execAsync(`nmcli connection delete "${ssid}"`);
+							await notify("WiFi", `Forgot ${ssid}`);
 						} catch (error) {
 							await handleError("forget", error);
 						}
-					};
-				default:
-					return () => { };
-			}
-		})();
+					}
+				}[action],
 
-		const classname = (() => {
-			const classnameMap: { [key: string]: string } = {
-				connect: "connect",
-				disconnect: "disconnect",
-				forget: "forget",
-			};
-			return classnameMap[Action] || "";
-		})();
+				halign: {
+					connect: START,
+					disconnect: END,
+					forget: END
+				}[action],
 
-		const tooltip = (() => {
-			const sap = SecuredAP ? "Secured: Password Required" : "Unsecured"
-			const tooltipMap: { [key: string]: string } = {
-				connect: isActiveAP ? "Connected: Secured" : sap,
-				disconnect: "Disconnect",
-				forget: "Forget/ Delete AP",
-			};
-			return tooltipMap[Action] || "";
-		})();
+				visible: {
+					connect: true,
+					disconnect: isActiveAP,
+					forget: isActiveAP,
+				}[action],
 
-		const visible = (() => {
-			switch (Action) {
-				case "connect": return true;
-				case "disconnect": return isActiveAP;
-				case "forget": return isActiveAP;
-				default:
-					return false;
-			}
-		})();
+				tooltip: {
+					connect: isActiveAP ? "Connected: Secured" : sap,
+					disconnect: "Disconnect",
+					forget: "Forget/ Delete AP",
+				}[action],
+
+				className: {
+					connect: "connect",
+					disconnect: "disconnect",
+					forget: "forget",
+				}[action],
+
+				content: {
+					connect: <APlabel />,
+					disconnect: <icon icon={"circle-x-symbolic"} />,
+					forget: <icon icon={"edit-delete-symbolic"} />,
+				}[action],
+			})
+		)()
 
 		return (
 			<button
-				className={`wifi ap ${classname}`}
+				className={`wifi ap ${bindings.as(c => c.className)}`}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						command()
+						bindings.get().command();
 					}
 				}}
-				tooltip_text={tooltip}
-				halign={halign}
+				tooltip_text={bindings.as(b => b.tooltip)}
+				halign={bindings.as(c => c.halign)}
 				valign={CENTER}
 				cursor={"pointer"}
-				visible={visible}
+				visible={bindings.as(b => b.visible)}
 				height_request={10}
+				{...props}
 			>
-				{content}
+				{bindings.get().content}
 			</button>
 		);
 	}
@@ -264,7 +271,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 				className={`wifi ap ${isActiveAP ? "connected" : ""}`}
 				halign={FILL}
 				valign={FILL}
-				startWidget={button("connect")}
+				startWidget={<CustomButton action={"connect"} />}
 				endWidget={
 					<stack
 						className={"wifi connected controls"}
@@ -274,12 +281,16 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 						homogeneous={false}
 					>
 						<box name={"connectionSpinner"} halign={END}>
-							{theSpinner}
+							<Spinner
+								name={"connectionSpinner"}
+								setup={(spinner) => isConnecting ? spinner.start() : spinner.stop()}
+								halign={CENTER} valign={CENTER}
+							/>
 							<label label={"Connecting..."} halign={END} valign={CENTER} />
 						</box>
 						<box name={"controls"} halign={END} spacing={5}>
-							{button("disconnect")}
-							{button("forget")}
+							<CustomButton action={"disconnect"} />
+							<CustomButton action={"forget"} />
 						</box>
 					</stack>
 				}
@@ -289,30 +300,27 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 	)
 }
 
-export default function WifiAPs() {
+export default function () {
 	const Network = AstalNetwork.get_default();
 	const Wifi = Network.wifi;
 
 	const APList = bind(Wifi, "accessPoints").as((aps) => {
 		const activeAP = Wifi.active_access_point || null;
 
-		const groupedAPs = aps.reduce((acc: any, ap: any) => {
-			const ssid = ap.ssid ? ap.ssid.trim() : null;
+		const groupedAPs = aps.reduce((acc: Record<string, any[]>, ap: any) => {
+			const ssid = ap.ssid?.trim();
 			if (!ssid) return acc;
 
-			if (!acc[ssid]) {
-				acc[ssid] = [];
-			}
+			acc[ssid] = acc[ssid] || [];
 			acc[ssid].push(ap);
 
 			return acc;
 		}, {});
 
-		const sortedAPGroups = Object.values(groupedAPs).map((apGroup: any) => {
-			apGroup.sort((a: any, b: any) => {
+		const sortedAPGroups = Object.values(groupedAPs).map((apGroup: any[]) => {
+			apGroup.sort((a, b) => {
 				if (a === activeAP) return -1;
 				if (b === activeAP) return 1;
-
 				return b.strength - a.strength;
 			});
 
@@ -322,7 +330,6 @@ export default function WifiAPs() {
 		sortedAPGroups.sort((a, b) => {
 			if (a === activeAP) return -1;
 			if (b === activeAP) return 1;
-
 			return b.strength - a.strength;
 		});
 

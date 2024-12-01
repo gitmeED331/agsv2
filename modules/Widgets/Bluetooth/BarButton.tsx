@@ -14,11 +14,12 @@ const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
 		btLabel.label = label;
 	};
 
+
 	bluetooth.connect("notify::enabled", updateLabel);
 	bluetooth.connect("notify::connected_devices", updateLabel);
 
 	return (
-		<box className={"bluetooth barbutton content"} halign={CENTER} valign={CENTER} visible={true}>
+		<box className={"bluetooth barbutton content"} halign={CENTER} valign={CENTER} visible={true} >
 			{bind(bluetooth, "is_powered").as((showLabel) => (
 				<box>
 					<icon className={"bluetooth barbutton-icon"} icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} />
@@ -30,14 +31,30 @@ const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
 		</box>
 	);
 };
+
 export default function BluetoothButton() {
 	const Bluetooth = AstalBluetooth.get_default();
+
+	const tooltip = Variable.derive(
+		[bind(Bluetooth, "is_connected"), bind(Bluetooth, "devices")],
+		(is_connected, devices) => {
+			const deviceList = ["Connected Devices:"]
+			if (is_connected) {
+				const connectedDevices = devices.filter((device: AstalBluetooth.Device) => device.connected === true);
+				const deviceNames = connectedDevices.map(device => device.name).join("\n");
+				deviceList.push(deviceNames);
+				return deviceList.join("\n");
+			}
+			return "No Devices Connected";
+		}
+	);
 
 	return (
 		<button
 			className={"bluetooth barbutton"}
 			halign={CENTER}
 			valign={CENTER}
+			tooltip_text={bind(tooltip)}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "bluetooth";

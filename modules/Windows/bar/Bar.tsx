@@ -1,5 +1,5 @@
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
-import { GLib, GObject } from "astal";
+import { GLib, GObject, exec, execAsync } from "astal";
 // ----- Widgets -----
 import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
@@ -7,7 +7,6 @@ import MediaTickerButton from "./MediaTicker";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-const monitorID = Gdk.Display.get_default()!.get_n_monitors() - 1
 
 function LeftBar() {
 	return (

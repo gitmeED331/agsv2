@@ -12,27 +12,16 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 Gdk.Screen.get_default();
 
 function Dashboard(monitor: Gdk.Monitor) {
-	const content = (
-		<Grid
-			className={"dashboard grid"}
-			halign={FILL}
-			valign={FILL}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			column_spacing={5}
-			row_spacing={5}
-			setup={(self) => {
-				self.attach(playerStack(), 1, 0, 3, 1);
-				self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
-				self.attach(LeftSide(), 1, 1, 1, 1);
-				self.attach(Tray(), 2, 1, 1, 1);
-				self.attach(RightSide(), 3, 1, 1, 1);
-				self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
-				self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
-			}}
-		/>
-	);
+
+	function gridSetup(self: Grid) {
+		self.attach(playerStack(), 1, 0, 3, 1);
+		self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
+		self.attach(LeftSide(), 1, 1, 1, 1);
+		self.attach(Tray(), 2, 1, 1, 1);
+		self.attach(RightSide(), 3, 1, 1, 1);
+		self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
+		self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
+	}
 
 	return (
 		<window
@@ -54,7 +43,25 @@ function Dashboard(monitor: Gdk.Monitor) {
 				}
 			}}
 		>
-			{content}
+			<Grid
+				className={"dashboard grid"}
+				halign={FILL}
+				valign={FILL}
+				hexpand
+				vexpand
+				visible={true}
+				column_spacing={5}
+				row_spacing={5}
+				setup={(self) => {
+					self.attach(playerStack(), 1, 0, 3, 1);
+					self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
+					self.attach(LeftSide(), 1, 1, 1, 1);
+					self.attach(Tray(), 2, 1, 1, 1);
+					self.attach(RightSide(), 3, 1, 1, 1);
+					self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
+					self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
+				}}
+			/>
 		</window>
 	);
 }
@@ -63,7 +70,8 @@ App.connect("window-toggled", (_, win) => {
 	if (win.visible === false && win.name === "dashboard") {
 		dashboardLeftStack.set_visible_child_name("calendar");
 		dashboardRightStack.set_visible_child_name("notifications");
-		if (dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer" && dashboardPlayerStack.get_visible_child_name() !== "no-media" && dashboardPlayerStack.length > 0) {
+		if (dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer"
+			&& dashboardPlayerStack.get_visible_child_name() !== "no-media" && (dashboardPlayerStack as any).length > 0) {
 			dashboardPlayerStack.set_visible_child_name("org.mpris.MediaPlayer2.Deezer");
 		}
 	}

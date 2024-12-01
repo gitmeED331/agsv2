@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { bind, execAsync } from "astal";
+import { bind, Binding, execAsync, Variable } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 import { Grid, StackSwitcher, Stack } from "../Astalified/index";
@@ -39,28 +39,43 @@ function Player(player: Mpris.Player) {
 		});
 	}
 
-	const TrackInfo = (
-		<box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
-			<label
-				className={"tracktitle"}
-				wrap={false}
-				hexpand={true}
-				halign={CENTER}
-				ellipsize={Pango.EllipsizeMode.END}
-				maxWidthChars={35}
-				label={bind(player, "title").as((title) => TrimTrackTitle(title) || "Unknown Title")}
-			/>
-			<label
-				className={"artist"}
-				wrap={false}
-				hexpand={true}
-				halign={CENTER}
-				ellipsize={Pango.EllipsizeMode.END}
-				maxWidthChars={30}
-				label={bind(player, "artist").as((artist) => artist || "Unknown Artist")}
-			/>
-		</box>
-	);
+	const TrackInfo = ({ action }: { action: "tracks" | "artists" }) => {
+
+		const Bindings = Variable.derive(
+			[bind(player, "title"),
+			bind(player, "artist")],
+			(title, artist) => ({
+
+				classname: {
+					tracks: "tracktitle",
+					artists: "artist"
+				}[action],
+
+				maxwidthchars: {
+					tracks: 35,
+					artists: 30
+				}[action],
+
+				label: {
+					tracks: TrimTrackTitle(title) || "Unknown Title",
+					artists: artist || "Unknown Artist"
+				}[action],
+
+			})
+		)();
+
+		// return <box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
+		return <label
+			className={Bindings.as(b => b.classname)}
+			wrap={false}
+			hexpand={true}
+			halign={CENTER}
+			ellipsize={Pango.EllipsizeMode.END}
+			maxWidthChars={Bindings.as(b => b.maxwidthchars)}
+			label={Bindings.as(b => b.label)}
+		/>
+		// </box>
+	};
 
 	/** @param {number} length */
 	function lengthStr(length: number) {
@@ -73,7 +88,6 @@ function Player(player: Mpris.Player) {
 	function TrackPosition() {
 		const positionSlider = (
 			<slider
-				hexpand={false}
 				className="position Slider"
 				drawValue={false}
 				onDragged={({ value }) => {
@@ -85,13 +99,41 @@ function Player(player: Mpris.Player) {
 				max={bind(player, "length")}
 				min={0}
 				value={bind(player, "position")}
-				halign={FILL}
+				halign={CENTER}
 			/>
 		);
 
-		const lengthLabel = <label className={"tracklength"} halign={START} label={bind(player, "length").as(lengthStr)} />;
+		const Labels = ({ action, ...props }: { action: "length" | "position" } & Widget.LabelProps) => {
+			const Bindings = Variable.derive(
+				[bind(player, "length"), bind(player, "position")],
+				(length, position) => ({
 
-		const positionLabel = <label className={"trackposition"} halign={END} label={bind(player, "position").as(lengthStr)} />;
+					classname: {
+						length: "tracklength",
+						position: "trackposition"
+					}[action],
+
+					label: {
+						length: lengthStr(length),
+						position: lengthStr(position)
+					}[action],
+
+				})
+			)();
+
+			return <label
+				className={Bindings.as(b => b.classname)}
+				label={Bindings.as(b => b.label)}
+				hexpand
+				wrap={false}
+				// maxWidthChars={35}
+				ellipsize={Pango.EllipsizeMode.END}
+				halign={CENTER}
+				valign={CENTER}
+				onDestroy={(self) => { self.destroy() }}
+				{...props}
+			/>
+		}
 
 		return (
 			<box
@@ -104,84 +146,109 @@ function Player(player: Mpris.Player) {
 				visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
 			>
 				{positionSlider}
-				<centerbox halign={FILL} valign={CENTER} startWidget={lengthLabel} endWidget={positionLabel} />
+				<centerbox halign={FILL} valign={CENTER} startWidget={<Labels action="length" />} endWidget={<Labels action="position" />} />
 			</box>
 		);
 	}
 
-	const PlayerIcon = (
-		<button
-			className={"playicon"}
-			onClick={(_, event) => {
-				const dwin = App.get_window("dashboard");
-				const mpwin = App.get_window("mediaplayerwindow");
+	const Controls = ({ action, ...props }: { action: "play_pause" | "activePlay" | "next" | "previous" | "close" } & Widget.ButtonProps) => {
 
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(player.entry);
-					if (dwin && dwin.visible === true) {
-						App.toggle_window("dashboard");
-					} else if (mpwin && mpwin.visible === true) {
-						App.toggle_window("mediaplayerwindow");
+		const bindings = Variable.derive(
+			[bind(player, "playbackStatus"), bind(player, "entry"), bind(player, "identity"), bind(player, "can_go_previous"), bind(player, "can_play"), bind(player, "can_go_next")],
+			(playbackStatus, entry, identity, can_go_previous, can_play, can_go_next) => ({
+
+				className: {
+					activePlay: "playicon",
+					play_pause: "play-pause",
+					next: "next",
+					previous: "previous",
+					close: "close"
+				}[action],
+
+				tooltip_text: {
+					activePlay: identity,
+					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? "Pause" : "Play",
+					next: "Next",
+					previous: "Previous",
+					close: "Close"
+				}[action],
+
+				visible: {
+					play_pause: can_play,
+					activePlay: true,
+					next: can_go_next,
+					previous: can_go_previous,
+					close: true
+				}[action],
+
+				command: {
+					play_pause: () => player.play_pause(),
+					activePlay: () => {
+						const dwin = App.get_window("dashboard");
+						const mpwin = App.get_window("mediaplayerwindow");
+						execAsync(player.entry);
+						if (dwin && dwin.visible === true) {
+							App.toggle_window("dashboard");
+						} else if (mpwin && mpwin.visible === true) {
+							App.toggle_window("mediaplayerwindow");
+						}
+					},
+					next: () => player.next(),
+					previous: () => player.previous(),
+					close: () => {
+						execAsync(`bash -c 'killall "${player.entry}"'`)
 					}
-				}
-			}}
-		>
-			<icon
-				hexpand={true}
-				halign={END}
-				valign={CENTER}
-				tooltip_text={bind(player, "identity")}
-				icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
-			/>
-		</button>
-	);
+				}[action],
 
-	const PlayerControls = (
-		<box className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
-			<button className={"previous"} valign={CENTER} onClick={() => player.previous()} visible={bind(player, "can_go_previous")}>
-				<icon icon={Icon.mpris.controls.PREV} />
-			</button>
-			<button className={"play-pause"} valign={CENTER} onClick={() => player.play_pause()} visible={bind(player, "can_play")}>
-				<icon icon={bind(player, "playbackStatus").as((s) => (s === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY))} />
-			</button>
-			<button className={"next"} valign={CENTER} onClick={() => player.next()} visible={bind(player, "can_go_next")}>
-				<icon icon={Icon.mpris.controls.NEXT} />
-			</button>
-		</box>
-	);
+				icon: {
+					activePlay: entry || Icon.mpris.controls.FALLBACK_ICON,
+					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY,
+					next: Icon.mpris.controls.NEXT,
+					previous: Icon.mpris.controls.PREV,
+					close: Icon.mpris.controls.CLOSE
+				}[action]
+			})
+		)();
 
-	const CloseIcon = (
-		<button
-			className={"close"}
-			valign={CENTER}
-			onClick={() => {
-				execAsync(`bash -c 'killall "${player.entry}"'`);
-			}}
+		return <button
+			className={bindings.as(b => b.className)}
+			tooltip_text={bindings.as(b => b.tooltip_text)}
+			visible={bindings.as(b => b.visible)}
+			onClick={() => bindings.get().command()}
+			onDestroy={(self) => { self.destroy() }}
+			{...props}
 		>
-			<icon icon={Icon.mpris.controls.CLOSE} />
+			<icon icon={bindings.as(b => b.icon)} />
 		</button>
-	);
+	}
 
 	const mediaInfoGrid = (
 		<Grid
-			halign={CENTER}
+			halign={FILL}
 			valign={CENTER}
 			hexpand={true}
 			vexpand={true}
 			visible={true}
 			rowSpacing={10}
 			setup={(self) => {
-				self.attach(TrackInfo, 0, 0, 1, 1);
-				self.attach(PlayerIcon, 1, 0, 1, 1);
-				self.attach(TrackPosition(), 0, 1, 2, 1);
-				self.attach(PlayerControls, 0, 2, 2, 1);
+				self.attach(<TrackInfo action="tracks" />, 0, 0, 1, 1);
+				self.attach(<TrackInfo action="artists" />, 0, 1, 1, 1);
+				self.attach(<Controls action="activePlay" />, 1, 0, 1, 1);
+				self.attach(TrackPosition(), 0, 2, 2, 1);
+				self.attach(
+					<box className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
+						<Controls action="previous" />
+						<Controls action="play_pause" />
+						<Controls action="next" />
+					</box>, 0, 3, 2, 1);
 			}}
 		/>
 	);
 
 	return (
 		<box className={"player"} name={player.entry} vertical={false} hexpand={true} spacing={5} halign={CENTER} valign={START} setup={setup}>
-			{[mediaInfoGrid, CloseIcon]}
+			{[mediaInfoGrid]}
+			<Controls action="close" valign={CENTER} />
 		</box>
 	);
 }
@@ -229,7 +296,7 @@ export default function playerStack() {
 	dashboardPlayerStack = theStack;
 	windowPlayerStack = theStack;
 
-	const switcher = <StackSwitcher stack={theStack} className={"playerswitcher"} visible={bind(mpris, "players").as((a) => a.length > 1)} halign={CENTER} spacing={10} te />;
+	const switcher = <StackSwitcher stack={theStack} className={"playerswitcher"} visible={bind(mpris, "players").as((a) => a.length > 1)} halign={CENTER} spacing={10} valign={CENTER} />;
 
 	return (
 		<box halign={CENTER} valign={CENTER} vertical={true} visible={bind(mpris, "players").as((a) => a.length > 0)}>

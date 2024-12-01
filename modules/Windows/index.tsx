@@ -15,13 +15,13 @@ import Launchergrid from "./Launcher/Launcher-grid";
 import Launcherflowbox from "./Launcher/Launcher-flowbox";
 import SystemStats from "./SystemStats";
 
-export {
+export default [
 	Bar,
 	// AudioMixer,
 	Dashboard,
 	// Calendar,
 	cliphist,
-	Launcherflowbox,
+	// Launcherflowbox,
 	Launchergrid,
 	MediaPlayerWindow,
 	NotificationPopups,
@@ -30,4 +30,4 @@ export {
 	sessioncontrol,
 	SystemStats,
 	wallpapers,
-};
+]

@@ -30,26 +30,28 @@
 		padding: 10px;
 	}
 
-	&:hover {
-		.track {
-			color: $color5;
-		}
+	button {
+		&:hover {
+			.tracks {
+				color: $color5;
+			}
 
-		.artist {
-			color: $color1;
-		}
+			.artists {
+				color: $color1;
+			}
 
-		icon {
-			animation: spin 1s infinite;
+			.icon {
+				animation: spin 1s infinite;
+			}
 		}
 	}
 
-	&.artist {
+	&.artists {
 		color: $color2;
 		font-size: 1rem;
 	}
 
-	&.track {
+	&.tracks {
 		color: $color1;
 		font-size: 1rem;
 	}
@@ -90,6 +92,7 @@
 }
 
 .track {
+
 	&position,
 	&length {
 		color: $color1;
@@ -193,7 +196,7 @@
 	border-radius: $radius;
 	border-left: $border;
 	border-right: $border;
-	
+
 	color: $color1;
 	padding: 0rem 1rem;
 
@@ -202,7 +205,7 @@
 		border-top: $border;
 		border-color: red;
 	}
-	
+
 	button {
 		border-radius: $radius;
 		padding: 0rem 0.5rem;
@@ -211,9 +214,9 @@
 		&:checked {
 			border-radius: $radius;
 			border-top: $border;
-			box-shadow: inset 0rem -0.5rem 0.5rem -0.25rem rgba(15,155,255,0.8);
+			box-shadow: inset 0rem -0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
 		}
-	
+
 		&:hover {
 			box-shadow: inset 0px -2px 6px lime;
 		}

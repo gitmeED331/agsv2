@@ -43,9 +43,9 @@ function ClipHistItem(entry: any) {
 		);
 	}
 
-	const idLabel = <label className={"idlabel"} label={`${id}`} xalign={0} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
+	const idLabel = <label className={"idlabel"} label={`${id}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
 	const contentLabel = (
-		<label className={"contentlabel"} label={`${content}`} xalign={0} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap={true} lines={2} />
+		<label className={"contentlabel"} label={`${content}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />
 	);
 
 	const grid = (
