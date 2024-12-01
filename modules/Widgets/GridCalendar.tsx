@@ -165,8 +165,6 @@ function GridCalendar() {
 			}}
 		/>;
 
-
-
 		return headerGrid;
 	}
 

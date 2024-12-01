@@ -5,33 +5,18 @@ import { Gdk, Gtk } from "astal/gtk3";
  * @param {number} value
  */
 
-export const winheight = (value: number) => {
+export const winheight = (value: number): number => {
 	const screenHeight = Gdk.Screen.get_default()?.get_height();
-	if (screenHeight === undefined) {
+	if (screenHeight == null) {
 		throw new Error("No default screen available");
 	}
-	const winheight = screenHeight * value;
-	return winheight;
+	return screenHeight * value;
 };
 
-export const winwidth = (value: number) => {
+export const winwidth = (value: number): number => {
 	const screenWidth = Gdk.Screen.get_default()?.get_width();
-	if (!screenWidth) {
+	if (screenWidth == null) {
 		throw new Error("No default screen available");
 	}
-	const winwidth = screenWidth * value;
-	return winwidth;
+	return screenWidth * value;
 };
-
-export function getWidgetPosition(widget: Gtk.Widget) {
-	// Get the widget's Gdk.Window, where the widget is drawn
-	const gdkWindow = widget.get_window();
-	if (!gdkWindow) {
-		console.error("Widget has no associated Gdk.Window");
-		return;
-	}
-
-	// Get the (x, y) position relative to the screen
-	const [x, y] = gdkWindow.get_origin();
-	console.log(`Widget is located at (x: ${x}, y: ${y}) on the screen.`);
-}

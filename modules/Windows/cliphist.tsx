@@ -255,7 +255,7 @@ function cliphist(monitor: Gdk.Monitor) {
 			vexpand={true}
 			visible={true}
 			setup={(self) => {
-				self.attach(ClickToClose(1, 0.75, 0.75, "cliphist"), 1, 1, 1, 1);
+				self.attach(<ClickToClose id={1} width={0.75} height={0.75} windowName="cliphist" />, 1, 1, 1, 1);
 				self.attach(ClipHistWidget(), 2, 1, 1, 1);
 			}}
 		/>

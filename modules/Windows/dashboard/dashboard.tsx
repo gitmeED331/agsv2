@@ -1,5 +1,4 @@
 import { Astal, Gtk, App, Gdk } from "astal/gtk3";
-import { winheight, winwidth } from "../../lib/screensizeadjust";
 import { Grid } from "../../Astalified/index";
 import ClickToClose from "../../lib/ClickToClose";
 
@@ -12,16 +11,6 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 Gdk.Screen.get_default();
 
 function Dashboard(monitor: Gdk.Monitor) {
-
-	function gridSetup(self: Grid) {
-		self.attach(playerStack(), 1, 0, 3, 1);
-		self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
-		self.attach(LeftSide(), 1, 1, 1, 1);
-		self.attach(Tray(), 2, 1, 1, 1);
-		self.attach(RightSide(), 3, 1, 1, 1);
-		self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
-		self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
-	}
 
 	return (
 		<window
@@ -54,12 +43,12 @@ function Dashboard(monitor: Gdk.Monitor) {
 				row_spacing={5}
 				setup={(self) => {
 					self.attach(playerStack(), 1, 0, 3, 1);
-					self.attach(ClickToClose(1, 0.25, 0.1, "dashboard"), 0, 0, 1, 2); // left side
+					self.attach(<ClickToClose id={3} width={0.25} height={0.1} windowName="dashboard" />, 0, 0, 1, 2); // left side
 					self.attach(LeftSide(), 1, 1, 1, 1);
 					self.attach(Tray(), 2, 1, 1, 1);
 					self.attach(RightSide(), 3, 1, 1, 1);
-					self.attach(ClickToClose(2, 0.25, 0.1, "dashboard"), 4, 0, 1, 2); // right side
-					self.attach(ClickToClose(3, 1, 0.5, "dashboard"), 0, 2, 5, 1); // bottom
+					self.attach(<ClickToClose id={3} width={0.25} height={0.1} windowName="dashboard" />, 4, 0, 1, 2); // right side
+					self.attach(<ClickToClose id={3} width={1} height={0.5} windowName="dashboard" />, 0, 2, 5, 1); // bottom
 				}}
 			/>
 		</window>

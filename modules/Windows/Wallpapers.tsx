@@ -217,10 +217,10 @@ export default async function (monitor: Gdk.Monitor) {
 		setup={(self) => {
 			self.attach(gridContent, 1, 1, 1, 1);
 
-			self.attach(ClickToClose(1, 0.25, 0.25, "wallpapers"), 0, 0, 3, 1); // Top
-			self.attach(ClickToClose(2, 0.25, 0.25, "wallpapers"), 0, 1, 1, 1); // Left
-			self.attach(ClickToClose(3, 0.25, 0.25, "wallpapers"), 2, 1, 1, 1); // Right
-			self.attach(ClickToClose(4, 0.25, 0.25, "wallpapers"), 0, 2, 3, 1); // Bottom
+			self.attach(<ClickToClose id={1} width={0.25} height={0.25} windowName="wallpapers" />, 0, 0, 3, 1); // Top
+			self.attach(<ClickToClose id={2} width={0.25} height={0.25} windowName="wallpapers" />, 0, 1, 1, 1); // Left
+			self.attach(<ClickToClose id={3} width={0.25} height={0.25} windowName="wallpapers" />, 2, 1, 1, 1); // Right
+			self.attach(<ClickToClose id={4} width={0.25} height={0.25} windowName="wallpapers" />, 0, 2, 3, 1); // Bottom
 		}}
 	/>
 

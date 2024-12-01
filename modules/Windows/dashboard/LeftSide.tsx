@@ -37,7 +37,7 @@ export default function LeftSide() {
 			hexpand={true}
 			vexpand={true}
 			setup={(self) => {
-				self.add_titled(GridCalendar(), "calendar", "Calendar");
+				self.add_titled(<GridCalendar />, "calendar", "Calendar");
 				self.add_titled(power, "power", "Power");
 				self.add_titled(settings, "settings", "Settings");
 			}}

@@ -38,12 +38,13 @@ export default function BluetoothButton() {
 	const tooltip = Variable.derive(
 		[bind(Bluetooth, "is_connected"), bind(Bluetooth, "devices")],
 		(is_connected, devices) => {
-			const deviceList = ["Connected Devices:"]
 			if (is_connected) {
-				const connectedDevices = devices.filter((device: AstalBluetooth.Device) => device.connected === true);
-				const deviceNames = connectedDevices.map(device => device.name).join("\n");
-				deviceList.push(deviceNames);
-				return deviceList.join("\n");
+				const connectedDevices = devices
+					.filter((device: AstalBluetooth.Device) => device.connected)
+					.map(device => device.name);
+				return connectedDevices.length
+					? `Connected Devices:\n${connectedDevices.join("\n")}`
+					: "No Devices Connected";
 			}
 			return "No Devices Connected";
 		}
@@ -64,8 +65,8 @@ export default function BluetoothButton() {
 					if (win) {
 						if (win.visible === true && !dashboardTab) {
 							setDashboardTab;
-						} else if (win.visible === true && dashboardTab) {
-							win.visible = !win.visible;
+							// } else if (win.visible === true && dashboardTab) {
+							// 	win.visible = !win.visible;
 						} else {
 							win.visible = !win.visible;
 						}

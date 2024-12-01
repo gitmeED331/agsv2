@@ -233,7 +233,7 @@ function Player(player: Mpris.Player) {
 			setup={(self) => {
 				self.attach(<TrackInfo action="tracks" />, 0, 0, 1, 1);
 				self.attach(<TrackInfo action="artists" />, 0, 1, 1, 1);
-				self.attach(<Controls action="activePlay" />, 1, 0, 1, 1);
+				self.attach(<Controls action="activePlay" />, 1, 1, 1, 1);
 				self.attach(TrackPosition(), 0, 2, 2, 1);
 				self.attach(
 					<box className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>

@@ -1,8 +1,7 @@
-import { Gdk, App } from "astal/gtk3";
+import { Gdk, App, Widget } from "astal/gtk3";
 import { winwidth, winheight } from "./screensizeadjust";
 
-export default function (eh: number, width: number, height: number, windowName: string) {
-	const background = `${SRC}/assets/groot-thin-left.png`;
+export default function ({ id, width, height, windowName, ...props }: { id: number, width: number, height: number, windowName: string } & Widget.EventBoxProps) {
 	return (
 		<eventbox
 			halign={FILL}
@@ -15,6 +14,7 @@ export default function (eh: number, width: number, height: number, windowName: 
 			}}
 			widthRequest={winwidth(width)}
 			heightRequest={winheight(height)}
+			{...props}
 		/>
 	);
 }

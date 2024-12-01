@@ -5,7 +5,8 @@ import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 let netreveal = Variable(false);
 
-function NetworkWidget(network: any) {
+function NetworkWidget({ network }: any) {
+
 	const icon = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
 		switch (primary) {
 			case AstalNetwork.Primary.WIFI:
@@ -13,7 +14,7 @@ function NetworkWidget(network: any) {
 			case AstalNetwork.Primary.WIRED:
 				return wired.icon_name
 			default:
-				return "network-disconnected"
+				return "network-disconnected-symbolic"
 		}
 	})
 
@@ -31,9 +32,9 @@ function NetworkWidget(network: any) {
 	const tooltip = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
 		switch (primary) {
 			case AstalNetwork.Primary.WIFI:
-				return `Connectd to "${wifi.ssid}"`
+				return `Connectd to: \n <b>${wifi.ssid}</b>`
 			case AstalNetwork.Primary.WIRED:
-				return "Connected to LAN"
+				return `Connected to:\n <b>Ethernet</b>`
 			default:
 				return "No connection"
 		}
@@ -63,8 +64,8 @@ function NetworkButton() {
 					if (win) {
 						if (win.visible === true && !dashboardTab) {
 							setDashboardTab;
-						} else if (win.visible === true && dashboardTab) {
-							win.visible = !win.visible;
+							// } else if (win.visible === true && dashboardTab) {
+							// 	win.visible = !win.visible;
 						} else {
 							win.visible = !win.visible;
 						}
@@ -75,7 +76,7 @@ function NetworkButton() {
 				}
 			}}
 		>
-			{NetworkWidget(Network)}
+			<NetworkWidget network={Network} />
 		</button>
 	);
 }

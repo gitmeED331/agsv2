@@ -1,5 +1,5 @@
-import { Gdk } from "astal/gtk3";
-import { execAsync, exec, bind } from "astal";
+import { Gdk, Widget } from "astal/gtk3";
+import { execAsync, exec, bind, Variable } from "astal";
 import Icon, { Icons } from "../lib/icons";
 import AstalPowerProfiles from "gi://AstalPowerProfiles";
 
@@ -29,29 +29,56 @@ function PowerProfiles() {
 		updateBrightness();
 	});
 
-	type PowerProfileActions = "balanced" | "power-saver" | "performance";
-	const SysButton = (action: string, label: string) => (
-		<button
+	const SysButton = ({ action, ...props }: { action: "balanced" | "power-saver" | "performance" } & Widget.ButtonProps) => {
+		const Bindings = Variable.derive(
+			[bind(powerprofile, "activeProfile")],
+			(activeProfile) => ({
+
+				className: {
+					"power-saver": activeProfile === action ? activeProfile : "",
+					balanced: activeProfile === action ? activeProfile : "",
+					performance: activeProfile === action ? activeProfile : "",
+				}[action],
+
+				label: {
+					"power-saver": "Saver",
+					balanced: "Balanced",
+					performance: "Performance"
+				}[action],
+				command: {
+					"power-saver": () => powerprofile.activeProfile = "power-saver",
+					balanced: () => powerprofile.activeProfile = "balanced",
+					performance: () => powerprofile.activeProfile = "performance",
+				}[action],
+				icon: {
+					"power-saver": Icon.powerprofile["power-saver"],
+					balanced: Icon.powerprofile.balanced,
+					performance: Icon.powerprofile.performance
+				}[action],
+			})
+		)();
+		return <button
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					powerprofile.activeProfile = action;
+					Bindings.get().command();
 					currentBrightness();
 				}
 			}}
-			className={bind(powerprofile, "activeProfile").as((c) => (c === action ? c : ""))}
+			className={Bindings.as(c => c.className)}
+			{...props}
 		>
 			<box vertical={true}>
-				<icon icon={Icon.powerprofile[action as PowerProfileActions]} />
-				<label label={label} visible={label !== ""} />
+				<icon icon={Bindings.as(i => i.icon)} />
+				<label label={Bindings.as(l => l.label)} />
 			</box>
 		</button>
-	);
+	};
 
 	return (
 		<box className={"powerprofiles container"} name={"powerprofiles"} vertical={false} vexpand={false} hexpand={false} valign={CENTER} halign={CENTER}>
-			{SysButton("power-saver", "Saver")}
-			{SysButton("balanced", "Balanced")}
-			{SysButton("performance", "Performance")}
+			<SysButton action="power-saver" />
+			<SysButton action="balanced" />
+			<SysButton action="performance" />
 		</box>
 	);
 }

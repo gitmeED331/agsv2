@@ -22,13 +22,6 @@ const ChargeIndicatorIcon = ({ battery, charging }: { battery: Battery.Device, c
 );
 
 const TheLabelReveal = ({ battery, charging }: { battery: Battery.Device, charging: any }) => {
-	const PercentLabel = (
-		<label
-			label={bind(battery, "percentage").as((p) => `${p * 100}%`)}
-			tooltipText={chargeTooltip(charging)}
-		/>
-	);
-
 	return (
 		<revealer
 			transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT}
@@ -36,7 +29,10 @@ const TheLabelReveal = ({ battery, charging }: { battery: Battery.Device, chargi
 			clickThrough={true}
 			revealChild={bind(battery, "charging").as((c) => !c)}
 		>
-			{PercentLabel}
+			<label
+				label={bind(battery, "percentage").as((p) => `${p * 100}%`)}
+				tooltipText={chargeTooltip(charging)} onDestroy={(self) => self.destroy()}
+			/>
 		</revealer>
 	);
 };

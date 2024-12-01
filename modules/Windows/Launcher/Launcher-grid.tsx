@@ -188,7 +188,7 @@ function Launchergrid(monitor: Gdk.Monitor) {
 			visible={true}
 			setup={(self) => {
 				self.attach(contentGrid, 1, 1, 1, 1);
-				self.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
+				self.attach(<ClickToClose id={1} width={0.8} height={0.8} windowName="launcher" />, 2, 1, 1, 1);
 			}}
 		/>
 	);

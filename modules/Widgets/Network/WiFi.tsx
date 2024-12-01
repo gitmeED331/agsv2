@@ -9,7 +9,6 @@ import Spinner from "../../Astalified/Spinner";
 function Header(wifi: AstalNetwork.Wifi) {
 
 	const CustomButton = ({ action, ...props }: { action: "power" | "refresh" } & Widget.ButtonProps) => {
-
 		const bindings = Variable.derive(
 			[bind(wifi, "enabled"), bind(wifi, "scanning")],
 			(enabled, scanning) => ({
@@ -151,12 +150,14 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		)();
 
 		return (
-			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}	>
+			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}>
 				<icon icon={ap.icon_name} valign={CENTER} halign={START} />
 				<label label={label} valign={CENTER} halign={START} />
 			</box>
 		);
 	};
+
+
 
 	const CustomButton = ({ action, ...props }: { action: "connect" | "disconnect" | "forget" } & Widget.ButtonProps) => {
 		const sap = SecuredAP ? "Secured: Password Required" : "Unsecured"
@@ -265,7 +266,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 	}
 
 	return (
-		<box vertical={true}>
+		<box vertical={true} >
 			<centerbox
 				height_request={20}
 				className={`wifi ap ${isActiveAP ? "connected" : ""}`}
@@ -309,11 +310,10 @@ export default function () {
 
 		const groupedAPs = aps.reduce((acc: Record<string, any[]>, ap: any) => {
 			const ssid = ap.ssid?.trim();
-			if (!ssid) return acc;
-
-			acc[ssid] = acc[ssid] || [];
-			acc[ssid].push(ap);
-
+			if (ssid) {
+				acc[ssid] = acc[ssid] || [];
+				acc[ssid].push(ap);
+			}
 			return acc;
 		}, {});
 
@@ -323,7 +323,6 @@ export default function () {
 				if (b === activeAP) return 1;
 				return b.strength - a.strength;
 			});
-
 			return apGroup[0];
 		});
 
@@ -331,16 +330,17 @@ export default function () {
 			if (a === activeAP) return -1;
 			if (b === activeAP) return 1;
 			return b.strength - a.strength;
-		});
+		})
 
-		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi));
+		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi))
+
 	});
 
 	return (
 		<box className={"network wifi container"} halign={FILL} valign={FILL} hexpand={true} visible={true} vertical={true} spacing={10}>
 			{Header(Wifi)}
 			<scrollable halign={FILL} valign={FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} vexpand={true}>
-				<box className={"wifi aplist-inner"} halign={FILL} valign={FILL} visible={true} vertical={true} spacing={5}>
+				<box className={"wifi aplist-inner"} halign={FILL} valign={FILL} visible={true} vertical={true} spacing={5} >
 					{APList}
 				</box>
 			</scrollable>

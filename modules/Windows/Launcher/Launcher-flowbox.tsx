@@ -450,7 +450,7 @@ function Launcherflowbox(monitor: Gdk.Monitor) {
             hexpand={true} vexpand={true} visible={true}
             setup={(self) => {
                 self.attach(contentGrid, 1, 1, 1, 1);
-                self.attach(ClickToClose(1, 0.8, 0.8, "launcher"), 2, 1, 1, 1);
+                self.attach(<ClickToClose id={1} windowName="launcher" />, 2, 1, 1, 1);
             }}
         />
     );

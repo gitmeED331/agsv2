@@ -6,8 +6,8 @@ import { Grid } from "../Astalified/index";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-function CTC(eh: number, w: number) {
-	return ClickToClose(eh, w, 0.25, "sessioncontrols");
+function CTC(id: number, width: number) {
+	return <ClickToClose id={id} width={width} height={0.25} windowName="sessioncontrols" />;
 }
 
 const theGrid = <Grid halign={FILL} valign={FILL} hexpand={true} vexpand={true} visible={true}

@@ -1,4 +1,4 @@
-import { Gtk, Gdk, App } from "astal/gtk3";
+import { Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, exec, Variable } from "astal";
 import Icon from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
@@ -100,79 +100,69 @@ function content(device: AstalBluetooth.Device) {
 		);
 	};
 
-	const btDeviceControls = (action: string) => {
-		const command = Variable.derive([bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")], (paired, trusted, connected) => {
-			const actionMap: {
-				[key: string]: any;
-			} = {
-				// ctl commands
-				pair: `bluetoothctl ${paired ? "Unpair" : "Pair"} ${device.address}`,
-				trust: `bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`,
-				connect: `bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`,
-				forget: `bluetoothctl remove ${device.address}`,
+	const DeviceControls = ({ action, ...props }: { action: "pair" | "trust" | "connect" | "forget" } & Widget.ButtonProps) => {
+		const Bindings = Variable.derive(
+			[bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")],
+			(paired, trusted, connected) => ({
 
-				// astal commands
-				// pair: paired ? (adapter as any).remove_device(device) : device.pair(),
-				// trust: trusted ? device.set_trusted(false) : device.set_trusted(true),
-				// connect: connected ? device.disconnect_device.begin() : device.connect_device.begin(),
-			};
-			return actionMap[action] || "";
-		})();
+				command: {
+					// ctl commands
+					pair: `bluetoothctl ${paired ? "Unpair" : "Pair"} ${device.address}`,
+					trust: `bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`,
+					connect: `bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`,
+					forget: `bluetoothctl remove ${device.address}`
 
-		const icon = Variable.derive([bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")], (paired, trusted, connected) => {
-			const iconMap: { [key: string]: string } = {
-				pair: paired ? "bluetooth-link-symbolic" : "bluetooth-unlink-symbolic",
-				trust: trusted ? "bluetooth-trust-symbolic" : "bluetooth-untrust-symbolic",
-				connect: connected ? "bluetooth-connect-symbolic" : "bluetooth-disconnect-symbolic",
-				forget: "circle-x-symbolic",
-			};
-			return iconMap[action] || "";
-		})();
+					// astal commands
+					// pair: paired ? (adapter as any).remove_device(device) : device.pair(),
+					// trust: trusted ? device.set_trusted(false) : device.set_trusted(true),
+					// connect: connected ? device.disconnect_device.begin() : device.connect_device.begin(),
+				}[action],
 
-		const tooltip = Variable.derive([bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")], (paired, trusted, connected) => {
-			const tooltipMap: { [key: string]: string } = {
-				pair: paired ? "Unpair" : "Pair",
-				trust: trusted ? "Untrust" : "Trust",
-				connect: connected ? "Disconnect" : "Connect",
-				forget: "Forget",
-			};
-			return tooltipMap[action] || "";
-		})();
+				icon: {
+					pair: paired ? "bluetooth-link-symbolic" : "bluetooth-unlink-symbolic",
+					trust: trusted ? "bluetooth-trust-symbolic" : "bluetooth-untrust-symbolic",
+					connect: connected ? "bluetooth-connect-symbolic" : "bluetooth-disconnect-symbolic",
+					forget: "circle-x-symbolic",
+				}[action],
 
-		const classname = Variable.derive([bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")], (paired, trusted, connected) => {
-			const classnameMap: { [key: string]: string } = {
-				pair: `bluetooth devicelist - inner controls ${paired ? "unpair" : "pair"} `,
-				trust: `bluetooth devicelist - inner controls ${trusted ? "untrust" : "trust"} `,
-				connect: `bluetooth devicelist - inner controls ${connected ? "disconnect" : "connect"} `,
-				forget: "bluetooth devicelist-inner controls forget",
-			};
-			return classnameMap[action] || "";
-		})();
+				tooltip: {
+					pair: paired ? "Unpair" : "Pair",
+					trust: trusted ? "Untrust" : "Trust",
+					connect: connected ? "Disconnect" : "Connect",
+					forget: "Forget",
+				}[action],
 
-		const visible = Variable.derive([bind(device, "paired"), bind(device, "trusted"), bind(device, "connected")], (paired, trusted, connected) => {
-			const visibleMap: { [key: string]: boolean } = {
-				pair: true,
-				trust: paired && connected,
-				connect: true,
-				forget: paired,
-			};
-			return visibleMap[action] || false;
-		})();
+				classname: {
+					pair: `bluetooth devicelist - inner controls ${paired ? "unpair" : "pair"} `,
+					trust: `bluetooth devicelist - inner controls ${trusted ? "untrust" : "trust"} `,
+					connect: `bluetooth devicelist - inner controls ${connected ? "disconnect" : "connect"} `,
+					forget: "bluetooth devicelist-inner controls forget",
+				}[action],
+
+				visible: {
+					pair: true,
+					trust: paired && connected,
+					connect: true,
+					forget: paired,
+				}[action],
+			})
+		)();
 
 		return (
 			<button
-				className={classname}
-				visible={visible}
+				className={Bindings.get().classname}
+				visible={Bindings.get().visible}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						execAsync(command.get());
+						execAsync(Bindings.get().command);
 					}
 				}}
 				halign={END}
 				valign={FILL}
-				tooltip_markup={tooltip}
+				tooltip_markup={Bindings.get().tooltip}
+				{...props}
 			>
-				<icon icon={icon} />
+				<icon icon={Bindings.get().icon} />
 			</button>
 		);
 	};
@@ -185,7 +175,10 @@ function content(device: AstalBluetooth.Device) {
 				startWidget={DeviceButton()}
 				endWidget={
 					<box className={"bluetooth devicelist-inner controls"} halign={END} valign={FILL} spacing={5}>
-						{[btDeviceControls("pair"), btDeviceControls("trust"), btDeviceControls("connect"), btDeviceControls("forget")]}
+						<DeviceControls action="pair" />
+						<DeviceControls action="trust" />
+						<DeviceControls action="connect" />
+						<DeviceControls action="forget" />
 					</box>
 				}
 			/>
