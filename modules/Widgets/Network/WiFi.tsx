@@ -6,7 +6,10 @@ import Pango from "gi://Pango";
 import NM from "gi://NM";
 import Spinner from "../../Astalified/Spinner";
 
+
 function Header(wifi: AstalNetwork.Wifi) {
+
+
 
 	const CustomButton = ({ action, ...props }: { action: "power" | "refresh" } & Widget.ButtonProps) => {
 		const bindings = Variable.derive(
@@ -19,8 +22,8 @@ function Header(wifi: AstalNetwork.Wifi) {
 				}[action],
 
 				icon: {
-					power: enabled ? Icon.network.wifi.enabled : Icon.network.wifi.disabled,
-					refresh: "view-refresh-symbolic",
+					power: Icon.network.wifi[enabled ? "enabled" : "disabled"],
+					refresh: scanning ? "process-working-symbolic" : "view-refresh-symbolic",
 				}[action],
 
 				tooltip: {
@@ -30,8 +33,9 @@ function Header(wifi: AstalNetwork.Wifi) {
 
 				className: {
 					power: enabled ? "enabled" : "disabled",
-					refresh: scanning ? "" : "refresh",
+					refresh: scanning ? "spinner" : "refresh",
 				}[action],
+
 			})
 		)()
 
@@ -49,10 +53,11 @@ function Header(wifi: AstalNetwork.Wifi) {
 				halign={CENTER}
 				valign={CENTER}
 			>
-				<icon icon={bindings.as(b => b.icon)} halign={END} valign={CENTER} />
+				<icon icon={bindings.as(b => b.icon)} halign={CENTER} valign={CENTER} />
 			</button>
 		);
 	}
+
 	const head = <label label="Wi-Fi" halign={CENTER} valign={CENTER} />;
 
 	return (
@@ -66,24 +71,7 @@ function Header(wifi: AstalNetwork.Wifi) {
 				<box halign={CENTER} vertical={false} spacing={15}>
 
 					<CustomButton action={"power"} />
-					<stack
-						visible
-						halign={END}
-						visible_child_name={bind(wifi, "scanning").as((s) =>
-							s ? "refreshspinner" : "refreshbtn"
-						)}
-						homogeneous={false}
-					>
-						<CustomButton action={"refresh"} name={"refreshbtn"} />
-						<Spinner
-							name="refreshspinner"
-							halign={CENTER}
-							valign={CENTER}
-							setup={(spinner) => {
-								bind(wifi, "scanning").as((s) => (s ? spinner.start : spinner.stop));
-							}}
-						/>
-					</stack>
+					<CustomButton action={"refresh"} />
 				</box>
 			}
 		/>
@@ -284,7 +272,7 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 						<box name={"connectionSpinner"} halign={END}>
 							<Spinner
 								name={"connectionSpinner"}
-								setup={(spinner) => isConnecting ? spinner.start() : spinner.stop()}
+								setup={(self) => isConnecting ? self.start() : self.stop()}
 								halign={CENTER} valign={CENTER}
 							/>
 							<label label={"Connecting..."} halign={END} valign={CENTER} />
@@ -333,7 +321,6 @@ export default function () {
 		})
 
 		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi))
-
 	});
 
 	return (

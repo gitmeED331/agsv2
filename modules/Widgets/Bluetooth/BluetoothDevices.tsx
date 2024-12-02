@@ -3,84 +3,67 @@ import { bind, execAsync, exec, Variable } from "astal";
 import Icon from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
 import Pango from "gi://Pango";
-import Spinner from "../../Astalified/Spinner";
 
 function btControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBluetooth.Adapter) {
-	const btPower = (
-		<button
-			className={bind(bluetooth, "is_powered").as((v) => `bluetooth ${v ? "power-on" : "power-off"}`)}
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync(`bluetoothctl power ${bluetooth.is_powered ? "off" : "on"}`);
-				}
-			}}
-			halign={END}
-			valign={CENTER}
-			tooltip_text={bind(bluetooth, "is_powered").as((v) => `Power ${v ? "off" : "on"}`)}
-		>
-			<icon icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} halign={END} valign={CENTER} />
-		</button>
-	);
+	function Buttons({ action, ...props }: { action: "blueman" | "refresh" | "power" } & Widget.ButtonProps) {
 
-	const Refresh = (
-		<stack visible={true} halign={END} visible_child_name={bind(adapter, "discovering").as((d) => (d ? "spinnerbtn" : "iconbtn"))} homogeneous={false}>
-			<button
-				name={"iconbtn"}
-				onClick={(_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						//execAsync(`bluetoothctl --timeout 120 scan on`)
+		const Bindings = Variable.derive(
+			[bind(bluetooth, "is_powered"), bind(adapter, "discovering")],
+			(is_powered, discovering) => ({
+				tooltip: {
+					power: is_powered ? "Turn off Bluetooth" : "Turn on Bluetooth",
+					refresh: discovering ? "Scanning..." : "Refresh",
+					blueman: "Blueman"
+				}[action],
+
+				className: {
+					power: is_powered ? "bluetooth power-on" : "bluetooth power-off",
+					refresh: discovering ? "spinner" : "refresh",
+					blueman: "bluetooth blueman"
+				}[action],
+
+				command: {
+					power: () => { adapter.set_powered(is_powered ? false : true) }, //execAsync("bluetoothctl power off") : execAsync("bluetoothctl power on"),
+					refresh: discovering ? () => { } : () => {
 						adapter.start_discovery();
-						setTimeout(() => {
-							adapter.stop_discovery();
-						}, 120000);
+						setTimeout(adapter.stop_discovery, 60000);
+					},
+					blueman: () => {
+						execAsync("blueman-manager");
+						App.toggle_window("dashboard");
 					}
-				}}
-				halign={CENTER}
-				valign={CENTER}
-				tooltip_text={"Start Discovery"}
-			>
-				<icon icon={"view-refresh-symbolic"} halign={CENTER} valign={CENTER} />
-			</button>
+				}[action],
+
+				icon: {
+					power: is_powered ? Icon.bluetooth.enabled : Icon.bluetooth.disabled,
+					refresh: discovering ? "process-working-symbolic" : "view-refresh-symbolic",
+					blueman: Icon.ui.settings
+				}[action]
+			})
+		)();
+
+		return (
 			<button
-				name="spinnerbtn"
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						//execAsync("bluetoothctl scan off")
-						adapter.stop_discovery();
+						Bindings.get().command();
 					}
 				}}
+				className={Bindings.as(c => c.className)}
 				halign={CENTER}
 				valign={CENTER}
-				tooltip_text={"Stop Discovery"}
+				tooltip_text={Bindings.as(t => t.tooltip)}
+				{...props}
 			>
-				<Spinner
-					halign={CENTER}
-					valign={CENTER}
-					setup={(spinner) => {
-						bind(adapter, "discovering").as((s) => (s === true ? spinner.start : spinner.stop));
-					}}
-				/>
+				<icon icon={Bindings.as(i => i.icon)} halign={CENTER} valign={CENTER} />
 			</button>
-		</stack>
-	);
-	const blueman = (
-		<button
-			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) {
-					execAsync("blueman-manager");
-					App.toggle_window("dashboard");
-				}
-			}}
-			halign={END}
-			valign={CENTER}
-			tooltip_text={"Blueman Manager"}
-		>
-			<icon icon={Icon.ui.settings} halign={END} valign={CENTER} />
-		</button>
-	);
+		)
+	}
 	return (
 		<box className={"bluetooth devicelist-header controls"} halign={CENTER} valign={CENTER} spacing={15}>
-			{[btPower, Refresh, blueman]}
+			<Buttons action={"power"} />
+			<Buttons action={"refresh"} />
+			<Buttons action={"blueman"} />
 		</box>
 	);
 }

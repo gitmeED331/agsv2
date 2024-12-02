@@ -38,19 +38,21 @@ function LeftBar() {
 
 function CenterBar() {
 	return (
-		<button
-			className="clock"
-			cursor="pointer"
-			onClick={(_, event) => {
-				App.toggle_window("dashboard");
-			}}
-		>
-			<box halign={CENTER} valign={CENTER} spacing={5}>
-				<DateTimeLabel format="%H:%M:%S" interval={500} />
-				<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
-				<DateTimeLabel format="%a %b %d" interval={3600000} />
-			</box>
-		</button>
+		<box spacing={10}>
+			<button
+				className="clock"
+				cursor="pointer"
+				onClick={(_, event) => {
+					App.toggle_window("dashboard");
+				}}
+			>
+				<box halign={CENTER} valign={CENTER} spacing={5}>
+					<DateTimeLabel format="%H:%M:%S" interval={500} />
+					<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
+					<DateTimeLabel format="%a %b %d" interval={3600000} />
+				</box>
+			</button>
+		</box>
 	);
 }
 
