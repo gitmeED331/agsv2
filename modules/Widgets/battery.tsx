@@ -56,6 +56,7 @@ const BatteryLevelBar = (
 function BatteryButton() {
 	const Bat = Battery.get_default();
 	const PowerProfiles = powerProfiles.get_default();
+
 	const Percentage = bind(Bat, "percentage");
 	const Charging = bind(Bat, "charging");
 

@@ -24,9 +24,10 @@ function btControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBluetooth
 
 				command: {
 					power: () => { adapter.set_powered(is_powered ? false : true) }, //execAsync("bluetoothctl power off") : execAsync("bluetoothctl power on"),
-					refresh: discovering ? () => { } : () => {
-						adapter.start_discovery();
-						setTimeout(adapter.stop_discovery, 60000);
+					refresh: () => {
+						discovering
+							? adapter.stop_discovery()
+							: [adapter.start_discovery(), setTimeout(() => adapter.stop_discovery(), 60000)]
 					},
 					blueman: () => {
 						execAsync("blueman-manager");
@@ -90,10 +91,10 @@ function content(device: AstalBluetooth.Device) {
 
 				command: {
 					// ctl commands
-					pair: `bluetoothctl ${paired ? "Unpair" : "Pair"} ${device.address}`,
-					trust: `bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`,
-					connect: `bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`,
-					forget: `bluetoothctl remove ${device.address}`
+					pair: () => execAsync(`bluetoothctl ${paired ? "Unpair" : "Pair"} ${device.address}`).catch(console.error),
+					trust: () => execAsync(`bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`).catch(console.error),
+					connect: () => execAsync(`bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`).catch(console.error),
+					forget: () => execAsync(`bluetoothctl remove ${device.address}`).catch(console.error)
 
 					// astal commands
 					// pair: paired ? (adapter as any).remove_device(device) : device.pair(),
@@ -135,15 +136,12 @@ function content(device: AstalBluetooth.Device) {
 			<button
 				className={Bindings.get().classname}
 				visible={Bindings.get().visible}
-				onClick={(_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						execAsync(Bindings.get().command);
-					}
-				}}
+				onClick={Bindings.get().command}
 				halign={END}
 				valign={FILL}
 				tooltip_markup={Bindings.get().tooltip}
 				{...props}
+				onDestroy={(self) => { self.destroy() }}
 			>
 				<icon icon={Bindings.get().icon} />
 			</button>
@@ -192,7 +190,9 @@ function BluetoothDevices() {
 
 	return (
 		<box className={"bluetooth container"} name={"Bluetooth"} halign={FILL} valign={FILL} visible={true} vertical={true} spacing={10}>
-			<centerbox className={"bluetooth devicelist-header"} vertical={false} halign={FILL} valign={CENTER} centerWidget={<label label={"Bluetooth"} />} endWidget={btControls(Bluetooth, Adapter)} />
+			<centerbox className={"bluetooth devicelist-header"} vertical={false} halign={FILL} valign={CENTER}
+				centerWidget={<label label={"Bluetooth"} />}
+				endWidget={btControls(Bluetooth, Adapter)} />
 			<scrollable halign={FILL} valign={FILL} visible={true} vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} expand>
 				<box className={"bluetooth devicelist-inner"} halign={FILL} valign={FILL} visible={true} vertical={true} spacing={5}>
 					{btdevicelist}

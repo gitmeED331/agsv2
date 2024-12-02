@@ -1,11 +1,6 @@
 import { Variable, GLib } from "astal";
 
-interface DateTimeLabelProps {
-	format: string,
-	interval: number | undefined | null
-}
-
-export default function DateTimeLabel({ format, interval }: DateTimeLabelProps) {
+export default function DateTimeLabel({ format, interval }: { format: string, interval?: number | undefined | null }) {
 
 	const shouldPoll = typeof interval === "number" && interval >= 1;
 

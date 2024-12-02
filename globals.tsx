@@ -21,6 +21,11 @@ declare global {
 	const REVEAL_SLIDE_UP: number;
 	const REVEAL_SLIDE_DOWN: number;
 	const REVEAL_SLIDE_CROSSFADE: number;
+	// Layers
+	const OVERLAY_LAYER: number;
+	const TOP_LAYER: number;
+	const BOTTOM_LAYER: number;
+	const BACKGROUND_LAYER: number;
 }
 
 Object.assign(globalThis, {
@@ -44,4 +49,9 @@ Object.assign(globalThis, {
 	REVEAL_SLIDE_UP: Gtk.RevealerTransitionType.SLIDE_UP,
 	REVEAL_SLIDE_DOWN: Gtk.RevealerTransitionType.SLIDE_DOWN,
 	REVEAL_SLIDE_CROSSFADE: Gtk.RevealerTransitionType.CROSSFADE,
+	// Layers
+	OVERLAY_LAYER: Astal.Layer.OVERLAY,
+	TOP_LAYER: Astal.Layer.TOP,
+	BOTTOM_LAYER: Astal.Layer.BOTTOM,
+	BACKGROUND_LAYER: Astal.Layer.BACKGROUND
 });

@@ -5,11 +5,9 @@ import AstalNetwork from "gi://AstalNetwork";
 import Pango from "gi://Pango";
 import NM from "gi://NM";
 import Spinner from "../../Astalified/Spinner";
-
+let id = 0
 
 function Header(wifi: AstalNetwork.Wifi) {
-
-
 
 	const CustomButton = ({ action, ...props }: { action: "power" | "refresh" } & Widget.ButtonProps) => {
 		const bindings = Variable.derive(
@@ -39,7 +37,6 @@ function Header(wifi: AstalNetwork.Wifi) {
 			})
 		)()
 
-
 		return (
 			<button
 				className={bindings.as(c => c.className)}
@@ -52,13 +49,12 @@ function Header(wifi: AstalNetwork.Wifi) {
 				{...props}
 				halign={CENTER}
 				valign={CENTER}
+
 			>
-				<icon icon={bindings.as(b => b.icon)} halign={CENTER} valign={CENTER} />
+				<icon icon={bindings.as(b => b.icon)} halign={FILL} valign={FILL} />
 			</button>
 		);
 	}
-
-	const head = <label label="Wi-Fi" halign={CENTER} valign={CENTER} />;
 
 	return (
 		<centerbox
@@ -66,10 +62,9 @@ function Header(wifi: AstalNetwork.Wifi) {
 			halign={FILL}
 			valign={FILL}
 			vertical={false}
-			centerWidget={head}
+			centerWidget={<label label="Wi-Fi" halign={CENTER} valign={CENTER} />}
 			endWidget={
 				<box halign={CENTER} vertical={false} spacing={15}>
-
 					<CustomButton action={"power"} />
 					<CustomButton action={"refresh"} />
 				</box>
@@ -79,7 +74,7 @@ function Header(wifi: AstalNetwork.Wifi) {
 }
 
 
-function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
+function WifiAP(ap: any, wifi: AstalNetwork.Wifi, id: number) {
 	const isActiveAP = wifi.active_access_point && wifi.active_access_point.ssid === ap.ssid ? true : false;
 	const isConnecting = NM.State.CONNECTING === ap.state ? true : false;
 	const passreveal = Variable(false);
@@ -127,24 +122,6 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		</revealer>
 	);
 
-	const APlabel = () => {
-		const label = Variable.derive(
-			[bind(ap, "ssid"), bind(ap, "frequency"), bind(ap, "maxBitrate")],
-			(ssid, frequency, maxBitrate) => {
-				const frequencyGHz = (frequency / 1000).toFixed(1) + "GHz";
-				const maxBitrateMbps = (maxBitrate / 1000).toFixed(0) + "Mbps";
-				return [ssid, frequencyGHz, maxBitrateMbps].join(" - ");
-			}
-		)();
-
-		return (
-			<box vertical={false} spacing={5} halign={FILL} valign={CENTER}>
-				<icon icon={ap.icon_name} valign={CENTER} halign={START} />
-				<label label={label} valign={CENTER} halign={START} />
-			</box>
-		);
-	};
-
 
 
 	const CustomButton = ({ action, ...props }: { action: "connect" | "disconnect" | "forget" } & Widget.ButtonProps) => {
@@ -157,6 +134,26 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 			await notify("WiFi Error", `Failed to ${action} ${ap.ssid}: ${error}`, "critical");
 			console.error(`Failed to ${action} ${ap.ssid}: ${error}`);
 		};
+		const APlabel = () => {
+			const label = Variable.derive(
+				[bind(ap, "ssid"), bind(ap, "frequency"), bind(ap, "maxBitrate")],
+				(ssid, frequency, maxBitrate) => {
+					const frequencyGHz = (frequency / 1000).toFixed(1) + "GHz";
+					const maxBitrateMbps = (maxBitrate / 1000).toFixed(0) + "Mbps";
+					return [ssid, frequencyGHz, maxBitrateMbps].join(" - ");
+				}
+			)();
+
+			const labelbox = <box vertical={false} spacing={5} halign={FILL} valign={CENTER} >
+				<icon icon={ap.icon_name} valign={CENTER} halign={START} />
+				<label label={label} valign={CENTER} halign={START} />
+			</box>
+			labelbox.connect("destroy", () => {
+				console.log(`Destroying widget for SSID: ${ap.ssid}`);
+			});
+			return labelbox
+		};
+
 		const bindings = Variable.derive(
 			[bind(ap, "ssid")],
 			(ssid) => ({
@@ -231,7 +228,6 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 				}[action],
 			})
 		)()
-
 		return (
 			<button
 				className={`wifi ap ${bindings.as(c => c.className)}`}
@@ -253,45 +249,51 @@ function WifiAP(ap: any, wifi: AstalNetwork.Wifi) {
 		);
 	}
 
-	return (
-		<box vertical={true} >
-			<centerbox
-				height_request={20}
-				className={`wifi ap ${isActiveAP ? "connected" : ""}`}
-				halign={FILL}
-				valign={FILL}
-				startWidget={<CustomButton action={"connect"} />}
-				endWidget={
-					<stack
-						className={"wifi connected controls"}
-						visible={isActiveAP || isConnecting}
-						halign={END}
-						visible_child_name={isConnecting ? "connectionSpinner" : "controls"}
-						homogeneous={false}
-					>
-						<box name={"connectionSpinner"} halign={END}>
-							<Spinner
-								name={"connectionSpinner"}
-								setup={(self) => isConnecting ? self.start() : self.stop()}
-								halign={CENTER} valign={CENTER}
-							/>
-							<label label={"Connecting..."} halign={END} valign={CENTER} />
-						</box>
-						<box name={"controls"} halign={END} spacing={5}>
-							<CustomButton action={"disconnect"} />
-							<CustomButton action={"forget"} />
-						</box>
-					</stack>
-				}
-			/>
-			{PasswordEntry}
-		</box>
-	)
+
+	const theAP = <box vertical={true} >
+		<centerbox
+			height_request={20}
+			className={`wifi ap ${isActiveAP ? "connected" : ""}`}
+			halign={FILL}
+			valign={FILL}
+			startWidget={<CustomButton action={"connect"} />}
+			endWidget={
+				<stack
+					className={"wifi connected controls"}
+					visible={isActiveAP || isConnecting}
+					halign={END}
+					visible_child_name={isConnecting ? "connectionSpinner" : "controls"}
+					homogeneous={false}
+				>
+					<box name={"connectionSpinner"} halign={END}>
+						<Spinner
+							name={"connectionSpinner"}
+							setup={(self) => isConnecting ? self.start() : self.stop()}
+							halign={CENTER} valign={CENTER}
+						/>
+						<label label={"Connecting..."} halign={END} valign={CENTER} />
+					</box>
+					<box name={"controls"} halign={END} spacing={5}>
+						<CustomButton action={"disconnect"} />
+						<CustomButton action={"forget"} />
+					</box>
+				</stack>
+			}
+		/>
+		{PasswordEntry}
+	</box>
+
+	theAP.connect("destroy", () => {
+		console.log(`Destroying widget for SSID: ${ap.ssid}`);
+	});
+
+	return theAP
 }
 
 export default function () {
 	const Network = AstalNetwork.get_default();
 	const Wifi = Network.wifi;
+
 
 	const APList = bind(Wifi, "accessPoints").as((aps) => {
 		const activeAP = Wifi.active_access_point || null;
@@ -299,8 +301,7 @@ export default function () {
 		const groupedAPs = aps.reduce((acc: Record<string, any[]>, ap: any) => {
 			const ssid = ap.ssid?.trim();
 			if (ssid) {
-				acc[ssid] = acc[ssid] || [];
-				acc[ssid].push(ap);
+				(acc[ssid] ||= []).push(ap);
 			}
 			return acc;
 		}, {});
@@ -320,7 +321,8 @@ export default function () {
 			return b.strength - a.strength;
 		})
 
-		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi))
+		return sortedAPGroups.map((ap) => WifiAP(ap, Wifi, id))
+
 	});
 
 	return (

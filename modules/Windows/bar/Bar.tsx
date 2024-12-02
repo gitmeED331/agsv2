@@ -1,5 +1,5 @@
 import { Astal, App, Gtk, Gdk } from "astal/gtk3";
-import { GLib, GObject, exec, execAsync } from "astal";
+import { GLib, GObject, exec, execAsync, Gio } from "astal";
 // ----- Widgets -----
 import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
@@ -38,21 +38,19 @@ function LeftBar() {
 
 function CenterBar() {
 	return (
-		<box spacing={10}>
-			<button
-				className="clock"
-				cursor="pointer"
-				onClick={(_, event) => {
-					App.toggle_window("dashboard");
-				}}
-			>
-				<box halign={CENTER} valign={CENTER} spacing={5}>
-					<DateTimeLabel format="%H:%M:%S" interval={500} />
-					<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
-					<DateTimeLabel format="%a %b %d" interval={3600000} />
-				</box>
-			</button>
-		</box>
+		<button
+			className="clock"
+			cursor="pointer"
+			onClick={(_, event) => {
+				App.toggle_window("dashboard");
+			}}
+		>
+			<box halign={CENTER} valign={CENTER} spacing={5}>
+				<DateTimeLabel format="%H:%M:%S" interval={500} />
+				<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
+				<DateTimeLabel format="%a %b %d" interval={3600000} />
+			</box>
+		</button>
 	);
 }
 
