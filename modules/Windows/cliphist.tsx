@@ -17,7 +17,6 @@ const background = `${SRC}/assets/groot-thin-left.png`;
 function ClipHistItem(entry: any) {
 	const [id, ..._content] = entry.split("\t");
 	const content = _content.join(" ").trim();
-	let clickCount = 0;
 
 	const fileUriPattern = /^file:\/\/(.+\.(jpg|jpeg|png|gif|bmp|webp))$/i;
 	const filePathMatch = content.match(fileUriPattern);
@@ -28,7 +27,7 @@ function ClipHistItem(entry: any) {
 
 	function revealer() {
 		return (
-			<revealer transition_type={Gtk.RevealerTransitionType.SLIDE_DOWN} reveal_child={bind(imageReveal)}>
+			<revealer transition_type={REVEAL_SLIDE_DOWN} reveal_child={bind(imageReveal)}>
 				<box
 					className={"imagePreview"}
 					halign={FILL}
@@ -44,9 +43,7 @@ function ClipHistItem(entry: any) {
 	}
 
 	const idLabel = <label className={"idlabel"} label={`${id}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
-	const contentLabel = (
-		<label className={"contentlabel"} label={`${content}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />
-	);
+	const contentLabel = <label className={"contentlabel"} label={`${content}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />;
 
 	const grid = (
 		<Grid
@@ -67,15 +64,15 @@ function ClipHistItem(entry: any) {
 			className="cliphist item"
 			valign={START}
 			halign={FILL}
-			onClick={(_, event) => {
+			onClick={async (_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					if (isImage && filePath) {
 						imageReveal.set(!imageReveal.get());
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
+					await execAsync(`cliphist decode ${id} | wl-copy`);
 					App.toggle_window("cliphist");
-					copyById(id);
 				}
 			}}
 		>
@@ -86,7 +83,6 @@ function ClipHistItem(entry: any) {
 	const button = createButton(id, content);
 
 	button.connect("focus-out-event", () => {
-		clickCount = 0;
 		imageReveal.set(false);
 	});
 
@@ -132,7 +128,7 @@ const entrySet = new Set<string>();
 
 async function repopulate() {
 	try {
-		output = await getClipboardHistory();
+		output = await execAsync("cliphist list");
 		entries = output
 			.split("\n")
 			.map((line) => line.trim()) // Trim whitespace from each line once
@@ -163,18 +159,6 @@ async function repopulate() {
 
 repopulate();
 
-async function getClipboardHistory() {
-	return await execAsync("cliphist list");
-}
-
-async function clearClipboardHistory() {
-	await execAsync("cliphist wipe");
-}
-
-async function copyById(id: string) {
-	return await execAsync(`cliphist decode "${id}" | wl-copy`);
-}
-
 function ClipHistWidget() {
 	const scrollableList = (
 		<scrollable halign={FILL} valign={FILL} vexpand={true}>
@@ -186,8 +170,8 @@ function ClipHistWidget() {
 			<button
 				className="clear_hist"
 				valign={CENTER}
-				on_clicked={() => {
-					clearClipboardHistory();
+				on_clicked={async () => {
+					await execAsync("cliphist wipe");
 					entrySet.clear();
 					list.children = [];
 				}}
@@ -216,36 +200,32 @@ function ClipHistWidget() {
 		);
 	};
 
-	const theGrid = (
-		<Grid
-			className={"cliphist contentgrid"}
-			halign={FILL}
-			valign={FILL}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			css={`
-				background-image: url("${background}");
-				background-size: contain;
-				background-repeat: no-repeat;
-				background-position: center;
-				background-color: rgba(0, 0, 0, 1);
-			`}
-			setup={(self) => {
-				self.attach(header(), 0, 0, 1, 1);
-				self.attach(scrollableList, 0, 1, 1, 1);
-			}}
-		/>
-	);
-
 	return (
 		<box orientation={Gtk.Orientation.VERTICAL} className="cliphist container" halign={FILL} valign={FILL}>
-			{theGrid}
+			<Grid
+				className={"cliphist contentgrid"}
+				halign={FILL}
+				valign={FILL}
+				hexpand={true}
+				vexpand={true}
+				visible={true}
+				css={`
+					background-image: url("${background}");
+					background-size: contain;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-color: rgba(0, 0, 0, 1);
+				`}
+				setup={(self) => {
+					self.attach(header(), 0, 0, 1, 1);
+					self.attach(scrollableList, 0, 1, 1, 1);
+				}}
+			/>
 		</box>
 	);
 }
 
-function cliphist(monitor: Gdk.Monitor) {
+export default function cliphist(monitor: Gdk.Monitor) {
 	const masterGrid = (
 		<Grid
 			className={"cliphist mastergrid"}
@@ -291,5 +271,3 @@ App.connect("window-toggled", async (_, win) => {
 		await repopulate();
 	}
 });
-
-export default cliphist;

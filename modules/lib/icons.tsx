@@ -11,29 +11,29 @@ import { Astal, App, Widget } from "astal/gtk3";
 import { GLib } from "astal";
 
 const substitutes = {
-	"geany": "geany-symbolic",
-	"vivaldi": "vivaldi-symbolic",
+	geany: "geany-symbolic",
+	vivaldi: "vivaldi-symbolic",
 	"vivaldi-stable": "vivaldi-symbolic",
 	"org.kde.konsole": "terminal-symbolic",
-	"konsole": "terminal-symbolic",
+	konsole: "terminal-symbolic",
 	"audio-headset-bluetooth": "audio-headphones-symbolic",
 	"audio-card-analog-usb": "audio-speakers-symbolic",
 	"audio-card-analog-pci": "audio-card-symbolic",
 	"preferences-system": "emblem-system-symbolic",
 	"pcloud-symbolic": "pcloud-symbolic",
-	"KeePassXC": "keepassxc-symbolic",
+	KeePassXC: "keepassxc-symbolic",
 	"filen-desktop-symbolic": "filen-desktop-symbolic",
-	"webcord": "discord-symbolic",
+	webcord: "discord-symbolic",
 	"deezer-enhanced-symbolic": "deezer-symbolic",
-	"codium": "vs-code-symbolic",
+	codium: "vs-code-symbolic",
 	"code-oss": "vs-code-symbolic",
 	"kate-symbolic": "geany-symbolic",
 	"org.kde.kate": "codepen-symbolic",
 	"dev.zed.Zed": "zed-symbolic",
 	"chromium-browser": "chromium-symbolic",
-	"ente_auth": "auth-icon-symbolic",
-	"signal": "signal-symbolic",
-	"rofi": "rofi-symbolic"
+	ente_auth: "auth-icon-symbolic",
+	signal: "signal-symbolic",
+	rofi: "rofi-symbolic",
 };
 
 const Icon = {
@@ -52,6 +52,7 @@ const Icon = {
 		audio: "audio-x-generic-symbolic",
 	},
 	ui: {
+		desktop: "desktop-symbolic",
 		close: "window-close-symbolic",
 		colorpicker: "color-select-symbolic",
 		info: "info-symbolic",
