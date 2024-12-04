@@ -1,16 +1,10 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { execAsync, Variable, bind } from "astal";
+import { execAsync, exec, Variable, bind } from "astal";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
 import { winwidth, winheight } from "../lib/screensizeadjust";
 import Icon from "../lib/icons";
 import ClickToClose from "../lib/ClickToClose";
-
-type EntryObject = {
-	id: string;
-	content: string;
-	entry: string;
-};
 
 const background = `${SRC}/assets/groot-thin-left.png`;
 
@@ -42,41 +36,39 @@ function ClipHistItem(entry: any) {
 		);
 	}
 
-	const idLabel = <label className={"idlabel"} label={`${id}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
-	const contentLabel = <label className={"contentlabel"} label={`${content}`} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />;
-
-	const grid = (
-		<Grid
-			attribute={{ content, id }}
-			columnSpacing={10}
-			setup={(self) => {
-				self.attach(idLabel, 0, 0, 1, 1);
-				self.attach(contentLabel, 1, 0, 1, 1);
-				if (isImage && filePath) {
-					self.attach(revealer(), 0, 1, 2, 1);
-				}
-			}}
-		/>
-	);
+	const idLabel = <label className={"idlabel"} label={id} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
+	const contentLabel = <label className={"contentlabel"} label={content} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />;
 
 	const createButton = (id: string, content: string) => (
 		<button
 			className="cliphist item"
 			valign={START}
 			halign={FILL}
-			onClick={async (_, event) => {
+			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					if (isImage && filePath) {
 						imageReveal.set(!imageReveal.get());
 					}
 				}
+
 				if (event.button === Gdk.BUTTON_SECONDARY) {
-					await execAsync(`cliphist decode ${id} | wl-copy`);
-					App.toggle_window("cliphist");
+					execAsync(`bash -c "cliphist decode ${id} | wl-copy"`);
+					console.log("decoding: ", id, " content: ", content);
+
+					// App.toggle_window("cliphist");
 				}
 			}}
 		>
-			{grid}
+			<Grid
+				columnSpacing={10}
+				setup={(self) => {
+					self.attach(idLabel, 0, 0, 1, 1);
+					self.attach(contentLabel, 1, 0, 1, 1);
+					if (isImage && filePath) {
+						self.attach(revealer(), 0, 1, 2, 1);
+					}
+				}}
+			/>
 		</button>
 	);
 
@@ -92,12 +84,14 @@ function ClipHistItem(entry: any) {
 		}
 	});
 
-	button.connect("destroy", (_, id) => {
+	button.connect("destroy", () => {
 		button.disconnect(id);
 	});
 
 	return button;
 }
+
+let query = ""
 
 const input = (
 	<entry
@@ -111,60 +105,22 @@ const input = (
 		widthRequest={winwidth(0.15)}
 		onChanged={({ text }) => {
 			const searchText = (text ?? "").toLowerCase();
-			list.children.forEach((item) => {
-				item.visible = item.attribute.content.toLowerCase().includes(searchText);
-			});
 		}}
-	/>
+	/> as Gtk.Entry
 );
 
-const list = <box vertical spacing={5} />;
-let output: string;
-let entries: string[];
-let clipHistItems: EntryObject[];
-let widgets: Box<any, any>[];
-
-const entrySet = new Set<string>();
-
-async function repopulate() {
-	try {
-		output = await execAsync("cliphist list");
-		entries = output
-			.split("\n")
-			.map((line) => line.trim()) // Trim whitespace from each line once
-			.filter((line) => line); // Filter out any empty lines
-
-		const clipHistItems: Box<any, any>[] = entries
-			.map((entry) => {
-				const [id, ...contentParts] = entry.split("\t");
-				const content = contentParts.join(" ").trim();
-
-				if (entrySet.has(id.trim())) {
-					return null;
-				}
-
-				entrySet.add(id.trim());
-				return ClipHistItem(entry);
-			})
-			.filter(Boolean) as Box<any, any>[];
-
-		widgets = [...clipHistItems, ...list.children];
-		list.children = widgets;
-
-		console.log("Total items added:", widgets.length);
-	} catch (error) {
-		console.error("Error in repopulate:", error);
-	}
-}
-
-repopulate();
-
+const list = await execAsync("cliphist list");
 function ClipHistWidget() {
 	const scrollableList = (
 		<scrollable halign={FILL} valign={FILL} vexpand={true}>
-			{list}
+			<box expand vertical>
+				{
+					list.split("\n").map((l) => ClipHistItem(l))
+				}
+			</box>
 		</scrollable>
 	);
+
 	const header = () => {
 		const clear = (
 			<button
@@ -172,8 +128,7 @@ function ClipHistWidget() {
 				valign={CENTER}
 				on_clicked={async () => {
 					await execAsync("cliphist wipe");
-					entrySet.clear();
-					list.children = [];
+					query = ("");
 				}}
 			>
 				<icon icon={Icon.cliphist.delete} halign={FILL} valign={FILL} />
@@ -184,10 +139,9 @@ function ClipHistWidget() {
 				className="refresh_hist"
 				valign={CENTER}
 				onClicked={async () => {
-					entrySet.clear();
-					list.children = [];
-					(input as Gtk.Entry).set_text("");
-					await repopulate();
+					query = "";
+					input.set_text("");
+
 				}}
 			>
 				<icon icon={Icon.ui.refresh} halign={FILL} valign={FILL} />
@@ -226,21 +180,6 @@ function ClipHistWidget() {
 }
 
 export default function cliphist(monitor: Gdk.Monitor) {
-	const masterGrid = (
-		<Grid
-			className={"cliphist mastergrid"}
-			halign={FILL}
-			valign={FILL}
-			hexpand={true}
-			vexpand={true}
-			visible={true}
-			setup={(self) => {
-				self.attach(<ClickToClose id={1} width={0.75} height={0.75} windowName="cliphist" />, 1, 1, 1, 1);
-				self.attach(ClipHistWidget(), 2, 1, 1, 1);
-			}}
-		/>
-	);
-
 	return (
 		<window
 			name={"cliphist"}
@@ -259,15 +198,26 @@ export default function cliphist(monitor: Gdk.Monitor) {
 				}
 			}}
 		>
-			{masterGrid}
+			<Grid
+				className={"cliphist mastergrid"}
+				halign={FILL}
+				valign={FILL}
+				hexpand={true}
+				vexpand={true}
+				visible={true}
+				setup={(self) => {
+					self.attach(<ClickToClose id={1} width={0.75} height={0.75} windowName="cliphist" />, 1, 1, 1, 1);
+					self.attach(ClipHistWidget(), 2, 1, 1, 1);
+				}}
+			/>
 		</window>
 	);
 }
 
 App.connect("window-toggled", async (_, win) => {
 	if (win.name === "cliphist") {
-		(input as Gtk.Entry).set_text("");
+		input.set_text("");
 		input.grab_focus();
-		await repopulate();
+
 	}
 });
