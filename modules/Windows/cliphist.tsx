@@ -83,9 +83,15 @@ function ClipHistItem(entry: any) {
 			imageReveal.set(true);
 		}
 	});
+	const focusOutHandlerId = button.connect("focus-out-event", () => imageReveal.set(false));
+	const focusInHandlerId = button.connect("focus-in-event", () => {
+		if (isImage && filePath) imageReveal.set(true);
+	});
 
+	// Cleanup signal handlers on button destruction
 	button.connect("destroy", () => {
-		button.disconnect(id);
+		button.disconnect(focusOutHandlerId);
+		button.disconnect(focusInHandlerId);
 	});
 
 	return button;
@@ -110,16 +116,21 @@ const input = (
 );
 
 const list = await execAsync("cliphist list");
+async function updateList(scrollableList: Gtk.Box) {
+	scrollableList.children.forEach((child) => child.destroy());
+
+	const list = await execAsync("cliphist list");
+	list.split("\n")
+		.filter(Boolean)
+		.forEach((entry) => scrollableList.add(ClipHistItem(entry)));
+}
+
+const scrollableList = (
+	<box expand vertical />
+) as Gtk.Box;
+
+await updateList(scrollableList);
 function ClipHistWidget() {
-	const scrollableList = (
-		<scrollable halign={FILL} valign={FILL} vexpand={true}>
-			<box expand vertical>
-				{
-					list.split("\n").map((l) => ClipHistItem(l))
-				}
-			</box>
-		</scrollable>
-	);
 
 	const header = () => {
 		const clear = (
@@ -129,6 +140,7 @@ function ClipHistWidget() {
 				on_clicked={async () => {
 					await execAsync("cliphist wipe");
 					query = ("");
+					await updateList(scrollableList);
 				}}
 			>
 				<icon icon={Icon.cliphist.delete} halign={FILL} valign={FILL} />
@@ -141,7 +153,7 @@ function ClipHistWidget() {
 				onClicked={async () => {
 					query = "";
 					input.set_text("");
-
+					await updateList(scrollableList);
 				}}
 			>
 				<icon icon={Icon.ui.refresh} halign={FILL} valign={FILL} />
@@ -172,7 +184,7 @@ function ClipHistWidget() {
 				`}
 				setup={(self) => {
 					self.attach(header(), 0, 0, 1, 1);
-					self.attach(scrollableList, 0, 1, 1, 1);
+					self.attach(<scrollable halign={FILL} valign={FILL} vexpand={true}>{scrollableList}</scrollable>, 0, 1, 1, 1);
 				}}
 			/>
 		</box>
@@ -218,6 +230,6 @@ App.connect("window-toggled", async (_, win) => {
 	if (win.name === "cliphist") {
 		input.set_text("");
 		input.grab_focus();
-
+		await updateList(scrollableList);
 	}
 });
