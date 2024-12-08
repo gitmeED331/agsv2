@@ -7,7 +7,7 @@ import { Grid } from "../Astalified/index";
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
 function CTC(id: number, width: number) {
-	return <ClickToClose id={id} width={width} height={0.25} windowName="sessioncontrols" />;
+	return <ClickToClose id={id} width={width} height={0.25} windowName={`sessioncontrols${App.get_monitors()[0]}`} />;
 }
 
 const theGrid = <Grid halign={FILL} valign={FILL} hexpand={true} vexpand={true} visible={true}
@@ -25,7 +25,7 @@ const theGrid = <Grid halign={FILL} valign={FILL} hexpand={true} vexpand={true} 
 
 export default (monitor: Gdk.Monitor) => {
 	<window
-		name={"sessioncontrols"}
+		name={`sessioncontrols${monitor}"`}
 		className={"sessioncontrols window"}
 		gdkmonitor={monitor}
 		anchor={TOP | BOTTOM | LEFT | RIGHT}
@@ -36,7 +36,7 @@ export default (monitor: Gdk.Monitor) => {
 		application={App}
 		onKeyPressEvent={(_, event) => {
 			if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-				App.toggle_window("sessioncontrols");
+				App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`);
 			}
 		}}
 	>

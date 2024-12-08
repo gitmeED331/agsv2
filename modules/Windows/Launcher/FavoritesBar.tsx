@@ -1,4 +1,5 @@
 import { Gtk, App } from "astal/gtk3";
+import { execAsync } from "astal";
 import { Icons } from "../../lib/icons";
 
 export default function FavoritesBar({ favorites }: any) {
@@ -23,7 +24,7 @@ export default function FavoritesBar({ favorites }: any) {
 
                         on_clicked={() => {
                             app.launch();
-                            App.toggle_window("launcher");
+                            execAsync('ags request launcher')
                         }}
                     >
                         <icon icon={Icons(app.icon_name)} />

@@ -55,7 +55,7 @@ async function createWallpaperGrid(wps: Array<{ name: string; path: string; orig
 						tooltip_text={wp.name}
 						on_clicked={() => {
 							execAsync(`swww img "${wp.originalPath}"`);
-							App.toggle_window("wallpapers");
+							App.toggle_window(`wallpapers${App.get_monitors()[0]}`);
 						}}
 						widthRequest={winwidth(0.1)}
 						heightRequest={winheight(0.1)}
@@ -225,7 +225,7 @@ export default async function (monitor: Gdk.Monitor) {
 	/>
 
 	return <window
-		name="wallpapers"
+		name={`wallpapers${monitor}`}
 		className="wallpapers window"
 		gdkmonitor={monitor}
 		anchor={TOP | BOTTOM | LEFT | RIGHT}
@@ -235,9 +235,8 @@ export default async function (monitor: Gdk.Monitor) {
 		visible={false}
 		application={App}
 		onKeyPressEvent={(_, event) => {
-			const win = App.get_window("wallpapers");
-			if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {
-				win.visible = false;
+			if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+				App.toggle_window(`wallpapers${App.get_monitors()[0]}`);
 			}
 		}}
 	>

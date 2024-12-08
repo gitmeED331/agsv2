@@ -15,18 +15,21 @@ import Player from "./MediaPlayer";
 import Clock from "./clock";
 
 import lockstyle from "./style/Lockscreen.scss";
+import { winheight, winwidth } from "../modules/lib/screensizeadjust";
 
+const background = "windows-failure.jpg";
 const player = AstalMpris.Player.new("Deezer");
 const pam = new AstalAuth.Pam();
 const prompt = Variable("");
 const inputVisible = Variable(true);
 const inputNeeded = Variable(true);
+const UIVisibility = Variable(false);
 
 function authMessages() {
 	const messageLabel = (msg, type) => {
-		return <label label={msg.toString()} wrap={true} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />;
+		return <label label={msg.toString()} wrap={true} halign={CENTER} valign={CENTER} />;
 	};
-	const box = <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />;
+	const box = <box halign={CENTER} valign={CENTER} />;
 	pam.connect("auth-error", (auth, msg) => {
 		(box as Gtk.Box).add(messageLabel(msg, "auth-error"));
 		box.show_all();
@@ -47,7 +50,7 @@ function authMessages() {
 }
 
 function loginGrid() {
-	const promptLabel = <label label={bind(prompt).as((p) => p.toUpperCase())} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={bind(inputNeeded)} />;
+	const promptLabel = <label label={bind(prompt).as((p) => p.toUpperCase())} halign={CENTER} valign={CENTER} visible={bind(inputNeeded)} />;
 
 	const PasswordEntry = (
 		<entry
@@ -66,8 +69,8 @@ function loginGrid() {
 				}
 			}}
 			hexpand={true}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
+			halign={CENTER}
+			valign={CENTER}
 			onRealize={(self) => self.grab_focus()}
 		/>
 	);
@@ -78,19 +81,18 @@ function loginGrid() {
 		</box>
 	);
 
-	const currentUser = <label className={"username"} label={bind(pam, "username").as((u) => u.toUpperCase())} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />;
+	const currentUser = <label className={"username"} label={bind(pam, "username").as((u) => u.toUpperCase())} halign={CENTER} valign={CENTER} />;
 
 	const currentDesktop = (
-		<label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+		<label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={CENTER} valign={CENTER} />
 	);
 
 	const grid = (
 		<Grid
 			className={"logingrid"}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-			hexpand={true}
-			vexpand={true}
+			halign={CENTER}
+			valign={CENTER}
+			expand
 			rowSpacing={15}
 			visible={true}
 			setup={(self) => {
@@ -108,8 +110,8 @@ function loginGrid() {
 const topRightGrid = (
 	<Grid
 		className={"topright"}
-		halign={Gtk.Align.END}
-		valign={Gtk.Align.START}
+		halign={END}
+		valign={START}
 		hexpand={true}
 		vexpand={true}
 		visible={true}
@@ -125,8 +127,8 @@ const topRightGrid = (
 
 function Lockscreen({ monitor }: { monitor: number }) {
 	const overlayBox = (
-		<box halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true} vertical>
-			<centerbox halign={Gtk.Align.FILL} valign={Gtk.Align.START} hexpand={true} vexpand={true}>
+		<box halign={FILL} valign={FILL} expand vertical>
+			<centerbox halign={FILL} valign={START} expand>
 				{Controls()}
 				{Clock()}
 				{topRightGrid}
@@ -135,9 +137,12 @@ function Lockscreen({ monitor }: { monitor: number }) {
 		</box>
 	);
 
-	const tsxFixed = <Fixed hexpand={true} vexpand={true} visible={true} widthRequest={250} heightRequest={500} />;
-	// @ts-expect-error
-	tsxFixed.put(loginGrid(), 250, 400);
+	const tsxFixed = <Fixed expand visible={true} widthRequest={250} heightRequest={500}
+		setup={(self) => {
+			self.put(loginGrid(), winwidth(0.41), winheight(0.25));
+			// self.put(loginGrid(), 250, 400);
+		}}
+	/>;
 
 	return (
 		<window
@@ -146,12 +151,21 @@ function Lockscreen({ monitor }: { monitor: number }) {
 			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
 			exclusivity={Astal.Exclusivity.IGNORE}
 			keymode={Astal.Keymode.EXCLUSIVE}
-			visible={false}
+			visible={false} halign={FILL} valign={FILL}
 			application={App}
 			monitor={monitor}
 			clickThrough={false}
+			css={`background-image: url("../assets/${background}")`}
+			onKeyPressEvent={(_, event) => {
+				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+					UIVisibility.set(!UIVisibility.get())
+				}
+			}}
 		>
-			<overlay visible={true} passThrough={true} clickThrough={true} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL} hexpand={true} vexpand={true}>
+			<overlay visible={bind(UIVisibility)}
+				passThrough={true} clickThrough={true}
+				halign={FILL} valign={FILL} expand
+			>
 				{overlayBox}
 				{tsxFixed}
 			</overlay>
@@ -234,4 +248,12 @@ App.connect("activate", () => {
 App.start({
 	instanceName: "lockscreen",
 	css: lockstyle,
+	requestHandler(request: string, resp: (response: any) => void) {
+		if (request == "UITrigger") {
+			UIVisibility.set(true);
+			resp("UI Visibility set to true");
+		} else {
+			resp("unknown command")
+		}
+	}
 });

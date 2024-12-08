@@ -59,7 +59,7 @@ export default function BluetoothButton() {
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "bluetooth";
-					const win = App.get_window("dashboard");
+					const win = App.get_window(`dashboard${App.get_monitors()[0]}`);
 					const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
 					const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
 					if (win) {

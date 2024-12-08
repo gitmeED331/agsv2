@@ -53,9 +53,7 @@ function ClipHistItem(entry: any) {
 
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					execAsync(`bash -c "cliphist decode ${id} | wl-copy"`);
-					console.log("decoding: ", id, " content: ", content);
-
-					// App.toggle_window("cliphist");
+					App.toggle_window(`cliphist${App.get_monitors()[0]}`);
 				}
 			}}
 		>
@@ -192,9 +190,18 @@ function ClipHistWidget() {
 }
 
 export default function cliphist(monitor: Gdk.Monitor) {
+	const WINDOWNAME = `cliphistwindow${monitor}`;
+
+	App.connect("window-toggled", async (_, win) => {
+		if (win.name === WINDOWNAME) {
+			input.set_text("");
+			input.grab_focus();
+			await updateList(scrollableList);
+		}
+	});
 	return (
 		<window
-			name={"cliphist"}
+			name={WINDOWNAME}
 			className={"cliphist"}
 			gdkmonitor={monitor}
 			application={App}
@@ -204,7 +211,7 @@ export default function cliphist(monitor: Gdk.Monitor) {
 			visible={false}
 			anchor={TOP | BOTTOM | RIGHT | LEFT}
 			onKeyPressEvent={(_, event) => {
-				const win = App.get_window("cliphist");
+				const win = App.get_window(WINDOWNAME);
 				if (event.get_keyval()[1] === Gdk.KEY_Escape && win?.visible) {
 					win.visible = false;
 				}
@@ -225,11 +232,3 @@ export default function cliphist(monitor: Gdk.Monitor) {
 		</window>
 	);
 }
-
-App.connect("window-toggled", async (_, win) => {
-	if (win.name === "cliphist") {
-		input.set_text("");
-		input.grab_focus();
-		await updateList(scrollableList);
-	}
-});

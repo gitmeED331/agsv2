@@ -15,11 +15,11 @@ export default function AppTitleTicker() {
 			primarycmd: {
 				focused: focused
 					? () => {
-							const win = App.get_window("overview");
-							if (win) {
-								win.visible = !win.visible;
-							}
+						const win = App.get_window(`overview${App.get_monitors()[0]}`);
+						if (win) {
+							win.visible = !win.visible;
 						}
+					}
 					: "",
 			}[action],
 			secondarycmd: {

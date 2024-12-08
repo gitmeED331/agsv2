@@ -3,6 +3,8 @@ import { bind, execAsync, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
 import Icon from "../../../lib/icons";
 
+const monitorID = Gdk.Display.get_default()!.get_n_monitors() - 1
+
 const dispatch = (arg: string | number) => {
 	execAsync(`hyprctl dispatch workspace ${arg}`);
 };
@@ -21,43 +23,41 @@ function ws(id: number) {
 }
 // --- end signal handler ---
 
-const monitorID = Gdk.Display.get_default()!.get_n_monitors() - 1
-
 // --- workspaces ---
-function Workspaces() {
+export default function Workspaces() {
 	const hyprland = Hyprland.get_default();
 
 	function workspaceButton(id: number) {
 		return bind(ws(id)).as((ws) => {
-			// bind(hyprland.monitors[monitorID], "activeWorkspace")
-			// ${ active === ws ? "active" : "" }
-			const classname = Variable.derive(
-				[bind(hyprland, "focusedWorkspace"),
-				bind(ws, "clients")],
-				(focused, clients) => `
-				${focused === ws ? "focused" : ""}
-                ${clients.length > 0 ? "occupied" : ""}
-                workspacebutton
-            `
-			)();
-
-			const isVisible = Variable.derive(
+			const Bindings = Variable.derive(
 				[bind(hyprland, "focusedWorkspace"), bind(ws, "clients")],
-				(focused, clients) => id <= 4 || clients.length > 0 || focused === ws
+				(focused, clients) => ({
+					classname: `
+                  		${focused === ws ? "focused" : ""}
+                  		${clients.length > 0 ? "occupied" : ""}
+                  		workspacebutton
+                	`,
+					visible: id <= 4 || clients.length > 0 || focused === ws,
+					content: Icon.wsicon[`ws${id}` as keyof typeof Icon.wsicon] ? (
+						<icon
+							icon={Icon.wsicon[`ws${id}` as keyof typeof Icon.wsicon]}
+							halign={CENTER}
+							valign={CENTER}
+						/>
+					) : (
+						<label
+							label={String(id)}
+							halign={CENTER}
+							valign={CENTER}
+						/>
+					),
+				})
 			)();
 
-			const wsIcon = Icon.wsicon;
-			// @ts-expect-error
-			const wsIconLabel = wsIcon[`ws${id}`] ? (
-				// @ts-expect-error
-				<icon icon={wsIcon[`ws${id}`]} halign={CENTER} valign={CENTER} />
-			) : (
-				<label label={`${id}`} halign={CENTER} valign={CENTER} />
-			);
 			return (
 				<button
-					className={classname}
-					visible={isVisible}
+					className={Bindings.as(c => c.classname)}
+					visible={Bindings.as(v => v.visible)}
 					valign={CENTER}
 					halign={CENTER}
 					cursor="pointer"
@@ -77,7 +77,7 @@ function Workspaces() {
 					}}
 				>
 
-					{wsIconLabel}
+					{Bindings.get().content}
 				</button >
 			);
 		});
@@ -90,7 +90,6 @@ function Workspaces() {
 			className="hyprworkspaces"
 			halign={CENTER}
 			valign={CENTER}
-			// spacing={10}
 			hexpand={true}
 		>
 			{
@@ -101,5 +100,3 @@ function Workspaces() {
 		</ box >
 	)
 }
-
-export default Workspaces;

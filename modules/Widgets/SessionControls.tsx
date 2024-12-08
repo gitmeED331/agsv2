@@ -4,7 +4,7 @@ import Icon, { Icons } from "../lib/icons.js";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-const SysButton = (action: string) => {
+const SysButton = ({ action }: { action: string }) => {
 	const command = () => {
 		const cmd = (() => {
 			switch (action) {
@@ -21,7 +21,7 @@ const SysButton = (action: string) => {
 			}
 		})();
 		return (
-			App.toggle_window("sessioncontrols"),
+			App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`),
 			execAsync(cmd)
 		)
 	}
@@ -76,10 +76,10 @@ const SysButton = (action: string) => {
 export default function SessionControls() {
 	return (
 		<box className={"sessioncontrols container"} valign={CENTER} halign={CENTER} visible={true}>
-			{SysButton("lock")}
-			{SysButton("logout")}
-			{SysButton("reboot")}
-			{SysButton("shutdown")}
+			<SysButton action={"lock"} />
+			<SysButton action={"logout"} />
+			<SysButton action={"reboot"} />
+			<SysButton action={"shutdown"} />
 		</box>
 	);
 }

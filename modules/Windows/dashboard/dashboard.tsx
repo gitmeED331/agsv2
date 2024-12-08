@@ -10,11 +10,22 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 
 Gdk.Screen.get_default();
 
-function Dashboard(monitor: Gdk.Monitor) {
+export default function Dashboard(monitor: Gdk.Monitor) {
+	const WINDOWNAME = `dashboard${monitor}`;
 
+	App.connect("window-toggled", (_, win) => {
+		if (win.visible === false && win.name === WINDOWNAME) {
+			dashboardLeftStack.set_visible_child_name("calendar");
+			dashboardRightStack.set_visible_child_name("notifications");
+			if (dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer"
+				&& dashboardPlayerStack.get_visible_child_name() !== "no-media" && (dashboardPlayerStack as any).length > 0) {
+				dashboardPlayerStack.set_visible_child_name("org.mpris.MediaPlayer2.Deezer");
+			}
+		}
+	});
 	return (
 		<window
-			name={"dashboard"}
+			name={WINDOWNAME}
 			className={"dashboard window"}
 			gdkmonitor={monitor}
 			anchor={TOP | LEFT | RIGHT | BOTTOM}
@@ -24,7 +35,7 @@ function Dashboard(monitor: Gdk.Monitor) {
 			visible={false}
 			application={App}
 			onKeyPressEvent={(_, event) => {
-				const win = App.get_window("dashboard");
+				const win = App.get_window(WINDOWNAME);
 				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
 					if (win && win.visible === true) {
 						win.visible = false;
@@ -42,28 +53,21 @@ function Dashboard(monitor: Gdk.Monitor) {
 				column_spacing={5}
 				row_spacing={5}
 				setup={(self) => {
-					self.attach(playerStack(), 1, 0, 3, 1);
-					self.attach(<ClickToClose id={3} width={0.25} height={0.1} windowName="dashboard" />, 0, 0, 1, 2); // left side
-					self.attach(LeftSide(), 1, 1, 1, 1);
-					self.attach(Tray(), 2, 1, 1, 1);
-					self.attach(RightSide(), 3, 1, 1, 1);
-					self.attach(<ClickToClose id={3} width={0.25} height={0.1} windowName="dashboard" />, 4, 0, 1, 2); // right side
-					self.attach(<ClickToClose id={3} width={1} height={0.5} windowName="dashboard" />, 0, 2, 5, 1); // bottom
+					// top
+					self.attach(playerStack(), 1, 2, 3, 1);
+
+					// main
+					self.attach(<ClickToClose id={1} width={0.25} height={0.1} windowName={WINDOWNAME} />, 0, 0, 1, 3); // left side
+					self.attach(LeftSide(), 1, 0, 1, 1);
+					self.attach(Tray(), 2, 0, 1, 1);
+					self.attach(RightSide(), 3, 0, 1, 1);
+					self.attach(<ClickToClose id={2} width={0.25} height={0.1} windowName={WINDOWNAME} />, 4, 0, 1, 3); // right side
+
+					// bottom
+					self.attach(<ClickToClose id={3} width={.5} height={0.25} windowName={WINDOWNAME} />, 1, 1, 5, 1); // bottom
 				}}
 			/>
 		</window>
 	);
+
 }
-
-App.connect("window-toggled", (_, win) => {
-	if (win.visible === false && win.name === "dashboard") {
-		dashboardLeftStack.set_visible_child_name("calendar");
-		dashboardRightStack.set_visible_child_name("notifications");
-		if (dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer"
-			&& dashboardPlayerStack.get_visible_child_name() !== "no-media" && (dashboardPlayerStack as any).length > 0) {
-			dashboardPlayerStack.set_visible_child_name("org.mpris.MediaPlayer2.Deezer");
-		}
-	}
-});
-
-export default Dashboard;

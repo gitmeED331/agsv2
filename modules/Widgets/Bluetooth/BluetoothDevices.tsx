@@ -28,7 +28,7 @@ function AdapterControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBlue
 				},
 				blueman: () => {
 					execAsync("blueman-manager");
-					App.toggle_window("dashboard");
+					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 				},
 			}[action],
 

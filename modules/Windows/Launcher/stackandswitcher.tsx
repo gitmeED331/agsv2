@@ -52,14 +52,9 @@ function createAppGrid(appList: typeof Applications) {
 				tooltip_text={app.get_description()}
 				on_clicked={() => {
 					app.launch();
-					App.toggle_window("launcher");
+					execAsync('ags request launcher')
 				}}
-				onKeyPressEvent={(_, event) => {
-					if (event.get_keyval()[1] === Gdk.KEY_Return) {
-						app.launch();
-						App.toggle_window("launcher");
-					}
-				}}
+
 			>
 				<box vertical={false} halign={FILL} valign={FILL} spacing={5} widthRequest={winwidth(0.15)}>
 					{validIcon && <icon icon={iconName} halign={CENTER} valign={CENTER} />}
@@ -201,11 +196,6 @@ export const Switcher = () => {
 				key={category}
 				onClick={(_, event) => {
 					if (event.button === Gdk.BUTTON_PRIMARY) {
-						handleSwitch(category.toLowerCase());
-					}
-				}}
-				onKeyPressEvent={(_, event) => {
-					if (event.get_keyval()[1] === Gdk.KEY_Return) {
 						handleSwitch(category.toLowerCase());
 					}
 				}}

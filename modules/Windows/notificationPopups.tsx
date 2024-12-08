@@ -16,11 +16,7 @@ function NotifItem() {
 		return Notif.get_dont_disturb();
 	}
 
-	const box = <box
-		vertical={true}
-		spacing={10}
-		expand
-	/> as Widget.Box;
+	const box = (<box vertical={true} spacing={10} expand />) as Widget.Box;
 
 	Notif.connect("notified", (_, id) => {
 		if (isDoNotDisturbEnabled()) {
@@ -60,20 +56,13 @@ function NotifItem() {
 
 		notification.connect("dismissed", () => removeItem(box, notificationItem));
 
-		// setTimeout(() => removeItem(box, notificationItem), expireTime.get());
-	})
+		setTimeout(() => removeItem(box, notificationItem), expireTime.get());
+	});
 	return box;
 }
 
 export default (monitor: Gdk.Monitor) => (
-	<window
-		name={`notifications${monitor}`}
-		className={"notifications notif"}
-		widthRequest={450}
-		anchor={TOP | RIGHT}
-		hexpand={true}
-		layer={OVERLAY_LAYER}
-		gdkmonitor={monitor}>
+	<window name={`notifications${monitor}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={OVERLAY_LAYER} gdkmonitor={monitor}>
 		<NotifItem />
 	</window>
 );

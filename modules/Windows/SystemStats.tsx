@@ -4,7 +4,7 @@ import systemStats from '../Widgets/SystemStats/systemStats';
 
 export default (monitor: Gdk.Monitor) => (
     <window
-        name={"systemstats"}
+        name={`systemstats${monitor}`}
         className={"stats window"}
         gdkmonitor={monitor}
         anchor={TOP | RIGHT}
@@ -16,7 +16,7 @@ export default (monitor: Gdk.Monitor) => (
         margin-top={45}
         onKeyPressEvent={(_, event) => {
             if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                App.toggle_window("systemstats");
+                App.toggle_window(`systemstats${App.get_monitors()[0]}`);
             }
         }}
     >

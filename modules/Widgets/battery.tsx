@@ -1,5 +1,5 @@
 import { Gtk, Gdk, App } from "astal/gtk3";
-import { Variable, bind } from "astal";
+import { Variable, bind, execAsync } from "astal";
 
 import Icon from "../lib/icons";
 import powerProfiles from "gi://AstalPowerProfiles";
@@ -31,29 +31,26 @@ const TheLabelReveal = ({ battery, charging }: { battery: Battery.Device, chargi
 		>
 			<label
 				label={bind(battery, "percentage").as((p) => `${p * 100}%`)}
-				tooltipText={chargeTooltip(charging)} onDestroy={(self) => self.destroy()}
+				tooltipText={chargeTooltip(charging)}
+				onDestroy={(self) => self.destroy()}
 			/>
 		</revealer>
 	);
 };
 
-const BatteryLevelBar = (
-	percent: any,
-	power: powerProfiles.PowerProfiles,
-	blocks: number = 10
-) => (
+const BatteryLevelBar = (percent: any, power: powerProfiles.PowerProfiles) => (
 	<levelbar
 		orientation={Gtk.Orientation.HORIZONTAL}
 		halign={CENTER}
 		valign={CENTER}
-		max_value={blocks}
+		max_value={BLOCKS}
 		mode={Gtk.LevelBarMode.CONTINUOUS}
 		tooltipText={bind(power, "active_profile")}
-		value={percent.as((p: any) => p * blocks)}
+		value={percent.as((p: number) => p * BLOCKS)}
 	/>
 );
 
-function BatteryButton() {
+export default function BatteryButton() {
 	const Bat = Battery.get_default();
 	const PowerProfiles = powerProfiles.get_default();
 
@@ -74,12 +71,11 @@ function BatteryButton() {
 			visible
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					const win = App.get_window("sessioncontrols");
-					if (win) win.visible = !win.visible;
+					App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`);
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					// PercentageReveal.set(!PercentageReveal.get());
-					App.toggle_window("systemstats")
+					App.toggle_window(`systemstats${App.get_monitors()[0]}`);
 				}
 			}}
 		>
@@ -87,11 +83,9 @@ function BatteryButton() {
 				{[
 					TheLabelReveal({ battery: Bat, charging: Charging }),
 					ChargeIndicatorIcon({ battery: Bat, charging: Charging }),
-					BatteryLevelBar(Percentage, PowerProfiles, BLOCKS),
+					BatteryLevelBar(Percentage, PowerProfiles),
 				]}
 			</box>
 		</button>
 	);
 }
-
-export default BatteryButton;

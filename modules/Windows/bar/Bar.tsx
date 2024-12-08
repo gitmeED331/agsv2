@@ -7,7 +7,6 @@ import MediaTickerButton from "./MediaTicker";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-
 function LeftBar() {
 	return (
 		<box
@@ -42,7 +41,7 @@ function CenterBar() {
 			className="clock"
 			cursor="pointer"
 			onClick={(_, event) => {
-				App.toggle_window("dashboard");
+				App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 			}}
 		>
 			<box halign={CENTER} valign={CENTER} spacing={5}>
@@ -69,7 +68,6 @@ export default function Bar(monitor: Gdk.Monitor) {
 			className={"bar"}
 			name={`bar${monitor}`}
 			gdkmonitor={monitor}
-			// monitor={monitor}
 			application={App}
 			anchor={TOP | LEFT | RIGHT}
 			exclusivity={Astal.Exclusivity.EXCLUSIVE}

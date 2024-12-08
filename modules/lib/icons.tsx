@@ -17,7 +17,7 @@ const substitutes = {
 	"org.kde.konsole": "terminal-symbolic",
 	konsole: "terminal-symbolic",
 	"audio-headset-bluetooth": "audio-headphones-symbolic",
-	"audio-card-analog-usb": "audio-speakers-symbolic",
+	"audio-card-analog-usb": "audio-headphones-symbolic",
 	"audio-card-analog-pci": "audio-card-symbolic",
 	"preferences-system": "emblem-system-symbolic",
 	"pcloud-symbolic": "pcloud-symbolic",
@@ -85,7 +85,7 @@ const Icon = {
 			medium: "microphone-sensitivity-medium-symbolic",
 			high: "microphone-sensitivity-high-symbolic",
 		},
-		volume: {
+		speaker: {
 			muted: "audio-volume-muted-symbolic",
 			low: "audio-volume-low-symbolic",
 			medium: "audio-volume-medium-symbolic",

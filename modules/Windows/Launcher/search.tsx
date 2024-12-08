@@ -43,7 +43,7 @@ const handleTerminalCommand = (query: string, state: any, self: any) => {
 		execAsync(cmd);
 
 		self.set_text("");
-		App.toggle_window("launcher");
+		execAsync('ags request launcher')
 	}
 };
 

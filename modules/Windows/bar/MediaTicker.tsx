@@ -1,5 +1,5 @@
 import { Gtk, Gdk, App, Widget } from "astal/gtk3";
-import { bind, Variable } from "astal";
+import { bind, Variable, execAsync } from "astal";
 import Mpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
 
@@ -40,10 +40,7 @@ function tickerButton(player: Mpris.Player) {
 			cursor={"pointer"}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					const win = App.get_window("mediaplayerwindow");
-					if (win) {
-						win.visible = !win.visible;
-					}
+					App.toggle_window(`mediaplayerwindow${App.get_monitors()[0]}`);
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					player.play_pause();

@@ -53,7 +53,6 @@ export default function BrightnessSlider() {
 			halign={CENTER}
 			xalign={0}
 			yalign={0}
-			ellipsize={Pango.EllipsizeMode.END}
 			label="Brightness"
 		/>
 	);

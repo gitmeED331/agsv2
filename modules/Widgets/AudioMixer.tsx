@@ -1,120 +1,92 @@
-import { Gdk, App } from "astal/gtk3";
-import { bind, execAsync, Variable } from "astal";
-import Icon from "../lib/icons";
+import { Gdk, Gtk, App, Widget } from "astal/gtk3";
+import { bind, Binding, execAsync, Variable } from "astal";
+import Icon, { Icons } from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-
-function theDevice({ device }: { device: any }) {
+function AudioElement({ element, type, ...props }: { element: any, type: "device" | "stream" } & Widget.SliderProps) {
 	const { audio } = AstalWp.get_default() as { audio: any };
-	const Speaker = audio.get_default_speaker();
 
-	const tooltipText = Variable.derive(
-		[bind(device, "volume"), bind(device, "mute")],
-		(volume, isMuted) => (isMuted ? "Muted" : `Volume ${(volume * 100).toFixed(2)}%`)
-	);
+	const Bindings = Variable.derive(
+		[
+			bind(element, "volume"),
+			bind(element, "mute"),
+			bind(element, "icon"),
+			bind(element, "volume_icon"),
+			bind(element, "description"),
+			bind(audio, "default_speaker"),
+			bind(audio, "default_microphone"),
+		],
+		(volume, isMuted, aIcon, volumeIcon, description, speaker, microphone) => ({
+			tooltip: {
+				device: isMuted ? "Muted" : `${description} \n Volume ${(volume * 100).toFixed(2)}%`,
+				stream: isMuted ? "Muted" : `${description} \n Volume ${(volume * 100).toFixed(2)}%`,
+			}[type],
+			buttonCN: {
+				device: `audio-mixer volume-indicator ${isMuted || volume === 0 ? "muted" : ""}`,
+				stream: `audio-mixer volume-indicator ${isMuted || volume === 0 ? "muted" : ""}`,
+			}[type],
+			sliderCN: {
+				device: `audio-mixer Slider ${isMuted || volume === 0 ? "muted" : ""}`,
+				stream: `audio-mixer Slider ${isMuted || volume === 0 ? "muted" : ""}`,
+			}[type],
+			theIcon: {
+				device: isMuted || volume === 0 ? (element === microphone ? Icon.audio.mic.muted : Icon.audio.speaker.muted) : volumeIcon,
+				stream: isMuted || volume === 0 ? Icon.audio.speaker.muted : aIcon,
+			}[type],
+			sliderValue: {
+				device: volume,
+				stream: volume,
+			}[type],
+			theDescription: {
+				device: description || "Device",
+				stream: description || "Stream",
+			}[type],
+		}),
+	)();
 
-	const classname = Variable.derive(
-		[bind(device, "mute")],
-		(isMuted) => ["audio-mixer", "volume-indicator", isMuted && "muted"].filter(Boolean).join(" ")
-	);
-
-	return (
-		<box spacing={5} key={device.id}>
-			<button
-				className={bind(classname)}
-				tooltip_text={bind(tooltipText)}
-				onClick={(_: any, event: any) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						device.set_mute(!device.get_mute());
-					}
-				}}
-				onScroll={(_: any, { delta_y }: any) => {
-					const volumeChange = delta_y < 0 ? 0.05 : -0.05;
-					device.set_volume(device.volume + volumeChange);
-					device.set_mute(false);
-				}}
-			>
-				<icon icon={bind(device, "volume_icon")} />
-			</button>
-			<slider
-				className={`audio-mixer ${device}-slider Slider`}
-				halign={CENTER}
-				valign={CENTER}
-				vexpand={true}
-				drawValue={false}
-				min={0}
-				max={device === Speaker ? 1.5 : 1}
-				value={bind(device, "volume")}
-				onDragged={({ value, dragging }: any) => {
-					if (dragging) {
-						device.set_volume(value);
-						device.set_mute(false);
-					}
-				}}
-			/>
-		</box>
-	);
-}
-
-function DeviceControlGroup({ devices }: { devices: any[] }) {
-	return (
-		<box className="audio-mixer devices" vertical vexpand spacing={10} valign={CENTER} halign={CENTER}>
-			{devices.map((device) => (
-				<box spacing={5} key={device.id}>
-					{theDevice({ device })}
-				</box>
-			))}
-		</box>
-	);
-}
-
-function AppMixerItem({ stream }: { stream: any }) {
-	const classname = Variable.derive([bind(stream, "mute")], (isMuted) => {
-		const classList = ["audio-mixer", "item"];
-		if (isMuted) {
-			classList.push("muted");
+	const handleClick = (_: any, event: any) => {
+		if (event.button === Gdk.BUTTON_PRIMARY) {
+			element.set_mute(!element.get_mute());
 		}
-		return classList.join(" ");
-	});
+	};
+
+	const handleScroll = (_: any, { delta_y }: any) => {
+		const volumeChange = delta_y < 0 ? 0.05 : -0.05;
+		element.set_volume(element.volume + volumeChange);
+		element.set_mute(false);
+	};
 
 	return (
-		<box className={"audio-mixer item"} visible={true} hexpand={false} halign={CENTER} vertical spacing={2}>
+		<box vertical spacing={5} halign={CENTER} valign={CENTER} >
 			<button
-				className={bind(classname)}
-				onClick={(_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						stream?.set_mute(!stream?.get_mute());
-					}
-				}}
-				onScroll={(_: any, { delta_y }: any) => {
-					const volumeChange = delta_y < 0 ? 0.05 : -0.05;
-					stream.set_volume(stream.volume + volumeChange);
-					stream.set_mute(false);
-				}}
+				className={bind(Bindings).as((c) => c.buttonCN)}
+				onClick={handleClick} onScroll={handleScroll}
+				halign={START}
+				tooltip_markup={bind(Bindings).as((t) => t.tooltip)}
 			>
-				<box spacing={5} valign={CENTER}>
-					<icon valign={START} tooltip_text={bind(stream, "description").as((n) => n || "")} icon={bind(stream, "icon").as((n) => n || Icon.audio.type.speaker)} />
-					<label valign={CENTER} xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(stream, "description").as((d) => d || "")} />
+				<box spacing={5} valign={FILL} halign={START}>
+					<icon icon={bind(Bindings).as((i) => i.theIcon)} halign={START} />
+					<label xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(Bindings).as((t) => t.theDescription)} halign={START} />
 				</box>
 			</button>
 			<slider
-				className={"audio-mixer item Slider"}
-				halign={CENTER}
-				valign={CENTER}
-				hexpand={true}
-				draw_value={false}
-				value={bind(stream, "volume")}
+				className={bind(Bindings).as((c) => c.sliderCN)}
+				halign={START} valign={FILL} vexpand={true}
+				drawValue={false}
+				min={0} max={1.5}
+				value={bind(Bindings).as((v) => v.sliderValue)}
 				onDragged={({ value, dragging }: any) => {
 					if (dragging) {
-						stream.set_volume(value);
-						stream.set_mute(false);
+						element.set_volume(value);
+						element.set_mute(value === 0);
 					}
 				}}
+				{...props}
 			/>
 		</box>
 	);
-}
+};
 
 function SettingsButton() {
 	return (
@@ -122,7 +94,7 @@ function SettingsButton() {
 			className={"audio-mixer settings-button"}
 			onClicked={() => {
 				execAsync("pavucontrol");
-				App.toggle_window("dashboard");
+				App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 			}}
 			hexpand
 			halign={END}
@@ -133,27 +105,83 @@ function SettingsButton() {
 	);
 }
 
-export default function AudioMixer() {
-	const { audio } = AstalWp.get_default() as { audio: any };
-	const Speaker = audio.get_default_speaker();
-	const Microphone = audio.get_default_microphone();
+export default function () {
+	const { audio } = AstalWp.get_default() as any;
+	const Speaker = audio?.get_default_speaker();
+	const Microphone = audio?.get_default_microphone();
 
-	const activeStreams = (
-		<box vertical>
-			<label className={"audio-mixer header"} label={"Active Audio Streams"} visible={audio.get_streams.length > 0} />
-			{bind(audio, "streams").as((streams) =>
-				streams.length > 0 ? streams.map((stream: any, index: any) =>
-					<AppMixerItem key={index} stream={stream} />) : <label label="No Active Audio Streams" />,
-			)}
-		</box>
-	);
+	// const theDevices = <scrollable expand vscroll={Gtk.PolicyType.NEVER} hscroll={Gtk.PolicyType.AUTOMATIC} halign={FILL} valign={START}>
+	// 	<box halign={START} >
+	// 		<Device device={Speaker} setup={(self) => {
+	// 			self.connect("scroll-event", (_: any, event: any) => {
+	// 				theDevices.emit("scroll-event", event);
+	// 				return true;
+	// 			})
+	// 		}} />
+	// 		<Device device={Microphone} setup={(self) => {
+	// 			self.connect("scroll-event", (_: any, event: any) => {
+	// 				theDevices.emit("scroll-event", event);
+	// 				return true;
+	// 			})
+	// 		}} />
+	// 	</box>
+	// </scrollable>
+
+	// const theStreams = <scrollable expand vscroll={Gtk.PolicyType.NEVER} hscroll={Gtk.PolicyType.AUTOMATIC} halign={FILL} valign={START}>
+	// 	{bind(audio, "streams").as((streams) => (streams.length > 0
+	// 		? streams.map((stream: any) => <AppMixerItem stream={stream}
+	// 			setup={(self) => {
+	// 				self.connect("scroll-event", (_: any, event: any) => {
+	// 					theStreams.emit("scroll-event", event);
+	// 					return true;
+	// 				})
+	// 			}}
+	// 		/>)
+	// 		: <label label="No Active Audio Streams" />))}
+	// </scrollable>
 
 	return (
-		<box vertical={true} className={"audio-mixer container"} spacing={10} hexpand={false}>
-			<label className={"header"} label={"Audio Devices & Streams"} halign={CENTER} />
-			<DeviceControlGroup devices={[Speaker, Microphone]} />
-			{activeStreams}
+		<box vertical className={"audio-mixer container"} spacing={10} hexpand={false}>
+			<box className={"audio-mixer devices"} vertical>
+				<label className={"header"} label={"Audio Devices"} halign={CENTER} />
+
+				<box vertical spacing={10}>
+					{/* {bind(audio, "devices").as(devices =>
+						devices.map((device: any) =>
+							<AudioElement element={device} type={"device"} />
+						)
+					)} */}
+
+					<AudioElement element={Speaker} type={"device"} />
+					<AudioElement element={Microphone} type={"device"} />
+				</box>
+			</box>
+			<box className={"audio-mixer streams"} vertical >
+				<label className={"header"} label={bind(audio, "streams").as((streams) => (streams.length > 0 ? "Active Audio Streams" : "No Active Audio Streams"))} halign={CENTER} />
+				<box vertical spacing={10}>
+					{bind(audio, "streams").as((streams) =>
+						streams.map((stream: any) =>
+							<AudioElement element={stream} type={"stream"} />
+						)
+					)}
+				</box>
+			</box>
+
 			<SettingsButton />
 		</box>
 	);
 }
+
+
+// setup: (self) => {
+// 	self.on("scroll-event", (widget, event) => {
+// 		let [ok, delta_x, delta_y] = event.get_scroll_deltas()
+// 		if (delta_y != 0) {
+// 			delta_x = delta_y
+// 			let adj = self.get_hadjustment()
+// 			adj.value += delta_x
+// 			self.set_hadjustment(adj)
+// 			return true;
+// 		}
+// 	})
+// },

@@ -1,16 +1,3 @@
-/*
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-//------------- VOLUME SLIDER ---------------------
 .audio-mixer {
 	color: $color1;
 
@@ -35,19 +22,71 @@
 		border-radius: calc($radius * 1.25);
 		border: $border;
 		padding: 1rem;
+
+		.devices,
+		.streams {
+			margin-top: 0.5rem;
+
+			.header {
+				margin-bottom: 1rem;
+			}
+		}
 	}
-}
 
-.muted {
-	color: red;
+	&.Slider {
+		min-width: 15rem;
 
-	.icon {
-		color: red;
+		& trough {
+			//background: $SliderTrough;
+			background: unset;
+			border-radius: 20rem;
+			min-height: 12px;
+			box-shadow: inset 0px 0px 4px white;
+		}
+
+		& highlight {
+			background: linear-gradient(0deg, rgba(0, 255, 0, 0.25) 0%, rgba(0, 0, 255, 0.75) 30%, rgba(0, 255, 255, 1) 50%, rgba(0, 0, 255, 0.75) 70%, rgba(0, 255, 0, 0.25) 100%);
+			border-radius: 20rem;
+			// min-width: 5px;
+		}
+
+		& slider {
+			min-height: 10px;
+			min-width: 10px;
+			border-radius: 20px;
+			background-color: steelblue;
+			border: none;
+			box-shadow: 0px 0px 4px white;
+		}
+
+		&.muted {
+			all: unset;
+			color: red;
+			min-width: 15rem;
+
+			& trough {
+				background-color: unset;
+				border-radius: 20rem;
+				min-height: 12px;
+				box-shadow: inset 0px 0px 4px red;
+			}
+
+			& highlight {
+				background: unset;
+				border-radius: 20rem;
+				// min-width: 5px;
+			}
+
+			& slider {
+				min-height: 10px;
+				min-width: 10px;
+				border-radius: 20px;
+				background-color: unset;
+				border: none;
+				box-shadow: 0px 0px 4px white;
+			}
+		}
 	}
-}
-
-.volume-indicator:hover {
-	color: $color5;
 }
 
 .volumemixer .menu {
@@ -88,5 +127,23 @@
 
 	&:last-child {
 		margin-bottom: 0.5rem;
+	}
+}
+
+.volume-indicator {
+	icon {
+		font-size: 1rem;
+	}
+
+	&:hover {
+		color: $color5;
+	}
+
+	&.muted {
+		color: red;
+
+		&:hover {
+			color: steelblue;
+		}
 	}
 }

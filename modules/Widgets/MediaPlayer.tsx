@@ -184,13 +184,14 @@ function Player(player: Mpris.Player) {
 				command: {
 					play_pause: () => player.play_pause(),
 					activePlay: () => {
-						const dwin = App.get_window("dashboard");
-						const mpwin = App.get_window("mediaplayerwindow");
+						const dwin = App.get_window(`dashboard${App.get_monitors()[0]}`);
+						const mpwin = App.get_window(`mediaplayerwindow${App.get_monitors()[0]}`);
 						execAsync(player.entry);
 						if (dwin && dwin.visible === true) {
-							App.toggle_window("dashboard");
+							App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 						} else if (mpwin && mpwin.visible === true) {
-							App.toggle_window("mediaplayerwindow");
+
+							App.toggle_window(`mediaplayerwindow${App.get_monitors()[0]}`);
 						}
 					},
 					next: () => player.next(),
@@ -236,11 +237,11 @@ function Player(player: Mpris.Player) {
 				self.attach(<Controls action="activePlay" />, 1, 1, 1, 1);
 				self.attach(TrackPosition(), 0, 2, 2, 1);
 				self.attach(
-					<box className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
+					<centerbox className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
 						<Controls action="previous" />
 						<Controls action="play_pause" />
 						<Controls action="next" />
-					</box>, 0, 3, 2, 1);
+					</centerbox>, 0, 3, 2, 1);
 			}}
 		/>
 	);

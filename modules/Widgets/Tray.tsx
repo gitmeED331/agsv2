@@ -1,4 +1,4 @@
-import { Gdk, Widget } from "astal/gtk3";
+import { Gdk, Widget, App } from "astal/gtk3";
 import { bind } from "astal";
 import AstalTray from "gi://AstalTray";
 
@@ -27,6 +27,7 @@ const SysTrayItem = (item: TrayItem) => {
 					clearTimeout(clickTimeout);
 					clickCount = 0;
 					item.activate(0, 0);
+					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 				}
 			}
 			if (event.button === Gdk.BUTTON_SECONDARY) {
