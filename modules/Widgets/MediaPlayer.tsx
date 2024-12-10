@@ -272,7 +272,7 @@ export default function playerStack() {
 					if (p?.entry) {
 						self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
 					} else {
-						console.error(`Player entry is invalid:`, p);
+						console.error(`Player entry is invalid: `, p);
 					}
 				});
 
@@ -280,7 +280,7 @@ export default function playerStack() {
 					if (p?.entry) {
 						self.add_titled(Player(p), p.busName, p.entry.toUpperCase());
 					} else {
-						console.error(`Added player entry is invalid:`, p);
+						console.error(`Added player entry is invalid: `, p);
 					}
 				});
 

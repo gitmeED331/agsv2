@@ -67,8 +67,8 @@ App.start({
 					res("Hiding mediaplayerwindow");
 				}
 			}
-			if (request == "sessioncontrol") {
-				const win = App.get_window(`sessioncontrol${monitor}`)
+			if (request == "sessioncontrols") {
+				const win = App.get_window(`sessioncontrols${monitor}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing sessioncontrol");

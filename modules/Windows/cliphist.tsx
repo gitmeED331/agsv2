@@ -190,7 +190,7 @@ function ClipHistWidget() {
 }
 
 export default function cliphist(monitor: Gdk.Monitor) {
-	const WINDOWNAME = `cliphistwindow${monitor}`;
+	const WINDOWNAME = `cliphist${monitor}`;
 
 	App.connect("window-toggled", async (_, win) => {
 		if (win.name === WINDOWNAME) {

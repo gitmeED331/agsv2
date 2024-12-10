@@ -49,31 +49,33 @@ function authMessages() {
 	return box;
 }
 
+const PasswordEntry = (
+	<entry
+		className={"password"}
+		placeholder_text={"Enter your password..."}
+		visibility={false}
+		onActivate={(self) => {
+			if (self.get_text().length === 0) {
+				inputNeeded.set(true);
+				prompt.set("Password Required, try again.");
+				return;
+			} else if (self.get_text().length > 0) {
+				inputNeeded.set(false);
+				pam.supply_secret(self.text);
+				self.text = "";
+			}
+		}}
+		hexpand={true}
+		halign={CENTER}
+		valign={CENTER}
+		onRealize={(self) => self.grab_focus()}
+	/>
+);
+
 function loginGrid() {
 	const promptLabel = <label label={bind(prompt).as((p) => p.toUpperCase())} halign={CENTER} valign={CENTER} visible={bind(inputNeeded)} />;
 
-	const PasswordEntry = (
-		<entry
-			className={"password"}
-			placeholder_text={"Enter your password..."}
-			visibility={false}
-			onActivate={(self) => {
-				if (self.get_text().length === 0) {
-					inputNeeded.set(true);
-					prompt.set("Password Required, try again.");
-					return;
-				} else if (self.get_text().length > 0) {
-					inputNeeded.set(false);
-					pam.supply_secret(self.text);
-					self.text = "";
-				}
-			}}
-			hexpand={true}
-			halign={CENTER}
-			valign={CENTER}
-			onRealize={(self) => self.grab_focus()}
-		/>
-	);
+
 
 	const passwordPrompt = (
 		<box vertical spacing={10}>
@@ -159,6 +161,10 @@ function Lockscreen({ monitor }: { monitor: number }) {
 			onKeyPressEvent={(_, event) => {
 				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
 					UIVisibility.set(!UIVisibility.get())
+					if (UIVisibility.get() === true) {
+						PasswordEntry.grab_focus();
+					}
+
 				}
 			}}
 		>
@@ -250,7 +256,7 @@ App.start({
 	css: lockstyle,
 	requestHandler(request: string, resp: (response: any) => void) {
 		if (request == "UITrigger") {
-			UIVisibility.set(true);
+			UIVisibility.set(!UIVisibility.get());
 			resp("UI Visibility set to true");
 		} else {
 			resp("unknown command")

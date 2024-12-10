@@ -25,7 +25,7 @@ const theGrid = <Grid halign={FILL} valign={FILL} hexpand={true} vexpand={true} 
 
 export default (monitor: Gdk.Monitor) => {
 	<window
-		name={`sessioncontrols${monitor}"`}
+		name={`sessioncontrols${monitor}`}
 		className={"sessioncontrols window"}
 		gdkmonitor={monitor}
 		anchor={TOP | BOTTOM | LEFT | RIGHT}

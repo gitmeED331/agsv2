@@ -52,19 +52,21 @@ export default function Dashboard(monitor: Gdk.Monitor) {
 				visible={true}
 				column_spacing={5}
 				row_spacing={5}
+				rowHomogeneous={false}
+				columnHomogeneous={false}
 				setup={(self) => {
 					// top
-					self.attach(playerStack(), 1, 2, 3, 1);
+					self.attach(playerStack(), 1, 0, 3, 1);
 
 					// main
-					self.attach(<ClickToClose id={1} width={0.25} height={0.1} windowName={WINDOWNAME} />, 0, 0, 1, 3); // left side
-					self.attach(LeftSide(), 1, 0, 1, 1);
-					self.attach(Tray(), 2, 0, 1, 1);
-					self.attach(RightSide(), 3, 0, 1, 1);
-					self.attach(<ClickToClose id={2} width={0.25} height={0.1} windowName={WINDOWNAME} />, 4, 0, 1, 3); // right side
+					self.attach(<ClickToClose id={1} width={0.25} height={0.2} windowName={WINDOWNAME} halign={FILL} valign={FILL} />, 0, 1, 1, 1); // left side
+					self.attach(LeftSide(), 1, 1, 1, 1);
+					self.attach(Tray(), 2, 1, 1, 1);
+					self.attach(RightSide(), 3, 1, 1, 1);
+					self.attach(<ClickToClose id={2} width={0.25} height={0.2} windowName={WINDOWNAME} halign={FILL} valign={FILL} />, 4, 1, 1, 1); // right side
 
 					// bottom
-					self.attach(<ClickToClose id={3} width={.5} height={0.25} windowName={WINDOWNAME} />, 1, 1, 5, 1); // bottom
+					self.attach(<ClickToClose id={3} width={1} height={0.75} windowName={WINDOWNAME} halign={FILL} valign={FILL} />, 0, 2, 5, 1); // bottom
 				}}
 			/>
 		</window>

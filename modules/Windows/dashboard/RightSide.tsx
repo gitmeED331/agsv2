@@ -43,7 +43,7 @@ export default function RightSide() {
 	const stackSwitcher = <StackSwitcher className={"dashboard stackSwitcher"} stack={rightStack} halign={CENTER} valign={START} spacing={10} />;
 
 	return (
-		<box className={"dashboard rightSide"} vertical={true} halign={FILL} valign={START} hexpand={true} vexpand={true} spacing={5} heightRequest={500} widthRequest={50}>
+		<box className={"dashboard rightSide"} vertical={true} halign={START} valign={START} hexpand={true} vexpand={true} spacing={5} heightRequest={450} widthRequest={450}>
 			{[stackSwitcher, rightStack]}
 		</box>
 	);
