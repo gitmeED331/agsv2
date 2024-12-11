@@ -28,7 +28,7 @@ const filterContext = new Variable({
     selectedCategory: "" as string | null,
 });
 
-const favorites = Applications.filter((app) => ["Zed", "Code - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
+const favorites = Applications.filter((app) => ["Zed", "VSCodium - OSS", "deezer-enhanced", "Floorp", "KeePassXC"].includes(app.get_name()));
 
 /* keep for looking up app names */
 // console.log(Applications.map(app => app.get_name()));
@@ -444,17 +444,6 @@ function Launcherflowbox(monitor: Gdk.Monitor) {
         />
     );
 
-    const masterGrid = (
-        <Grid
-            className={"launcher containergrid"} halign={FILL} valign={FILL}
-            hexpand={true} vexpand={true} visible={true}
-            setup={(self) => {
-                self.attach(contentGrid, 1, 1, 1, 1);
-                self.attach(<ClickToClose id={1} windowName="launcher" />, 2, 1, 1, 1);
-            }}
-        />
-    );
-
     return (
         <window
             name={"launcher"}
@@ -477,7 +466,14 @@ function Launcherflowbox(monitor: Gdk.Monitor) {
                 }
             }}
         >
-            {masterGrid}
+            <Grid
+                className={"launcher containergrid"} halign={FILL} valign={FILL}
+                hexpand={true} vexpand={true} visible={true}
+                setup={(self) => {
+                    self.attach(contentGrid, 0, 0, 1, 1);
+                    self.attach(<ClickToClose id={1} width={0.8} height={0.8} windowName="launcher" />, 1, 0, 1, 1);
+                }}
+            />
         </window>
     );
 }

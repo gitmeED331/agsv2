@@ -1,5 +1,5 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { GLib, bind, execAsync } from "astal";
+import { GLib, bind } from "astal";
 import AstalApps from "gi://AstalApps";
 import Pango from "gi://Pango";
 import Icon, { Icons } from "../../lib/icons";
@@ -52,7 +52,7 @@ function createAppGrid(appList: typeof Applications) {
 				tooltip_text={app.get_description()}
 				on_clicked={() => {
 					app.launch();
-					execAsync('ags request launcher')
+					App.toggle_window(`launcher${App.get_monitors()[0]}`)
 				}}
 
 			>

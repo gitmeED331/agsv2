@@ -64,8 +64,8 @@ export default function Launchergrid(monitor: Gdk.Monitor) {
 			vexpand={true}
 			visible={true}
 			setup={(self) => {
-				self.attach(contentGrid, 1, 1, 1, 1);
-				self.attach(<ClickToClose id={1} width={0.8} height={0.8} windowName={WINDOWNAME} />, 2, 1, 1, 1);
+				self.attach(contentGrid, 0, 0, 1, 1);
+				self.attach(<ClickToClose id={1} width={0.8} height={0.8} windowName={WINDOWNAME} />, 1, 0, 1, 1);
 			}}
 		/>
 	);

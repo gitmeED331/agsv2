@@ -6,45 +6,46 @@ import Pango from "gi://Pango";
 
 function AdapterControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBluetooth.Adapter) {
 	function Buttons({ action, ...props }: { action: "blueman" | "refresh" | "power" } & Widget.ButtonProps) {
-		const Bindings = Variable.derive([bind(bluetooth, "is_powered"), bind(adapter, "discovering")], (is_powered, discovering) => ({
-			tooltip: {
-				power: is_powered ? "Turn off Bluetooth" : "Turn on Bluetooth",
-				refresh: discovering ? "Scanning..." : "Refresh",
-				blueman: "Blueman",
-			}[action],
+		const Bindings = Variable.derive(
+			[bind(bluetooth, "is_powered"), bind(adapter, "discovering")],
+			(is_powered, discovering) => ({
+				tooltip: {
+					power: is_powered ? "Disable Bluetooth" : "Enable Bluetooth",
+					refresh: discovering ? "Scanning..." : "Refresh",
+					blueman: "Blueman",
+				}[action],
 
-			className: {
-				power: is_powered ? "bluetooth power-on" : "bluetooth power-off",
-				refresh: discovering ? "spinner" : "refresh",
-				blueman: "bluetooth blueman",
-			}[action],
+				className: {
+					power: is_powered ? "bluetooth power-on" : "bluetooth power-off",
+					refresh: discovering ? "spinner" : "refresh",
+					blueman: "bluetooth blueman",
+				}[action],
 
-			command: {
-				power: () => {
-					adapter.set_powered(is_powered ? false : true);
-				}, //execAsync("bluetoothctl power off") : execAsync("bluetoothctl power on"),
-				refresh: () => {
-					discovering ? adapter.stop_discovery() : [adapter.start_discovery(), setTimeout(() => adapter.stop_discovery(), 60000)];
-				},
-				blueman: () => {
-					execAsync("blueman-manager");
-					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
-				},
-			}[action],
+				command: {
+					power: () => {
+						is_powered ? adapter.set_powered(false) : adapter.set_powered(true);
+						// execAsync(`bluetoothctl power ${is_powered ? "off" : "on"}`);
+					},
+					refresh: () => {
+						discovering ? adapter.stop_discovery() : [adapter.start_discovery(), setTimeout(() => adapter.stop_discovery(), 60000)];
+					},
+					blueman: () => {
+						execAsync("blueman-manager");
+						App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+					},
+				}[action],
 
-			icon: {
-				power: is_powered ? Icon.bluetooth.enabled : Icon.bluetooth.disabled,
-				refresh: discovering ? "process-working-symbolic" : "view-refresh-symbolic",
-				blueman: Icon.ui.settings,
-			}[action],
-		}))();
+				icon: {
+					power: is_powered ? Icon.bluetooth.enabled : Icon.bluetooth.disabled,
+					refresh: discovering ? "process-working-symbolic" : "view-refresh-symbolic",
+					blueman: Icon.ui.settings,
+				}[action],
+			}))();
 
 		return (
 			<button
-				onClick={(_, event) => {
-					if (event.button === Gdk.BUTTON_PRIMARY) {
-						Bindings.get().command();
-					}
+				onClick={() => {
+					Bindings.get().command();
 				}}
 				className={Bindings.as((c) => c.className)}
 				halign={CENTER}

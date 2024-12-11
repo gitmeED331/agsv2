@@ -5,9 +5,18 @@
         "strict": true,
         "target": "ES2022",
         "module": "ES2022",
+        "lib": [
+            "ES2022",
+            "DOM"
+        ],
         "moduleResolution": "Bundler",
-        // "checkJs": true,
-        // "allowJs": true,
+        "checkJs": true,
+        "allowJs": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "noImplicitThis": true,
+        "baseUrl": ".",
         "jsx": "react-jsx",
         "jsxImportSource": "/usr/share/astal/gjs/gtk3",
         "paths": {

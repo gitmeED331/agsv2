@@ -18,5 +18,6 @@ import Spinner from "./Spinner";
 import Stack from "./Stack";
 import StackSidebar from "./StackSideBar";
 import StackSwitcher from "./StackSwitcher";
+import ToggleButton from "./ToggleButton";
 
-export { Fixed, FlowBox, FlowBoxChild, Grid, Image, Notebook, SearchEntry, Spinner, Stack, StackSidebar, StackSwitcher };
+export { Fixed, FlowBox, FlowBoxChild, Grid, Image, Notebook, SearchEntry, Spinner, Stack, StackSidebar, StackSwitcher, ToggleButton };
