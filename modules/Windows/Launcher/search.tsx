@@ -16,7 +16,6 @@ const Apps = new AstalApps.Apps({
 
 export let query = new Variable<string>("");
 
-
 function Search(query: string) {
 	const results = Apps.fuzzy_query(query);
 
@@ -33,8 +32,9 @@ function Search(query: string) {
 		theStack.set_visible_child_name("All Apps");
 	}
 
-	return results.length > 0;
+	// return results.length > 0;
 }
+
 
 const handleTerminalCommand = (query: string, state: any) => {
 	const command = query.startsWith("TERM::") ? query.slice(6).trim() : query.trim();
@@ -62,7 +62,9 @@ const handleCalculatorCommand = (query: string) => {
 		if (!existingChild) {
 			theStack.add_named(calculatorPage, "calculator");
 		}
-		theStack.set_visible_child_name("calculator");
+		if (theStack.get_visible_child_name() !== "calculator") {
+			theStack.set_visible_child_name("calculator");
+		}
 	}
 };
 
@@ -72,44 +74,45 @@ const entry = (
 	<entry
 		className="launcher search"
 		placeholder_text="Search apps, TERM:: for teriminal commands, CALC:: for calculator..."
-		on_changed={(self) => {
+		onChanged={(self) => {
 			const query = self.get_text().trim();
 			const results = Apps.fuzzy_query(query);
 			currentQuery = query;
-			if (query.startsWith("CALC::") && theStack.get_visible_child_name() !== "calculator") {
-				theStack.set_visible_child_name("calculator");
+			if (query.startsWith("CALC::") || /^[0-9+\-*/().\s]+$/.test(query) && results.length === 0) {
+				handleCalculatorCommand(query);
+				if (theStack.get_visible_child_name() !== "calculator") {
+					theStack.set_visible_child_name("calculator");
+				}
 			} else if (!query.startsWith("TERM::") && !query.startsWith("CALC::")) {
 				Search(query);
 			}
 		}}
-		onKeyPressEvent={(self, event) => {
+		onKeyPressEvent={(_, event) => {
 			const keyval = event.get_keyval()[1];
 			const state = event.get_state()[1];
 			const query = currentQuery.trim();
 			const results = Apps.fuzzy_query(query);
 
 			if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
-				switch (true) {
-					case (query.startsWith("TERM::") && results.length === 0 || results.length === 0 && /^[a-zA-Z0-9_\-]+$/.test(query)):
+
+				if (query.startsWith("TERM::") && results.length === 0 || results.length === 0 && /^[a-zA-Z0-9_\-]+$/.test(query)) {
+					handleTerminalCommand(query, state);
+				}
+				if (query.startsWith("CALC::") && results.length === 0 || results.length === 0 && /^[0-9+\-*/().\s]+$/.test(query)) {
+					handleCalculatorCommand(query);
+					if (theStack.get_visible_child_name() !== "calculator") {
+						theStack.set_visible_child_name("calculator");
+					}
+				}
+				if (results.length === 1) {
+					const app = results[0];
+					const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
+					if (isShiftPressed) {
 						handleTerminalCommand(query, state);
-						break;
-					case (query.startsWith("CALC::") && results.length === 0 || results.length === 0 && /^[0-9+\-*/().\s]+$/.test(query)):
-						handleCalculatorCommand(query);
-						if (theStack.get_visible_child_name() !== "calculator") {
-							theStack.set_visible_child_name("calculator");
-						}
-						break;
-					case (results.length === 1 && results[0].name.toLowerCase() === query.toLowerCase()):
-						const app = results[0];
-						const isShiftPressed = state & Gdk.ModifierType.SHIFT_MASK;
-						if (isShiftPressed) {
-							handleTerminalCommand(query, state);
-						} else {
-							app.launch();
-						}
-						break;
-					default:
-						break;
+					}
+					if (results[0].name.toLowerCase() === query.toLowerCase()) {
+						app.launch();
+					}
 				}
 			}
 		}}

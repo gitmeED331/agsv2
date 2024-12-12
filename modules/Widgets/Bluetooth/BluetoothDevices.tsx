@@ -84,19 +84,20 @@ function content(device: AstalBluetooth.Device) {
 			command: {
 				// ctl commands
 				pair: () => {
-					execAsync(`bluetoothctl ${paired ? "remove" : "pair"} ${device.address}`);
+					//execAsync(`bluetoothctl ${paired ? "remove" : "pair"} ${device.address}`);
+					paired ? "" : device.pair()
 				},
 				trust: () => {
-					execAsync(`bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`);
+					//execAsync(`bluetoothctl ${trusted ? "untrust" : "trust"} ${device.address}`);
+					device.set_trusted(trusted ? false : true)
 				},
 				connect: () => {
-					execAsync(`bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`);
+					//execAsync(`bluetoothctl ${connected ? "disconnect" : "connect"} ${device.address}`);
+					connected ? device.disconnect_device() : device.connect_device()
 				},
 
-				// astal commands
-				// pair: () => paired ? "" : device.pair(),
-				// trust: () => device.set_trusted(trusted ? false : true),
-				// connect: () => connected ? device.disconnect_device() : device.connect_device(),
+
+
 			}[action],
 
 			icon: {

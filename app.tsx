@@ -113,8 +113,6 @@ App.start({
 			// SystemStats(monitor);
 			// wallpapers(monitor);
 		}
-
-
 	},
 });
 

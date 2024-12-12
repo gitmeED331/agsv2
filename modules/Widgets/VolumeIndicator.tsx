@@ -1,4 +1,4 @@
-import { Gdk, Gtk, App } from "astal/gtk3";
+import { Gdk, Gtk, App, Astal } from "astal/gtk3";
 import { bind, Variable, execAsync } from "astal";
 import AstalWp from "gi://AstalWp";
 import Icon, { Icons } from "../lib/icons";
@@ -7,7 +7,7 @@ import { dashboardLeftStack } from "../Windows/dashboard/LeftSide";
 const TRANSITION = 300
 const REVEALMIC = Variable(true);
 
-function Indicator({ device, type }: { device: any, type: "speaker" | "mic" }) {
+function Indicator({ device, type }: { device: AstalWp.Endpoint, type: "speaker" | "mic" }) {
 	const { audio } = AstalWp.get_default() as { audio: any };
 	const Bindings = Variable.derive(
 		[

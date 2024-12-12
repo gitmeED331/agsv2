@@ -1,8 +1,5 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
-import { GLib, execAsync } from "astal";
 import AstalApps from "gi://AstalApps";
-import Pango from "gi://Pango";
-import { winwidth, winheight } from "../../lib/screensizeadjust";
 import { Grid } from "../../Astalified/index";
 import FavoritesBar from "./FavoritesBar";
 import ClickToClose from "../../lib/ClickToClose";

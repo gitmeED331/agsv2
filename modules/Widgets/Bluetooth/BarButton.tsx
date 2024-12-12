@@ -7,7 +7,7 @@ import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 let btreveal = Variable(false);
 
 const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
-	const updateLabel = (btLabel: any) => {
+	const updateLabel = (btLabel: Gtk.Label) => {
 		const btEnabled = bluetooth.is_powered;
 		const btDevices = bluetooth.is_connected;
 		const label = btEnabled ? (btDevices ? ` (${btDevices})` : "On") : "Off";

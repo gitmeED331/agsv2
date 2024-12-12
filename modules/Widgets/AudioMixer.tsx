@@ -4,7 +4,7 @@ import Icon, { Icons } from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-function AudioElement({ element, type, ...props }: { element: any, type: "device" | "stream" } & Widget.SliderProps) {
+function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; type: "device" | "stream" } & Widget.SliderProps) {
 	const { audio } = AstalWp.get_default() as { audio: any };
 
 	const Bindings = Variable.derive(
@@ -58,23 +58,21 @@ function AudioElement({ element, type, ...props }: { element: any, type: "device
 	};
 
 	return (
-		<box vertical spacing={5} halign={CENTER} valign={CENTER} >
-			<button
-				className={bind(Bindings).as((c) => c.buttonCN)}
-				onClick={handleClick} onScroll={handleScroll}
-				halign={START}
-				tooltip_markup={bind(Bindings).as((t) => t.tooltip)}
-			>
+		<box vertical spacing={5} halign={CENTER} valign={CENTER}>
+			<button className={bind(Bindings).as((c) => c.buttonCN)} onClick={handleClick} onScroll={handleScroll} halign={START} tooltip_markup={bind(Bindings).as((t) => t.tooltip)}>
 				<box spacing={5} valign={FILL} halign={START}>
 					<icon icon={bind(Bindings).as((i) => i.theIcon)} halign={START} />
-					<label xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(Bindings).as((t) => t.theDescription)} halign={START} />
+					<label xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(Bindings).as((d) => d.theDescription)} halign={START} />
 				</box>
 			</button>
 			<slider
 				className={bind(Bindings).as((c) => c.sliderCN)}
-				halign={START} valign={FILL} vexpand={true}
+				halign={START}
+				valign={FILL}
+				vexpand={true}
 				drawValue={false}
-				min={0} max={1.5}
+				min={0}
+				max={1.5}
 				value={bind(Bindings).as((v) => v.sliderValue)}
 				onDragged={({ value, dragging }: any) => {
 					if (dragging) {
@@ -86,7 +84,7 @@ function AudioElement({ element, type, ...props }: { element: any, type: "device
 			/>
 		</box>
 	);
-};
+}
 
 function SettingsButton() {
 	return (
@@ -146,9 +144,9 @@ export default function () {
 				<label className={"header"} label={"Audio Devices"} halign={CENTER} />
 
 				<box vertical spacing={10}>
-					{/* {bind(audio, "devices").as(devices =>
-						devices.map((device: any) =>
-							<AudioElement element={device} type={"device"} />
+					{/* {bind(audio, "devices").as(ds =>
+						ds.map((d: any) =>
+							<AudioElement element={d} type={"device"} />
 						)
 					)} */}
 
@@ -156,14 +154,11 @@ export default function () {
 					<AudioElement element={Microphone} type={"device"} />
 				</box>
 			</box>
-			<box className={"audio-mixer streams"} vertical >
+
+			<box className={"audio-mixer streams"} vertical>
 				<label className={"header"} label={bind(audio, "streams").as((streams) => (streams.length > 0 ? "Active Audio Streams" : "No Active Audio Streams"))} halign={CENTER} />
 				<box vertical spacing={10}>
-					{bind(audio, "streams").as((streams) =>
-						streams.map((stream: any) =>
-							<AudioElement element={stream} type={"stream"} />
-						)
-					)}
+					{bind(audio, "streams").as((streams) => streams.map((stream: any) => <AudioElement element={stream} type={"stream"} />))}
 				</box>
 			</box>
 
@@ -171,7 +166,6 @@ export default function () {
 		</box>
 	);
 }
-
 
 // setup: (self) => {
 // 	self.on("scroll-event", (widget, event) => {

@@ -1,48 +1,46 @@
 import { Gdk, Widget, App } from "astal/gtk3";
-import { bind } from "astal";
+import { bind, Variable, timeout, GLib } from "astal";
 import AstalTray from "gi://AstalTray";
 
 type TrayItem = ReturnType<ReturnType<typeof AstalTray.Tray.get_default>["get_item"]>;
 
 const SysTrayItem = (item: TrayItem) => {
 	const menu = item.create_menu();
-	let clickTimeout: any = null;
+	let clickTimeout: number | GLib.Source;
 	let clickCount = 0;
 
-	const button = <button
-		className="systray-item"
-		halign={CENTER}
-		valign={CENTER}
-		tooltip_markup={bind(item, "tooltip_markup")}
-		focus_on_click={false}
-		use_underline={false}
-		onClick={(btn, event) => {
-			if (event.button === Gdk.BUTTON_PRIMARY) {
-				clickCount++;
-				if (clickCount === 1) {
-					clickTimeout = setTimeout(() => {
-						clickCount = 0;
-					}, 400);
-				} else if (clickCount === 2) {
-					clearTimeout(clickTimeout);
-					clickCount = 0;
-					item.activate(0, 0);
-					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
-				}
-			}
-			if (event.button === Gdk.BUTTON_SECONDARY) {
-				menu?.popup_at_widget(btn, Gdk.Gravity.EAST, Gdk.Gravity.WEST, null);
-			}
-		}}
-	>
-		<icon
-			gIcon={bind(item, "gicon")}
+	const button = (
+		<button
+			className="systray-item"
 			halign={CENTER}
 			valign={CENTER}
-		/>
-	</button>
+			tooltip_markup={bind(item, "tooltip_markup")}
+			focus_on_click={false}
+			use_underline={false}
+			onClick={(btn, event) => {
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					clickCount++;
+					if (clickCount === 1) {
+						clickTimeout = setTimeout(() => {
+							clickCount = 0;
+						}, 400);
+					} else if (clickCount === 2) {
+						GLib.source_remove(Number(clickTimeout));
+						clickCount = 0;
+						item.activate(0, 0);
+						App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+					}
+				}
+				if (event.button === Gdk.BUTTON_SECONDARY) {
+					menu?.popup_at_widget(btn, Gdk.Gravity.EAST, Gdk.Gravity.WEST, null);
+				}
+			}}
+		>
+			<icon gIcon={bind(item, "gicon")} halign={CENTER} valign={CENTER} />
+		</button>
+	);
 
-	return button
+	return button;
 };
 
 const setupTray = (box: Widget.Box) => {
@@ -72,11 +70,4 @@ const setupTray = (box: Widget.Box) => {
 	systemTray.connect("item_removed", (_, id) => removeItem(id));
 };
 
-export default () => (<box
-	className={"tray container"}
-	halign={CENTER}
-	valign={CENTER}
-	vertical={true}
-	setup={setupTray}
-/>)
-
+export default () => <box className={"tray container"} halign={CENTER} valign={CENTER} expand vertical={true} setup={setupTray} />;
