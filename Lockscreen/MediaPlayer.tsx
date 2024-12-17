@@ -1,12 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2024 TopsyKrets
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction...
- *
- */
-
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, GLib, Variable } from "astal";
 import Mpris from "gi://AstalMpris";
@@ -14,41 +5,6 @@ import Pango from "gi://Pango";
 import { Grid } from "../modules/Astalified/index";
 import Icon from "../modules/lib/icons";
 import TrimTrackTitle from "../modules/lib/TrimTrackTitle";
-import { CircularProgress } from "../../../../../usr/share/astal/gjs/gtk3/widget";
-
-const player = Mpris.Player.new("Deezer"); //"Deezer"  "vlc" "mpv" "spotify"
-
-function TrackInfo() {
-	const title = (
-		<label
-			className={"tracktitle"}
-			wrap={false}
-			hexpand={true}
-			halign={Gtk.Align.CENTER}
-			ellipsize={Pango.EllipsizeMode.END}
-			maxWidthChars={35}
-			label={bind(player, "title").as((title) => TrimTrackTitle(title))}
-		/>
-	);
-
-	const artist = (
-		<label
-			className={"trackartist"}
-			wrap={false}
-			hexpand={true}
-			halign={Gtk.Align.CENTER}
-			ellipsize={Pango.EllipsizeMode.END}
-			maxWidthChars={30}
-			label={bind(player, "artist").as((artist) => artist || "Unknown Artist")}
-		/>
-	);
-	return (
-		<box className={"trackinfo"} valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} hexpand={true} vertical={true} spacing={5}>
-			{title}
-			{artist}
-		</box>
-	);
-}
 
 /** @param {number} length */
 function lengthStr(length: number) {
@@ -56,96 +12,6 @@ function lengthStr(length: number) {
 	const sec = Math.floor(length % 60);
 	const sec0 = sec < 10 ? "0" : "";
 	return `${min}:${sec0}${sec}`;
-}
-
-function TrackPosition() {
-	// const positionSlider = (
-	// 	<slider
-	// 		className="Slider"
-	// 		hexpand={false}
-	// 		drawValue={false}
-	// 		onDragged={({ value }) => {
-	// 			if (player.length > 0) {
-	// 				const newPosition = (value / player.length) * player.length;
-	// 				player.set_position(newPosition);
-	// 			}
-	// 		}}
-	// 		max={bind(player, "length")}
-	// 		min={0}
-	// 		value={bind(player, "position")}
-	// 		halign={Gtk.Align.FILL}
-	// 	/>
-	// );
-	const position = bind(player, "position").as((n) => parseInt(n.toString()));
-	const length = bind(player, "length").as((n) => parseInt(n.toString()));
-	const trackPercent = Variable.derive([position, length], (position, length) => {
-		return (position / length).toFixed(2);
-	});
-	const lengthLabel = <label className={"tracklength"} halign={Gtk.Align.START} label={bind(player, "length").as(lengthStr)} />;
-
-	const positionLabel = <label className={"trackposition"} halign={Gtk.Align.END} label={bind(player, "position").as(lengthStr)} />;
-
-	return (
-		<box
-			className={"positioncontainer"}
-			valign={Gtk.Align.CENTER}
-			halign={Gtk.Align.FILL}
-			hexpand={true}
-			vertical={true}
-			spacing={5}
-			visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
-		>
-			<circularprogress className={"circularprogress"} value={Number(trackPercent())} startAt={0.75} endAt={-0.25} rounded={true} inverted={false}>
-				<box vertical valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
-					{[lengthLabel, positionLabel]}
-				</box>
-			</circularprogress>
-			{/* {positionSlider}
-		<centerbox
-			halign={Gtk.Align.FILL}
-		 	valign={Gtk.Align.CENTER}
-		 	startWidget={lengthLabel}
-		 	endWidget={positionLabel}
-		 /> */}
-		</box>
-	);
-}
-
-function PlayerIcon() {
-	return (
-		<icon
-			hexpand={true}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.CENTER}
-			tooltip_text={bind(player, "identity")}
-			icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
-		/>
-	);
-}
-
-function PlayerControls() {
-	const playPause = (
-		<button className={"play-pause"} valign={Gtk.Align.CENTER} onClick={() => player.play_pause()} visible={bind(player, "can_play")}>
-			<icon icon={bind(player, "playbackStatus").as((s) => (s === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY))} />
-		</button>
-	);
-
-	const prev = (
-		<button className={"previous"} valign={Gtk.Align.CENTER} onClick={() => player.previous()} visible={bind(player, "can_go_previous")}>
-			<icon icon={Icon.mpris.controls.PREV} />
-		</button>
-	);
-
-	const next = (
-		<button className={"next"} valign={Gtk.Align.CENTER} onClick={() => player.next()} visible={bind(player, "can_go_next")}>
-			<icon icon={Icon.mpris.controls.NEXT} />
-		</button>
-	);
-	return (
-		<box className={"playercontrols"} vexpand={false} hexpand={false} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={15}>
-			{[prev, playPause, next]}
-		</box>
-	);
 }
 
 /**
@@ -173,15 +39,6 @@ const blurCoverArtCss = async (cover_art: string): Promise<string> => {
 	return "background-color: #0e0e1e";
 };
 
-function trackTime() {
-	const position = bind(player, "position").as(lengthStr);
-	const totalLength = bind(player, "length").as(lengthStr);
-
-	return (
-		<label className="tracklength" label={`${position} / ${totalLength}`} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-	);
-}
-
 /** @param {import('types/service/mpris').MprisPlayer} player */
 function Player({ player }: { player: Mpris.Player }) {
 	async function setup(wid: Widget.Box) {
@@ -191,52 +48,177 @@ function Player({ player }: { player: Mpris.Player }) {
 		});
 	}
 
-	const position = bind(player, "position").as((n) => parseInt(n.toString()));
-	const length = bind(player, "length").as((n) => parseInt(n.toString()));
+	const TrackInfo = ({ info }: { info: "tracks" | "artists" }) => {
+		const Bindings = Variable.derive([bind(player, "title"), bind(player, "artist")], (title, artist) => ({
+			classname: {
+				tracks: "track title",
+				artists: "track artist",
+			}[info],
+
+			maxwidthchars: {
+				tracks: 35,
+				artists: 30,
+			}[info],
+
+			label: {
+				tracks: TrimTrackTitle(title) || "Unknown Title",
+				artists: artist || "Unknown Artist",
+			}[info],
+		}))();
+
+		return (
+			<label
+				className={Bindings.as((b) => b.classname)}
+				wrap={false}
+				hexpand={true}
+				halign={CENTER}
+				ellipsize={Pango.EllipsizeMode.END}
+				maxWidthChars={Bindings.as((b) => b.maxwidthchars)}
+				label={Bindings.as((b) => b.label)}
+			/>
+		);
+	};
+
+	const PlayerControls = ({ btn, ...props }: { btn: "play_pause" | "activePlay" | "next" | "previous" | "close" } & Widget.ButtonProps) => {
+		const bindings = Variable.derive(
+			[bind(player, "playbackStatus"), bind(player, "entry"), bind(player, "identity"), bind(player, "can_go_previous"), bind(player, "can_play"), bind(player, "can_go_next")],
+			(playbackStatus, entry, identity, can_go_previous, can_play, can_go_next) => ({
+				className: {
+					activePlay: "playicon",
+					play_pause: "play-pause",
+					next: "next",
+					previous: "previous",
+					close: "close",
+				}[btn],
+
+				tooltip_text: {
+					activePlay: identity,
+					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? "Pause" : "Play",
+					next: "Next",
+					previous: "Previous",
+					close: "Close",
+				}[btn],
+
+				visible: {
+					play_pause: can_play,
+					activePlay: true,
+					next: can_go_next,
+					previous: can_go_previous,
+					close: true,
+				}[btn],
+
+				command: {
+					play_pause: () => player.play_pause(),
+					activePlay: () => {
+						const dwin = App.get_window(`dashboard${App.get_monitors()[0]}`);
+						const mpwin = App.get_window(`mediaplayerwindow${App.get_monitors()[0]}`);
+						execAsync(player.entry);
+						if (dwin && dwin.visible === true) {
+							App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+						} else if (mpwin && mpwin.visible === true) {
+							App.toggle_window(`mediaplayerwindow${App.get_monitors()[0]}`);
+						}
+					},
+					next: () => player.next(),
+					previous: () => player.previous(),
+					close: () => {
+						execAsync(`bash -c 'killall "${player.entry}"'`);
+					},
+				}[btn],
+
+				icon: {
+					activePlay: entry || Icon.mpris.controls.FALLBACK_ICON,
+					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY,
+					next: Icon.mpris.controls.NEXT,
+					previous: Icon.mpris.controls.PREV,
+					close: Icon.mpris.controls.CLOSE,
+				}[btn],
+			}),
+		)();
+
+		return (
+			<button
+				className={bindings.as((b) => b.className)}
+				tooltip_text={bindings.as((b) => b.tooltip_text)}
+				visible={bindings.as((b) => b.visible)}
+				onClick={() => bindings.get().command()}
+				onDestroy={(self) => {
+					self.destroy();
+				}}
+				{...props}
+			>
+				<icon icon={bindings.as((b) => b.icon)} />
+			</button>
+		);
+	};
+	const position = bind(player, "position").as(n => Number(parseInt(n.toString())));
+	const length = bind(player, "length").as(n => Number(parseInt(n.toString())));
 	const trackPercent = Variable.derive([position, length], (position, length) => {
-		return (position / length).toFixed(2);
+		return Number((position / length).toFixed(2));
 	});
+
+	function trackTime() {
+		const Bindings = Variable.derive([bind(player, "position"), bind(player, "length")], (position, length) => ({
+			classname: "track length",
+			label: `${lengthStr(position)} / ${lengthStr(length)}`,
+		}))
+
+		return (
+			<label className={bind(Bindings).as((b) => b.classname)} label={bind(Bindings).as((b) => b.label)} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+		);
+	}
 
 	const mediaInfoGrid = <Grid
 		className={"mediainfo"}
-		halign={Gtk.Align.CENTER}
-		valign={Gtk.Align.CENTER}
-		hexpand={true}
-		vexpand={true}
+		halign={CENTER}
+		valign={CENTER}
+		expand
 		visible={true}
 		rowSpacing={10}
-		setup={(grid) => {
-			grid.attach(PlayerIcon(), 0, 0, 1, 1);
-			grid.attach(TrackInfo(), 0, 1, 1, 1);
-			grid.attach(trackTime(), 0, 2, 2, 1);
-			grid.attach(PlayerControls(), 0, 3, 2, 1);
+		setup={(self) => {
+			self.attach(<TrackInfo info="tracks" />, 0, 0, 1, 1);
+			self.attach(<TrackInfo info="artists" />, 0, 1, 1, 1);
+			self.attach(trackTime(), 0, 3, 1, 1);
+			self.attach(
+				<centerbox className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
+					<PlayerControls btn="previous" />
+					<PlayerControls btn="play_pause" />
+					<PlayerControls btn="next" />
+				</centerbox>,
+				0,
+				2,
+				1,
+				1,
+			);
 		}}
-
 	/>
 
 	return (
 		<box
-			className={"outer"}
-			halign={Gtk.Align.CENTER}
-			valign={Gtk.Align.END}
+			className={"player"}
+			halign={CENTER}
+			valign={CENTER}
+			expand={false}
+			width_request={350}
+			height_request={350}
 			setup={setup}
 			css={`
 				border-radius: 50rem;
 			`}
 		>
 			<circularprogress
-				className={"player"}
-				hexpand={true}
-				halign={Gtk.Align.CENTER}
-				valign={Gtk.Align.CENTER}
+				className={"circularprogress"}
+				expand
+				halign={FILL}
+				valign={FILL}
 				visible={bind(player, "available").as((a) => a === true)}
-				value={Number(trackPercent())}
+				value={bind(trackPercent)}
 				startAt={0.75}
 				endAt={-0.25}
 				rounded={true}
 				inverted={false}
 			>
-				<eventbox className={"inner"} halign={Gtk.Align.FILL} valign={Gtk.Align.FILL}>
+				<eventbox className={"inner"} expand halign={FILL} valign={FILL}>
 					{mediaInfoGrid}
 				</eventbox>
 			</circularprogress>

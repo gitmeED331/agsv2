@@ -1,0 +1,30 @@
+@use '../_variables' as *;
+
+// general slider style
+.Slider {
+	min-width: 15rem;
+
+	& trough {
+		//background: $SliderTrough;
+		background: unset;
+		border-radius: 20rem;
+		min-height: 12px;
+		box-shadow: inset 0px 0px 4px white;
+	}
+
+	& highlight {
+		background: $SliderHighlight;
+		border-radius: 20rem;
+		// min-width: 5px;
+	}
+
+	& slider {
+		min-height: 10px;
+		min-width: 10px;
+		border-radius: 20px;
+		background-color: steelblue;
+		border: none;
+		box-shadow: 0px 0px 4px white;
+	}
+
+}

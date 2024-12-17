@@ -40,40 +40,35 @@ function Player(player: Mpris.Player) {
 	}
 
 	const TrackInfo = ({ action }: { action: "tracks" | "artists" }) => {
+		const Bindings = Variable.derive([bind(player, "title"), bind(player, "artist")], (title, artist) => ({
+			classname: {
+				tracks: "tracktitle",
+				artists: "artist",
+			}[action],
 
-		const Bindings = Variable.derive(
-			[bind(player, "title"),
-			bind(player, "artist")],
-			(title, artist) => ({
+			maxwidthchars: {
+				tracks: 35,
+				artists: 30,
+			}[action],
 
-				classname: {
-					tracks: "tracktitle",
-					artists: "artist"
-				}[action],
-
-				maxwidthchars: {
-					tracks: 35,
-					artists: 30
-				}[action],
-
-				label: {
-					tracks: TrimTrackTitle(title) || "Unknown Title",
-					artists: artist || "Unknown Artist"
-				}[action],
-
-			})
-		)();
+			label: {
+				tracks: TrimTrackTitle(title) || "Unknown Title",
+				artists: artist || "Unknown Artist",
+			}[action],
+		}))();
 
 		// return <box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
-		return <label
-			className={Bindings.as(b => b.classname)}
-			wrap={false}
-			hexpand={true}
-			halign={CENTER}
-			ellipsize={Pango.EllipsizeMode.END}
-			maxWidthChars={Bindings.as(b => b.maxwidthchars)}
-			label={Bindings.as(b => b.label)}
-		/>
+		return (
+			<label
+				className={Bindings.as((b) => b.classname)}
+				wrap={false}
+				hexpand={true}
+				halign={CENTER}
+				ellipsize={Pango.EllipsizeMode.END}
+				maxWidthChars={Bindings.as((b) => b.maxwidthchars)}
+				label={Bindings.as((b) => b.label)}
+			/>
+		);
 		// </box>
 	};
 
@@ -104,47 +99,38 @@ function Player(player: Mpris.Player) {
 		);
 
 		const Labels = ({ action, ...props }: { action: "length" | "position" } & Widget.LabelProps) => {
-			const Bindings = Variable.derive(
-				[bind(player, "length"), bind(player, "position")],
-				(length, position) => ({
+			const Bindings = Variable.derive([bind(player, "length"), bind(player, "position")], (length, position) => ({
+				classname: {
+					length: "tracklength",
+					position: "trackposition",
+				}[action],
 
-					classname: {
-						length: "tracklength",
-						position: "trackposition"
-					}[action],
+				label: {
+					length: lengthStr(length),
+					position: lengthStr(position),
+				}[action],
+			}))();
 
-					label: {
-						length: lengthStr(length),
-						position: lengthStr(position)
-					}[action],
-
-				})
-			)();
-
-			return <label
-				className={Bindings.as(b => b.classname)}
-				label={Bindings.as(b => b.label)}
-				hexpand
-				wrap={false}
-				// maxWidthChars={35}
-				ellipsize={Pango.EllipsizeMode.END}
-				halign={CENTER}
-				valign={CENTER}
-				onDestroy={(self) => { self.destroy() }}
-				{...props}
-			/>
-		}
+			return (
+				<label
+					className={Bindings.as((b) => b.classname)}
+					label={Bindings.as((b) => b.label)}
+					hexpand
+					wrap={false}
+					// maxWidthChars={35}
+					ellipsize={Pango.EllipsizeMode.END}
+					halign={CENTER}
+					valign={CENTER}
+					onDestroy={(self) => {
+						self.destroy();
+					}}
+					{...props}
+				/>
+			);
+		};
 
 		return (
-			<box
-				className={"positioncontainer"}
-				valign={CENTER}
-				halign={FILL}
-				hexpand={true}
-				vertical={true}
-				spacing={5}
-				visible={bind(player, "length").as((length) => (length > 0 ? true : false))}
-			>
+			<box className={"positioncontainer"} valign={CENTER} halign={FILL} hexpand={true} vertical={true} spacing={5} visible={bind(player, "length").as((length) => (length > 0 ? true : false))}>
 				{positionSlider}
 				<centerbox halign={FILL} valign={CENTER} startWidget={<Labels action="length" />} endWidget={<Labels action="position" />} />
 			</box>
@@ -152,17 +138,15 @@ function Player(player: Mpris.Player) {
 	}
 
 	const Controls = ({ action, ...props }: { action: "play_pause" | "activePlay" | "next" | "previous" | "close" } & Widget.ButtonProps) => {
-
 		const bindings = Variable.derive(
 			[bind(player, "playbackStatus"), bind(player, "entry"), bind(player, "identity"), bind(player, "can_go_previous"), bind(player, "can_play"), bind(player, "can_go_next")],
 			(playbackStatus, entry, identity, can_go_previous, can_play, can_go_next) => ({
-
 				className: {
 					activePlay: "playicon",
 					play_pause: "play-pause",
 					next: "next",
 					previous: "previous",
-					close: "close"
+					close: "close",
 				}[action],
 
 				tooltip_text: {
@@ -170,7 +154,7 @@ function Player(player: Mpris.Player) {
 					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? "Pause" : "Play",
 					next: "Next",
 					previous: "Previous",
-					close: "Close"
+					close: "Close",
 				}[action],
 
 				visible: {
@@ -178,7 +162,7 @@ function Player(player: Mpris.Player) {
 					activePlay: true,
 					next: can_go_next,
 					previous: can_go_previous,
-					close: true
+					close: true,
 				}[action],
 
 				command: {
@@ -190,15 +174,14 @@ function Player(player: Mpris.Player) {
 						if (dwin && dwin.visible === true) {
 							App.toggle_window(`dashboard${App.get_monitors()[0]}`);
 						} else if (mpwin && mpwin.visible === true) {
-
 							App.toggle_window(`mediaplayerwindow${App.get_monitors()[0]}`);
 						}
 					},
 					next: () => player.next(),
 					previous: () => player.previous(),
 					close: () => {
-						execAsync(`bash -c 'killall "${player.entry}"'`)
-					}
+						execAsync(`bash -c 'killall "${player.entry}"'`);
+					},
 				}[action],
 
 				icon: {
@@ -206,29 +189,32 @@ function Player(player: Mpris.Player) {
 					play_pause: playbackStatus === Mpris.PlaybackStatus.PLAYING ? Icon.mpris.controls.PAUSE : Icon.mpris.controls.PLAY,
 					next: Icon.mpris.controls.NEXT,
 					previous: Icon.mpris.controls.PREV,
-					close: Icon.mpris.controls.CLOSE
-				}[action]
-			})
+					close: Icon.mpris.controls.CLOSE,
+				}[action],
+			}),
 		)();
 
-		return <button
-			className={bindings.as(b => b.className)}
-			tooltip_text={bindings.as(b => b.tooltip_text)}
-			visible={bindings.as(b => b.visible)}
-			onClick={() => bindings.get().command()}
-			onDestroy={(self) => { self.destroy() }}
-			{...props}
-		>
-			<icon icon={bindings.as(b => b.icon)} />
-		</button>
-	}
+		return (
+			<button
+				className={bindings.as((b) => b.className)}
+				tooltip_text={bindings.as((b) => b.tooltip_text)}
+				visible={bindings.as((b) => b.visible)}
+				onClick={() => bindings.get().command()}
+				onDestroy={(self) => {
+					self.destroy();
+				}}
+				{...props}
+			>
+				<icon icon={bindings.as((b) => b.icon)} />
+			</button>
+		);
+	};
 
 	const mediaInfoGrid = (
 		<Grid
 			halign={FILL}
 			valign={CENTER}
-			hexpand={true}
-			vexpand={true}
+			expand
 			visible={true}
 			rowSpacing={10}
 			setup={(self) => {
@@ -241,7 +227,12 @@ function Player(player: Mpris.Player) {
 						<Controls action="previous" />
 						<Controls action="play_pause" />
 						<Controls action="next" />
-					</centerbox>, 0, 3, 2, 1);
+					</centerbox>,
+					0,
+					3,
+					2,
+					1,
+				);
 			}}
 		/>
 	);
@@ -290,9 +281,8 @@ export default function playerStack() {
 					}
 				});
 			}}
-
-		/> as Gtk.Stack
-	);
+		/>
+	) as Gtk.Stack;
 
 	dashboardPlayerStack = theStack;
 	windowPlayerStack = theStack;

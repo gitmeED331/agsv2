@@ -1,12 +1,16 @@
 #!/usr/bin/gjs -m
 
+/*
+Many thanks to Kotontrion (https://github.com/kotontrion) for all the assistance and inspiration
+*/
+
 import "../globals";
-import { Astal, App, Gtk, Gdk } from "astal/gtk3";
+import { Astal, App, Gtk, Gdk, astalify } from "astal/gtk3";
 import { bind, Variable, timeout, GLib } from "astal";
 import Lock from "gi://GtkSessionLock";
 import AstalAuth from "gi://AstalAuth";
 import AstalMpris from "gi://AstalMpris";
-import { Grid, Fixed } from "../modules/Astalified/index";
+import { Grid, Fixed, RegularWindow } from "../modules/Astalified/index";
 
 /* Widgets */
 import Controls from "./Controls";
@@ -18,12 +22,12 @@ import lockstyle from "./style/Lockscreen.scss";
 import { winheight, winwidth } from "../modules/lib/screensizeadjust";
 
 const background = "windows-failure.jpg";
-const player = AstalMpris.Player.new("Deezer");
+const player = AstalMpris.Player.new("spotify");
 const pam = new AstalAuth.Pam();
 const prompt = Variable("");
 const inputVisible = Variable(true);
 const inputNeeded = Variable(true);
-const UIVisibility = Variable(false);
+const UIVisibility = Variable(true);
 
 function authMessages() {
 	const messageLabel = (msg, type) => {
@@ -75,8 +79,6 @@ const PasswordEntry = (
 function loginGrid() {
 	const promptLabel = <label label={bind(prompt).as((p) => p.toUpperCase())} halign={CENTER} valign={CENTER} visible={bind(inputNeeded)} />;
 
-
-
 	const passwordPrompt = (
 		<box vertical spacing={10}>
 			{[promptLabel, PasswordEntry]}
@@ -85,9 +87,7 @@ function loginGrid() {
 
 	const currentUser = <label className={"username"} label={bind(pam, "username").as((u) => u.toUpperCase())} halign={CENTER} valign={CENTER} />;
 
-	const currentDesktop = (
-		<label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={CENTER} valign={CENTER} />
-	);
+	const currentDesktop = <label className={"desktop"} label={GLib.getenv("XDG_CURRENT_DESKTOP") ? GLib.getenv("XDG_CURRENT_DESKTOP")?.toUpperCase() : ""} halign={CENTER} valign={CENTER} />;
 
 	const grid = (
 		<Grid
@@ -127,7 +127,7 @@ const topRightGrid = (
 	/>
 );
 
-function Lockscreen({ monitor }: { monitor: number }) {
+function Lockscreen({ monitor }: { monitor: Gdk.Monitor }) {
 	const overlayBox = (
 		<box halign={FILL} valign={FILL} expand vertical>
 			<centerbox halign={FILL} valign={START} expand>
@@ -139,51 +139,58 @@ function Lockscreen({ monitor }: { monitor: number }) {
 		</box>
 	);
 
-	const tsxFixed = <Fixed expand visible={true} widthRequest={250} heightRequest={500}
-		setup={(self) => {
-			self.put(loginGrid(), winwidth(0.41), winheight(0.25));
-			// self.put(loginGrid(), 250, 400);
-		}}
-	/>;
+	const tsxFixed = (
+		<Fixed
+			expand
+			visible={true}
+			widthRequest={250}
+			heightRequest={500}
+			setup={(self) => {
+				self.put(loginGrid(), winwidth(0.41), winheight(0.2));
+				// self.put(loginGrid(), 250, 400);
+			}}
+		/>
+	);
 
 	return (
-		<window
+		<RegularWindow
 			name={`lockscreen-${monitor}`}
 			className={"lockscreen"}
-			anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
-			exclusivity={Astal.Exclusivity.IGNORE}
-			keymode={Astal.Keymode.EXCLUSIVE}
-			visible={false} halign={FILL} valign={FILL}
+			visible={false}
+			halign={FILL}
+			valign={FILL}
 			application={App}
-			monitor={monitor}
-			clickThrough={false}
-			css={`background-image: url("../assets/${background}")`}
+			expand
+			resizable={false}
+			decorated={false}
+			css={`
+				background-image: url("../assets/${background}");
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+			`}
 			onKeyPressEvent={(_, event) => {
 				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-					UIVisibility.set(!UIVisibility.get())
+					UIVisibility.set(!UIVisibility.get());
 					if (UIVisibility.get() === true) {
 						PasswordEntry.grab_focus();
 					}
-
 				}
 			}}
 		>
-			<overlay visible={bind(UIVisibility)}
-				passThrough={true} clickThrough={true}
-				halign={FILL} valign={FILL} expand
-			>
+			<overlay visible={bind(UIVisibility)} passThrough={true} clickThrough={true} halign={FILL} valign={FILL} expand>
 				{overlayBox}
 				{tsxFixed}
 			</overlay>
-		</window>
-	);
+		</RegularWindow>
+	)
 }
 
-const windows: { window: Gtk.Window; monitor: any }[] = [];
+const windows: { window: Gtk.Window; monitor: Gdk.Monitor }[] = [];
 
-function createWindow(monitor) {
-	const window = Lockscreen({ monitor }) as Gtk.Window;
-	const win = { window, monitor };
+function createWindow(monitor: Gdk.Monitor): { window: Gtk.Window; monitor: Gdk.Monitor } {
+	const window = Lockscreen({ monitor });
+	const win = { window: window as Gtk.Window, monitor };
 	windows.push(win);
 	return win;
 }
@@ -193,12 +200,16 @@ function startLock() {
 	// @ts-expect-error
 	for (let m = 0; m < display?.get_n_monitors(); m++) {
 		const monitor = display?.get_monitor(m);
-		createWindow(monitor);
+		if (monitor) {
+			createWindow(monitor);
+		}
 	}
-	display?.connect("monitor-added", (disp, monitor) => {
-		const w = createWindow(monitor);
-		sessionLock.new_surface(w.window, w.monitor);
-		w.window.show();
+	display?.connect("monitor-added", (ds, monitor) => {
+		if (monitor) {
+			const w = createWindow(monitor);
+			sessionLock.new_surface(w.window, w.monitor);
+			w.window.show();
+		}
 	});
 	sessionLock.lock_lock();
 	windows.map((w) => {
@@ -206,7 +217,6 @@ function startLock() {
 		w.window.show();
 	});
 }
-
 pam.connect("auth-prompt-visible", (auth, msg) => {
 	prompt.set(msg);
 	inputVisible.set(true);
@@ -258,8 +268,6 @@ App.start({
 		if (request == "UITrigger") {
 			UIVisibility.set(!UIVisibility.get());
 			resp("UI Visibility set to true");
-		} else {
-			resp("unknown command")
 		}
-	}
+	},
 });

@@ -1,0 +1,111 @@
+@use '../_variables' as *;
+
+.calendarbox {
+	background: $TertiaryBG;
+	border-radius: 2rem;
+	border: $border;
+	padding: 1rem;
+}
+
+.dashcal {
+	border-top: $border;
+	border-radius: $radius-rltop;
+	padding: 0.5rem 2.5rem;
+}
+
+.calendar {
+	font-family: $font;
+
+	&-grid {
+		border-radius: $radius;
+		padding: 0.25rem;
+		color: $color1;
+		font-size: 1.5rem;
+
+		label {
+			margin: 3px;
+		}
+	}
+
+	&.header {
+		color: $color3;
+		margin: 0 1rem 0.5rem;
+		font-size: 2rem;
+
+		label {
+			color: $color1;
+			font-size: 1.75rem;
+		}
+
+		icon {
+			font-size: 1.5rem;
+		}
+
+		.year,
+		.month {
+			// Additional styles if needed
+		}
+
+		.arrow-left,
+		.arrow-right {
+			font-size: 3rem;
+			color: $color3;
+
+			&:hover {
+				color: $color5;
+			}
+		}
+
+		.arrow-left {
+			color: $color4;
+		}
+
+		.return-today {
+			color: $color1;
+			background: $BGG5;
+			border-radius: $radius;
+			min-width: 50px;
+			min-height: 30px;
+			padding: 0.25rem 0.5rem;
+
+			image {
+				font-size: 1.25rem;
+				padding: 0.25rem 1.5rem;
+			}
+
+			&:hover {
+				background: $BGG3;
+
+				image {
+					color: $color3;
+					animation: spin 1s infinite;
+				}
+			}
+		}
+	}
+
+	&-days {
+		color: $color6;
+		border-bottom: $border;
+		border-radius: $radius;
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		font-size: 1.5rem;
+		padding: 0.5rem;
+	}
+
+	&-day {
+		color: $color1;
+		margin: 0.1rem 0.25rem;
+		padding: 0.2rem 0.6rem;
+		border-radius: $radius;
+		font-size: 1.5rem;
+		font-weight: 100;
+	}
+
+	&-today {
+		background: radial-gradient(rgba(0, 0, 0, 1) 25%, rgba(15, 155, 255, 1) 100%);
+		color: red;
+		border-radius: $radius;
+		font-weight: bolder;
+	}
+}

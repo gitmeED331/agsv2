@@ -1,0 +1,118 @@
+@use '../_variables' as *;
+
+.network {
+	&.barbutton {
+		color: $color1;
+
+		&:hover {
+			color: $color5;
+		}
+	}
+
+	&.dashboard {
+		// Uncomment if needed
+		// border-radius: $radius-rlbottom;
+		// border: $border;
+		// border-top: none;
+		// background-color: $TertiaryBG;
+	}
+}
+
+.network .ethernet {
+	box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+}
+
+.network .ethernet,
+.network .wifi {
+	&.container {
+		color: $color1;
+		padding: 0.5rem 1rem;
+		border-radius: $radius;
+
+		&.dim {
+			opacity: 0.7;
+		}
+	}
+}
+
+.network .wifi {
+	entry {
+		box-shadow: inset 0 0 7px rgba(15, 155, 255, 0.8);
+		border-radius: $radius;
+		border: 1px solid $color2;
+		padding: 0.1rem 0.75rem;
+
+		selection {
+			color: $color5;
+			background: rgba(255, 140, 0, 0.7);
+		}
+	}
+
+	&.header {
+		color: $color1;
+		border-radius: $radius;
+		border-bottom: $border;
+		padding: 0.25rem 1rem;
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+		button {
+			&.enabled {
+				color: $color3;
+			}
+
+			&.disabled {
+				color: grey;
+			}
+
+			&:hover {
+				color: $color5;
+			}
+		}
+	}
+
+	button {
+		&.enabled {
+			color: $color3;
+		}
+
+		&.disabled {
+			color: grey;
+		}
+
+		&:hover {
+			color: $color5;
+		}
+	}
+
+	&.connected {
+		background: transparent;
+		border-bottom: 2px solid $color3;
+		border-radius: $radius;
+		padding: 0.25rem 0.5rem;
+
+		label {
+			color: $color3;
+		}
+
+		&.controls {
+			all: unset;
+			background: transparent;
+			border-radius: $radius;
+			border-left: $border;
+			padding: 0 0.5rem;
+			box-shadow: -0.75rem 0 0.35rem -0.25rem rgba(15, 155, 255, 0.8);
+
+			icon {
+				font-size: 1rem;
+			}
+
+			button {
+				all: unset;
+
+				&:hover icon {
+					color: $color4;
+				}
+			}
+		}
+	}
+}

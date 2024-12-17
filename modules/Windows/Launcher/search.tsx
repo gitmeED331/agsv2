@@ -1,31 +1,49 @@
-import { Gtk, Gdk, App } from "astal/gtk3";
+import { Gtk, Gdk, App, Astal } from "astal/gtk3";
 import { execAsync, Variable } from "astal";
 import AstalApps from "gi://AstalApps";
 import Icon, { Icons } from "../../lib/icons";
-import { theStack, createScrollablePage } from "./stackandswitcher";
+import { theStack, createScrollablePage } from "./Design";
+import { ListBox } from "../../Astalified/index";
 import Calculator from "./Calculator";
-
-const Apps = new AstalApps.Apps({
-	nameMultiplier: 2,
-	entryMultiplier: 0.05,
-	executableMultiplier: 0.05,
-	descriptionMultiplier: 0.1,
-	keywordsMultiplier: 0.1,
-	minScore: 0.75,
-});
+import { Apps } from "./AppAccess";
 
 export let query = new Variable<string>("");
 
 function Search(query: string) {
+	// const ApplicationElement = (app: AstalApps.Application) => (
+	// 	<box spacing={5}>
+	// 		<icon icon={app.get_icon_name()} />
+	// 		<label label={app.get_name()} />
+	// 	</box>
+	// );
+
+	// const appList = (
+	// 	<ListBox
+	// 		setup={(self) => {
+	// 			Apps.get_list()?.forEach((app) => {
+	// 				const appElement = ApplicationElement(app);
+	// 				appElement.set_data("app", app); // Use set_data instead of Object.assign
+	// 				self.add(appElement);
+	// 			});
+	// 		}}
+	// 	/>
+	// ) as ListBox;
+
+	// appList.get_children()?.forEach((widget: any) => {
+	// 	const app = widget.get_data("app"); // Use get_data to retrieve the app
+	// 	widget.set_visible(app.fuzzy_match(query ?? "").name);
+	// });
+
 	const results = Apps.fuzzy_query(query);
 
 	const searchResultsPage = theStack.get_child_by_name("search_results");
 
-	if (results.length > 0) {
+	if (query.length > 0) {
 		if (searchResultsPage) {
 			theStack.remove(searchResultsPage);
 		}
 		const newSearchResultsPage = createScrollablePage(results);
+		// const newSearchResultsPage = appList;
 		theStack.add_named(newSearchResultsPage, "search_results");
 		theStack.set_visible_child_name("search_results");
 	} else {
@@ -34,7 +52,6 @@ function Search(query: string) {
 
 	// return results.length > 0;
 }
-
 
 const handleTerminalCommand = (query: string, state: any) => {
 	const command = query.startsWith("TERM::") ? query.slice(6).trim() : query.trim();
@@ -47,7 +64,7 @@ const handleTerminalCommand = (query: string, state: any) => {
 
 		entry.set_text("");
 
-		App.toggle_window(`launcher${App.get_monitors()[0]}`)
+		App.toggle_window(`launcher${App.get_monitors()[0]}`);
 	}
 };
 
@@ -57,7 +74,7 @@ const handleCalculatorCommand = (query: string) => {
 	if (expression) {
 		const existingChild = theStack.get_child_by_name("calculator");
 
-		const calculatorPage = <Calculator expression={expression} />
+		const calculatorPage = <Calculator expression={expression} />;
 
 		if (!existingChild) {
 			theStack.add_named(calculatorPage, "calculator");
@@ -68,7 +85,6 @@ const handleCalculatorCommand = (query: string) => {
 	}
 };
 
-
 let currentQuery = "";
 const entry = (
 	<entry
@@ -78,7 +94,7 @@ const entry = (
 			const query = self.get_text().trim();
 			const results = Apps.fuzzy_query(query);
 			currentQuery = query;
-			if (query.startsWith("CALC::") || /^[0-9+\-*/().\s]+$/.test(query) && results.length === 0) {
+			if (query.startsWith("CALC::") || (/^[0-9+\-*/().\s]+$/.test(query) && results.length === 0)) {
 				handleCalculatorCommand(query);
 				if (theStack.get_visible_child_name() !== "calculator") {
 					theStack.set_visible_child_name("calculator");
@@ -94,11 +110,10 @@ const entry = (
 			const results = Apps.fuzzy_query(query);
 
 			if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
-
-				if (query.startsWith("TERM::") && results.length === 0 || results.length === 0 && /^[a-zA-Z0-9_\-]+$/.test(query)) {
+				if ((query.startsWith("TERM::") && results.length === 0) || (results.length === 0 && /^[a-zA-Z0-9_\-]+$/.test(query))) {
 					handleTerminalCommand(query, state);
 				}
-				if (query.startsWith("CALC::") && results.length === 0 || results.length === 0 && /^[0-9+\-*/().\s]+$/.test(query)) {
+				if ((query.startsWith("CALC::") && results.length === 0) || (results.length === 0 && /^[0-9+\-*/().\s]+$/.test(query))) {
 					handleCalculatorCommand(query);
 					if (theStack.get_visible_child_name() !== "calculator") {
 						theStack.set_visible_child_name("calculator");
@@ -116,7 +131,6 @@ const entry = (
 				}
 			}
 		}}
-
 		hexpand={true}
 		vexpand={false}
 		halign={FILL}
@@ -131,8 +145,8 @@ const entry = (
 		secondary_icon_sensitive={true}
 		secondary_icon_activatable={true}
 		secondary_icon_tooltip_text={"Clear input"}
-	/> as Gtk.Entry
-)
+	/>
+) as Gtk.Entry;
 
 entry.connect("icon-press", (_, event) => {
 	entry.set_text("");

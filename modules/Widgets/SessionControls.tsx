@@ -1,10 +1,12 @@
-import { Gdk, App } from "astal/gtk3";
-import { execAsync, GLib, Variable } from "astal";
+import { Gdk, App, Widget } from "astal/gtk3";
+import { execAsync, GLib, Variable, bind } from "astal";
 import Icon, { Icons } from "../lib/icons.js";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
-const SysButton = ({ action }: { action: string }) => {
+const labelvisible = Variable(true);
+
+export const SysButton = ({ action, ...labelprops }: { action: string } & Widget.LabelProps) => {
 	const command = () => {
 		const cmd = (() => {
 			switch (action) {
@@ -20,11 +22,8 @@ const SysButton = ({ action }: { action: string }) => {
 					return "";
 			}
 		})();
-		return (
-			App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`),
-			execAsync(cmd)
-		)
-	}
+		return App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`), execAsync(cmd);
+	};
 	const icon = () => {
 		switch (action) {
 			case "lock":
@@ -38,7 +37,7 @@ const SysButton = ({ action }: { action: string }) => {
 			default:
 				return "";
 		}
-	}
+	};
 	const label = () => {
 		switch (action) {
 			case "lock":
@@ -52,22 +51,42 @@ const SysButton = ({ action }: { action: string }) => {
 			default:
 				return "";
 		}
-	}
+	};
+
+	const tooltip = () => {
+		switch (action) {
+			case "lock":
+				return "Lock";
+			case "logout":
+				return "Log Out";
+			case "reboot":
+				return "Reboot";
+			case "shutdown":
+				return "Shutdown";
+			default:
+				return "";
+		}
+	};
 
 	return (
 		<button
 			onClick={(_, event) => {
-				if (event.button === Gdk.BUTTON_PRIMARY) { command() }
+				if (event.button === Gdk.BUTTON_PRIMARY) {
+					command();
+				}
 			}}
 			onKeyPressEvent={(_, event) => {
-				if (event.get_keyval()[1] === Gdk.KEY_Return) { command() }
+				if (event.get_keyval()[1] === Gdk.KEY_Return) {
+					command();
+				}
 			}}
 			canFocus={true}
 			hasDefault={false}
+			tooltip_text={tooltip()}
 		>
 			<box className={"sessioncontrol button"} vertical={true} halign={CENTER} valign={CENTER}>
 				<icon icon={icon()} />
-				<label label={label()} />
+				<label label={label()} {...labelprops} />
 			</box>
 		</button>
 	);

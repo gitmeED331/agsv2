@@ -4,6 +4,7 @@ import { GLib, GObject, exec, execAsync, Gio } from "astal";
 import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
+import { PrivacyModule } from "../../Widgets/index";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
@@ -31,25 +32,27 @@ function LeftBar() {
 				}
 			}}
 		/>
-
 	);
 }
 
 function CenterBar() {
 	return (
-		<button
-			className="clock"
-			cursor="pointer"
-			onClick={(_, event) => {
-				App.toggle_window(`dashboard${App.get_monitors()[0]}`);
-			}}
-		>
-			<box halign={CENTER} valign={CENTER} spacing={5}>
-				<DateTimeLabel format="%H:%M:%S" interval={500} />
-				<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
-				<DateTimeLabel format="%a %b %d" interval={3600000} />
-			</box>
-		</button>
+		<box spacing={10}>
+			<button
+				className="clock"
+				cursor="pointer"
+				onClick={(_, event) => {
+					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+				}}
+			>
+				<box halign={CENTER} valign={CENTER} spacing={5}>
+					<DateTimeLabel format="%H:%M:%S" interval={500} />
+					<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
+					<DateTimeLabel format="%a %b %d" interval={3600000} />
+				</box>
+			</button>
+			<PrivacyModule />
+		</box>
 	);
 }
 
@@ -64,15 +67,7 @@ function RightBar() {
 
 export default function Bar(monitor: Gdk.Monitor) {
 	return (
-		<window
-			className={"bar"}
-			name={`bar${monitor}`}
-			gdkmonitor={monitor}
-			application={App}
-			anchor={TOP | LEFT | RIGHT}
-			exclusivity={Astal.Exclusivity.EXCLUSIVE}
-			layer={Astal.Layer.TOP}
-		>
+		<window className={"bar"} name={`bar${monitor}`} gdkmonitor={monitor} application={App} anchor={TOP | LEFT | RIGHT} exclusivity={Astal.Exclusivity.EXCLUSIVE} layer={Astal.Layer.TOP}>
 			<centerbox
 				halign={FILL}
 				valign={START}

@@ -49,7 +49,7 @@ export default function LeftSide() {
 	dashboardLeftStack = leftStack;
 
 	return (
-		<box className={"dashboard leftSide"} vertical={true} halign={END} valign={START} hexpand={true} vexpand={true} spacing={10} widthRequest={450}>
+		<box className={"dashboard leftSide"} vertical halign={END} valign={START} hexpand={true} vexpand={true} spacing={10} widthRequest={450}>
 			{[stackSwitcher, leftStack]}
 		</box>
 	);

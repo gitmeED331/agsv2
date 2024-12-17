@@ -1,0 +1,102 @@
+@use '../_variables' as *;
+
+@keyframes spin {
+	to {
+		-gtk-icon-transform: rotate(1turn);
+	}
+}
+
+.bar {
+	color: $color7;
+	background: none;
+	min-height: 8px;
+
+	&left,
+	&center,
+	&right {
+		min-width: 100px;
+	}
+}
+
+/* --- AppTitleTicker --- */
+.AppTitleTicker {
+	background: $PrimaryBG;
+	border-radius: 1rem;
+	border-top: $border;
+	min-width: 50px;
+	padding: 0 0.5rem;
+
+	icon {
+		color: $color5;
+		font-size: 1rem;
+	}
+
+	label {
+		color: $color1;
+		font-weight: bold;
+	}
+
+	&:hover {
+		icon {
+			color: $color1;
+			animation: spin 1s ease-in-out infinite;
+			// -gtk-icon-transform: scale(2);
+		}
+
+		label {
+			color: $color5;
+		}
+	}
+}
+
+/* --- Clock --- */
+.clock {
+	background: $PrimaryBG;
+	color: $color1;
+	border-top: $border;
+	font-weight: bold;
+	border-radius: 1rem;
+	padding: 0 0.5rem;
+
+	label {
+		font-size: 1rem;
+		color: inherit; // keeps label consistent with parent
+	}
+
+	icon {
+		color: $color5;
+	}
+
+	&:hover {
+		color: $color5;
+
+		icon {
+			color: $color1;
+			animation: spin 1s linear infinite;
+
+		}
+	}
+}
+
+/* --- sysinfo --- */
+.sysinfo {
+	background: $PrimaryBG;
+	border-top: $border;
+	color: $color1;
+	font-weight: bold;
+	border-radius: 1rem;
+	padding: 0 0.5rem;
+
+	.volumebtn {
+		color: inherit;
+
+		icon,
+		image {
+			font-size: 1.15rem;
+		}
+
+		button:hover {
+			color: $color5;
+		}
+	}
+}

@@ -1,0 +1,135 @@
+@use '../_variables' as *;
+
+.cliphist {
+	&.contentgrid {
+		background: $GrootRightBG black center no-repeat;
+		background-size: auto auto;
+		border-radius: $radius-tbleft;
+		border: $border;
+		border-right: none;
+		box-shadow: 1rem 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+		padding: 0 1rem;
+	}
+
+	&.header {
+		margin: 1rem;
+		background: none;
+		border: $border;
+		border-top: none;
+		border-radius: $radius;
+		color: $color1;
+		padding: 0.5rem;
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+		.clear_hist,
+		.refresh_hist {
+			color: $color1;
+			border-radius: $radius;
+
+			icon {
+				margin: -0.25rem;
+			}
+
+			&:hover {
+				color: $color2;
+				background: $color4;
+			}
+		}
+
+		.clear_hist icon {
+			font-size: 2rem;
+		}
+
+		.refresh_hist icon {
+			font-size: 1.5rem;
+		}
+
+		.search {
+			border-radius: $radius;
+			padding: 0 0.5rem;
+
+			selection {
+				color: black;
+				background-color: $color2;
+			}
+		}
+	}
+
+	button.item {
+		all: unset;
+		padding: 0 0.75rem;
+		min-height: 1.5rem;
+		margin-bottom: 0.5rem;
+		border-bottom: 2px solid rgba(0, 0, 255, 1);
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		icon {
+			font-size: 2rem;
+			color: $color1;
+			border-radius: 10rem;
+		}
+
+		label {
+			color: $color1;
+			font-weight: normal;
+			font-size: 1.25rem;
+		}
+
+		&.active,
+		&:focus,
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.8);
+			border-radius: $radius;
+			border-bottom: $border;
+
+			label {
+				text-shadow: 0.3rem 0.3rem 0.5rem $color2;
+			}
+
+			icon {
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $color2;
+				animation: spin 1s linear infinite;
+			}
+		}
+
+		.idlabel {
+			border-right: $border;
+			border-radius: $radius;
+			padding: 0.5rem;
+		}
+
+		.imagePreview {
+			background-size: contain;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-color: rgba(255, 255, 255, 0.25);
+			border-radius: $radius;
+		}
+	}
+
+	scrollbar.vertical {
+		transition: 200ms;
+		background-color: rgba(23, 23, 23, 0.3);
+		margin: 0.5rem 0;
+
+		&:hover {
+			background-color: rgba(23, 23, 23, 0.7);
+
+			slider {
+				background-color: $color1;
+				min-width: 0.5rem;
+			}
+		}
+
+		slider {
+			background-color: rgba(15, 155, 255, 0.5);
+			border-radius: $radius;
+			min-width: 0.4rem;
+			min-height: 2rem;
+			transition: 200ms;
+		}
+	}
+}

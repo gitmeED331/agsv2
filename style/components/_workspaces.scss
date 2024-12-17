@@ -1,0 +1,89 @@
+@use '../_variables' as *;
+
+.hyprworkspaces,
+.riverworkspaces {
+	background: $PrimaryBG;
+	border-top: $border;
+	border-radius: 1rem;
+	padding: 0 0.5rem;
+	margin-left: 0.5rem;
+
+	.urgent,
+	.occupied,
+	.focused {
+		&:hover {
+
+			icon,
+			label {
+				color: $color5;
+			}
+		}
+	}
+
+	.urgent {
+		color: $color4;
+	}
+
+	.occupied {
+		color: rgba(15, 155, 255, 1);
+	}
+
+	.active {
+		color: purple;
+	}
+
+	.focused {
+		all: unset;
+		color: $color3;
+		padding: 0.1rem 0.25rem;
+		border-radius: 2rem;
+		border: 1px solid $color2;
+		transition: all 2s ease;
+
+		@each $workspace in hyprworkspaces, riverworkspaces {
+			@if $workspace ==hyprworkspaces {
+				background-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), $color1 1.5rem);
+			}
+
+			@else if $workspace ==riverworkspaces {
+				border-bottom: 1px solid $color2;
+			}
+		}
+	}
+
+	button {
+		color: $color1;
+		transition: all 2s cubic-bezier(0.5, 2, 0, 1);
+
+		icon {
+			font-size: 0.8rem;
+		}
+
+		label {
+			font-size: 0.9rem;
+		}
+
+		&:first-child {
+			margin-right: 0.25rem;
+		}
+
+		&:nth-child(1n + 0) {
+			margin: 0 0.25rem;
+		}
+
+		&:last-child {
+			margin-left: 0.25rem;
+		}
+
+		&:hover {
+			icon {
+				animation: spin 1s linear infinite;
+				color: $color5;
+			}
+
+			label {
+				color: $color5;
+			}
+		}
+	}
+}

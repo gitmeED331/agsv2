@@ -13,6 +13,7 @@ import BluetoothButton from "./Bluetooth/BarButton";
 import BluetoothDevices from "./Bluetooth/BluetoothDevices";
 import Tray from "./Tray";
 import SessionControls from "./SessionControls";
+import PrivacyModule from "./PrivacyIndicator";
 
 export {
 	AudioMixer,
@@ -28,6 +29,7 @@ export {
 	WifiAPs,
 	BluetoothButton,
 	BluetoothDevices,
+	PrivacyModule,
 	SessionControls,
 	Tray,
 };

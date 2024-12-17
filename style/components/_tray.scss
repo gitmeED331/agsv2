@@ -1,0 +1,63 @@
+@use '../_variables' as *;
+
+.tray {
+	background: $TertiaryBG;
+	border: $border;
+	border-radius: $radius;
+	padding: 0.25rem;
+
+	>* {
+		border: 2px solid transparent;
+		background-color: transparent;
+		font-weight: bold;
+	}
+
+	button {
+
+		image,
+		icon {
+			color: $color1;
+			font-size: 1.5rem;
+			border-radius: $radius;
+		}
+
+		&:hover {
+			background-color: #1e1e2e;
+			border-radius: $radius;
+			border: $border;
+		}
+	}
+}
+
+menu>menuitem {
+	background: rgba(0, 0, 0, 1);
+	border-radius: $radius;
+	border-bottom: $border;
+	color: $color1;
+	margin: 0.5px;
+	padding: 5px;
+
+	&:hover {
+		color: $color5;
+		font-weight: bold;
+		border: $border;
+		border-top: none;
+		border-color: $color4;
+
+		icon,
+		image {
+			color: $color4;
+		}
+	}
+
+	icon,
+	image {
+		color: $color1;
+	}
+
+	&:disabled {
+		color: gray;
+		background: rgba(39, 38, 38, 0.5);
+		border: none;
+	}
+}

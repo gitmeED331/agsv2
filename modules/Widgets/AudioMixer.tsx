@@ -4,9 +4,9 @@ import Icon, { Icons } from "../lib/icons";
 import AstalWp from "gi://AstalWp";
 import Pango from "gi://Pango";
 
-function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; type: "device" | "stream" } & Widget.SliderProps) {
-	const { audio } = AstalWp.get_default() as { audio: any };
+const { audio } = AstalWp.get_default()!;
 
+function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; type: "device" | "stream" } & Widget.SliderProps) {
 	const Bindings = Variable.derive(
 		[
 			bind(element, "volume"),
@@ -57,9 +57,34 @@ function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; 
 		element.set_mute(false);
 	};
 
+	function theTooltip() {
+		return (
+			<box spacing={10}>
+				<icon
+					icon={bind(Bindings).as((c) => c.theIcon)}
+					css={`
+						font-size: 2rem;
+					`}
+				/>
+				<label label={bind(Bindings).as((l) => l.tooltip)} />
+			</box>
+		);
+	}
+
 	return (
 		<box vertical spacing={5} halign={CENTER} valign={CENTER}>
-			<button className={bind(Bindings).as((c) => c.buttonCN)} onClick={handleClick} onScroll={handleScroll} halign={START} tooltip_markup={bind(Bindings).as((t) => t.tooltip)}>
+			<button
+				className={bind(Bindings).as((c) => c.buttonCN)}
+				onClick={handleClick}
+				onScroll={handleScroll}
+				halign={START}
+				// tooltip_markup={bind(Bindings).as((t) => t.tooltip)}
+				hasTooltip
+				onQueryTooltip={(self, x, y, kbtt, tooltip) => {
+					tooltip.set_custom(theTooltip());
+					return true;
+				}}
+			>
 				<box spacing={5} valign={FILL} halign={START}>
 					<icon icon={bind(Bindings).as((i) => i.theIcon)} halign={START} />
 					<label xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(Bindings).as((d) => d.theDescription)} halign={START} />
@@ -104,9 +129,8 @@ function SettingsButton() {
 }
 
 export default function () {
-	const { audio } = AstalWp.get_default() as any;
-	const Speaker = audio?.get_default_speaker();
-	const Microphone = audio?.get_default_microphone();
+	const Speaker = audio.get_default_speaker();
+	const Microphone = audio.get_default_microphone();
 
 	// const theDevices = <scrollable expand vscroll={Gtk.PolicyType.NEVER} hscroll={Gtk.PolicyType.AUTOMATIC} halign={FILL} valign={START}>
 	// 	<box halign={START} >
@@ -150,8 +174,8 @@ export default function () {
 						)
 					)} */}
 
-					<AudioElement element={Speaker} type={"device"} />
-					<AudioElement element={Microphone} type={"device"} />
+					<AudioElement element={Speaker!} type={"device"} />
+					<AudioElement element={Microphone!} type={"device"} />
 				</box>
 			</box>
 

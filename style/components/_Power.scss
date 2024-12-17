@@ -1,0 +1,66 @@
+@use '../_variables' as *;
+
+@keyframes lowBlink {
+	0% {
+		color: #ff0000;
+	}
+
+	50% {
+		color: #ffff00;
+	}
+
+	100% {
+		color: #000066;
+	}
+}
+
+// ------------- Battery bar --------------
+
+.battery {
+	border: none;
+	color: $color1;
+	font-size: 0.5rem;
+
+	icon {
+		&.charging {
+			color: yellow;
+		}
+
+		&.discharging {
+			color: red;
+		}
+	}
+
+	&.low {
+		animation: lowBlink 3s infinite;
+
+		label,
+		icon {
+			animation: lowBlink 2s infinite;
+		}
+	}
+
+	&:hover {
+		color: $color5;
+	}
+
+	& trough {
+		border-radius: calc($radius * 5);
+		min-width: 75px;
+
+		block {
+			min-height: 10px;
+			border: 1px solid $color2;
+			border-radius: calc($radius * 5);
+			margin: 0 0.25px;
+
+			&.empty {
+				background: linear-gradient(90deg, red, black 100%);
+			}
+
+			&.filled {
+				background: linear-gradient(90deg, black, lime 100%);
+			}
+		}
+	}
+}

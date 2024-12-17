@@ -1,12 +1,12 @@
 import { Gdk, Widget, App } from "astal/gtk3";
-import { bind, Variable, timeout, GLib } from "astal";
+import { bind, Variable, timeout, GLib, AstalIO } from "astal";
 import AstalTray from "gi://AstalTray";
 
 type TrayItem = ReturnType<ReturnType<typeof AstalTray.Tray.get_default>["get_item"]>;
 
 const SysTrayItem = (item: TrayItem) => {
 	const menu = item.create_menu();
-	let clickTimeout: number | GLib.Source;
+	let clickTimeout: AstalIO.Time;
 	let clickCount = 0;
 
 	const button = (
@@ -21,11 +21,11 @@ const SysTrayItem = (item: TrayItem) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					clickCount++;
 					if (clickCount === 1) {
-						clickTimeout = setTimeout(() => {
+						clickTimeout = timeout(400, () => {
 							clickCount = 0;
-						}, 400);
+						});
 					} else if (clickCount === 2) {
-						GLib.source_remove(Number(clickTimeout));
+						clickTimeout.cancel();
 						clickCount = 0;
 						item.activate(0, 0);
 						App.toggle_window(`dashboard${App.get_monitors()[0]}`);
@@ -65,7 +65,10 @@ const setupTray = (box: Widget.Box) => {
 		}
 	};
 
-	systemTray.get_items().forEach((item) => addItem(item.item_id));
+	systemTray
+		.get_items()
+		.sort((a, b) => a.item_id.localeCompare(b.item_id))
+		.forEach((item) => addItem(item.item_id));
 	systemTray.connect("item_added", (_, id) => addItem(id));
 	systemTray.connect("item_removed", (_, id) => removeItem(id));
 };

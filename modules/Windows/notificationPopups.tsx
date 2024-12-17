@@ -1,5 +1,5 @@
 import { Astal, Gdk, App, Widget } from "astal/gtk3";
-import { timeout, Variable } from "astal";
+import { idle, timeout, Variable } from "astal";
 import AstalNotifd from "gi://AstalNotifd";
 import { NotifWidget } from "../Widgets/index";
 
@@ -56,7 +56,11 @@ function NotifItem() {
 
 		notification.connect("dismissed", () => removeItem(box, notificationItem));
 
-		setTimeout(() => removeItem(box, notificationItem), expireTime.get());
+		if (expireTime.get() > 0) {
+			setTimeout(() => {
+				removeItem(box, notificationItem);
+			}, expireTime.get());
+		}
 	});
 	return box;
 }

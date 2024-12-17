@@ -1,0 +1,132 @@
+@use '../_variables' as *;
+
+.bluetooth {
+	&.devicelist-header {
+		color: $color1;
+		border-radius: $radius;
+		border-bottom: $border;
+		padding: 0.25rem 1rem;
+		box-shadow: 0 0.5rem 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+		&.controls {
+			border: none;
+			box-shadow: none;
+			padding: 0;
+
+			button {
+				&.power-on {
+					color: $color3;
+
+				}
+
+				&.power-off {
+					color: $color4;
+
+				}
+
+				&:hover {
+
+					label,
+					icon {
+						color: $color5;
+					}
+				}
+			}
+		}
+
+		.refreshing {
+			color: $color3;
+
+			icon {
+				animation: spin 1s infinite linear;
+			}
+		}
+	}
+
+	&.devicelist-inner {
+		color: $color1;
+		padding: 0.25rem;
+
+		&.controls {
+			all: unset;
+			background: transparent;
+			border-radius: $radius;
+			border-left: $border;
+			padding: 0 0.5rem;
+			box-shadow: -0.75rem 0 0.5rem -0.25rem rgba(15, 155, 255, 0.8);
+
+			icon {
+				font-size: 1.25rem;
+			}
+
+			button {
+				all: unset;
+
+				&:hover {
+
+					label,
+					icon {
+						color: $color5;
+					}
+				}
+			}
+		}
+
+		button {
+			&.enabled {
+				color: $color3;
+			}
+
+			&.disabled {
+				color: grey;
+			}
+
+			&:hover {
+				color: $color5;
+			}
+		}
+
+		&.items {
+			border-radius: $radius;
+			border-bottom: $border;
+
+			button {
+
+				label,
+				icon {
+					color: $color1;
+				}
+
+				&:hover {
+
+					label,
+					icon {
+						color: $color5;
+					}
+				}
+			}
+
+			&.itemicon {
+				color: $color3;
+			}
+
+			&.connected {
+				border-color: $color3;
+
+				label {
+					color: $color3;
+				}
+			}
+		}
+	}
+
+	&.barbutton {
+		&:hover {
+			color: $color5;
+		}
+
+		&-label {
+			color: $color2;
+		}
+	}
+}

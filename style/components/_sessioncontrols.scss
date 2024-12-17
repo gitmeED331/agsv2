@@ -1,0 +1,143 @@
+@use '../_variables' as *;
+
+@keyframes spin {
+	to {
+		-gtk-icon-transform: rotate(1turn);
+	}
+}
+
+.sessioncontrols {
+	&.window {
+		all: unset;
+		background: $PrimaryBG;
+
+		&.container {
+			color: $color2;
+			font-size: 2rem;
+			font-weight: bold;
+			min-width: 5rem;
+		}
+
+		&.box {
+			background: $PrimaryBG;
+			border-top: $border;
+			border-bottom: $border;
+			border-radius: calc($radius * 2);
+			border-width: calc($border-width / 2);
+			padding: 2rem;
+		}
+
+		button {
+			border-radius: 5rem;
+			min-width: 10rem;
+			min-height: 10rem;
+			border-left: 0.5rem solid #0f9bff;
+			border-right: 0.5rem solid #0f9bff;
+			background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 255, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 255, 1) 85%, rgba(0, 0, 255, 0.5) 100%);
+			padding: 0.5rem;
+			margin: 0 2rem;
+
+			icon,
+			image {
+				color: $color1;
+				min-width: 3.5rem;
+				min-height: 3.5rem;
+				font-size: 4rem;
+			}
+
+			label {
+				color: $color1;
+				font-size: 2rem;
+			}
+
+			label {
+				font-size: 1.75rem;
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				icon {
+					animation: spin 1s linear;
+				}
+			}
+
+			&:hover {
+				border-left: 0.5rem dashed red;
+				border-right: 0.5rem dashed red;
+				background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 0, 0, 1) 85%, rgba(255, 0, 0, 0.5) 100%);
+
+				label {
+					color: $color5;
+				}
+			}
+
+			&:focus,
+			&:active {
+				border-left: 0.5rem dashed rgba(255, 255, 0, 1);
+				border-right: 0.5rem dashed rgba(255, 255, 0, 1);
+				background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 0, 1) 85%, rgba(255, 255, 0, 0.5) 100%);
+
+				label {
+					color: $color5;
+				}
+			}
+		}
+	}
+
+	&.launcher {
+		all: unset;
+
+		&.pbox {
+			padding: 1rem 0rem;
+		}
+
+		button {
+			border-radius: 5rem;
+			border-left: 0.5rem solid #0f9bff;
+			border-right: 0.5rem solid #0f9bff;
+			background: linear-gradient(0deg, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 255, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 255, 1) 85%, rgba(0, 0, 255, 0.5) 100%);
+			padding: 0.25rem;
+			margin: 0.25rem 0rem;
+
+			icon {
+				color: $color1;
+				font-size: 1.5rem;
+			}
+
+			label {
+				color: $color1;
+				font-size: 0.75rem;
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				icon {
+					animation: spin 1s infinite;
+				}
+			}
+
+			&:hover {
+				border-left: 0.5rem dashed red;
+				border-right: 0.5rem dashed red;
+				background: linear-gradient(0deg, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 0, 0, 1) 85%, rgba(255, 0, 0, 0.5) 100%);
+
+				label {
+					color: $color5;
+				}
+			}
+
+			&:focus,
+			&:active {
+				border-left: 0.5rem dashed rgba(255, 255, 0, 1);
+				border-right: 0.5rem dashed rgba(255, 255, 0, 1);
+				background: linear-gradient(0deg, rgba(255, 255, 0, 0.5) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 0, 1) 85%, rgba(255, 255, 0, 0.5) 100%);
+
+				label {
+					color: $color5;
+				}
+			}
+		}
+	}
+}

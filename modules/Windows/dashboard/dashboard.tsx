@@ -8,8 +8,6 @@ import playerStack, { dashboardPlayerStack } from "../../Widgets/MediaPlayer";
 import LeftSide, { dashboardLeftStack } from "./LeftSide";
 import RightSide, { dashboardRightStack } from "./RightSide";
 
-Gdk.Screen.get_default();
-
 export default function Dashboard(monitor: Gdk.Monitor) {
 	const WINDOWNAME = `dashboard${monitor}`;
 
@@ -17,8 +15,11 @@ export default function Dashboard(monitor: Gdk.Monitor) {
 		if (win.visible === false && win.name === WINDOWNAME) {
 			dashboardLeftStack.set_visible_child_name("calendar");
 			dashboardRightStack.set_visible_child_name("notifications");
-			if (dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer"
-				&& dashboardPlayerStack.get_visible_child_name() !== "no-media" && (dashboardPlayerStack as any).length > 0) {
+			if (
+				dashboardPlayerStack.get_visible_child_name() !== "org.mpris.MediaPlayer2.Deezer" &&
+				dashboardPlayerStack.get_visible_child_name() !== "no-media" &&
+				(dashboardPlayerStack as any).length > 0
+			) {
 				dashboardPlayerStack.set_visible_child_name("org.mpris.MediaPlayer2.Deezer");
 			}
 		}
@@ -71,5 +72,4 @@ export default function Dashboard(monitor: Gdk.Monitor) {
 			/>
 		</window>
 	);
-
 }
