@@ -27,7 +27,7 @@ const pam = new AstalAuth.Pam();
 const prompt = Variable("");
 const inputVisible = Variable(true);
 const inputNeeded = Variable(true);
-const UIVisibility = Variable(true);
+const UIVisibility = Variable(false);
 
 function authMessages() {
 	const messageLabel = (msg, type) => {
@@ -170,7 +170,10 @@ function Lockscreen({ monitor }: { monitor: Gdk.Monitor }) {
 				background-size: cover;
 			`}
 			onKeyPressEvent={(_, event) => {
-				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+				const keyval = event.get_keyval()[1];
+				const state = event.get_state()[1];
+				const modPressed = state & Gdk.ModifierType.CONTROL_MASK;
+				if (keyval === Gdk.KEY_Escape && modPressed) {
 					UIVisibility.set(!UIVisibility.get());
 					if (UIVisibility.get() === true) {
 						PasswordEntry.grab_focus();
