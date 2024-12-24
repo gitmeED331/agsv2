@@ -6,87 +6,57 @@ const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
 const labelvisible = Variable(true);
 
-export const SysButton = ({ action, ...labelprops }: { action: string } & Widget.LabelProps) => {
-	const command = () => {
-		const cmd = (() => {
-			switch (action) {
-				case "lock":
-					return `ags run -d ${SRC}/Lockscreen/`;
-				case "logout":
-					return wm === "hyprland" ? "hyprctl dispatch exit" : wm === "river" ? "riverctl exit" : "";
-				case "reboot":
-					return "systemctl reboot";
-				case "shutdown":
-					return "systemctl -i poweroff";
-				default:
-					return "";
-			}
-		})();
-		return App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`), execAsync(cmd);
-	};
-	const icon = () => {
-		switch (action) {
-			case "lock":
-				return Icon.powermenu.lock;
-			case "logout":
-				return Icon.powermenu.logout;
-			case "reboot":
-				return Icon.powermenu.reboot;
-			case "shutdown":
-				return Icon.powermenu.shutdown;
-			default:
-				return "";
-		}
-	};
-	const label = () => {
-		switch (action) {
-			case "lock":
-				return "Lock";
-			case "logout":
-				return "Log Out";
-			case "reboot":
-				return "Reboot";
-			case "shutdown":
-				return "Shutdown";
-			default:
-				return "";
-		}
-	};
+export const SysBtn = ({ action, ...labelprops }: { action: "lock" | "logout" | "reboot" | "shutdown" } & Widget.LabelProps) => {
 
-	const tooltip = () => {
-		switch (action) {
-			case "lock":
-				return "Lock";
-			case "logout":
-				return "Log Out";
-			case "reboot":
-				return "Reboot";
-			case "shutdown":
-				return "Shutdown";
-			default:
-				return "";
-		}
-	};
+	const Bindings = Variable.derive([], () => ({
+		command: {
+			lock: `ags run ${SRC}/Lockscreen`,
+			logout: wm === "hyprland" ? "hyprctl dispatch exit" : wm === "river" ? "riverctl exit" : "",
+			reboot: "systemctl reboot",
+			shutdown: "systemctl -i poweroff",
+		}[action],
+		icon: {
+			lock: Icon.powermenu.lock,
+			logout: Icon.powermenu.logout,
+			reboot: Icon.powermenu.reboot,
+			shutdown: Icon.powermenu.shutdown,
+		}[action],
+		label: {
+			lock: "Lock",
+			logout: "Log Out",
+			reboot: "Reboot",
+			shutdown: "Shutdown",
+		}[action],
+		tooltip: {
+			lock: "Lock",
+			logout: "Log Out",
+			reboot: "Reboot",
+			shutdown: "Shutdown",
+		}[action]
+	}))
 
 	return (
 		<button
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					command();
+					App.toggle_window(`sessioncontrols${App.get_monitors()[0].get_model()}`),
+						execAsync(Bindings.get().command);
+
 				}
 			}}
 			onKeyPressEvent={(_, event) => {
 				if (event.get_keyval()[1] === Gdk.KEY_Return) {
-					command();
+					App.toggle_window(`sessioncontrols${App.get_monitors()[0].get_model()}`),
+						execAsync(Bindings.get().command);
 				}
 			}}
 			canFocus={true}
 			hasDefault={false}
-			tooltip_text={tooltip()}
+			tooltip_text={bind(Bindings).as(t => t.tooltip)}
 		>
 			<box className={"sessioncontrol button"} vertical={true} halign={CENTER} valign={CENTER}>
-				<icon icon={icon()} />
-				<label label={label()} {...labelprops} />
+				<icon icon={bind(Bindings).as(i => i.icon)} />
+				<label label={bind(Bindings).as(l => l.label)} {...labelprops} />
 			</box>
 		</button>
 	);
@@ -95,10 +65,10 @@ export const SysButton = ({ action, ...labelprops }: { action: string } & Widget
 export default function SessionControls() {
 	return (
 		<box className={"sessioncontrols container"} valign={CENTER} halign={CENTER} visible={true}>
-			<SysButton action={"lock"} />
-			<SysButton action={"logout"} />
-			<SysButton action={"reboot"} />
-			<SysButton action={"shutdown"} />
+			<SysBtn action={"lock"} />
+			<SysBtn action={"logout"} />
+			<SysBtn action={"reboot"} />
+			<SysBtn action={"shutdown"} />
 		</box>
 	);
 }

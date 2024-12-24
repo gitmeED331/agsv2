@@ -1,5 +1,5 @@
 import { Gdk, App, Widget } from "astal/gtk3";
-import { winwidth, winheight } from "./screensizeadjust";
+import ScreenSizing from "./screensizeadjust";
 
 export default function ({ id, width, height, windowName, ...props }: { id: number, width: number, height: number, windowName: string } & Widget.EventBoxProps) {
 	return (
@@ -10,8 +10,8 @@ export default function ({ id, width, height, windowName, ...props }: { id: numb
 					win.visible = false;
 				}
 			}}
-			widthRequest={winwidth(width)}
-			heightRequest={winheight(height)}
+			widthRequest={ScreenSizing({ type: "width", multiplier: width })}
+			heightRequest={ScreenSizing({ type: "height", multiplier: height })}
 			{...props}
 		/>
 	);

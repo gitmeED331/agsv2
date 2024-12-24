@@ -5,48 +5,42 @@ import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 
 let netreveal = Variable(false);
 
-function NetworkWidget({ network }: any) {
+function NetworkWidget({ network }: { network: AstalNetwork.Network }) {
 
-	const icon = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
-		switch (primary) {
-			case AstalNetwork.Primary.WIFI:
-				return wifi.icon_name
-			case AstalNetwork.Primary.WIRED:
-				return wired.icon_name
-			default:
-				return "network-disconnected-symbolic"
+	const Bindings = Variable.derive(
+		[bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")],
+		(primary, wired, wifi) => {
+			switch (primary) {
+				case AstalNetwork.Primary.WIFI:
+					return {
+						icon: wifi.icon_name,
+						label: "Wifi",
+						tooltip: `Connectd to: \n <b>${wifi.ssid}</b>`,
+					};
+				case AstalNetwork.Primary.WIRED:
+					return {
+						icon: wired.icon_name,
+						label: "Wired",
+						tooltip: `Connected to:\n <b>Ethernet</b>`,
+					};
+				default:
+					return {
+						icon: "network-disconnected-symbolic",
+						label: "Disconnected",
+						tooltip: "No connection",
+					};
+			}
 		}
-	})
+	);
 
-	const label = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
-		switch (primary) {
-			case AstalNetwork.Primary.WIFI:
-				return "Wifi"
-			case AstalNetwork.Primary.WIRED:
-				return "Wired"
-			default:
-				return "Disconnected"
-		}
-	});
-
-	const tooltip = Variable.derive([bind(network, "primary"), bind(network, "wired"), bind(network, "wifi")], (primary, wired, wifi) => {
-		switch (primary) {
-			case AstalNetwork.Primary.WIFI:
-				return `Connectd to: \n <b>${wifi.ssid}</b>`
-			case AstalNetwork.Primary.WIRED:
-				return `Connected to:\n <b>Ethernet</b>`
-			default:
-				return "No connection"
-		}
-	})
-
-	return <box tooltipMarkup={bind(tooltip)} >
-		<icon icon={bind(icon)} />
+	return <box tooltipMarkup={bind(Bindings).as((t) => t.tooltip)} spacing={5} >
+		<icon icon={bind(Bindings).as((i) => i.icon)} />
 		<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(netreveal)}>
-			<label label={bind(label)} />
+			<label label={bind(Bindings).as((l) => l.label)} />
 		</revealer>
 	</box>
 }
+
 function NetworkButton() {
 	const Network = AstalNetwork.get_default();
 
@@ -58,7 +52,7 @@ function NetworkButton() {
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "network";
-					const win = App.get_window(`dashboard${App.get_monitors()[0]}`);
+					const win = App.get_window(`dashboard${App.get_monitors()[0].get_model()}`);
 					const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
 					const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
 					if (win) {

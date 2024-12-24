@@ -7,7 +7,9 @@ import entry, { query } from "./search";
 import { theStack, Switcher } from "./Design";
 import { Icons } from "../../lib/icons";
 import { Applications } from "./AppAccess";
-import { SysButton } from "modules/Widgets/SessionControls";
+import { SysBtn } from "modules/Widgets/SessionControls";
+import PopupWindow from "../../lib/popupwindow";
+import ScreenSizing from "../../lib/screensizeadjust";
 
 const background = `${SRC}/assets/groot-thin-right.png`;
 
@@ -20,15 +22,15 @@ const favorites = Applications.filter((app) => ["Zed", "VSCodium - Wayland", "de
 
 const SessCon = (
 	<box className={"sessioncontrols launcher pbox"} spacing={10} halign={CENTER} valign={END} vertical>
-		<SysButton action={"lock"} visible={false} />
-		<SysButton action={"logout"} visible={false} />
-		<SysButton action={"reboot"} visible={false} />
-		<SysButton action={"shutdown"} visible={false} />
+		<SysBtn action={"lock"} visible={false} />
+		<SysBtn action={"logout"} visible={false} />
+		<SysBtn action={"reboot"} visible={false} />
+		<SysBtn action={"shutdown"} visible={false} />
 	</box>
 );
 
 export default function Launchergrid(monitor: Gdk.Monitor) {
-	const WINDOWNAME = `launcher${monitor}`;
+	const WINDOWNAME = `launcher${monitor.get_model()}`;
 
 	const contentGrid = (
 		<Grid
@@ -38,6 +40,8 @@ export default function Launchergrid(monitor: Gdk.Monitor) {
 			hexpand={true}
 			vexpand={true}
 			visible={true}
+			// widthRequest={ScreenSizing({ type: "width", multiplier: 0.15)}
+			// heightRequest={ScreenSizing({ type: "height", multiplier: 0.981)}
 			css={`
 				background-image: url("${background}");
 				background-size: contain;
@@ -55,21 +59,6 @@ export default function Launchergrid(monitor: Gdk.Monitor) {
 		/>
 	);
 
-	// const masterGrid = (
-	// 	<Grid
-	// 		className={"launcher containergrid"}
-	// 		halign={FILL}
-	// 		valign={FILL}
-	// 		hexpand={true}
-	// 		vexpand={true}
-	// 		visible={true}
-	// 		setup={(self) => {
-	// 			self.attach(contentGrid, 0, 0, 1, 1);
-	// 			self.attach(<ClickToClose id={1} width={0.8} height={0.8} windowName={WINDOWNAME} />, 1, 0, 1, 1);
-	// 		}}
-	// 	/>
-	// );
-
 	App.connect("window-toggled", (_, win) => {
 		if (win.visible === false && win.name === WINDOWNAME) {
 			query.set("");
@@ -78,6 +67,17 @@ export default function Launchergrid(monitor: Gdk.Monitor) {
 			theStack.set_visible_child_name("All Apps");
 		}
 	});
+
+
+	// return <PopupWindow
+	// 	name={WINDOWNAME}
+	// 	className={"launcher window"}
+	// 	exclusivity={Astal.Exclusivity.NORMAL}
+	// 	xcoord={0}
+	// 	ycoord={0.0}
+	// 	child={contentGrid}
+	// 	transition={Gtk.RevealerTransitionType.SLIDE_RIGHT}
+	// />
 
 	return (
 		<window

@@ -5,8 +5,10 @@ import Pango from "gi://Pango";
 import Icon, { Icons } from "../../lib/icons";
 import { Stack, Grid } from "../../Astalified/index";
 import entry, { query } from "./search";
-import { winheight, winwidth } from "../../lib/screensizeadjust";
+import ScreenSizing from "../../lib/screensizeadjust";
 import { Apps, Applications, AstalApplication } from "./AppAccess";
+
+const WINDOWNAME = `launcher${App.get_monitors()[0].get_model()}`;
 
 export function CreateAppGrid({ appList }: { appList: AstalApplication[] }) {
 	const columnCount = 1;
@@ -38,10 +40,10 @@ export function CreateAppGrid({ appList }: { appList: AstalApplication[] }) {
 				tooltip_text={app.get_description()}
 				on_clicked={() => {
 					app.launch();
-					App.toggle_window(`launcher${App.get_monitors()[0]}`);
+					App.toggle_window(WINDOWNAME);
 				}}
 			>
-				<box halign={FILL} valign={FILL} spacing={5} widthRequest={winwidth(0.1)}>
+				<box halign={FILL} valign={FILL} spacing={5} widthRequest={ScreenSizing({ type: "width", multiplier: 0.1 })}>
 					{validIcon && <icon icon={iconName} halign={CENTER} valign={CENTER} />}
 					<label label={app.get_name()} halign={CENTER} valign={CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
 				</box>
@@ -138,6 +140,7 @@ export const theStack = (
 		visible={true}
 		hexpand={false}
 		vexpand={true}
+		width_request={ScreenSizing({ type: "width", multiplier: 0.2 })}
 		setup={(self) => {
 			[allAppsPage, ...categoryPages].forEach((page) => {
 				self.add_named(page, page.name);

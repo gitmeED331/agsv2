@@ -33,10 +33,10 @@ const blurCoverArtCss = async (cover_art: string): Promise<string> => {
 /** @param {import('types/service/mpris').MprisPlayer} player */
 
 function tickerButton(player: Mpris.Player) {
-	const CustomLabel = ({ action }: { action: "tracks" | "artists" }) => {
+	const CustomLabel = ({ info }: { info: "tracks" | "artists" }) => {
 		const Bindings = Variable.derive([bind(player, "title"), bind(player, "artist")], (title, artist) => ({
-			label: action === "tracks" ? TrimTrackTitle(title) : artist || "Unknown Artist",
-			classname: `ticker ${action}`,
+			label: info === "tracks" ? TrimTrackTitle(title) : artist || "Unknown Artist",
+			classname: `ticker ${info}`,
 		}))();
 
 		return (
@@ -65,8 +65,8 @@ function tickerButton(player: Mpris.Player) {
 		}
 		return (
 			<box vertical spacing={10} setup={setup} widthRequest={350}>
-				<CustomLabel action="tracks" />
-				<CustomLabel action="artists" />
+				<CustomLabel info="tracks" />
+				<CustomLabel info="artists" />
 			</box>
 		);
 	}
@@ -79,7 +79,7 @@ function tickerButton(player: Mpris.Player) {
 			cursor={"pointer"}
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					App.toggle_window(`mediaplayerwindow${App.get_monitors()[0]}`);
+					App.toggle_window(`mediaplayerwindow${App.get_monitors()[0].get_model()}`);
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					player.play_pause();
@@ -98,7 +98,7 @@ function tickerButton(player: Mpris.Player) {
 			}}
 		>
 			<box visible spacing={5} halign={CENTER} valign={CENTER}>
-				<CustomLabel action="tracks" />
+				<CustomLabel info="tracks" />
 				<icon
 					className={"ticker icon"}
 					hexpand={false}
@@ -107,7 +107,7 @@ function tickerButton(player: Mpris.Player) {
 					tooltip_text={bind(player, "identity")}
 					icon={bind(player, "entry").as((entry) => entry || Icon.mpris.controls.FALLBACK_ICON)}
 				/>
-				<CustomLabel action="artists" />
+				<CustomLabel info="artists" />
 			</box>
 		</button>
 	);
@@ -183,7 +183,7 @@ export default function MediaTickerButton() {
 	);
 
 	return (
-		<box className={"ticker container"} halign={CENTER} valign={CENTER}>
+		<box className={"ticker container"} halign={CENTER} valign={CENTER} vertical>
 			{theStack}
 		</box>
 	);

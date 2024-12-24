@@ -41,7 +41,7 @@ const Workspaces = () => {
 	const workspaceButtons = Array.from({ length: 6 }, (_, i) => WorkspaceButton(i + 1));
 
 	return (
-		<box className="riverworkspaces" halign={FILL} valign={FILL}>
+		<box className="riverworkspaces" halign={FILL} valign={FILL} >
 			{workspaceButtons}
 		</box>
 	);

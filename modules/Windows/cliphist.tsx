@@ -2,9 +2,10 @@ import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { execAsync, exec, Variable, bind } from "astal";
 import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
-import { winwidth, winheight } from "../lib/screensizeadjust";
+import ScreenSizing from "../lib/screensizeadjust";
 import Icon from "../lib/icons";
 import ClickToClose from "../lib/ClickToClose";
+import PopupWindow from "../lib/popupwindow";
 
 const background = `${SRC}/assets/groot-thin-left.png`;
 
@@ -106,7 +107,7 @@ const input = (
 		valign={CENTER}
 		activates_default={true}
 		focusOnClick={true}
-		widthRequest={winwidth(0.15)}
+		widthRequest={ScreenSizing({ type: "width", multiplier: 0.15 })}
 		onChanged={({ text }) => {
 			const searchText = (text ?? "").toLowerCase();
 		}}
@@ -115,7 +116,7 @@ const input = (
 
 const list = await execAsync("cliphist list");
 async function updateList(scrollableList: Gtk.Box) {
-	scrollableList.children.forEach((child) => child.destroy());
+	scrollableList.get_children().forEach((child) => child.destroy());
 
 	const list = await execAsync("cliphist list");
 	list.split("\n")
@@ -173,6 +174,8 @@ function ClipHistWidget() {
 				hexpand={true}
 				vexpand={true}
 				visible={true}
+				// width_request={winwidth(0.25)}
+				// height_request={winheight(0.98)}
 				css={`
 					background-image: url("${background}");
 					background-size: contain;
@@ -190,7 +193,7 @@ function ClipHistWidget() {
 }
 
 export default function cliphist(monitor: Gdk.Monitor) {
-	const WINDOWNAME = `cliphist${monitor}`;
+	const WINDOWNAME = `cliphist${monitor.get_model()}`;
 
 	App.connect("window-toggled", async (_, win) => {
 		if (win.name === WINDOWNAME) {
@@ -199,6 +202,17 @@ export default function cliphist(monitor: Gdk.Monitor) {
 			await updateList(scrollableList);
 		}
 	});
+
+	// return <PopupWindow
+	// 	name={WINDOWNAME}
+	// 	className={"cliphist"}
+	// 	exclusivity={Astal.Exclusivity.NORMAL}
+	// 	xcoord={0.75}
+	// 	ycoord={0.0}
+	// 	child={ClipHistWidget()}
+	// 	transition={REVEAL_SLIDE_CROSSFADE}
+	// />
+
 	return (
 		<window
 			name={WINDOWNAME}
@@ -225,7 +239,7 @@ export default function cliphist(monitor: Gdk.Monitor) {
 				vexpand={true}
 				visible={true}
 				setup={(self) => {
-					self.attach(<ClickToClose id={1} width={0.75} height={0.75} windowName="cliphist" />, 1, 1, 1, 1);
+					self.attach(<ClickToClose id={1} width={0.75} height={0.75} windowName={WINDOWNAME} />, 1, 1, 1, 1);
 					self.attach(ClipHistWidget(), 2, 1, 1, 1);
 				}}
 			/>

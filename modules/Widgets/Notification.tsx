@@ -1,6 +1,6 @@
 import Icon from "../lib/icons";
 import Pango from "gi://Pango";
-import { Grid, Image } from "../Astalified/index";
+import { Grid } from "../Astalified/index";
 import DateTimeLabel from "../lib/datetime";
 
 export default function NotifWidget({ item }: any) {
@@ -40,7 +40,7 @@ export default function NotifWidget({ item }: any) {
 	);
 
 	const theGrid = (
-		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={FILL} valign={FILL} hexpand={true} vexpand={true} visible={true} rowSpacing={5}
+		<Grid className={`level${item.get_hint("urgency")?.unpack()} outerbox`} halign={FILL} valign={FILL} expand visible={true} rowSpacing={5}
 			setup={(self) => {
 				self.attach(iconDateTime, 0, 0, 1, 3);
 				self.attach(notifTitle, 1, 0, 1, 1);

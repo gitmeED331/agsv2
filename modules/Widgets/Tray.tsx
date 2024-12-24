@@ -1,11 +1,37 @@
-import { Gdk, Widget, App } from "astal/gtk3";
-import { bind, Variable, timeout, GLib, AstalIO } from "astal";
+import { Gdk, Widget, Gtk, App } from "astal/gtk3";
+import { bind, Variable, timeout, Gio, GLib, AstalIO } from "astal";
 import AstalTray from "gi://AstalTray";
+
+// export default function () {
+// 	const tray = AstalTray.get_default()
+// 	let clickTimeout: AstalIO.Time;
+// 	let clickCount = 0;
+
+// 	return <box className={"tray container"} halign={CENTER} valign={CENTER} expand vertical={true}>
+// 		{bind(tray, "items").as(items => items.map(item => (
+// 			<menubutton
+// 				tooltipMarkup={bind(item, "tooltipMarkup")}
+// 				usePopover={false} // do not change, will cause crash
+// 				actionGroup={bind(item, "action-group").as(ag => ["dbusmenu", ag])}
+// 				menuModel={bind(item, "menu-model")}
+// 				direction={Gtk.ArrowType.RIGHT}
+// 			>
+// 				<icon gIcon={bind(item, "gicon")} />
+// 			</menubutton>
+// 		)))}
+// 	</box>
+// }
 
 type TrayItem = ReturnType<ReturnType<typeof AstalTray.Tray.get_default>["get_item"]>;
 
+function createMenu(menuModel: Gio.MenuModel, actionGroup: Gio.ActionGroup): Gtk.Menu {
+	const menu: Gtk.Menu = Gtk.Menu.new_from_model(menuModel);
+	menu.insert_action_group("dbusmenu", actionGroup);
+	return menu;
+}
+
 const SysTrayItem = (item: TrayItem) => {
-	const menu = item.create_menu();
+	let menu: Gtk.Menu = createMenu(item.menu_model, item.action_group);
 	let clickTimeout: AstalIO.Time;
 	let clickCount = 0;
 
@@ -40,6 +66,18 @@ const SysTrayItem = (item: TrayItem) => {
 		</button>
 	);
 
+	menu.connect("notify::menu-model", () => {
+		const newMenu = createMenu(item.menu_model, item.action_group);
+		menu.destroy();
+		menu = newMenu;
+	});
+
+	menu.connect("notify::action-group", () => {
+		const newMenu = createMenu(item.menu_model, item.action_group);
+		menu.destroy();
+		menu = newMenu;
+	});
+
 	return button;
 };
 
@@ -73,4 +111,4 @@ const setupTray = (box: Widget.Box) => {
 	systemTray.connect("item_removed", (_, id) => removeItem(id));
 };
 
-export default () => <box className={"tray container"} halign={CENTER} valign={CENTER} expand vertical={true} setup={setupTray} />;
+export default () => <box className={"tray container"} halign={CENTER} valign={CENTER} expand vertical setup={setupTray} />;

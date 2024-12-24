@@ -22,7 +22,7 @@ import lockstyle from "./style/Lockscreen.scss";
 import { winheight, winwidth } from "../modules/lib/screensizeadjust";
 
 const background = "windows-failure.jpg";
-const player = AstalMpris.Player.new("spotify");
+const player = AstalMpris.Player.new("Deezer");
 const pam = new AstalAuth.Pam();
 const prompt = Variable("");
 const inputVisible = Variable(true);
@@ -114,8 +114,7 @@ const topRightGrid = (
 		className={"topright"}
 		halign={END}
 		valign={START}
-		hexpand={true}
-		vexpand={true}
+		expand
 		visible={true}
 		columnSpacing={10}
 		setup={(self) => {

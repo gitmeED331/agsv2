@@ -4,7 +4,8 @@
 	.outerbox {
 		background: $TertiaryBG;
 		border-radius: $radius;
-		padding: 0.35rem;
+		padding: 0.5rem;
+		min-width: 26rem;
 	}
 
 	&.panel {
@@ -68,6 +69,7 @@
 		font-size: 0.9rem;
 		font-weight: normal;
 		padding: 0rem 1rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.icondatetime {

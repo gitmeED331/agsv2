@@ -39,22 +39,22 @@ function Player(player: Mpris.Player) {
 		});
 	}
 
-	const TrackInfo = ({ action }: { action: "tracks" | "artists" }) => {
+	const TrackInfo = ({ info }: { info: "tracks" | "artists" }) => {
 		const Bindings = Variable.derive([bind(player, "title"), bind(player, "artist")], (title, artist) => ({
 			classname: {
 				tracks: "tracktitle",
 				artists: "artist",
-			}[action],
+			}[info],
 
 			maxwidthchars: {
 				tracks: 35,
 				artists: 30,
-			}[action],
+			}[info],
 
 			label: {
 				tracks: TrimTrackTitle(title) || "Unknown Title",
 				artists: artist || "Unknown Artist",
-			}[action],
+			}[info],
 		}))();
 
 		// return <box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
@@ -137,7 +137,7 @@ function Player(player: Mpris.Player) {
 		);
 	}
 
-	const Controls = ({ action, ...props }: { action: "play_pause" | "activePlay" | "next" | "previous" | "close" } & Widget.ButtonProps) => {
+	const Controls = ({ btn, ...props }: { btn: "play_pause" | "activePlay" | "next" | "previous" | "close" } & Widget.ButtonProps) => {
 		const bindings = Variable.derive(
 			[bind(player, "playbackStatus"), bind(player, "entry"), bind(player, "identity"), bind(player, "can_go_previous"), bind(player, "can_play"), bind(player, "can_go_next")],
 			(playbackStatus, entry, identity, can_go_previous, can_play, can_go_next) => ({
@@ -147,7 +147,7 @@ function Player(player: Mpris.Player) {
 					next: "next",
 					previous: "previous",
 					close: "close",
-				}[action],
+				}[btn],
 
 				tooltip_text: {
 					activePlay: identity,
@@ -155,7 +155,7 @@ function Player(player: Mpris.Player) {
 					next: "Next",
 					previous: "Previous",
 					close: "Close",
-				}[action],
+				}[btn],
 
 				visible: {
 					play_pause: can_play,
@@ -163,7 +163,7 @@ function Player(player: Mpris.Player) {
 					next: can_go_next,
 					previous: can_go_previous,
 					close: true,
-				}[action],
+				}[btn],
 
 				command: {
 					play_pause: () => player.play_pause(),
@@ -182,7 +182,7 @@ function Player(player: Mpris.Player) {
 					close: () => {
 						execAsync(`bash -c 'killall "${player.entry}"'`);
 					},
-				}[action],
+				}[btn],
 
 				icon: {
 					activePlay: entry || Icon.mpris.controls.FALLBACK_ICON,
@@ -190,7 +190,7 @@ function Player(player: Mpris.Player) {
 					next: Icon.mpris.controls.NEXT,
 					previous: Icon.mpris.controls.PREV,
 					close: Icon.mpris.controls.CLOSE,
-				}[action],
+				}[btn],
 			}),
 		)();
 
@@ -218,15 +218,15 @@ function Player(player: Mpris.Player) {
 			visible={true}
 			rowSpacing={10}
 			setup={(self) => {
-				self.attach(<TrackInfo action="tracks" />, 0, 0, 1, 1);
-				self.attach(<TrackInfo action="artists" />, 0, 1, 1, 1);
-				self.attach(<Controls action="activePlay" />, 1, 1, 1, 1);
+				self.attach(<TrackInfo info="tracks" />, 0, 0, 1, 1);
+				self.attach(<TrackInfo info="artists" />, 0, 1, 1, 1);
+				self.attach(<Controls btn="activePlay" />, 1, 1, 1, 1);
 				self.attach(TrackPosition(), 0, 2, 2, 1);
 				self.attach(
 					<centerbox className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
-						<Controls action="previous" />
-						<Controls action="play_pause" />
-						<Controls action="next" />
+						<Controls btn="previous" />
+						<Controls btn="play_pause" />
+						<Controls btn="next" />
 					</centerbox>,
 					0,
 					3,
@@ -240,7 +240,7 @@ function Player(player: Mpris.Player) {
 	return (
 		<box className={"player"} name={player.entry} vertical={false} hexpand={true} spacing={5} halign={CENTER} valign={START} setup={setup}>
 			{[mediaInfoGrid]}
-			<Controls action="close" valign={CENTER} />
+			<Controls btn="close" valign={CENTER} />
 		</box>
 	);
 }

@@ -35,7 +35,7 @@ function PrivacyIndicator({ obj, type }: { obj: AstalWp.Audio | AstalWp.Video, t
 
 export default function PrivacyModule() {
     return (
-        <box>
+        <box visible={bind(audio, "recorders").as(list => list.length > 0) || bind(video, "recorders").as(list => list.length > 0)} >
             <PrivacyIndicator obj={audio} type="recorders" />
             <PrivacyIndicator obj={audio} type="streams" />
             <PrivacyIndicator obj={video} type="recorders" />

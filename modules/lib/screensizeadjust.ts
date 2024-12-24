@@ -5,18 +5,17 @@ import { Gdk, Gtk } from "astal/gtk3";
  * @param {number} value
  */
 
-export const winheight = (value: number): number => {
-	const screenHeight = Gdk.Screen.get_default()?.get_height();
-	if (screenHeight == null) {
-		throw new Error("No default screen available");
-	}
-	return screenHeight * value;
-};
+export default function ScreenSizing({ type, multiplier }: { type: "width" | "height", multiplier: number }) {
+	const Width = Gdk.Screen.get_default()?.get_width();
+	const Height = Gdk.Screen.get_default()?.get_height();
 
-export const winwidth = (value: number): number => {
-	const screenWidth = Gdk.Screen.get_default()?.get_width();
-	if (screenWidth == null) {
+	if (Width == null || Height == null) {
 		throw new Error("No default screen available");
 	}
-	return screenWidth * value;
-};
+
+	switch (type) {
+		case "width": return Width! * multiplier
+		case "height": return Height! * multiplier
+
+	}
+}

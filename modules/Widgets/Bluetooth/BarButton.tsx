@@ -7,16 +7,21 @@ import { dashboardRightStack } from "../../Windows/dashboard/RightSide";
 let btreveal = Variable(false);
 
 const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
-	const updateLabel = (btLabel: Gtk.Label) => {
+
+	bluetooth.connect("notify::enabled", (btLabel: Gtk.Label) => {
 		const btEnabled = bluetooth.is_powered;
 		const btDevices = bluetooth.is_connected;
 		const label = btEnabled ? (btDevices ? ` (${btDevices})` : "On") : "Off";
 		btLabel.label = label;
-	};
 
+	});
+	bluetooth.connect("notify::connected_devices", (btLabel: Gtk.Label) => {
+		const btEnabled = bluetooth.is_powered;
+		const btDevices = bluetooth.is_connected;
+		const label = btEnabled ? (btDevices ? ` (${btDevices})` : "On") : "Off";
+		btLabel.label = label;
 
-	bluetooth.connect("notify::enabled", updateLabel);
-	bluetooth.connect("notify::connected_devices", updateLabel);
+	});
 
 	return (
 		<box className={"bluetooth barbutton content"} halign={CENTER} valign={CENTER} visible={true} >
@@ -24,7 +29,15 @@ const BluetoothWidget = (bluetooth: AstalBluetooth.Bluetooth) => {
 				<box>
 					<icon className={"bluetooth barbutton-icon"} icon={bind(bluetooth, "is_powered").as((v) => (v ? Icon.bluetooth.enabled : Icon.bluetooth.disabled))} />
 					<revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} clickThrough={true} reveal_child={bind(btreveal)}>
-						<label className={"bluetooth barbutton-label"} setup={updateLabel} />
+						<label className={"bluetooth barbutton-label"}
+							setup={
+								(btLabel: Gtk.Label) => {
+									const btEnabled = bluetooth.is_powered;
+									const btDevices = bluetooth.is_connected;
+									const label = btEnabled ? (btDevices ? ` (${btDevices})` : "On") : "Off";
+									btLabel.label = label;
+								}}
+						/>
 					</revealer>
 				</box>
 			))}
@@ -59,7 +72,7 @@ export default function BluetoothButton() {
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "bluetooth";
-					const win = App.get_window(`dashboard${App.get_monitors()[0]}`);
+					const win = App.get_window(`dashboard${App.get_monitors()[0].get_model()}`);
 					const dashboardTab = dashboardRightStack.get_visible_child_name() === dashTab;
 					const setDashboardTab = dashboardRightStack.set_visible_child_name(dashTab);
 					if (win) {

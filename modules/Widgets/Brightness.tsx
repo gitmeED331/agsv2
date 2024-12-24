@@ -1,6 +1,5 @@
 import { bind, exec, execAsync, monitorFile, Variable } from "astal";
 import Icon from "../lib/icons";
-import Pango from "gi://Pango";
 
 const BrightLevel = Icon.brightness.levels;
 

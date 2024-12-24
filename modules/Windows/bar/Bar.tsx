@@ -4,7 +4,6 @@ import { GLib, GObject, exec, execAsync, Gio } from "astal";
 import DateTimeLabel from "../../lib/datetime";
 import SysInfo from "./sysinfo";
 import MediaTickerButton from "./MediaTicker";
-import { PrivacyModule } from "../../Widgets/index";
 
 const wm = GLib.getenv("XDG_CURRENT_DESKTOP")?.toLowerCase();
 
@@ -12,6 +11,7 @@ function LeftBar() {
 	return (
 		<box
 			className={"left"}
+
 			halign={START}
 			valign={START}
 			spacing={5}
@@ -37,28 +37,28 @@ function LeftBar() {
 
 function CenterBar() {
 	return (
-		<box spacing={10}>
+		<box className={"center"} spacing={10} halign={CENTER} valign={START}>
 			<button
 				className="clock"
 				cursor="pointer"
 				onClick={(_, event) => {
-					App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+					App.toggle_window(`dashboard${App.get_monitors()[0].get_model()}`);
 				}}
+
 			>
-				<box halign={CENTER} valign={CENTER} spacing={5}>
+				<box halign={CENTER} valign={CENTER} spacing={5} >
 					<DateTimeLabel format="%H:%M:%S" interval={500} />
 					<icon icon="nix-snowflake-symbolic" valign={CENTER} halign={CENTER} />
 					<DateTimeLabel format="%a %b %d" interval={3600000} />
 				</box>
 			</button>
-			<PrivacyModule />
 		</box>
 	);
 }
 
 function RightBar() {
 	return (
-		<box className={"right"} halign={END} valign={START} spacing={5}>
+		<box className={"right"} halign={END} valign={START} spacing={5} >
 			<MediaTickerButton />
 			<SysInfo />
 		</box>
@@ -67,10 +67,10 @@ function RightBar() {
 
 export default function Bar(monitor: Gdk.Monitor) {
 	return (
-		<window className={"bar"} name={`bar${monitor}`} gdkmonitor={monitor} application={App} anchor={TOP | LEFT | RIGHT} exclusivity={Astal.Exclusivity.EXCLUSIVE} layer={Astal.Layer.TOP}>
+		<window className={"bar"} name={`bar${monitor.get_model()}`} gdkmonitor={monitor} application={App} anchor={TOP | LEFT | RIGHT} exclusivity={Astal.Exclusivity.EXCLUSIVE} layer={Astal.Layer.TOP}>
 			<centerbox
-				halign={FILL}
 				valign={START}
+				halign={FILL}
 				css={`
 					margin-right: 7px;
 				`}

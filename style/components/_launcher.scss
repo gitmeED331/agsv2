@@ -14,7 +14,8 @@
 		border-radius: $radius-tbright;
 		border: $border;
 		border-left: none;
-		box-shadow: 1.5rem 1.5rem 1.5rem 0 rgba(15, 155, 255, 0.8);
+		// border-bottom: none;
+		// box-shadow: 0rem 0rem 2rem 2rem rgba(15, 155, 255, 0.8);
 	}
 
 	&.search {
@@ -93,7 +94,7 @@
 	}
 
 	.stack {
-		border-bottom: $border;
+		border-bottom: none;
 	}
 
 	.switcher {

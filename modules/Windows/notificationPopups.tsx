@@ -5,7 +5,7 @@ import { NotifWidget } from "../Widgets/index";
 
 function NotifItem() {
 	const Notif = AstalNotifd.get_default();
-	const waitTime = new Variable(2000);
+	const waitTime = new Variable(3000);
 	const expireTime = new Variable(20000);
 
 	function removeItem(box: Widget.Box, notificationItem: any) {
@@ -16,7 +16,7 @@ function NotifItem() {
 		return Notif.get_dont_disturb();
 	}
 
-	const box = (<box vertical={true} spacing={10} expand />) as Widget.Box;
+	const box = (<box vertical={true} spacing={10} expand valign={START} halign={END} />) as Widget.Box;
 
 	Notif.connect("notified", (_, id) => {
 		if (isDoNotDisturbEnabled()) {
@@ -56,7 +56,7 @@ function NotifItem() {
 
 		notification.connect("dismissed", () => removeItem(box, notificationItem));
 
-		if (expireTime.get() > 0) {
+		if (expireTime.get() > waitTime.get()) {
 			setTimeout(() => {
 				removeItem(box, notificationItem);
 			}, expireTime.get());
@@ -66,7 +66,7 @@ function NotifItem() {
 }
 
 export default (monitor: Gdk.Monitor) => (
-	<window name={`notifications${monitor}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={OVERLAY_LAYER} gdkmonitor={monitor}>
+	<window name={`notifications${monitor.get_model()}`} className={"notifications notif"} widthRequest={450} anchor={TOP | RIGHT} hexpand={true} layer={OVERLAY_LAYER} gdkmonitor={monitor}>
 		<NotifItem />
 	</window>
 );

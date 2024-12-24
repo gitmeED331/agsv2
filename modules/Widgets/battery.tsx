@@ -3,7 +3,7 @@ import { Variable, bind, execAsync } from "astal";
 
 import Icon from "../lib/icons";
 import powerProfiles from "gi://AstalPowerProfiles";
-import Battery from "gi://AstalBattery";
+import AstalBat from "gi://AstalBattery";
 
 let TRANSITION = 300
 let BLOCKS = 10
@@ -13,7 +13,7 @@ const chargeTooltip = (charging: any) => charging ? "Charging" : "Discharging";
 
 const chargeIcon = (charging: any) => charging ? Icon.battery.Charging : Icon.battery.Discharging;
 
-const ChargeIndicatorIcon = ({ battery, charging }: { battery: Battery.Device, charging: any }) => (
+const ChargeIndicatorIcon = ({ battery, charging }: { battery: AstalBat.Device, charging: any }) => (
 	<icon
 		className={bind(battery, "charging").as((c) => c ? "charging" : "discharging")}
 		tooltipText={chargeTooltip(charging)}
@@ -21,10 +21,10 @@ const ChargeIndicatorIcon = ({ battery, charging }: { battery: Battery.Device, c
 	/>
 );
 
-const TheLabelReveal = ({ battery, charging }: { battery: Battery.Device, charging: any }) => {
+const TheLabelReveal = ({ battery, charging }: { battery: AstalBat.Device, charging: any }) => {
 	return (
 		<revealer
-			transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT}
+			transitionType={REVEAL_SLIDE_RIGHT}
 			transitionDuration={TRANSITION}
 			clickThrough={true}
 			revealChild={bind(battery, "charging").as((c) => !c)}
@@ -38,20 +38,22 @@ const TheLabelReveal = ({ battery, charging }: { battery: Battery.Device, chargi
 	);
 };
 
-const BatteryLevelBar = (percent: any, power: powerProfiles.PowerProfiles) => (
+const BatteryLevelBar = (percent: Number, power: powerProfiles.PowerProfiles) => (
 	<levelbar
+		// inverted /* for vertical orientation */
 		orientation={Gtk.Orientation.HORIZONTAL}
 		halign={CENTER}
 		valign={CENTER}
 		max_value={BLOCKS}
 		mode={Gtk.LevelBarMode.CONTINUOUS}
 		tooltipText={bind(power, "active_profile")}
-		value={percent.as((p: number) => p * BLOCKS)}
+		value={Number(percent) * BLOCKS}
+	// height_request={20} / * for vertical orientation */
 	/>
 );
 
 export default function BatteryButton() {
-	const Bat = Battery.get_default();
+	const Bat = AstalBat.get_default();
 	const PowerProfiles = powerProfiles.get_default();
 
 	const Percentage = bind(Bat, "percentage");
@@ -71,11 +73,11 @@ export default function BatteryButton() {
 			visible
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
-					App.toggle_window(`sessioncontrols${App.get_monitors()[0]}`);
+					App.toggle_window(`sessioncontrols${App.get_monitors()[0].get_model()}`);
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {
 					// PercentageReveal.set(!PercentageReveal.get());
-					App.toggle_window(`systemstats${App.get_monitors()[0]}`);
+					App.toggle_window(`systemstats${App.get_monitors()[0].get_model()}`);
 				}
 			}}
 		>
@@ -83,7 +85,7 @@ export default function BatteryButton() {
 				{[
 					TheLabelReveal({ battery: Bat, charging: Charging }),
 					ChargeIndicatorIcon({ battery: Bat, charging: Charging }),
-					BatteryLevelBar(Percentage, PowerProfiles),
+					BatteryLevelBar(Percentage.get(), PowerProfiles),
 				]}
 			</box>
 		</button>

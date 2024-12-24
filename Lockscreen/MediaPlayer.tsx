@@ -56,22 +56,28 @@ function Player({ player }: { player: Mpris.Player }) {
 			}[info],
 
 			maxwidthchars: {
-				tracks: 35,
-				artists: 30,
+				tracks: 20,
+				artists: 20,
 			}[info],
 
 			label: {
 				tracks: TrimTrackTitle(title) || "Unknown Title",
 				artists: artist || "Unknown Artist",
 			}[info],
+			lines: {
+				tracks: 2,
+				artists: 1,
+			}[info],
 		}))();
 
 		return (
 			<label
 				className={Bindings.as((b) => b.classname)}
-				wrap={false}
-				hexpand={true}
+				wrap={true}
 				halign={CENTER}
+				valign={CENTER}
+				lines={Bindings.as((b) => b.lines)}
+				wrap_mode={Pango.WrapMode.WORD}
 				ellipsize={Pango.EllipsizeMode.END}
 				maxWidthChars={Bindings.as((b) => b.maxwidthchars)}
 				label={Bindings.as((b) => b.label)}
@@ -151,6 +157,7 @@ function Player({ player }: { player: Mpris.Player }) {
 			</button>
 		);
 	};
+
 	const position = bind(player, "position").as(n => Number(parseInt(n.toString())));
 	const length = bind(player, "length").as(n => Number(parseInt(n.toString())));
 	const trackPercent = Variable.derive([position, length], (position, length) => {
@@ -164,11 +171,11 @@ function Player({ player }: { player: Mpris.Player }) {
 		}))
 
 		return (
-			<label className={bind(Bindings).as((b) => b.classname)} label={bind(Bindings).as((b) => b.label)} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+			<label className={bind(Bindings).as((b) => b.classname)} label={bind(Bindings).as((b) => b.label)} halign={CENTER} valign={END} />
 		);
 	}
 
-	const mediaInfoGrid = <Grid
+	const mediaInfo = <Grid
 		className={"mediainfo"}
 		halign={CENTER}
 		valign={CENTER}
@@ -178,7 +185,6 @@ function Player({ player }: { player: Mpris.Player }) {
 		setup={(self) => {
 			self.attach(<TrackInfo info="tracks" />, 0, 0, 1, 1);
 			self.attach(<TrackInfo info="artists" />, 0, 1, 1, 1);
-			self.attach(trackTime(), 0, 3, 1, 1);
 			self.attach(
 				<centerbox className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
 					<PlayerControls btn="previous" />
@@ -190,6 +196,7 @@ function Player({ player }: { player: Mpris.Player }) {
 				1,
 				1,
 			);
+			self.attach(trackTime(), 0, 3, 1, 1);
 		}}
 	/>
 
@@ -202,6 +209,7 @@ function Player({ player }: { player: Mpris.Player }) {
 			width_request={350}
 			height_request={350}
 			setup={setup}
+			visible={bind(player, "available").as((a) => a === true)}
 			css={`
 				border-radius: 50rem;
 			`}
@@ -211,7 +219,6 @@ function Player({ player }: { player: Mpris.Player }) {
 				expand
 				halign={FILL}
 				valign={FILL}
-				visible={bind(player, "available").as((a) => a === true)}
 				value={bind(trackPercent)}
 				startAt={0.75}
 				endAt={-0.25}
@@ -219,7 +226,7 @@ function Player({ player }: { player: Mpris.Player }) {
 				inverted={false}
 			>
 				<eventbox className={"inner"} expand halign={FILL} valign={FILL}>
-					{mediaInfoGrid}
+					{mediaInfo}
 				</eventbox>
 			</circularprogress>
 		</box>

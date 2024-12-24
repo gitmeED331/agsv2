@@ -1,7 +1,7 @@
 // Components
-@use 'variables' as *;
+@use '../../style/_variables' as *;
 @use "components";
-@use "globals";
+@use "../../style/globals";
 
 * {
 	//:not(selection)

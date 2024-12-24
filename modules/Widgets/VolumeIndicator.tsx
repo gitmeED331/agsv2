@@ -65,17 +65,17 @@ function Indicator({ device, type }: { device: AstalWp.Endpoint; type: "speaker"
 			onClick={(_, event) => {
 				if (event.button === Gdk.BUTTON_PRIMARY) {
 					const dashTab = "settings";
-					const win = App.get_window(`dashboard${App.get_monitors()[0]}`);
+					const win = App.get_window(`dashboard${App.get_monitors()[0].get_model()}`);
 					const dashboardTab = dashboardLeftStack.get_visible_child_name() === dashTab;
 					const setDashboardTab = dashboardLeftStack.set_visible_child_name(dashTab);
 					if (win && win.visible) {
 						if (!dashboardTab) {
 							setDashboardTab;
 						} else {
-							App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+							App.toggle_window(`dashboard${App.get_monitors()[0].get_model()}`);
 						}
 					} else {
-						App.toggle_window(`dashboard${App.get_monitors()[0]}`);
+						App.toggle_window(`dashboard${App.get_monitors()[0].get_model()}`);
 					}
 				}
 				if (event.button === Gdk.BUTTON_SECONDARY) {

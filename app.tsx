@@ -3,6 +3,7 @@
 import "./globals"
 import { App, Gdk } from "astal/gtk3";
 import monitorStyle from "./cssHotLoad";
+import PopupWindow from "modules/lib/popupwindow";
 
 monitorStyle;
 
@@ -28,7 +29,7 @@ App.start({
 	requestHandler(request: string, res: (response: any) => void) {
 		for (const monitor of App.get_monitors()) {
 			if (request == "dashboard") {
-				const win = App.get_window(`dashboard${monitor}`)
+				const win = App.get_window(`dashboard${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Hiding Dashboard");
@@ -38,7 +39,7 @@ App.start({
 				}
 			}
 			if (request == "cliphist") {
-				const win = App.get_window(`cliphist${monitor}`)
+				const win = App.get_window(`cliphist${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Hiding Cliphist");
@@ -48,7 +49,7 @@ App.start({
 				}
 			}
 			if (request == "wallpapers") {
-				const win = App.get_window(`wallpapers${monitor}`)
+				const win = App.get_window(`wallpapers${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing Wallpapers");
@@ -58,7 +59,7 @@ App.start({
 				}
 			}
 			if (request == "mediaplayerwindow") {
-				const win = App.get_window(`mediaplayerwindow${monitor}`)
+				const win = App.get_window(`mediaplayerwindow${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing mediaplayerwindow");
@@ -68,7 +69,7 @@ App.start({
 				}
 			}
 			if (request == "sessioncontrols") {
-				const win = App.get_window(`sessioncontrols${monitor}`)
+				const win = App.get_window(`sessioncontrols${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing sessioncontrol");
@@ -78,7 +79,7 @@ App.start({
 				}
 			}
 			if (request == "systemstats") {
-				const win = App.get_window(`systemstats${monitor}`)
+				const win = App.get_window(`systemstats${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing systemstats");
@@ -88,7 +89,7 @@ App.start({
 				}
 			}
 			if (request == "launcher") {
-				const win = App.get_window(`launcher${monitor}`)
+				const win = App.get_window(`launcher${monitor.get_model()}`)
 				if (win && win.visible) {
 					win.visible = false;
 					res("Showing Launcher");

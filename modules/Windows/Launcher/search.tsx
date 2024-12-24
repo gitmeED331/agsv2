@@ -64,7 +64,7 @@ const handleTerminalCommand = (query: string, state: any) => {
 
 		entry.set_text("");
 
-		App.toggle_window(`launcher${App.get_monitors()[0]}`);
+		App.toggle_window(`launcher${App.get_monitors()[0].get_model()}`);
 	}
 };
 
