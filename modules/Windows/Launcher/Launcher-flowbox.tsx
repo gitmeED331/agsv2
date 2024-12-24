@@ -1,9 +1,8 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { bind, execAsync, GLib, Variable } from "astal";
 import AstalApps from "gi://AstalApps";
-import Pango from "gi://Pango";
 import Icon, { Icons } from "../../lib/icons";
-import { winwidth, winheight } from "../../lib/screensizeadjust";
+import ScreenSizing from "../../lib/screensizeadjust";
 import { Stack, FlowBox, FlowBoxChild, Grid, SearchEntry } from "../../Astalified/index";
 import Calculator from "./Calculator";
 import FavoritesBar from "./FavoritesBar";
@@ -76,7 +75,7 @@ function createAppButton(app: AstalApps.Application) {
                     halign={FILL}
                     valign={FILL}
                     spacing={5}
-                    widthRequest={winwidth(0.15)}
+                    widthRequest={ScreenSizing({ type: "width", multiplier: 0.15 })}
                 >
                     {validIcon && (
                         <icon
@@ -89,7 +88,7 @@ function createAppButton(app: AstalApps.Application) {
                         label={app.get_name()}
                         halign={CENTER}
                         valign={CENTER}
-                        ellipsize={Pango.EllipsizeMode.END}
+                        truncate
                         maxWidthChars={30}
                         lines={1}
                         wrap={true}
@@ -158,7 +157,7 @@ const createScrollablePage = (appList: typeof Applications) => (
         hexpand={true}
         halign={FILL}
         valign={FILL}
-        heightRequest={winheight(0.9)}
+        heightRequest={ScreenSizing({ type: "height", multiplier: 0.9 })}
         css={`
 			padding: 1rem;
 		`}

@@ -1,5 +1,4 @@
 import Icon from "../lib/icons";
-import Pango from "gi://Pango";
 import { Grid } from "../Astalified/index";
 import DateTimeLabel from "../lib/datetime";
 
@@ -16,12 +15,12 @@ export default function NotifWidget({ item }: any) {
 
 	const notifTitle = (
 		<box className={"titlebox"} vertical halign={FILL}>
-			<label className={"title"} label={item.summary} maxWidthChars={50} lines={2} ellipsize={Pango.EllipsizeMode.END} halign={START} />
-			<label className={"subtitle"} label={item.app_name} maxWidthChars={30} lines={1} ellipsize={Pango.EllipsizeMode.END} halign={START} />
+			<label className={"title"} label={item.summary} maxWidthChars={50} lines={2} truncate halign={START} />
+			<label className={"subtitle"} label={item.app_name} maxWidthChars={30} lines={1} truncate halign={START} />
 		</box>
 	);
 
-	const notifBody = <label className={"body"} label={item.body} maxWidthChars={50} lines={4} ellipsize={Pango.EllipsizeMode.END} halign={START} valign={START} />;
+	const notifBody = <label className={"body"} label={item.body} maxWidthChars={50} lines={4} truncate halign={START} valign={START} />;
 
 	const notifActions = (
 		<box className={"actions"} valign={END} halign={FILL}>

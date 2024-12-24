@@ -8,6 +8,7 @@ import Calculator from "./Calculator";
 import { Apps } from "./AppAccess";
 
 export let query = new Variable<string>("");
+let currentQuery = "";
 
 function Search(query: string) {
 	// const ApplicationElement = (app: AstalApps.Application) => (
@@ -85,7 +86,7 @@ const handleCalculatorCommand = (query: string) => {
 	}
 };
 
-let currentQuery = "";
+
 const entry = (
 	<entry
 		className="launcher search"

@@ -1,12 +1,11 @@
 import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import { GLib, bind, monitorFile } from "astal";
-import AstalApps from "gi://AstalApps";
-import Pango from "gi://Pango";
 import Icon, { Icons } from "../../lib/icons";
 import { Stack, Grid } from "../../Astalified/index";
 import entry, { query } from "./search";
 import ScreenSizing from "../../lib/screensizeadjust";
 import { Apps, Applications, AstalApplication } from "./AppAccess";
+import Pango from "gi://Pango";
 
 const WINDOWNAME = `launcher${App.get_monitors()[0].get_model()}`;
 
@@ -45,7 +44,10 @@ export function CreateAppGrid({ appList }: { appList: AstalApplication[] }) {
 			>
 				<box halign={FILL} valign={FILL} spacing={5} widthRequest={ScreenSizing({ type: "width", multiplier: 0.1 })}>
 					{validIcon && <icon icon={iconName} halign={CENTER} valign={CENTER} />}
-					<label label={app.get_name()} halign={CENTER} valign={CENTER} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
+					<box vertical>
+						<label label={app.get_name()} className={"appname"} halign={START} valign={CENTER} truncate maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
+						<label label={app.get_description()} className={"appdescription"} halign={START} valign={CENTER} truncate maxWidthChars={50} wrapMode={Pango.WrapMode.WORD} lines={2} wrap xalign={0} yalign={0} />
+					</box>
 				</box>
 			</button>
 		);

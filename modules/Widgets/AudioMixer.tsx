@@ -2,7 +2,6 @@ import { Gdk, Gtk, App, Widget } from "astal/gtk3";
 import { bind, Binding, execAsync, Variable } from "astal";
 import Icon, { Icons } from "../lib/icons";
 import AstalWp from "gi://AstalWp";
-import Pango from "gi://Pango";
 
 const { audio } = AstalWp.get_default()!;
 
@@ -87,7 +86,7 @@ function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; 
 			>
 				<box spacing={5} valign={FILL} halign={START}>
 					<icon icon={bind(Bindings).as((i) => i.theIcon)} halign={START} />
-					<label xalign={0} ellipsize={Pango.EllipsizeMode.END} max_width_chars={28} label={bind(Bindings).as((d) => d.theDescription)} halign={START} />
+					<label xalign={0} truncate max_width_chars={28} label={bind(Bindings).as((d) => d.theDescription)} halign={START} />
 				</box>
 			</button>
 			<slider

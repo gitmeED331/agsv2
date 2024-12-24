@@ -1,7 +1,6 @@
 import { Astal, Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, Binding, execAsync, Variable } from "astal";
 import Mpris from "gi://AstalMpris";
-import Pango from "gi://Pango";
 import { Grid, StackSwitcher, Stack } from "../Astalified/index";
 import Icon from "../lib/icons";
 import TrimTrackTitle from "../lib/TrimTrackTitle";
@@ -64,7 +63,7 @@ function Player(player: Mpris.Player) {
 				wrap={false}
 				hexpand={true}
 				halign={CENTER}
-				ellipsize={Pango.EllipsizeMode.END}
+				truncate
 				maxWidthChars={Bindings.as((b) => b.maxwidthchars)}
 				label={Bindings.as((b) => b.label)}
 			/>
@@ -118,7 +117,7 @@ function Player(player: Mpris.Player) {
 					hexpand
 					wrap={false}
 					// maxWidthChars={35}
-					ellipsize={Pango.EllipsizeMode.END}
+					truncate
 					halign={CENTER}
 					valign={CENTER}
 					onDestroy={(self) => {

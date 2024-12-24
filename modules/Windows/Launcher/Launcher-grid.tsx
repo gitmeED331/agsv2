@@ -59,15 +59,16 @@ export default function Launchergrid(monitor: Gdk.Monitor) {
 		/>
 	);
 
-	App.connect("window-toggled", (_, win) => {
-		if (win.visible === false && win.name === WINDOWNAME) {
+	App.connect("window-toggled", (_) => {
+		const win = App.get_window(WINDOWNAME);
+		if (win && win.name === WINDOWNAME && win.visible === false) {
 			query.set("");
 			entry.set_text("");
 			entry.grab_focus();
 			theStack.set_visible_child_name("All Apps");
+
 		}
 	});
-
 
 	// return <PopupWindow
 	// 	name={WINDOWNAME}

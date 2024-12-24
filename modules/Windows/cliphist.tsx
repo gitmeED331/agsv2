@@ -37,8 +37,8 @@ function ClipHistItem(entry: any) {
 		);
 	}
 
-	const idLabel = <label className={"idlabel"} label={id} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} />;
-	const contentLabel = <label className={"contentlabel"} label={content} valign={CENTER} halign={START} ellipsize={Pango.EllipsizeMode.END} wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />;
+	const idLabel = <label className={"idlabel"} label={id} valign={CENTER} halign={START} truncate />;
+	const contentLabel = <label className={"contentlabel"} label={content} valign={CENTER} halign={START} truncate wrap wrapMode={Pango.WrapMode.WORD_CHAR} lines={3} />;
 
 	const createButton = (id: string, content: string) => (
 		<button
@@ -111,8 +111,8 @@ const input = (
 		onChanged={({ text }) => {
 			const searchText = (text ?? "").toLowerCase();
 		}}
-	/> as Gtk.Entry
-);
+	/>
+) as Gtk.Entry;
 
 const list = await execAsync("cliphist list");
 async function updateList(scrollableList: Gtk.Box) {
@@ -195,8 +195,9 @@ function ClipHistWidget() {
 export default function cliphist(monitor: Gdk.Monitor) {
 	const WINDOWNAME = `cliphist${monitor.get_model()}`;
 
-	App.connect("window-toggled", async (_, win) => {
-		if (win.name === WINDOWNAME) {
+	App.connect("window-toggled", async () => {
+		const win = App.get_window(WINDOWNAME);
+		if (win && win.name === WINDOWNAME) {
 			input.set_text("");
 			input.grab_focus();
 			await updateList(scrollableList);

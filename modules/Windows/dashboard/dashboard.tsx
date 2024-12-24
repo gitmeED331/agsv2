@@ -11,8 +11,9 @@ import RightSide, { dashboardRightStack } from "./RightSide";
 export default function Dashboard(monitor: Gdk.Monitor) {
 	const WINDOWNAME = `dashboard${monitor.get_model()}`;
 
-	App.connect("window-toggled", (_, win) => {
-		if (win.visible === false && win.name === WINDOWNAME) {
+	App.connect("window-toggled", () => {
+		const win = App.get_window(WINDOWNAME);
+		if (win && win.name === WINDOWNAME) {
 			dashboardLeftStack.set_visible_child_name("calendar");
 			dashboardRightStack.set_visible_child_name("notifications");
 			if (

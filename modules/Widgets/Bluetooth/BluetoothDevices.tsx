@@ -2,7 +2,6 @@ import { Gtk, Gdk, App, Widget } from "astal/gtk3";
 import { bind, execAsync, exec, Variable } from "astal";
 import Icon from "../../lib/icons";
 import AstalBluetooth from "gi://AstalBluetooth";
-import Pango from "gi://Pango";
 
 function AdapterControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBluetooth.Adapter) {
 	function Buttons({ action, ...props }: { action: "blueman" | "refresh" | "power" } & Widget.ButtonProps) {
@@ -68,7 +67,7 @@ function AdapterControls(bluetooth: AstalBluetooth.Bluetooth, adapter: AstalBlue
 
 function content(device: AstalBluetooth.Device) {
 	const DeviceButton = () => {
-		const btDeviceLabel = <label label={device.name} halign={START} valign={CENTER} ellipsize={Pango.EllipsizeMode.END} tooltip_text={device.address || "No Address"} />;
+		const btDeviceLabel = <label label={device.name} halign={START} valign={CENTER} truncate tooltip_text={device.address || "No Address"} />;
 
 		const DeviceTypeIcon = <icon icon={device.icon || "bluetooth-symbolic"} halign={START} valign={CENTER} />;
 
