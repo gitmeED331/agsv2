@@ -1,0 +1,25 @@
+@use "../_variables" as *;
+
+.wallpaper {
+	.window {
+		background-color: rgba(0, 0, 0, 1);
+		border: $border;
+		border-radius: $radius;
+	}
+	button {
+		border-bottom: 1px solid rgba(0, 0, 155, 0.7);
+		image {
+			border-radius: 3rem;
+		}
+		&:focus,
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.8);
+			border-radius: $radius;
+			border-bottom: $border;
+
+			image {
+				-gtk-icon-shadow: 0.3rem 0.3rem 0.5rem $color2;
+			}
+		}
+	}
+}

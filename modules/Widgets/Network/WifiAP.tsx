@@ -32,9 +32,9 @@ export default function WifiAP({ ap, wifi }: { ap: any, wifi: AstalNetwork.Wifi 
                 halign={FILL}
                 valign={FILL}
                 css={`
-					min-width: 10px;
-					min-height: 10px;
-				`}
+                	min-width: 10px;
+                	min-height: 10px;
+                `}
                 onActivate={(self) => {
                     const password = self.get_text();
                     if (password) {

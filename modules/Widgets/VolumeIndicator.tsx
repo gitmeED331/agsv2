@@ -45,8 +45,8 @@ function Indicator({ device, type }: { device: AstalWp.Endpoint; type: "speaker"
 				<icon
 					icon={bind(Bindings).as((c) => c.theIcon)}
 					css={`
-						font-size: 2rem;
-					`}
+					font-size: 2rem;
+				`}
 				/>
 				<label label={bind(Bindings).as((l) => l.tooltip)} />
 			</box>

@@ -58,15 +58,7 @@ function Player(player: Mpris.Player) {
 
 		// return <box className={"trackinfo"} valign={CENTER} halign={CENTER} hexpand={true} vertical={true} spacing={5}>
 		return (
-			<label
-				className={Bindings.as((b) => b.classname)}
-				wrap={false}
-				hexpand={true}
-				halign={CENTER}
-				truncate
-				maxWidthChars={Bindings.as((b) => b.maxwidthchars)}
-				label={Bindings.as((b) => b.label)}
-			/>
+			<label className={Bindings.as((b) => b.classname)} wrap={false} hexpand={true} halign={CENTER} truncate maxWidthChars={Bindings.as((b) => b.maxwidthchars)} label={Bindings.as((b) => b.label)} />
 		);
 		// </box>
 	};
@@ -224,7 +216,10 @@ function Player(player: Mpris.Player) {
 				self.attach(
 					<centerbox className={"playercontrols"} vexpand={false} hexpand={false} halign={CENTER} valign={CENTER} spacing={20}>
 						<Controls btn="previous" />
-						<Controls btn="play_pause" />
+						<circularprogress halign={CENTER} valign={CENTER} startAt={0.75} endAt={0.75} rounded value={bind(player, "position").as((pos) => (player ? pos / player.length : 1))}>
+							<Controls btn="play_pause" />
+						</circularprogress>
+
 						<Controls btn="next" />
 					</centerbox>,
 					0,

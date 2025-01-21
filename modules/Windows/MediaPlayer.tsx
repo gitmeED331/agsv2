@@ -23,28 +23,28 @@ export default function MediaPlayerWindow(monitor: Gdk.Monitor) {
 		}
 	});
 
-	return <PopupWindow name={WINDOWNAME} className={"window media-player"} exclusivity={Astal.Exclusivity.NORMAL} xcoord={0.7} ycoord={0.05} child={playerStack()} transition={REVEAL_CROSSFADE} />;
-	// return (
-	// 	<window
-	// 		name={WINDOWNAME}
-	// 		className={"window media-player"}
-	// 		anchor={TOP | RIGHT}
-	// 		layer={Astal.Layer.OVERLAY}
-	// 		exclusivity={Astal.Exclusivity.NORMAL}
-	// 		keymode={Astal.Keymode.EXCLUSIVE}
-	// 		visible={false}
-	// 		application={App}
-	// 		margin-right={90}
-	// 		onKeyPressEvent={(_, event) => {
-	// 			const win = App.get_window(WINDOWNAME);
-	// 			if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-	// 				if (win && win.visible === true) {
-	// 					win.visible = false;
-	// 				}
-	// 			}
-	// 		}}
-	// 	>
-	// 		{playerStack()}
-	// 	</window>
-	// );
+	// return <PopupWindow name={WINDOWNAME} className={"window media-player"} exclusivity={Astal.Exclusivity.NORMAL} xcoord={0.7} ycoord={0.05} child={playerStack()} transition={REVEAL_CROSSFADE} />;
+	return (
+		<window
+			name={WINDOWNAME}
+			className={"window media-player"}
+			anchor={TOP | RIGHT}
+			layer={Astal.Layer.OVERLAY}
+			exclusivity={Astal.Exclusivity.NORMAL}
+			keymode={Astal.Keymode.EXCLUSIVE}
+			visible={false}
+			application={App}
+			margin-right={90}
+			onKeyPressEvent={(_, event) => {
+				const win = App.get_window(WINDOWNAME);
+				if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+					if (win && win.visible === true) {
+						win.visible = false;
+					}
+				}
+			}}
+		>
+			{playerStack()}
+		</window>
+	);
 }

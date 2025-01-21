@@ -46,7 +46,7 @@ export function CreateAppGrid({ appList }: { appList: AstalApplication[] }) {
 					{validIcon && <icon icon={iconName} halign={CENTER} valign={CENTER} />}
 					<box vertical>
 						<label label={app.get_name()} className={"appname"} halign={START} valign={CENTER} truncate maxWidthChars={30} lines={1} wrap={true} xalign={0} yalign={0} />
-						<label label={app.get_description()} className={"appdescription"} halign={START} valign={CENTER} truncate maxWidthChars={50} wrapMode={Pango.WrapMode.WORD} lines={2} wrap xalign={0} yalign={0} />
+						<label label={app.get_description() || "(Description not found)"} className={"appdescription"} halign={START} valign={CENTER} truncate maxWidthChars={50} wrapMode={Pango.WrapMode.WORD} lines={2} wrap xalign={0} yalign={0} />
 					</box>
 				</box>
 			</button>
@@ -78,10 +78,8 @@ export const createScrollablePage = (appList: AstalApplication[]) => (
 		hexpand={true}
 		halign={FILL}
 		valign={FILL}
-		// heightRequest={winheight(0.85)}
-		css={`
-			padding: 1rem;
-		`}
+		// heightRequest={ScreenSizing({type: "height", multiplier: 0.85})}
+		css={`padding: 1rem;`}
 	>
 		<CreateAppGrid appList={appList} />
 	</scrollable>

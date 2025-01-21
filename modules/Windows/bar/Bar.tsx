@@ -71,9 +71,7 @@ export default function Bar(monitor: Gdk.Monitor) {
 			<centerbox
 				valign={START}
 				halign={FILL}
-				css={`
-					margin-right: 7px;
-				`}
+				css={`margin-right: 7px;`}
 			>
 				<LeftBar />
 				<CenterBar />

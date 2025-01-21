@@ -2,10 +2,9 @@
 
 import "./globals"
 import { App, Gdk } from "astal/gtk3";
-import monitorStyle from "./cssHotLoad";
-import PopupWindow from "modules/lib/popupwindow";
+import csshotreload from "./cssHotLoad";
 
-monitorStyle;
+csshotreload;
 
 // import {
 // 	Bar,

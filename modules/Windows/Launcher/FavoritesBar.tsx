@@ -1,11 +1,13 @@
 import { Gtk, App } from "astal/gtk3";
 import { execAsync } from "astal";
 import { Icons } from "../../lib/icons";
+import { Apps, Applications, AstalApplication } from "./AppAccess";
+
 
 export default function FavoritesBar({ favorites }: any) {
 	return (
 		<box orientation={Gtk.Orientation.HORIZONTAL} spacing={10} halign={CENTER} valign={CENTER} className={"favorites-bar"} visible={true} hexpand={true}>
-			{favorites.map((app) => (
+			{favorites.map((app: any) => (
 				<button
 					className="launcher favorite-app"
 					name={app.get_name()}

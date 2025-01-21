@@ -11,7 +11,7 @@ function Header(wifi: AstalNetwork.Wifi) {
 				power: () => (wifi.enabled = !wifi.enabled), //execAsync(`nmcli radio wifi ${enabled ? "off" : "on"}`),
 				refresh: enabled && !scanning ? () => wifi.scan() : () => { },
 				manager: () => (
-					execAsync("nm-connection-editor"), App.toggle_window(`dashboard${App.get_monitors()[0]}`)
+					execAsync("nm-connection-editor"), App.toggle_window(`dashboard${App.get_monitors()[0].get_model()}`)
 				),
 			}[action],
 

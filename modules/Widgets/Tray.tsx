@@ -62,7 +62,7 @@ const SysTrayItem = (item: TrayItem) => {
 				}
 			}}
 		>
-			<icon gIcon={bind(item, "gicon")} halign={CENTER} valign={CENTER} />
+			<icon gicon={bind(item, "gicon")} halign={CENTER} valign={CENTER} />
 		</button>
 	);
 

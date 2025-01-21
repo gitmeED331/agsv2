@@ -120,3 +120,4 @@ setInterval(() => {
     recalculateMemoryUsage();
     recalculateNetworkUsage();
 }, UPDATE_INTERVAL);
+

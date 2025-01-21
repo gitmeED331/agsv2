@@ -62,8 +62,8 @@ function AudioElement({ element, type, ...props }: { element: AstalWp.Endpoint; 
 				<icon
 					icon={bind(Bindings).as((c) => c.theIcon)}
 					css={`
-						font-size: 2rem;
-					`}
+					font-size: 2rem;
+				`}
 				/>
 				<label label={bind(Bindings).as((l) => l.tooltip)} />
 			</box>

@@ -7,6 +7,7 @@ import { Fixed } from "modules/Astalified/index";
 import { Revealer } from "astal/gtk3/widget";
 import ScreenSizing from "modules/lib/screensizeadjust";
 
+
 type GlobalEventBoxes = {
 	[key: string]: unknown;
 };
@@ -27,10 +28,9 @@ export default ({ name, child, xcoord, ycoord, transition, exclusivity = Astal.E
 		<window
 			name={name}
 			className={`${name} popup`}
-			onKeyPressEvent={(_, event) => {
-				const key = event.get_keyval()[1];
+			onKeyPressed={(_, keyval) => {
 				const win = App.get_window(name);
-				if (win && win?.visible && key === Gdk.KEY_Escape) {
+				if (win && win?.visible && keyval === Gdk.KEY_Escape) {
 					win.visible = false;
 				}
 			}}
